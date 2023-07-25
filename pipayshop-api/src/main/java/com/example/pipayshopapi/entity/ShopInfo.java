@@ -80,110 +80,13 @@ public class ShopInfo implements Serializable {
     private Integer categoryId;
 
     /**
+     * 店铺的所有者的用户id
+     */
+    private String uid;
+
+    /**
      * 0:正常运用1:下架状态
      */
     private Boolean status;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getShopId() {
-        return shopId;
-    }
-
-    public void setShopId(String shopId) {
-        this.shopId = shopId;
-    }
-    public String getShopName() {
-        return shopName;
-    }
-
-    public void setShopName(String shopName) {
-        this.shopName = shopName;
-    }
-    public BigDecimal getLocalhostLatitude() {
-        return localhostLatitude;
-    }
-
-    public void setLocalhostLatitude(BigDecimal localhostLatitude) {
-        this.localhostLatitude = localhostLatitude;
-    }
-    public BigDecimal getLocalhostLongitude() {
-        return localhostLongitude;
-    }
-
-    public void setLocalhostLongitude(BigDecimal localhostLongitude) {
-        this.localhostLongitude = localhostLongitude;
-    }
-    public String getTagList() {
-        return tagList;
-    }
-
-    public void setTagList(String tagList) {
-        this.tagList = tagList;
-    }
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-    public Double getScore() {
-        return score;
-    }
-
-    public void setScore(Double score) {
-        this.score = score;
-    }
-    public String getShopInroduce() {
-        return shopInroduce;
-    }
-
-    public void setShopInroduce(String shopInroduce) {
-        this.shopInroduce = shopInroduce;
-    }
-    public String getShopImagList() {
-        return shopImagList;
-    }
-
-    public void setShopImagList(String shopImagList) {
-        this.shopImagList = shopImagList;
-    }
-    public Integer getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
-    }
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return "ShopInfo{" +
-            "id=" + id +
-            ", shopId=" + shopId +
-            ", shopName=" + shopName +
-            ", localhostLatitude=" + localhostLatitude +
-            ", localhostLongitude=" + localhostLongitude +
-            ", tagList=" + tagList +
-            ", address=" + address +
-            ", score=" + score +
-            ", shopInroduce=" + shopInroduce +
-            ", shopImagList=" + shopImagList +
-            ", categoryId=" + categoryId +
-            ", status=" + status +
-        "}";
-    }
 }
