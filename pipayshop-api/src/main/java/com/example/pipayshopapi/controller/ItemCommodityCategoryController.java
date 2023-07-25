@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 网店的一级分类表 前端控制器
+ * 网店商品的二级分类表 前端控制器
  * </p>
  *
  * @author nws
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(value = "接口",tags = "接口")
 @RestController
-@RequestMapping("/pipayshopapi/item-category-top")
-public class ItemCategoryTopController {
+@RequestMapping("/pipayshopapi/item-commodity-category")
+public class ItemCommodityCategoryController {
 
 }

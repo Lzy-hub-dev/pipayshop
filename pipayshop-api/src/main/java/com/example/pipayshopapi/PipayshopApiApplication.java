@@ -11,7 +11,7 @@ public class PipayshopApiApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(PipayshopApiApplication.class, args);
-        System.out.println("shop后台管理启动成功！");
+        System.out.println("PiPayShop启动成功！");
     }
 
 }

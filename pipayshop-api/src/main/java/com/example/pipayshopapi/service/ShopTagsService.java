@@ -1,16 +1,16 @@
 package com.example.pipayshopapi.service;
 
-import com.example.pipayshopapi.entity.BuyerData;
+import com.example.pipayshopapi.entity.ShopTags;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
- * 买家的基本数据（多选） 服务类
+ * 实体店的标签 服务类
  * </p>
  *
  * @author nws
  * @since 2023-07-25
  */
-public interface IBuyerDataService extends IService<BuyerData> {
+public interface ShopTagsService extends IService<ShopTags> {
 
 }

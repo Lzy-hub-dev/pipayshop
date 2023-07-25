@@ -45,7 +45,8 @@ public class FollowFocus implements Serializable {
     /**
      * 关注时间
      */
-    private LocalDateTime createTime;
+
+    private Date createTime;
 
     /**
      * 修改时间

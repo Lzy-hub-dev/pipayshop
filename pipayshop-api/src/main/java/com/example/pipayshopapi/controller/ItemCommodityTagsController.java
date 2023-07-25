@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 网店信息表 前端控制器
+ * 网店商品的标签表 前端控制器
  * </p>
  *
  * @author nws
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(value = "接口",tags = "接口")
 @RestController
-@RequestMapping("/pipayshopapi/item-info")
-public class ItemInfoController {
+@RequestMapping("/pipayshopapi/item-commodity-tags")
+public class ItemCommodityTagsController {
 
 }

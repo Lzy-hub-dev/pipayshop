@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author nws
  * @since 2023-07-25
  */
-public interface IShopCategoryTopService extends IService<ShopCategoryTop> {
+public interface ShopCategoryTopService extends IService<ShopCategoryTop> {
 
 }

@@ -1,16 +1,16 @@
 package com.example.pipayshopapi.service;
 
-import com.example.pipayshopapi.entity.ShopCommodity;
+import com.example.pipayshopapi.entity.AccountInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
- * 实体店的商品表 服务类
+ * 用户账户表 服务类
  * </p>
  *
  * @author nws
  * @since 2023-07-25
  */
-public interface IShopCommodityService extends IService<ShopCommodity> {
+public interface AccountInfoService extends IService<AccountInfo> {
 
 }

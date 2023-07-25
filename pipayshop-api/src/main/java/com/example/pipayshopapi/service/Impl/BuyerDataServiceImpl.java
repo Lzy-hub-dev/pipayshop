@@ -2,7 +2,7 @@ package com.example.pipayshopapi.service.Impl;
 
 import com.example.pipayshopapi.entity.BuyerData;
 import com.example.pipayshopapi.mapper.BuyerDataMapper;
-import com.example.pipayshopapi.service.IBuyerDataService;
+import com.example.pipayshopapi.service.BuyerDataService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2023-07-25
  */
 @Service
-public class BuyerDataServiceImpl extends ServiceImpl<BuyerDataMapper, BuyerData> implements IBuyerDataService {
+public class BuyerDataServiceImpl extends ServiceImpl<BuyerDataMapper, BuyerData> implements BuyerDataService {
 
 }

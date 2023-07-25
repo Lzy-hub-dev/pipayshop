@@ -15,17 +15,17 @@ import java.util.Date;
 
 /**
  * <p>
- * 网店的标签表
+ * 网店商品的标签表
  * </p>
  *
  * @author nws
  * @since 2023-07-25
  */
-@TableName("item_tags")
+@TableName("item_commodity_tags")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItemTags implements Serializable {
+public class ItemCommodityTags implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -51,6 +51,5 @@ public class ItemTags implements Serializable {
      * 0:启用 1：禁用
      */
     private Boolean delFlag;
-
 
 }

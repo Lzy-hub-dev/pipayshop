@@ -16,17 +16,17 @@ import java.util.Date;
 
 /**
  * <p>
- * 网店信息表
+ * 网店的商品表
  * </p>
  *
  * @author nws
  * @since 2023-07-25
  */
-@TableName("item_info")
+@TableName("item_commodity_info")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItemInfo implements Serializable {
+public class ItemCommodityInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

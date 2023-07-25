@@ -13,27 +13,27 @@ import java.util.Date;
 
 /**
  * <p>
- * 网店的一级分类表
+ * 网店商品的二级分类表
  * </p>
  *
  * @author nws
  * @since 2023-07-25
  */
-@TableName("item_category_top")
+@TableName("item_commodity_category")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItemCategoryTop implements Serializable {
+public class ItemCommodityCategory implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 所有商品的首级分类id
+     * 商品类别id
      */
     private Integer categoryId;
 
     /**
-     * 所有商品的首级分类内容
+     * 种类内容
      */
     private String content;
 
@@ -45,9 +45,13 @@ public class ItemCategoryTop implements Serializable {
     private Date createTime;
 
     /**
+     * 该分类的父级分类id
+     */
+    private Integer categoryPid;
+
+    /**
      * 0:启用1:禁用
      */
     private Boolean delFlag;
-
 
 }

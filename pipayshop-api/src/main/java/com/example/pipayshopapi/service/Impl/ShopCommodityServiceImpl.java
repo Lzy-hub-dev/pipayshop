@@ -2,7 +2,7 @@ package com.example.pipayshopapi.service.Impl;
 
 import com.example.pipayshopapi.entity.ShopCommodity;
 import com.example.pipayshopapi.mapper.ShopCommodityMapper;
-import com.example.pipayshopapi.service.IShopCommodityService;
+import com.example.pipayshopapi.service.ShopCommodityService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2023-07-25
  */
 @Service
-public class ShopCommodityServiceImpl extends ServiceImpl<ShopCommodityMapper, ShopCommodity> implements IShopCommodityService {
+public class ShopCommodityServiceImpl extends ServiceImpl<ShopCommodityMapper, ShopCommodity> implements ShopCommodityService {
 
 }
