@@ -2,7 +2,9 @@ package com.example.pipayshopapi.mapper;
 
 import com.example.pipayshopapi.entity.AccountInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.pipayshopapi.entity.vo.AccountInfoVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -14,5 +16,13 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface AccountInfoMapper extends BaseMapper<AccountInfo> {
+
+
+    /**
+     * 根据用户Id查找用户账户表的积分余额和pi币余额
+     * @param uid
+     * @return
+     */
+    AccountInfoVO selectAccountInfo(@Param("uid") String uid);
 
 }
