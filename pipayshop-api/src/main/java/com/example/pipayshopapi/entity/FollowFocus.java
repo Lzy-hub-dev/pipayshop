@@ -35,7 +35,7 @@ public class FollowFocus implements Serializable {
     /**
      * 用户id
      */
-    private byte[] uid;
+    private String uid;
 
     /**
      * 粉丝id
