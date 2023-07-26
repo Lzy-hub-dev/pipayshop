@@ -2,7 +2,11 @@ package com.example.pipayshopapi.mapper;
 
 import com.example.pipayshopapi.entity.ShopCategory;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.pipayshopapi.entity.vo.ShopCategoryVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,5 +18,12 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface ShopCategoryMapper extends BaseMapper<ShopCategory> {
+
+    /**
+     * 查找二级分类的id和内容的集合
+     * @param categoryPid
+     * @return
+     */
+    List<ShopCategoryVO> selectAllContentList(@Param("category_pid") String categoryPid);
 
 }
