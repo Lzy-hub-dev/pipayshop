@@ -2,7 +2,10 @@ package com.example.pipayshopapi.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.pipayshopapi.entity.UserInfo;
+import com.example.pipayshopapi.entity.enums.Country;
+import com.example.pipayshopapi.entity.enums.Language;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
+import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.UserInfoMapper;
 import com.example.pipayshopapi.service.UserInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -55,9 +58,23 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean updateLanguageByUid(String uid, Integer language) {
+        Language language1;
+        switch (language){
+            case 1:language1 = Language.LANGUAGE_1;break;
+            case 2:language1 = Language.LANGUAGE_2;break;
+            case 3:language1 = Language.LANGUAGE_3;break;
+            case 4:language1 = Language.LANGUAGE_4;break;
+            case 5:language1 = Language.LANGUAGE_5;break;
+            case 6:language1 = Language.LANGUAGE_6;break;
+            case 7:language1 = Language.LANGUAGE_7;break;
+            case 8:language1 = Language.LANGUAGE_8;break;
+            case 9:language1 = Language.lLANGUAGE_9;break;
+            case 10:language1 = Language.lLANGUAGE_10;break;
+            default: throw new BusinessException("修改语言失败");
+        }
         int result = userInfoMapper.update(null, new UpdateWrapper<UserInfo>()
                                                             .eq("uid", uid)
-                                                            .set("language", language));
+                                                            .set("language", language1.getLanguageId()));
         return result > 0;
     }
 
@@ -68,9 +85,26 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean updateCountryByUid(String uid, Integer country) {
+
+        Country country1;
+        switch (country){
+            case 1:country1=Country.COUNTRY_1;break;
+            case 2:country1=Country.COUNTRY_2;break;
+            case 3:country1=Country.COUNTRY_3;break;
+            case 4:country1=Country.COUNTRY_4;break;
+            case 5:country1=Country.COUNTRY_5;break;
+            case 6:country1=Country.COUNTRY_6;break;
+            case 7:country1=Country.COUNTRY_7;break;
+            case 8:country1=Country.COUNTRY_8;break;
+            case 9:country1=Country.COUNTRY_9;break;
+            case 10:country1=Country.COUNTRY_10;break;
+            default: throw new BusinessException("修改国家失败");
+        }
+
         int result = userInfoMapper.update(null, new UpdateWrapper<UserInfo>()
                                                             .eq("uid", uid)
-                                                            .set("country", country));
+                                                            .set("Country", country1.getCountryId()));
+
         return result > 0;
     }
 
