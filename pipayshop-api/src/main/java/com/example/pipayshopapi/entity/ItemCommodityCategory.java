@@ -52,6 +52,6 @@ public class ItemCommodityCategory implements Serializable {
     /**
      * 0:启用1:禁用
      */
-    private Boolean delFlag;
+    private Integer delFlag;
 
 }
