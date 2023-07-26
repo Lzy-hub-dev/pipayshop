@@ -1,13 +1,9 @@
 package com.example.pipayshopapi.service.Impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.pipayshopapi.entity.AccountInfo;
 import com.example.pipayshopapi.entity.vo.AccountInfoVO;
 import com.example.pipayshopapi.entity.vo.FrontAccountInfoVO;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
-import com.example.pipayshopapi.entity.vo.PageVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.AccountInfoMapper;
 import com.example.pipayshopapi.service.AccountInfoService;
@@ -17,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * <p>
@@ -52,10 +47,10 @@ public class AccountInfoServiceImpl extends ServiceImpl<AccountInfoMapper, Accou
         BigDecimal pointBalance = accountInfoVO1.getPointBalance().add(frontAccountInfoVO.getPointBalance());
 
         int result = accountInfoMapper.update(null, new UpdateWrapper<AccountInfo>()
-                .eq("uid", uid)
-                .set("point_balance", pointBalance)
-                .set("pi_balance", piBalance));
-        return result>0;
+                                                                .eq("uid", uid)
+                                                                .set("point_balance", pointBalance)
+                                                                .set("pi_balance", piBalance));
+        return result > 0;
     }
 
     /**
@@ -73,9 +68,9 @@ public class AccountInfoServiceImpl extends ServiceImpl<AccountInfoMapper, Accou
         BigDecimal subtract = accountInfoVO.getPointBalance().subtract(frontAccountInfoVO.getPointBalance());
 
         int result = accountInfoMapper.update(null, new UpdateWrapper<AccountInfo>()
-                .eq("uid", uid)
-                .set("point_balance", subtract));
-        return result>0;
+                                                            .eq("uid", uid)
+                                                            .set("point_balance", subtract));
+        return result > 0;
     }
 
 }

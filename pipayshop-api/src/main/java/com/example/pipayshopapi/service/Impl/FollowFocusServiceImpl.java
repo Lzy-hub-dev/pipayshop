@@ -2,10 +2,7 @@ package com.example.pipayshopapi.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.pipayshopapi.entity.FollowFocus;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
-import com.example.pipayshopapi.entity.vo.PageVO;
 import com.example.pipayshopapi.mapper.FollowFocusMapper;
 import com.example.pipayshopapi.service.FollowFocusService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -35,7 +32,7 @@ public class FollowFocusServiceImpl extends ServiceImpl<FollowFocusMapper, Follo
     @Override
     public Date selectUpdateTimeByFollowId( String followId) {
         FollowFocus followFocus = followFocusMapper.selectOne(new QueryWrapper<FollowFocus>()
-                .eq(followId != null, "follow_id", followId));
+                                                                    .eq(followId != null, "follow_id", followId));
         return followFocus.getCreateTime();
     }
 
@@ -46,9 +43,9 @@ public class FollowFocusServiceImpl extends ServiceImpl<FollowFocusMapper, Follo
     @Transactional(rollbackFor = Exception.class)
     public boolean attentionFollowId(String followId) {
         int result = followFocusMapper.update(null, new UpdateWrapper<FollowFocus>()
-                .eq(followId != null, "uid", followId)
-                .set("status", 0));
-        return result>0;
+                                                                .eq(followId != null, "uid", followId)
+                                                                .set("status", 0));
+        return result > 0;
     }
 
     /**
@@ -58,9 +55,9 @@ public class FollowFocusServiceImpl extends ServiceImpl<FollowFocusMapper, Follo
     @Transactional(rollbackFor = Exception.class)
     public boolean cancelAttentionFollowId(String followId) {
         int result = followFocusMapper.update(null, new UpdateWrapper<FollowFocus>()
-                .eq(followId != null, "uid", followId)
-                .set("status", 1));
-        return result>0;
+                                                                .eq(followId != null, "uid", followId)
+                                                                .set("status", 1));
+        return result > 0;
     }
 
 

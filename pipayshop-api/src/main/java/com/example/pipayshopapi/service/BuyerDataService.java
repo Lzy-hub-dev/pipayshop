@@ -1,13 +1,8 @@
 package com.example.pipayshopapi.service;
 
-import com.example.pipayshopapi.entity.AccountInfo;
 import com.example.pipayshopapi.entity.BuyerData;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.vo.BuyerDataVO;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
-import com.example.pipayshopapi.entity.vo.PageVO;
-
-import java.util.List;
 
 /**
  * <p>
