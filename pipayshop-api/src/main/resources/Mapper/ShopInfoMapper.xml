@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.pipayshopapi.mapper.ShopInfoMapper">
+
+    <select id="selectShopInfoByTopCate" resultType="com.example.pipayshopapi.entity.ShopInfo">
+        select *
+        FROM shop_info i
+        where i.category_id = (select ct.category_id
+                               from shop_category c
+                                        INNER JOIN
+                                    shop_category_top ct
+                                    ON
+                                        c.category_pid = ct.category_id
+                               WHERE c.category_id = #{categorySecId});
+    </select>
+</mapper>
