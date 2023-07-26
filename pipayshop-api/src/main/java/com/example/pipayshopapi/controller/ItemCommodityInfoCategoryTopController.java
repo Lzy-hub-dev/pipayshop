@@ -1,11 +1,22 @@
 package com.example.pipayshopapi.controller;
 
 
+import com.example.pipayshopapi.entity.ItemCommodityInfoCategoryTop;
+import com.example.pipayshopapi.entity.vo.ResponseVO;
+import com.example.pipayshopapi.exception.BusinessException;
+import com.example.pipayshopapi.service.ItemCommodityCategoryService;
+import com.example.pipayshopapi.service.ItemCommodityInfoCategoryTopService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -15,10 +26,33 @@ import org.springframework.web.bind.annotation.RestController;
  * @author nws
  * @since 2023-07-25
  */
-@Api(value = "接口",tags = "接口")
+@Api(value = "首级分类接口",tags = "首级分类接口")
 @RestController
 @RequestMapping("/pipayshopapi/item-commodity-info-category-top")
+@Slf4j
 public class ItemCommodityInfoCategoryTopController {
+
+
+    @Resource
+    private ItemCommodityInfoCategoryTopService categoryTopService;
+
+    @PostMapping("topCateList")
+    @ApiOperation("首级分类列表展示")
+    public ResponseVO topCateList(){
+
+        try{
+            List<ItemCommodityInfoCategoryTop> topCateList = categoryTopService.cateTopList();
+            return ResponseVO.getSuccessResponseVo(topCateList);
+
+        }catch (Exception e){
+            log.error(e.getMessage());
+            throw new BusinessException("首级分类列表展示失败，请联系后台人员");
+        }
+    }
+
+
+
+
 
 
 

@@ -2,7 +2,13 @@ package com.example.pipayshopapi.mapper;
 
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.pipayshopapi.entity.vo.commodityVO;
+import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.omg.CORBA.INTERNAL;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,5 +20,9 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface ItemCommodityInfoMapper extends BaseMapper<ItemCommodityInfo> {
+
+    List<commodityVO> commodityOfCateList(@Param("categoryId") Integer categoryId, @Param("startIndex")Integer startIndex, @Param("number")Integer number);
+
+    Integer  listCount(@Param("categoryId") Integer categoryId);
 
 }

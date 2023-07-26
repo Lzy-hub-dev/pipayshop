@@ -1,10 +1,14 @@
 package com.example.pipayshopapi.service.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.pipayshopapi.entity.ItemCommodityCategory;
 import com.example.pipayshopapi.mapper.ItemCommodityCategoryMapper;
 import com.example.pipayshopapi.service.ItemCommodityCategoryService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -17,4 +21,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class ItemCommodityCategoryServiceImpl extends ServiceImpl<ItemCommodityCategoryMapper, ItemCommodityCategory> implements ItemCommodityCategoryService {
 
+    @Resource
+    private ItemCommodityCategoryMapper categoryMapper;
+
+
+    /**
+     * 展示某一级分类下的二级分类列表
+     */
+    @Override
+    public List<ItemCommodityCategory> cateSecondList(Integer categoryPid) {
+
+        List<ItemCommodityCategory> cateSecondList = categoryMapper.selectList(new QueryWrapper<ItemCommodityCategory>()
+                                                                                    .eq("category_pid",categoryPid)
+                                                                                    .eq("del_flag",0));
+        return cateSecondList;
+
+    }
 }
