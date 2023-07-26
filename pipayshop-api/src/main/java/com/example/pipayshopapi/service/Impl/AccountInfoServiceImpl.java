@@ -47,10 +47,10 @@ public class AccountInfoServiceImpl extends ServiceImpl<AccountInfoMapper, Accou
         BigDecimal pointBalance = accountInfoVO1.getPointBalance().add(frontAccountInfoVO.getPointBalance());
 
         int result = accountInfoMapper.update(null, new UpdateWrapper<AccountInfo>()
-                                                                .eq("uid", uid)
-                                                                .set("point_balance", pointBalance)
-                                                                .set("pi_balance", piBalance));
-        return result > 0;
+                .eq("uid", uid)
+                .set("point_balance", pointBalance)
+                .set("pi_balance", piBalance));
+        return result>0;
     }
 
     /**
@@ -68,9 +68,9 @@ public class AccountInfoServiceImpl extends ServiceImpl<AccountInfoMapper, Accou
         BigDecimal subtract = accountInfoVO.getPointBalance().subtract(frontAccountInfoVO.getPointBalance());
 
         int result = accountInfoMapper.update(null, new UpdateWrapper<AccountInfo>()
-                                                            .eq("uid", uid)
-                                                            .set("point_balance", subtract));
-        return result > 0;
+                .eq("uid", uid)
+                .set("point_balance", subtract));
+        return result>0;
     }
 
 }

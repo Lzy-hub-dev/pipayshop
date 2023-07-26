@@ -1,8 +1,12 @@
 package com.example.pipayshopapi.entity;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -52,8 +56,8 @@ public class ShopInfo implements Serializable {
     /**
      * 店铺的标签id集合
      */
-    private String tagList;
 
+    private String tagList;
     /**
      * 店铺地址
      */
@@ -67,7 +71,7 @@ public class ShopInfo implements Serializable {
     /**
      * 店铺简介（广告词）
      */
-    private String shopInroduce;
+    private String shopIntroduce;
 
     /**
      * 店铺图片的路径集合

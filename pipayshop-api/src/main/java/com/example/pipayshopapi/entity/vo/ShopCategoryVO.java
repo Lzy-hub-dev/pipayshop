@@ -4,32 +4,27 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 /**
- * <p>
- * 实体店分类
- * </p>
- *
- * @author mongdie
- * @since 2023-07-25
+ * @author: jiangjiafeng
+ * @ClassName CategoryVO
+ * @Description 分类VO
+ * @date 2023/7/26 12:27
+ * @Version 1.0
  */
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class ShopCategoryVO<T> {
+@NoArgsConstructor
+public class ShopCategoryVO {
     /**
-     * 所有实体店分类id
+     * 实体店分类id
      */
-    private String categoryId;
+    private Integer categoryId;
     /**
-     * 所有实体店一级分类内容
+     * 实体店分类内容
      */
     private String content;
-
     /**
-     * 所有实体店二级分类内容列表
+     * 该分类的父级分类id
      */
-    List<T> CategoryVOList;
-
+    private Integer categoryPid;
 }

@@ -1,10 +1,8 @@
 package com.example.pipayshopapi.service;
 
-import com.example.pipayshopapi.entity.ShopCategoryTop;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.pipayshopapi.entity.vo.ShopCategoryVO;
-
-import java.util.List;
+import com.example.pipayshopapi.entity.ShopCategoryTop;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 
 /**
  * <p>
@@ -17,9 +15,31 @@ import java.util.List;
 public interface ShopCategoryTopService extends IService<ShopCategoryTop> {
 
     /**
-     * 查找分类
+     *查询一级分类列表
+     * @param pageNum
+     * @param pageSize
      * @return
      */
-    List<ShopCategoryVO> selectAllContentList();
+    PageDataVO getShopCategoryTopList(Integer pageNum, Integer pageSize);
 
+    /**
+     * 根据分类id查询分类
+     * @param categoryTopId
+     * @return
+     */
+    ShopCategoryTop getShopCategoryTopById(String categoryTopId);
+
+    /**
+     * 根据分类id删除分类
+     * @param categoryTopId
+     * @return
+     */
+    Boolean deleteShopCategoryTopById(String categoryTopId);
+
+    /**
+     * 根据分类id修改分类
+     * @param shopCategoryTop
+     * @return
+     */
+    Boolean updateShopCategoryTopById(ShopCategoryTop shopCategoryTop);
 }
