@@ -2,8 +2,6 @@ package com.example.pipayshopapi.service;
 
 import com.example.pipayshopapi.entity.UserInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
-import com.example.pipayshopapi.entity.vo.PageVO;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
 
 /**
@@ -31,4 +29,19 @@ public interface UserInfoService extends IService<UserInfo> {
      * */
     boolean updateUserInfoByUid(UserInfoVO userInfoVO);
 
+    /**
+     * 根据用户Id更改用户语言标识
+     * @param uid
+     * @param language
+     * @return
+     * */
+    boolean updateLanguageByUid(String uid,Integer language);
+
+    /**
+     * 根据用户Id更改用户国家标识
+     * @param uid
+     * @param country
+     * @return
+     * */
+    boolean updateCountryByUid(String uid,Integer country);
 }

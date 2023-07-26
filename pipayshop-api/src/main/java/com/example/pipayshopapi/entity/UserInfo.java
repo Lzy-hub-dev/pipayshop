@@ -60,9 +60,14 @@ public class UserInfo implements Serializable {
     private String personalProfile;
 
     /**
+     * 国家标识（枚举类)
+     */
+    private Integer country;
+
+    /**
      * 语言标识（枚举类)
      */
-    private Boolean language;
+    private Integer language;
 
     /**
      * 邮箱

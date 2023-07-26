@@ -1,12 +1,7 @@
 package com.example.pipayshopapi.service.Impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.pipayshopapi.entity.UserInfo;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
-import com.example.pipayshopapi.entity.vo.PageVO;
-import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
 import com.example.pipayshopapi.mapper.UserInfoMapper;
 import com.example.pipayshopapi.service.UserInfoService;
@@ -45,13 +40,38 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Transactional(rollbackFor = Exception.class)
     public boolean updateUserInfoByUid(UserInfoVO userInfoVO) {
         int result = userInfoMapper.update(null, new UpdateWrapper<UserInfo>()
-                .eq("uid", userInfoVO.getUid())
-                .set("user_name", userInfoVO.getUserName())
-                .set("personal_profile", userInfoVO.getPersonalProfile())
-                .set("language", userInfoVO.getLanguage())
-                .set("email", userInfoVO.getEmail())
-                .set("age", userInfoVO.getAge()));
-        return result>0;
+                                                            .eq("uid", userInfoVO.getUid())
+                                                            .set("user_name", userInfoVO.getUserName())
+                                                            .set("personal_profile", userInfoVO.getPersonalProfile())
+                                                            .set("language", userInfoVO.getLanguage())
+                                                            .set("email", userInfoVO.getEmail())
+                                                            .set("age", userInfoVO.getAge()));
+        return result > 0;
+    }
+
+    /**
+     * 根据用户Id更改用户语言标识
+     * */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateLanguageByUid(String uid, Integer language) {
+        int result = userInfoMapper.update(null, new UpdateWrapper<UserInfo>()
+                                                            .eq("uid", uid)
+                                                            .set("language", language));
+        return result > 0;
+    }
+
+
+    /**
+     * 根据用户Id更改用户国家标识
+     * */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateCountryByUid(String uid, Integer country) {
+        int result = userInfoMapper.update(null, new UpdateWrapper<UserInfo>()
+                                                            .eq("uid", uid)
+                                                            .set("country", country));
+        return result > 0;
     }
 
 }

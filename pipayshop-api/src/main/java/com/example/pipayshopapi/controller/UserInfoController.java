@@ -1,9 +1,7 @@
 package com.example.pipayshopapi.controller;
 
 
-import com.example.pipayshopapi.entity.UserInfo;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
-import com.example.pipayshopapi.entity.vo.PageVO;
+import com.example.pipayshopapi.entity.enums.Language;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
 import com.example.pipayshopapi.service.UserInfoService;
@@ -11,10 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.stereotype.Controller;
-
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * <p>
@@ -57,6 +52,36 @@ public class UserInfoController {
         }catch (Exception e){
             e.printStackTrace();
             throw new RuntimeException("根据用户Id更改用户数据表的基本信息失败，请联系后台人员");
+        }
+    }
+
+    @PostMapping("updateLanguageByUid/{uid}/{language}")
+    @ApiOperation("根据用户Id更改用户语言标识")
+    public ResponseVO updateLanguageByUid(@PathVariable String uid,@PathVariable Integer language){
+        try {
+            boolean result = userInfoService.updateLanguageByUid(uid, language);
+            if (!result){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("根据用户Id更改用户语言标识成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("根据用户Id更改用户语言标识失败，请联系后台人员");
+        }
+    }
+
+    @PostMapping("updateCountryByUid/{uid}/{country}")
+    @ApiOperation("根据用户Id更改用户国家标识")
+    public ResponseVO updateCountryByUid(@PathVariable String uid,@PathVariable Integer country){
+        try {
+            boolean result = userInfoService.updateCountryByUid(uid, country);
+            if (!result){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("根据用户Id更改用户国家标识成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("根据用户Id更改用户国家标识失败，请联系后台人员");
         }
     }
 
