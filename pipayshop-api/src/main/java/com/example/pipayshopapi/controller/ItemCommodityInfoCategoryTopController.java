@@ -20,4 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/pipayshopapi/item-commodity-info-category-top")
 public class ItemCommodityInfoCategoryTopController {
 
+
+
 }
