@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.omg.CORBA.INTERNAL;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
@@ -45,7 +46,7 @@ public class BgImg implements Serializable {
     /**
      * 0:网点  1:实体店
      */
-    private Boolean category;
+    private Integer category;
 
     /**
      * 创造时间
@@ -57,6 +58,6 @@ public class BgImg implements Serializable {
     /**
      * 0:启用 1：逻辑删除 2：删除
      */
-    private Boolean delFlag;
+    private Integer delFlag;
 
 }

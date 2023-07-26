@@ -17,4 +17,5 @@ import org.springframework.stereotype.Service;
 @Service
 public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoMapper, ItemCommodityInfo> implements ItemCommodityInfoService {
 
+
 }
