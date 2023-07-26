@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * <p>
- *  服务类
+ *  品牌服务类
  * </p>
  *
  * @author nws
@@ -18,9 +18,10 @@ import java.util.List;
 public interface BrandInfoService extends IService<BrandInfo> {
 
     /**
-     * 查找品牌分类列表
+     * 查找二级分类的id查找品牌的集合
+     * @param cateId
      * @return
      */
-    List<ShopCategoryVO> selectAllBrandList();
+    List<BrandInfoVO> selectAllBrandList(String cateId);
 
 }

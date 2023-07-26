@@ -27,34 +27,13 @@ public class BrandInfoServiceImpl extends ServiceImpl<BrandInfoMapper, BrandInfo
     @Resource
     private BrandInfoMapper brandInfoMapper;
 
-    @Resource
-    private ShopCategoryTopMapper shopCategoryTopMapper;
-
-    @Resource
-    private ShopCategoryMapper shopCategoryMapper;
-
     /**
-     * 查找品牌分类列表
+     * 查找二级分类的id查找的品牌集合
      * @return
      */
     @Override
-    public List<ShopCategoryVO> selectAllBrandList() {
-        //查找出一级分类列表
-        List<ShopCategoryVO> shopCategoryVOS = shopCategoryTopMapper.selectAllTopContentList();
-        List<ShopCategoryVO> temList = shopCategoryVOS;
-
-        for (ShopCategoryVO shopCategoryVO : shopCategoryVOS) {
-            String categoryId = shopCategoryVO.getCategoryId();
-            //查找出二级分类列表
-            List<ShopCategoryVO> list = shopCategoryMapper.selectAllContentList(categoryId);
-            shopCategoryVO.setCategoryVOList(list);
-
-            for (ShopCategoryVO listSon : list) {
-                String sonCategoryId = listSon.getCategoryId();
-                List<BrandInfoVO> brandInfoVOS = brandInfoMapper.selectAllContentList(sonCategoryId);
-                listSon.setCategoryVOList(brandInfoVOS);
-            }
-        }
-        return temList;
+    public List<BrandInfoVO> selectAllBrandList(String cateId) {
+        List<BrandInfoVO> brandInfoVOS = brandInfoMapper.selectAllContentList(cateId);
+        return brandInfoVOS;
     }
 }
