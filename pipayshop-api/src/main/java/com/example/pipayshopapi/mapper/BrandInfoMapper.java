@@ -26,4 +26,11 @@ public interface BrandInfoMapper extends BaseMapper<BrandInfo> {
      */
     List<BrandInfoVO> selectAllContentList(@Param("cate_id") String cateId);
 
+
+    /**
+     * 网店获取品牌的集合
+     * @return
+     */
+    List<BrandInfoVO> itemSelectAllContentList();
+
 }

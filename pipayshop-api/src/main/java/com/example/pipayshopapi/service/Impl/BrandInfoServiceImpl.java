@@ -1,5 +1,6 @@
 package com.example.pipayshopapi.service.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.pipayshopapi.entity.BrandInfo;
 import com.example.pipayshopapi.entity.vo.BrandInfoVO;
 import com.example.pipayshopapi.entity.vo.ShopCategoryVO;
@@ -35,5 +36,11 @@ public class BrandInfoServiceImpl extends ServiceImpl<BrandInfoMapper, BrandInfo
     public List<BrandInfoVO> selectAllBrandList(String cateId) {
         List<BrandInfoVO> brandInfoVOS = brandInfoMapper.selectAllContentList(cateId);
         return brandInfoVOS;
+    }
+
+    @Override
+    public List<BrandInfoVO> itemSelectAllBrandList() {
+        List<BrandInfoVO> brandInfos = brandInfoMapper.itemSelectAllContentList();
+        return brandInfos;
     }
 }

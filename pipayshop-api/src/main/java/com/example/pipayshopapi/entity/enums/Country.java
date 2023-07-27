@@ -9,7 +9,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum country {
+public enum Country {
 
     COUNTRY_1(1, "中国"),
     COUNTRY_2(2, "英国"),

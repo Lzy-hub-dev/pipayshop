@@ -21,7 +21,10 @@ public interface ItemCommodityCategoryService extends IService<ItemCommodityCate
      List<ItemCommodityCategory> cateSecondList(Integer categoryPid);
 
 
-
+    /**
+     * 展示一级分类列表
+     */
+    List<ItemCommodityCategory> cateSecondList( );
 
 
 

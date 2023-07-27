@@ -48,4 +48,19 @@ public class BrandInfoController {
         }
     }
 
+    @GetMapping("itemSelectAllBrandList")
+    @ApiOperation("网店首页获取品牌的集合")
+    public ResponseVO<List> itemSelectAllBrandList(){
+        try {
+            List<BrandInfoVO> brandInfoVOS = brandInfoService.itemSelectAllBrandList();
+            if (brandInfoVOS==null){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo(brandInfoVOS);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("网店获取品牌的集合失败，请联系后台人员");
+        }
+    }
+
 }

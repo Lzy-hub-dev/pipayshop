@@ -24,4 +24,10 @@ public interface BrandInfoService extends IService<BrandInfo> {
      */
     List<BrandInfoVO> selectAllBrandList(String cateId);
 
+
+    /**
+     * 网店获取品牌的集合
+     * @return
+     */
+    List<BrandInfoVO> itemSelectAllBrandList();
 }

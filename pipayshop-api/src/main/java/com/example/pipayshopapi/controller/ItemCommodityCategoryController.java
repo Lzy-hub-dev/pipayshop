@@ -27,7 +27,7 @@ import java.util.List;
  * @author nws
  * @since 2023-07-25
  */
-@Api(value = "二级分类接口",tags = "二级分类接口")
+@Api(value = "网店二级分类接口",tags = "网店二级分类接口")
 @RestController
 @RequestMapping("/pipayshopapi/item-commodity-category")
 @Slf4j
