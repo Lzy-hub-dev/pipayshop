@@ -9,14 +9,12 @@ import com.example.pipayshopapi.service.ShopCommodityService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -70,6 +68,22 @@ public class ItemCommodityInfoController {
         }
     }
 
+
+    @GetMapping("itemCommodityChoose/{itemId}/{brandId}")
+    @ApiOperation("获取同一网店同一品牌的商品接口")
+    public ResponseVO<List<commodityVO>> itemCommodityChoose(@PathVariable("itemId") String itemId,@PathVariable("brandId") String brandId) {
+        try {
+            List<commodityVO> commodityVOS = commodityInfoService.itemCommodityChoose(itemId, brandId);
+            if (commodityVOS == null){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo(commodityVOS);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            System.out.println(e.getMessage());
+            throw new BusinessException("获取同一网店同一品牌的商品失败，请联系后台人员");
+        }
+    }
 
 
 }

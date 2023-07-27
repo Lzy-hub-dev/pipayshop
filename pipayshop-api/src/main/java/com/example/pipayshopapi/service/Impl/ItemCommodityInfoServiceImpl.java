@@ -66,4 +66,11 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         return new PageDataVO((int)page.getTotal(), page.getRecords());
 
     }
+
+    @Override
+    public List<commodityVO> itemCommodityChoose(String itemId,String brandId) {
+        // 获取同一网店同一品牌的商品的vo
+        List<commodityVO> commodityVOS = commodityInfoMapper.itemCommodityChoose(itemId, brandId);
+        return commodityVOS;
+    }
 }

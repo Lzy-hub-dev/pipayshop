@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.commodityPageVO;
+import com.example.pipayshopapi.entity.vo.commodityVO;
 
 import java.util.List;
 
@@ -32,4 +33,8 @@ public interface ItemCommodityInfoService extends IService<ItemCommodityInfo> {
     PageDataVO itemSearchCommodity(ItemSearchConditionDTO itemSearchConditionDTO);
 
 
+    /**
+     *商品展示choose展示
+     */
+    List<commodityVO> itemCommodityChoose(String itemId,String brandId);
 }
