@@ -21,7 +21,7 @@ class PipayshopApiApplicationTests {
     private ItemCommodityInfoMapper itemCommodityInfoMapper;
     @Test
     void contextLoads() {
-        List<commodityVO> commodityVOS = itemCommodityInfoMapper.itemCommodityChoose("1001", "5");
+        List<commodityVO> commodityVOS = itemCommodityInfoMapper.itemCommodityChoose("1001", "");
         System.out.println(commodityVOS);
 
     }

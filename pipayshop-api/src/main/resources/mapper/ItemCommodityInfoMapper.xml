@@ -13,4 +13,19 @@
     <select id="listCount" resultType="java.lang.Integer">
         select count(*) from item_commodity_info where category_id=#{categoryId}
     </select>
+    <select id="itemCommodityChoose" resultType="com.example.pipayshopapi.entity.vo.commodityVO">
+        select commodity_id,item_commodity_name,origin_price,price,details,imags_list
+        FROM item_commodity_info
+        where item_id=#{itemId}
+        <if test="brandId">
+            and brand_id=#{brandId}
+        </if>
+    </select>
+    <select id="itemCommodityDetail" resultType="com.example.pipayshopapi.entity.vo.CommodityDetailVO">
+        select   commodity_id,brand_id, item_commodity_name, origin_price,
+        color_list, size_list,origin_address,accept_address_list,
+        item_id, price, details, imags_list, inventory, free_shipping_num,
+        category_id, coupons_list, tag_list, degree_loss FROM item_commodity_info
+        where commodity_id=#{commodityId}
+    </select>
 </mapper>

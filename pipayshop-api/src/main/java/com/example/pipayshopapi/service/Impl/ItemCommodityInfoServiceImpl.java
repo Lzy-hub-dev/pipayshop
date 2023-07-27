@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.OrderInfo;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
+import com.example.pipayshopapi.entity.vo.CommodityDetailVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.commodityPageVO;
 import com.example.pipayshopapi.entity.vo.commodityVO;
@@ -72,5 +73,12 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         // 获取同一网店同一品牌的商品的vo
         List<commodityVO> commodityVOS = commodityInfoMapper.itemCommodityChoose(itemId, brandId);
         return commodityVOS;
+    }
+
+    @Override
+    public CommodityDetailVO itemCommodityDetail(String commodityId) {
+        CommodityDetailVO commodityDetailVO = commodityInfoMapper.itemCommodityDetail(commodityId);
+
+        return commodityDetailVO;
     }
 }

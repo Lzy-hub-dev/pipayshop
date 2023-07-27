@@ -85,5 +85,22 @@ public class ItemCommodityInfoController {
         }
     }
 
+    @GetMapping("itemCommodityDetail/{commodityId}")
+    @ApiOperation("获取网店商品详情接口")
+    public ResponseVO<CommodityDetailVO> itemCommodityDetail(@PathVariable("commodityId") String commodityId) {
+        try {
+
+            CommodityDetailVO commodityDetailVO = commodityInfoService.itemCommodityDetail(commodityId);
+            if (commodityDetailVO == null){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo(commodityDetailVO);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            System.out.println(e.getMessage());
+            throw new BusinessException("获取网店商品详情接口失败，请联系后台人员");
+        }
+    }
+
 
 }
