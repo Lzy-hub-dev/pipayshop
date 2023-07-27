@@ -37,4 +37,9 @@ public class ItemCommodityCategoryServiceImpl extends ServiceImpl<ItemCommodityC
         return cateSecondList;
 
     }
+
+    @Override
+    public List<ItemCommodityCategory> cateSecondList() {
+        return null;
+    }
 }

@@ -38,6 +38,11 @@ public class ItemCommodityInfoCategoryTop implements Serializable {
     private String content;
 
     /**
+     * 分类图标
+     */
+    private String imgUrl;
+
+    /**
      * 创建时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

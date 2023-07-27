@@ -26,7 +26,7 @@ import java.util.List;
  * @author nws
  * @since 2023-07-25
  */
-@Api(value = "首级分类接口",tags = "首级分类接口")
+@Api(value = "网店一级分类接口",tags = "网店一级分类接口")
 @RestController
 @RequestMapping("/pipayshopapi/item-commodity-info-category-top")
 @Slf4j
