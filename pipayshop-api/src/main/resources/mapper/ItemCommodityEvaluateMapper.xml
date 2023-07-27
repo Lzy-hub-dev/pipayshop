@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.pipayshopapi.mapper.ItemCommodityEvaluateMapper">
+
+
+    <select id="getItemCommodityEvaluates" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityEvaluateVO">
+        select   e.item_id,  e.commodity_id, e.evaluate ,e.create_time,e.evaluate_id
+        , e.user_id,u.user_name,u.user_image
+        from item_commodity_evaluate e
+        left join user_info u on u.uid=e.user_id
+        where commodity_id=#{commodityId}
+        LIMIT #{page}, #{limit}
+
+    </select>
+    <select id="getItemCommodityEvaluatesSum" resultType="java.lang.Integer">
+        select count(*)  from item_commodity_evaluate  where commodity_id=#{commodityId}
+    </select>
+</mapper>
