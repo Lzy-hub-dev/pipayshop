@@ -2,6 +2,7 @@ package com.example.pipayshopapi.service;
 
 import com.example.pipayshopapi.entity.ItemFollowFocus;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.pipayshopapi.entity.vo.ItemInfoVO;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
 
 /**
@@ -15,5 +16,12 @@ import com.example.pipayshopapi.entity.vo.UserInfoVO;
 public interface ItemFollowFocusService extends IService<ItemFollowFocus> {
 
 
+    /**
+     * 用户关注网店
+     * @param followId
+     * @param itemId
+     * @return
+     * */
+    Boolean userFollowItem(String followId,String itemId);
 
 }

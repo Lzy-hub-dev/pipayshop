@@ -13,7 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2023-07-27
  */
 @Mapper
-
 public interface ItemFollowFocusMapper extends BaseMapper<ItemFollowFocus> {
 
 }
