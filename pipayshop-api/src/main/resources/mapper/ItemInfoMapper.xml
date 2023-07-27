@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.pipayshopapi.mapper.ItemInfoMapper">
+
+
+    <select id="getItemInfo" resultType="com.example.pipayshopapi.entity.vo.ItemInfoVO">
+        select c1.item_id,i.item_name,i.score,i.item_imag_list,
+        (select count(*) from item_commodity_info c2 where i.item_id=c2.item_id  ) as itemSum,
+        (select count(*) from item_follow_focus f where i.item_id=f.item_id) as fanSum
+        from item_commodity_info c1
+        join item_info i on c1.item_id=i.item_id
+        where c1.commodity_id=#{commodityId}
+    </select>
+</mapper>
