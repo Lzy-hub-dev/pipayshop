@@ -39,6 +39,11 @@ public class ItemCommodityInfo implements Serializable {
     private String commodityId;
 
     /**
+     * 品牌id 可有可无
+     */
+    private Integer brandId;
+
+    /**
      * 商品原价
      */
     private BigDecimal originPrice;
@@ -132,6 +137,12 @@ public class ItemCommodityInfo implements Serializable {
      * 0:正常 1:逻辑删除 2:真正删除
      */
     private Boolean delFlag;
+
+
+    /**
+     * 商品的折损（枚举）
+     */
+    private  Integer degreeLoss;
 
     public Long getId() {
         return id;

@@ -1,10 +1,12 @@
 package com.example.pipayshopapi.service.Impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.OrderInfo;
+import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.commodityPageVO;
 import com.example.pipayshopapi.entity.vo.commodityVO;
@@ -44,6 +46,24 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         List<commodityVO> commodityList = commodityInfoMapper.commodityOfCateList(commodityPageVO.getCategoryId(),startIndex,limit);
 
         return new PageDataVO( commodityInfoMapper.listCount(commodityPageVO.getCategoryId()),commodityList);
+
+    }
+
+    @Override
+    public PageDataVO itemSearchCommodity(ItemSearchConditionDTO itemSearchConditionDTO) {
+
+        // 设置分页参数
+        Page<ItemCommodityInfo> page = new Page<>(itemSearchConditionDTO.getPage(),itemSearchConditionDTO.getLimit());
+
+        // 查询分页数据封装到page中
+        commodityInfoMapper.selectPage(page, new LambdaQueryWrapper<ItemCommodityInfo>()
+        // 可选的条件查询，可要可不要
+.eq(itemSearchConditionDTO.getBrandId()!=null && !"".equals(itemSearchConditionDTO.getBrandId()),ItemCommodityInfo::getBrandId,itemSearchConditionDTO.getBrandId())
+.eq(itemSearchConditionDTO.getDegreeLoss() != null ,ItemCommodityInfo::getDegreeLoss,itemSearchConditionDTO.getDegreeLoss())
+.between(itemSearchConditionDTO.getMaxPrice()!=null && itemSearchConditionDTO.getMinPrice() != null,ItemCommodityInfo::getPrice,itemSearchConditionDTO.getMinPrice(),itemSearchConditionDTO.getMaxPrice())
+        );
+        // 封装数据
+        return new PageDataVO((int)page.getTotal(), page.getRecords());
 
     }
 }

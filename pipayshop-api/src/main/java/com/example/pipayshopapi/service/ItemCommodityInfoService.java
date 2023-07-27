@@ -2,6 +2,7 @@ package com.example.pipayshopapi.service;
 
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.commodityPageVO;
 
@@ -25,6 +26,10 @@ public interface ItemCommodityInfoService extends IService<ItemCommodityInfo> {
 
 
 
+    /**
+     *首页下面的商品列表分页展示
+     */
+    PageDataVO itemSearchCommodity(ItemSearchConditionDTO itemSearchConditionDTO);
 
 
 }

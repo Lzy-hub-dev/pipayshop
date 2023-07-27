@@ -21,8 +21,7 @@ class PipayshopApiApplicationTests {
         strings.add("14");
         String s = JSON.toJSONString(strings);
         System.out.println(s);
-        List<String> collect = JSON.parseArray(s, String.class).stream().collect(Collectors.toList());
-
+        List<String> collect = JSON.parseArray(s, String.class);
 
     }
 

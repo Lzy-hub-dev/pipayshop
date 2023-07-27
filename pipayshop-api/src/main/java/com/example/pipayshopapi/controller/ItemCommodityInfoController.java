@@ -1,6 +1,7 @@
 package com.example.pipayshopapi.controller;
 
 
+import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ItemCommodityInfoService;
@@ -52,6 +53,22 @@ public class ItemCommodityInfoController {
         }
     }
 
+
+    @GetMapping("itemSearchCommodity")
+    @ApiOperation("网店首页条件搜索")
+    public ResponseVO<PageDataVO> itemSearchCommodity(ItemSearchConditionDTO itemSearchConditionDTO) {
+        try {
+            PageDataVO pageDataVO = commodityInfoService.itemSearchCommodity(itemSearchConditionDTO);
+            if (pageDataVO == null){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo(pageDataVO);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            System.out.println(e.getMessage());
+            throw new BusinessException("网店首页条件搜索失败，请联系后台人员");
+        }
+    }
 
 
 
