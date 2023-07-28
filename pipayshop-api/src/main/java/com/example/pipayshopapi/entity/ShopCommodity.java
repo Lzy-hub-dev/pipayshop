@@ -63,6 +63,13 @@ public class ShopCommodity implements Serializable {
      */
     private Integer monthlySales;
 
+
+
+    /**
+     * 该商品标签集合
+     */
+    private String tagList;
+
     /**
      * 该商品的店铺id
      */

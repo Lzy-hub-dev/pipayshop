@@ -70,7 +70,7 @@ public class AccountInfoServiceImpl extends ServiceImpl<AccountInfoMapper, Accou
         int result = accountInfoMapper.update(null, new UpdateWrapper<AccountInfo>()
                 .eq("uid", uid)
                 .set("point_balance", subtract));
-        return result>0;
+        return result > 0;
     }
 
 }

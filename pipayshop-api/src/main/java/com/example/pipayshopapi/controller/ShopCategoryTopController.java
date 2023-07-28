@@ -30,7 +30,7 @@ public class ShopCategoryTopController {
     private static final Logger log = LoggerFactory.getLogger(ShopCategoryTopController.class);
 
     @GetMapping("getShopCategoryTopList")
-    @ApiOperation("查询一级分类列表") // todo
+    @ApiOperation("查询一级分类列表")
     public ResponseVO getShopCategoryTopList(Integer pageNum, Integer pageSize) {
         try {
             PageDataVO list = categoryTopService.getShopCategoryTopList(pageNum, pageSize);
