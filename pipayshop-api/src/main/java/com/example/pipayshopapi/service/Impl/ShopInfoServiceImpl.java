@@ -3,6 +3,7 @@ package com.example.pipayshopapi.service.Impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -86,6 +87,26 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         }
         List<ShopInfoVO> shopVO = getShopVO(records, shopDTO);
         return new PageDataVO(Integer.valueOf(info.getTotal() + ""), shopVO);
+    }
+
+    /**
+     * 根据条件筛选后获取实体店列表
+     * @param limit
+     * @param pages
+     * @param categoryId
+     * @param state
+     * @return
+     */
+    @Override
+    public PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId, Integer state) {
+        Page<ShopInfo> page = new Page<>(pages, limit);
+        //stata==1,按评分从低到高；stata==2,按评分从高到低
+        shopInfoMapper.selectPage(page,new QueryWrapper<ShopInfo>()
+                .eq(!categoryId.equals(0),"category_id",categoryId)
+                .orderByAsc(state==1,"score")
+                .orderByDesc(state==2,"score"));
+
+        return new PageDataVO((int) page.getTotal(),page.getRecords());
     }
 
     /**

@@ -5,6 +5,7 @@ import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ShopDTO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
+import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -40,6 +41,22 @@ public class ShopInfoController {
             return ResponseVO.getFalseResponseVo(null);
         }
     }
+
+    @GetMapping("getShopInfoListByCondition/{limit}/{pages}/{categoryId}/{state}")
+    @ApiOperation("根据条件筛选后获取实体店列表")
+    public ResponseVO getShopInfoListByCondition(@PathVariable Integer limit,@PathVariable Integer pages,@PathVariable String categoryId,@PathVariable Integer state){
+        try {
+            PageDataVO list = infoService.getShopInfoListByCondition(limit,pages,categoryId,state);
+            if (list==null){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo(list.getList());
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("根据条件筛选后获取实体店列表失败，请联系后台人员");
+        }
+    }
+
     @GetMapping("getShopInfoById/{shopId}")
     @ApiOperation("根据id查询实体店详情")
     public ResponseVO getShopInfoById(@PathVariable String shopId) {
