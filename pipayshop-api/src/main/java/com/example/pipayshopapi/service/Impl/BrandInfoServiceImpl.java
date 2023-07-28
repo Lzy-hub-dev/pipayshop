@@ -38,6 +38,10 @@ public class BrandInfoServiceImpl extends ServiceImpl<BrandInfoMapper, BrandInfo
         return brandInfoVOS;
     }
 
+    /**
+     * 网店获取所有品牌接口
+     * @return
+     */
     @Override
     public List<BrandInfoVO> itemSelectAllBrandList() {
         List<BrandInfoVO> brandInfos = brandInfoMapper.itemSelectAllContentList();

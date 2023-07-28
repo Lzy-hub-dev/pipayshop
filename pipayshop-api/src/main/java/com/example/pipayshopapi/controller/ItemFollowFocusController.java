@@ -35,7 +35,7 @@ public class ItemFollowFocusController {
     private ItemFollowFocusService followFocusService;
 
     @GetMapping("userFollowItem/{followId}/{itemId}")
-    @ApiOperation("获取网店信息")
+    @ApiOperation("关注网店")
     public ResponseVO userFollowItem(@PathVariable String followId,@PathVariable String itemId) {
         try {
             Boolean update = followFocusService.userFollowItem(followId, itemId);
@@ -45,7 +45,7 @@ public class ItemFollowFocusController {
             return ResponseVO.getSuccessResponseVo("关注网店成功");
         } catch (Exception e) {
             log.error(e.getMessage());
-            throw new BusinessException("关注网店成功失败，请联系后台人员");
+            throw new BusinessException("关注网店失败，请联系后台人" + "、员");
         }
     }
 }

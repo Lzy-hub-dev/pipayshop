@@ -24,6 +24,14 @@ public class ItemCommodityEvaluateServiceImpl extends ServiceImpl<ItemCommodityE
 
     @Resource
     private ItemCommodityEvaluateMapper itemCommodityEvaluateMapper;
+
+    /**
+     * 获取网店商品评价
+     * @param commodityId
+     * @param page
+     * @param limit
+     * @return
+     */
     @Override
     public PageDataVO getItemCommodityEvaluates(String commodityId, Integer page, Integer limit) {
         List<ItemCommodityEvaluateVO> itemCommodityEvaluates = itemCommodityEvaluateMapper.getItemCommodityEvaluates(commodityId,(page-1)*limit,limit);

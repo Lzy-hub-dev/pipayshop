@@ -21,6 +21,13 @@ public class ItemFollowFocusServiceImpl extends ServiceImpl<ItemFollowFocusMappe
 
     @Resource
     private ItemFollowFocusMapper itemFollowFocusMapper;
+
+    /**
+     * 用户关注网店接口
+     * @param followId
+     * @param itemId
+     * @return
+     */
     @Override
     public Boolean userFollowItem(String followId, String itemId) {
         ItemFollowFocus itemFollowFocus = new ItemFollowFocus();

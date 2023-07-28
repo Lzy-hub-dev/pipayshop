@@ -70,6 +70,11 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         return result>0;
     }
 
+    /**
+     * 网店首页下面的搜索商品接口
+     * @param itemSearchConditionDTO
+     * @return
+     */
     @Override
     public PageDataVO itemSearchCommodity(ItemSearchConditionDTO itemSearchConditionDTO) {
 

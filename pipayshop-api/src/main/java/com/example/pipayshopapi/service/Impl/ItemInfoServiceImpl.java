@@ -24,6 +24,11 @@ public class ItemInfoServiceImpl extends ServiceImpl<ItemInfoMapper, ItemInfo> i
     @Resource
     private ItemInfoMapper itemInfoMapper;
 
+    /**
+     * 获取网店商品详情的网店信息接口
+     * @param commodityId
+     * @return
+     */
     @Override
     public ItemInfoVO getItemInfo(String commodityId) {
         ItemInfoVO itemInfo = itemInfoMapper.getItemInfo(commodityId);
