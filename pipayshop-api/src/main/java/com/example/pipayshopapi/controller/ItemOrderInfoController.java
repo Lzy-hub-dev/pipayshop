@@ -38,11 +38,11 @@ public class ItemOrderInfoController {
     @Resource
     private ItemOrderInfoService itemOrderInfoService;
 
-    @GetMapping("selectItemOrders/{userId}")
+    @GetMapping("selectUserItemOrders/{userId}")
     @ApiOperation("获取网店用户订单列表")
-    public ResponseVO selectItemOrders(@PathVariable String userId) {
+    public ResponseVO selectUserItemOrders(@PathVariable String userId) {
         try {
-            List<ItemOrderInfoVO> itemOrderInfoVOS = itemOrderInfoService.selectItemOrders(userId);
+            List<ItemOrderInfoVO> itemOrderInfoVOS = itemOrderInfoService.selectUserItemOrders(userId);
             if (itemOrderInfoVOS == null){
                 throw new Exception();
             }
@@ -50,6 +50,21 @@ public class ItemOrderInfoController {
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new BusinessException("获取网店用户订单列表失败，请联系后台人员");
+        }
+    }
+
+    @GetMapping("deleteUserItemOrder/{orderId}")
+    @ApiOperation("删除网店用户订单")
+    public ResponseVO deleteUserItemOrder(@PathVariable String orderId) {
+        try {
+            Boolean update = itemOrderInfoService.deleteUserItemOrder(orderId);
+            if (!update){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("删除网店用户订单");
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new BusinessException("删除网店用户订单失败，请联系后台人员");
         }
     }
 }

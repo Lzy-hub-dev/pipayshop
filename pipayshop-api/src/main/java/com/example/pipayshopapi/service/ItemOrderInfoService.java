@@ -20,5 +20,12 @@ public interface ItemOrderInfoService extends IService<ItemOrderInfo> {
      * @param userId
      * @return
      */
-    List<ItemOrderInfoVO> selectItemOrders(String userId);
+    List<ItemOrderInfoVO> selectUserItemOrders(String userId);
+
+    /**
+     * 通过orderId逻辑删除订单
+     * @param orderId
+     * @return
+     */
+    Boolean deleteUserItemOrder(String orderId);
 }

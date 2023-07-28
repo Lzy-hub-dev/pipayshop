@@ -12,6 +12,7 @@ import com.example.pipayshopapi.mapper.ItemCommodityInfoMapper;
 import com.example.pipayshopapi.mapper.ItemInfoMapper;
 import com.example.pipayshopapi.mapper.ItemOrderInfoMapper;
 import com.example.pipayshopapi.service.ItemCommodityEvaluateService;
+import com.example.pipayshopapi.service.ItemOrderInfoService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -35,11 +36,14 @@ class PipayshopApiApplicationTests {
 
     @Resource
     private ItemOrderInfoMapper itemOrderInfoMapper;
+
+    @Resource
+    private ItemOrderInfoService orderInfoService;
     @Test
     void contextLoads() {
+        Boolean update = orderInfoService.deleteUserItemOrder("test2");
+        System.out.println(update);
 
-        List<ItemOrderInfoVO> itemOrderInfoVOS = itemOrderInfoMapper.selectItemOrders("1001");
-        itemOrderInfoVOS.forEach(vo-> System.out.println(vo));
 
     }
 

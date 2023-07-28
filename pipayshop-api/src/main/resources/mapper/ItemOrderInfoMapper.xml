@@ -9,6 +9,6 @@
         from item_order_info o
         left join item_commodity_info c
         on o.commodity_id=c.commodity_id
-        where o.uid=#{userId}
+        where o.uid=#{userId} and o.del_flag=0
     </select>
 </mapper>
