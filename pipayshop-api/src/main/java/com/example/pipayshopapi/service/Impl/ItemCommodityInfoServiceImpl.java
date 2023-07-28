@@ -7,15 +7,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.OrderInfo;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
-import com.example.pipayshopapi.entity.vo.CommodityDetailVO;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
-import com.example.pipayshopapi.entity.vo.commodityPageVO;
-import com.example.pipayshopapi.entity.vo.commodityVO;
+import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.mapper.ItemCommodityInfoMapper;
 import com.example.pipayshopapi.service.ItemCommodityInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.pipayshopapi.util.StringUtil;
 import io.swagger.models.auth.In;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -48,6 +47,27 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
 
         return new PageDataVO( commodityInfoMapper.listCount(commodityPageVO.getCategoryId()),commodityList);
 
+    }
+
+    /**
+     * 发布网店商品
+     * @param itemCommodityInfoVO
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean issueItemCommodity(ItemCommodityInfoVO itemCommodityInfoVO, String imagsList) {
+
+        ItemCommodityInfo itemCommodityInfo = new ItemCommodityInfo();
+        itemCommodityInfo.setCommodityId(StringUtil.generateShortId());
+        itemCommodityInfo.setPrice(itemCommodityInfoVO.getPrice());
+        itemCommodityInfo.setItemCommodityName(itemCommodityInfoVO.getItemCommodityName());
+        itemCommodityInfo.setOriginAddress(itemCommodityInfoVO.getOriginAddress());
+        itemCommodityInfo.setDetails(itemCommodityInfoVO.getDetails());
+        itemCommodityInfo.setImagsList(imagsList);
+        itemCommodityInfo.setCategoryId(itemCommodityInfoVO.getCategoryId());
+        int result = commodityInfoMapper.insert(itemCommodityInfo);
+        return result>0;
     }
 
     @Override

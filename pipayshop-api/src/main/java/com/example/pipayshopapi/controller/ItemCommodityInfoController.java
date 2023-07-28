@@ -51,6 +51,22 @@ public class ItemCommodityInfoController {
         }
     }
 
+    @PostMapping("issueItemCommodity")
+    @ApiOperation("发布网店商品")
+    public ResponseVO issueItemCommodity(@RequestParam("imagsList")String imagsList,@RequestBody ItemCommodityInfoVO itemCommodityInfoVO){
+        System.out.println(itemCommodityInfoVO);
+        try {
+            boolean result = commodityInfoService.issueItemCommodity(itemCommodityInfoVO,imagsList);
+            if (!result){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("发布网店商品成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("发布网店商品失败，请联系后台人员");
+        }
+    }
+
 
     @GetMapping("itemSearchCommodity")
     @ApiOperation("网店首页条件搜索")

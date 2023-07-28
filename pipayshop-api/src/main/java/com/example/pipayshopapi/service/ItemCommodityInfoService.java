@@ -3,10 +3,7 @@ package com.example.pipayshopapi.service;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
-import com.example.pipayshopapi.entity.vo.CommodityDetailVO;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
-import com.example.pipayshopapi.entity.vo.commodityPageVO;
-import com.example.pipayshopapi.entity.vo.commodityVO;
+import com.example.pipayshopapi.entity.vo.*;
 
 import java.util.List;
 
@@ -26,7 +23,13 @@ public interface ItemCommodityInfoService extends IService<ItemCommodityInfo> {
      */
     PageDataVO commodityOfCateList(commodityPageVO commodityPageVO);
 
-
+    /**
+     * 发布网店商品
+     * @param itemCommodityInfoVO
+     * @param imagsList
+     * @return
+     */
+    boolean issueItemCommodity(ItemCommodityInfoVO itemCommodityInfoVO, String imagsList);
 
     /**
      *首页下面的商品列表分页展示
