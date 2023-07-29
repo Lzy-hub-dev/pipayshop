@@ -24,4 +24,12 @@ public interface ItemFollowFocusService extends IService<ItemFollowFocus> {
      * */
     Boolean userFollowItem(String followId,String itemId);
 
+    /**
+     * 用户取消关注
+     * @param followId
+     * @param itemId
+     * @return
+     * */
+    Boolean userUnfollow(String followId,String itemId);
+
 }
