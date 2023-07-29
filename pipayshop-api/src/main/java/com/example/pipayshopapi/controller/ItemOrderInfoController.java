@@ -1,7 +1,6 @@
 package com.example.pipayshopapi.controller;
 
 
-import com.example.pipayshopapi.entity.vo.ItemInfoVO;
 import com.example.pipayshopapi.entity.vo.ItemOrderInfoVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -67,4 +65,18 @@ public class ItemOrderInfoController {
             throw new BusinessException("删除网店用户订单失败，请联系后台人员");
         }
     }
+    //
+    @GetMapping("selectOrderByUerId/{userId}")
+    @ApiOperation("获取用户订单列表(包含商品信息)-网店")
+    public ResponseVO selectOrderByUerId(@PathVariable("userId") String userId) {
+        try {
+            List<ItemOrderInfoVO> itemOrderInfoVOS = itemOrderInfoService.selectOrderByUerId(userId);
+            return ResponseVO.getSuccessResponseVo(itemOrderInfoVOS);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new BusinessException("获取网店用户订单列表失败，请联系后台人员");
+        }
+    }
+
+
 }

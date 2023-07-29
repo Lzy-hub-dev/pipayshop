@@ -2,6 +2,7 @@ package com.example.pipayshopapi.service;
 
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.pipayshopapi.entity.ItemInfo;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,4 +48,24 @@ public interface ItemCommodityInfoService extends IService<ItemCommodityInfo> {
      *商品详情展示
      */
     CommodityDetailVO itemCommodityDetail(String commodityId);
+
+    /**
+     * 根据用户id查询 对应的 网店收藏列表
+     * @param userId
+     * @return
+     */
+    List<ItemCommodityInfo> getCollectList(String userId);
+
+    /**
+     * 根据用户id查询 对应的 网店关注列表
+     * @param userId
+     * @return
+     */
+    List<ItemInfo> getFollowList(String userId);
+    /**
+     * 根据用户id查询用户浏览商品历史-网店
+     * @param userId
+     * @return
+     */
+    List<ShopCommodityVO> historyList(String userId);
 }

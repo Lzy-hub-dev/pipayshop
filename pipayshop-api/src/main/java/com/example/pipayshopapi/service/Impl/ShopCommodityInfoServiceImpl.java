@@ -33,9 +33,8 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
     private ShopCommodityInfoMapper shopCommodityInfoMapper;
 
     /**
-     * 申请发布实体店商品
-     * @param applyShopCommodityDTO
-     * @param files
+     * 发布实体店商品
+     * @param shopCommodityVO
      * @return
      */
     @Override
@@ -62,6 +61,39 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
 //        shopCommodityInfo.setTagList(applyShopCommodityDTO.getTagList());
         shopCommodityInfo.setMyEvaluate(applyShopCommodityDTO.getMyEvaluate());
         return shopCommodityInfoMapper.insert(shopCommodityInfo) > 0;
+    }
+
+    /**
+     * 根据用户id查询 用户收藏的商品列表
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<ShopCommodityInfo> getCollectList(String userId) {
+        return shopCommodityInfoMapper.selectCollectProductByUserId(userId);
+    }
+
+    /**
+     * 根据用户id查询用户关注的网店列表
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<ShopInfo> getFollowList(String userId) {
+        return shopCommodityInfoMapper.selectFollowProductByUserId(userId);
+    }
+
+    /**
+     * 根据用户id查询用户浏览商品历史-实体店
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<ShopCommodityVO> historyList(String userId) {
+        return shopCommodityInfoMapper.selectHistoryProductByUserId(userId);
     }
 
 }

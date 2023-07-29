@@ -6,7 +6,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
+import com.example.pipayshopapi.entity.ItemInfo;
 import com.example.pipayshopapi.entity.OrderInfo;
+import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.mapper.ItemCommodityInfoMapper;
@@ -122,4 +124,39 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
 
         return commodityDetailVO;
     }
+
+    /**
+     * 根据用户id查询 对应的 网店收藏列表
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<ItemCommodityInfo> getCollectList(String userId) {
+        return commodityInfoMapper.selectCollectProductByUserId(userId);
+    }
+
+    /**
+     * 根据用户id查询 对应的 网店关注列表
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<ItemInfo> getFollowList(String userId) {
+        return commodityInfoMapper.selectFollowItemByUserId(userId);
+    }
+
+    /**
+     * 根据用户id查询用户浏览商品历史-网店
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<ShopCommodityVO> historyList(String userId) {
+        return commodityInfoMapper.selectHistoryProductByUserId(userId);
+    }
+
+
 }

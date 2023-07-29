@@ -44,4 +44,18 @@ public class ItemCommodityInfoVO {
      * 损坏程度
      */
     private Integer degreeLoss;
+
+    /**
+     * 浏览时间
+     */
+    private String accessTime;
+
+    /**
+     * 商品首图
+     */
+    private String image;
+    /**
+     * 商品id
+     */
+    private String commodityId;
 }
