@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ShopDTO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.entity.vo.ShopInfoVO;
 
 /**
  * <p>
@@ -34,8 +35,7 @@ public interface ShopInfoService extends IService<ShopInfo> {
     /**
      * 根据实体店id查询实体店信息
      */
-    ShopInfo getShopInfoById(String shopId);
-
+    ShopInfoVO getShopInfoById(String shopId);
 
     /**
      * 根据实体店id删除实体店

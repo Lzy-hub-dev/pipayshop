@@ -33,6 +33,15 @@ public class ShopInfoVO {
      */
     private String distance;
     /**
+     * 坐标维度
+     */
+    private BigDecimal localhostLatitude;
+
+    /**
+     * 坐标经度
+     */
+    private BigDecimal localhostLongitude;
+    /**
      * 店铺地址
      */
     private String address;
@@ -49,4 +58,5 @@ public class ShopInfoVO {
      * 标签列表
      */
     private List<ShopTags> shopTagsList;
+
 }
