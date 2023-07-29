@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -61,12 +62,12 @@ public class ShopCommodityInfo implements Serializable {
     /**
      * 商品上架的时间
      */
-    private LocalDateTime createTime;
+    private Date createTime;
 
     /**
      * 商品数据修改的时间
      */
-    private LocalDateTime updateTime;
+    private Date updateTime;
 
     /**
      * 商品有效期
@@ -84,126 +85,9 @@ public class ShopCommodityInfo implements Serializable {
     private String reservationInformation;
 
     /**
-     * 0:正常1:下架2:绝对删除
+     * 0:审核 1:上架 2:下架3:绝对删除
      */
-    private Boolean status;
+    private Integer status;
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getCommodityId() {
-        return commodityId;
-    }
-
-    public void setCommodityId(String commodityId) {
-        this.commodityId = commodityId;
-    }
-    public String getCommodityName() {
-        return commodityName;
-    }
-
-    public void setCommodityName(String commodityName) {
-        this.commodityName = commodityName;
-    }
-    public String getCommodityImgList() {
-        return commodityImgList;
-    }
-
-    public void setCommodityImgList(String commodityImgList) {
-        this.commodityImgList = commodityImgList;
-    }
-    public String getCommodityDetail() {
-        return commodityDetail;
-    }
-
-    public void setCommodityDetail(String commodityDetail) {
-        this.commodityDetail = commodityDetail;
-    }
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-    public Integer getMonthlySales() {
-        return monthlySales;
-    }
-
-    public void setMonthlySales(Integer monthlySales) {
-        this.monthlySales = monthlySales;
-    }
-    public String getShopId() {
-        return shopId;
-    }
-
-    public void setShopId(String shopId) {
-        this.shopId = shopId;
-    }
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
-    public LocalDateTime getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(LocalDateTime updateTime) {
-        this.updateTime = updateTime;
-    }
-    public Integer getValidityTime() {
-        return validityTime;
-    }
-
-    public void setValidityTime(Integer validityTime) {
-        this.validityTime = validityTime;
-    }
-    public Integer getResidue() {
-        return residue;
-    }
-
-    public void setResidue(Integer residue) {
-        this.residue = residue;
-    }
-    public String getReservationInformation() {
-        return reservationInformation;
-    }
-
-    public void setReservationInformation(String reservationInformation) {
-        this.reservationInformation = reservationInformation;
-    }
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return "ShopCommodityInfo{" +
-            "id=" + id +
-            ", commodityId=" + commodityId +
-            ", commodityName=" + commodityName +
-            ", commodityImgList=" + commodityImgList +
-            ", commodityDetail=" + commodityDetail +
-            ", price=" + price +
-            ", monthlySales=" + monthlySales +
-            ", shopId=" + shopId +
-            ", createTime=" + createTime +
-            ", updateTime=" + updateTime +
-            ", validityTime=" + validityTime +
-            ", residue=" + residue +
-            ", reservationInformation=" + reservationInformation +
-            ", status=" + status +
-        "}";
-    }
 }
