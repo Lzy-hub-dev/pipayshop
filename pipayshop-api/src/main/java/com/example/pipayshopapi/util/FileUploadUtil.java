@@ -33,7 +33,7 @@ public class FileUploadUtil {
         if ("".equals(fileName)) {
             return "文件名不能为空";
         }
-        System.out.println("文件名: " + fileName);
+//        System.out.println("文件名: " + fileName);
         String postStr = fileName.substring(fileName.lastIndexOf("."));
         String preStr = StringUtil.generateShortId();
         fileName = preStr +  postStr;

@@ -2,8 +2,11 @@ package com.example.pipayshopapi.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ShopInfo;
+import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
 import com.example.pipayshopapi.entity.dto.ShopDTO;
+import com.example.pipayshopapi.entity.vo.ItemCommodityInfoVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <p>
@@ -51,10 +54,14 @@ public interface ShopInfoService extends IService<ShopInfo> {
      */
     Boolean updateShopInfoById(ShopInfo shopInfo);
 
+
+
     /**
-     * 新增实体店
-     * @param shopInfo
+     * 申请实体店
+     * @param applyShopDTO
+     * @param file
      * @return
      */
-    Boolean addShopInfo(ShopInfo shopInfo);
+    boolean applyShop(ApplyShopDTO applyShopDTO , MultipartFile[] file);
+
 }

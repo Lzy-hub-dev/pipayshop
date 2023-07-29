@@ -1,5 +1,6 @@
 package com.example.pipayshopapi.service.Impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -9,12 +10,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.ShopTags;
+import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
 import com.example.pipayshopapi.entity.dto.ShopDTO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ShopInfoVO;
 import com.example.pipayshopapi.mapper.ShopInfoMapper;
 import com.example.pipayshopapi.mapper.ShopTagsMapper;
 import com.example.pipayshopapi.service.ShopInfoService;
+import com.example.pipayshopapi.util.FileUploadUtil;
 import com.example.pipayshopapi.util.StringUtil;
 import com.javadocmd.simplelatlng.LatLng;
 import com.javadocmd.simplelatlng.LatLngTool;
@@ -23,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -198,14 +202,34 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
                 .eq(ShopInfo::getShopId, shopInfo.getShopId())) > 0;
     }
 
+
+
     /**
-     * 新增实体店
+     * 申请实体店
+     * @param applyShopDTO
+     * @param file
+     * @return
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean addShopInfo(ShopInfo shopInfo) {
-        String shortId = StringUtil.generateShortId();
-        shopInfo.setShopId(shortId);
+    public boolean applyShop(ApplyShopDTO applyShopDTO, MultipartFile[] file) {
+        // 创建一个集合存储商品图片
+        List<String> imagesList = new ArrayList<>();
+        for (MultipartFile multipartFile : file) {
+            // 获取存储到本地空间并返回图片url
+            imagesList.add(FileUploadUtil.uploadFile(multipartFile));
+        }
+        // 将list集合转为string
+        String jsonString = JSON.toJSONString(imagesList);
+        // 属性转移
+        ShopInfo shopInfo = new ShopInfo();
+        shopInfo.setShopId(StringUtil.generateShortId());
+        shopInfo.setShopImagList(jsonString);
+        shopInfo.setLocalhostLatitude(applyShopDTO.getLocalhostLatitude());
+        shopInfo.setLocalhostLongitude(applyShopDTO.getLocalhostLongitude());
+        shopInfo.setShopName(applyShopDTO.getShopName());
+        shopInfo.setPhone(applyShopDTO.getPhone());
+        shopInfo.setUid(applyShopDTO.getUid());
         return shopInfoMapper.insert(shopInfo) > 0;
     }
 
