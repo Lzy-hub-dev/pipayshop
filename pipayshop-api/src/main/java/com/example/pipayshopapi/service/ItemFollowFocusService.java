@@ -1,9 +1,12 @@
 package com.example.pipayshopapi.service;
 
+import com.example.pipayshopapi.entity.FollowFocus;
 import com.example.pipayshopapi.entity.ItemFollowFocus;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.vo.ItemInfoVO;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
+
+import java.util.List;
 
 /**
  * <p>

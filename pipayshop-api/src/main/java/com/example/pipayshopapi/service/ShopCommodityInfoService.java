@@ -4,6 +4,8 @@ import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.ItemInfo;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.pipayshopapi.entity.ShopInfo;
+import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityVO;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,12 +27,11 @@ public interface ShopCommodityInfoService extends IService<ShopCommodityInfo> {
 
     /**
      * 发布实体店商品
-     * @param shopCommodityVO
-     * @param commodityImgList
+     * @param applyShopCommodityDTO
+     * @param files
      * @return
      */
     boolean issueShopCommodity(ApplyShopCommodityDTO applyShopCommodityDTO, MultipartFile[] files);
-
     /**
      * 根据用户id查询 用户收藏的商品列表
      * @param userId
