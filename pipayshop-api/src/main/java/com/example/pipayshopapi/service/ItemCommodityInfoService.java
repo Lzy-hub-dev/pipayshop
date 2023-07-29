@@ -4,6 +4,7 @@ import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -26,10 +27,10 @@ public interface ItemCommodityInfoService extends IService<ItemCommodityInfo> {
     /**
      * 发布网店商品
      * @param itemCommodityInfoVO
-     * @param imagsList
+     * @param file
      * @return
      */
-    boolean issueItemCommodity(ItemCommodityInfoVO itemCommodityInfoVO, String imagsList);
+    boolean issueItemCommodity(ItemCommodityInfoVO itemCommodityInfoVO, MultipartFile[] file);
 
     /**
      *首页下面的商品列表分页展示

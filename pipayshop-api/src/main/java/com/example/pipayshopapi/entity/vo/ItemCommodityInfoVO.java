@@ -30,8 +30,18 @@ public class ItemCommodityInfoVO {
      */
     private String details;
     /**
-     * 商品类别(外键关联)
+     * 商品类别二级分类(外键关联)
      */
     private Integer categoryId;
 
+    /**
+     * 品牌id
+     */
+    private Integer brandId;
+
+
+    /**
+     * 损坏程度
+     */
+    private Integer degreeLoss;
 }

@@ -1,5 +1,6 @@
 package com.example.pipayshopapi.service.Impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -11,12 +12,16 @@ import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.mapper.ItemCommodityInfoMapper;
 import com.example.pipayshopapi.service.ItemCommodityInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.pipayshopapi.util.FileUploadUtil;
 import com.example.pipayshopapi.util.StringUtil;
 import io.swagger.models.auth.In;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -56,18 +61,29 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean issueItemCommodity(ItemCommodityInfoVO itemCommodityInfoVO, String imagsList) {
+    public boolean issueItemCommodity(ItemCommodityInfoVO itemCommodityInfoVO, MultipartFile[] files) {
 
+        // 创建集合放图片url
+        List<String> iamgesList = new ArrayList<>();
+        for (MultipartFile file : files) {
+            // 通过工具类放入本地文件并返回文件路径存入集合中
+            iamgesList.add(FileUploadUtil.uploadFile(file));
+        }
+        // 将list集合转为string
+        String jsonString = JSON.toJSONString(iamgesList);
+        // 属性转移
         ItemCommodityInfo itemCommodityInfo = new ItemCommodityInfo();
         itemCommodityInfo.setCommodityId(StringUtil.generateShortId());
+        itemCommodityInfo.setBrandId(itemCommodityInfo.getBrandId());
         itemCommodityInfo.setPrice(itemCommodityInfoVO.getPrice());
+        itemCommodityInfo.setDegreeLoss(itemCommodityInfoVO.getDegreeLoss());
         itemCommodityInfo.setItemCommodityName(itemCommodityInfoVO.getItemCommodityName());
         itemCommodityInfo.setOriginAddress(itemCommodityInfoVO.getOriginAddress());
         itemCommodityInfo.setDetails(itemCommodityInfoVO.getDetails());
-        itemCommodityInfo.setImagsList(imagsList);
         itemCommodityInfo.setCategoryId(itemCommodityInfoVO.getCategoryId());
+        itemCommodityInfo.setImagsList(jsonString);
         int result = commodityInfoMapper.insert(itemCommodityInfo);
-        return result>0;
+        return result > 0;
     }
 
     /**

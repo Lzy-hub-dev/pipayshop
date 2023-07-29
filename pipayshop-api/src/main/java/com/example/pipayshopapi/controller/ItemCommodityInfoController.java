@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -53,10 +54,10 @@ public class ItemCommodityInfoController {
 
     @PostMapping("issueItemCommodity")
     @ApiOperation("发布网店商品")
-    public ResponseVO issueItemCommodity(@RequestParam("imagsList")String imagsList,@RequestBody ItemCommodityInfoVO itemCommodityInfoVO){
+    public ResponseVO issueItemCommodity(@RequestParam("files") MultipartFile[] files, ItemCommodityInfoVO itemCommodityInfoVO){
         System.out.println(itemCommodityInfoVO);
         try {
-            boolean result = commodityInfoService.issueItemCommodity(itemCommodityInfoVO,imagsList);
+            boolean result = commodityInfoService.issueItemCommodity(itemCommodityInfoVO,files);
             if (!result){
                 throw new Exception();
             }
