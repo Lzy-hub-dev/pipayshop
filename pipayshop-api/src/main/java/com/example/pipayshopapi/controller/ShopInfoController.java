@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author nws
  * @since 2023-07-25
  */
-@Api(value = "实体店",tags = "实体店")
+
 @RestController
 @RequestMapping("/pipayshopapi/shop-info")
 public class ShopInfoController {

@@ -2,7 +2,10 @@ package com.example.pipayshopapi.service;
 
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityVO;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <p>
@@ -16,10 +19,10 @@ public interface ShopCommodityInfoService extends IService<ShopCommodityInfo> {
 
     /**
      * 发布实体店商品
-     * @param shopCommodityVO
-     * @param commodityImgList
+     * @param applyShopCommodityDTO
+     * @param files
      * @return
      */
-    boolean issueShopCommodity(ShopCommodityVO shopCommodityVO, String commodityImgList);
+    boolean issueShopCommodity(ApplyShopCommodityDTO applyShopCommodityDTO, MultipartFile[] files);
 
 }

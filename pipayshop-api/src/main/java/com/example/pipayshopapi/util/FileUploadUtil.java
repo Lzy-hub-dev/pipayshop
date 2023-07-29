@@ -17,7 +17,7 @@ import java.io.InputStream;
 public class FileUploadUtil {
 
 
-    private static String UPLOAD_DIR="pipayshop-api/src/main/resources/headPic";
+    private static String UPLOAD_DIR="pipayshop-api/src/main/resources/localImg";
     /**
      * 文件上传
      * @param multipartFile

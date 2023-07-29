@@ -1,15 +1,22 @@
 package com.example.pipayshopapi.service.Impl;
 
+import com.alibaba.fastjson.JSON;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
+import com.example.pipayshopapi.entity.ShopInfo;
+import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityVO;
 import com.example.pipayshopapi.mapper.ShopCommodityInfoMapper;
 import com.example.pipayshopapi.service.ShopCommodityInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.pipayshopapi.util.FileUploadUtil;
 import com.example.pipayshopapi.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -26,27 +33,35 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
     private ShopCommodityInfoMapper shopCommodityInfoMapper;
 
     /**
-     * 发布实体店商品
-     * @param shopCommodityVO
+     * 申请发布实体店商品
+     * @param applyShopCommodityDTO
+     * @param files
      * @return
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean issueShopCommodity(ShopCommodityVO shopCommodityVO, String commodityImgList) {
-        ShopCommodityInfo shopCommodity = new ShopCommodityInfo();
-
-        shopCommodity.setCommodityImgList(commodityImgList);
-
-        shopCommodity.setCommodityName(shopCommodityVO.getCommodityName());
-        shopCommodity.setCommodityId(StringUtil.generateShortId());
-        shopCommodity.setCommodityDetail(shopCommodityVO.getCommodityDetail());
-        shopCommodity.setShopId(shopCommodityVO.getShopId());
-        shopCommodity.setPrice(shopCommodityVO.getPrice());
-
-        int result = shopCommodityInfoMapper.insert(shopCommodity);
-
-
-        return result>0;
+    public boolean issueShopCommodity(ApplyShopCommodityDTO applyShopCommodityDTO, MultipartFile[] files) {
+        // 创建一个集合存储商品图片
+        List<String> imagesList = new ArrayList<>();
+        for (MultipartFile multipartFile : files) {
+            // 获取存储到本地空间并返回图片url
+            imagesList.add(FileUploadUtil.uploadFile(multipartFile));
+        }
+        // 将list集合转为string
+        String jsonString = JSON.toJSONString(imagesList);
+        // 属性转移
+        ShopCommodityInfo shopCommodityInfo = new ShopCommodityInfo();
+        shopCommodityInfo.setCommodityId(StringUtil.generateShortId());
+        shopCommodityInfo.setCommodityName(applyShopCommodityDTO.getCommodityName());
+        shopCommodityInfo.setCommodityImgList(jsonString);
+        shopCommodityInfo.setCommodityDetail(applyShopCommodityDTO.getCommodityDetail());
+        shopCommodityInfo.setPrice(applyShopCommodityDTO.getPrice());
+        shopCommodityInfo.setShopId(applyShopCommodityDTO.getShopId());
+        shopCommodityInfo.setResidue(applyShopCommodityDTO.getResidue());
+        shopCommodityInfo.setReservationInformation(applyShopCommodityDTO.getReservationInformation());
+//        shopCommodityInfo.setTagList(applyShopCommodityDTO.getTagList());
+        shopCommodityInfo.setMyEvaluate(applyShopCommodityDTO.getMyEvaluate());
+        return shopCommodityInfoMapper.insert(shopCommodityInfo) > 0;
     }
 
 }

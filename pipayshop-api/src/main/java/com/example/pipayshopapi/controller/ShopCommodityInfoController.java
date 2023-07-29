@@ -1,10 +1,13 @@
 package com.example.pipayshopapi.controller;
 
 
+import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
+import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopCommodityInfoService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 
@@ -25,6 +29,7 @@ import javax.annotation.Resource;
  */
 @Controller
 @RequestMapping("/pipayshopapi/shop-commodity-info")
+@Api(value = "实体店商品",tags = "实体店商品")
 public class ShopCommodityInfoController {
 
     @Resource
@@ -32,11 +37,11 @@ public class ShopCommodityInfoController {
 
     @PostMapping("issueShopCommodity")
     @ApiOperation("发布实体店商品")
-    public ResponseVO issueShopCommodity(@RequestParam("commodityImgList") String commodityImgList, @RequestBody ShopCommodityVO shopCommodityVO){
-        System.out.println(commodityImgList);
+    public ResponseVO issueShopCommodity(ApplyShopCommodityDTO applyShopCommodityDTO, @RequestParam("files") MultipartFile[] files){
+
         try {
-            boolean result = shopCommodityService.issueShopCommodity(shopCommodityVO,commodityImgList);
-            if (!result){
+            boolean insert = shopCommodityService.issueShopCommodity(applyShopCommodityDTO, files);
+            if (!insert){
                 throw new Exception();
             }
             return ResponseVO.getSuccessResponseVo("发布实体店商品成功");

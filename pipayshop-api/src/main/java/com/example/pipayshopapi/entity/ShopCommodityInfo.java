@@ -3,6 +3,10 @@ package com.example.pipayshopapi.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -17,6 +21,9 @@ import java.util.Date;
  * @since 2023-07-27
  */
 @TableName("shop_commodity_info")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ShopCommodityInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -89,5 +96,13 @@ public class ShopCommodityInfo implements Serializable {
      */
     private Integer status;
 
+    /**
+     * 我的评价
+     */
+    private String myEvaluate;
+    /**
+     * 标签集合
+     */
+    private String tagList;
 
 }
