@@ -43,7 +43,7 @@ public class ItemOrderInfo implements Serializable {
     /**
      * 卖家id
      */
-    private String shopId;
+    private String itemId;
 
     /**
      * 0:待支付1:已支付2：已完成3：无效订单
@@ -65,90 +65,5 @@ public class ItemOrderInfo implements Serializable {
      */
     private LocalDateTime updateTime;
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
-    }
-    public BigDecimal getTransactionAmount() {
-        return transactionAmount;
-    }
-
-    public void setTransactionAmount(BigDecimal transactionAmount) {
-        this.transactionAmount = transactionAmount;
-    }
-    public String getCommodityId() {
-        return commodityId;
-    }
-
-    public void setCommodityId(String commodityId) {
-        this.commodityId = commodityId;
-    }
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-    public String getShopId() {
-        return shopId;
-    }
-
-    public void setShopId(String shopId) {
-        this.shopId = shopId;
-    }
-    public Boolean getOrderStatus() {
-        return orderStatus;
-    }
-
-    public void setOrderStatus(Boolean orderStatus) {
-        this.orderStatus = orderStatus;
-    }
-    public Boolean getDelFlag() {
-        return delFlag;
-    }
-
-    public void setDelFlag(Boolean delFlag) {
-        this.delFlag = delFlag;
-    }
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
-    public LocalDateTime getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(LocalDateTime updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @Override
-    public String toString() {
-        return "ItemOrderInfo{" +
-            "id=" + id +
-            ", orderId=" + orderId +
-            ", transactionAmount=" + transactionAmount +
-            ", commodityId=" + commodityId +
-            ", uid=" + uid +
-            ", shopId=" + shopId +
-            ", orderStatus=" + orderStatus +
-            ", delFlag=" + delFlag +
-            ", createTime=" + createTime +
-            ", updateTime=" + updateTime +
-        "}";
-    }
 }

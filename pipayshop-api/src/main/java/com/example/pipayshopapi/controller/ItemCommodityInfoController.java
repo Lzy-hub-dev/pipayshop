@@ -1,11 +1,12 @@
 package com.example.pipayshopapi.controller;
 
 
+import com.example.pipayshopapi.entity.ItemCommodityInfo;
+import com.example.pipayshopapi.entity.ItemInfo;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ItemCommodityInfoService;
-import com.example.pipayshopapi.service.ShopCommodityService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,7 @@ import java.util.List;
  * @author nws
  * @since 2023-07-25
  */
-@Api(value = "商品接口",tags = "商品接口")
+@Api(value = "网店商品接口",tags = "网店商品接口")
 @RestController
 @RequestMapping("/pipayshopapi/item-commodity-info")
 @Slf4j
@@ -116,6 +117,41 @@ public class ItemCommodityInfoController {
             log.error(e.getMessage());
             System.out.println(e.getMessage());
             throw new BusinessException("获取网店商品详情接口失败，请联系后台人员");
+        }
+    }
+
+    @GetMapping("collectList/{userId}")
+    @ApiOperation("根据用户id查询 用户收藏的商品列表")
+    public ResponseVO collectList(@PathVariable("userId") String userId) {
+        try {
+            List<ItemCommodityInfo> list = commodityInfoService.getCollectList(userId);
+            return ResponseVO.getSuccessResponseVo(list);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new BusinessException("查询失败，请联系后台人" + "、员");
+        }
+    }
+    @GetMapping("followList/{userId}")
+    @ApiOperation("根据用户id查询 用户关注的网店列表")
+    public ResponseVO followList(@PathVariable("userId") String userId) {
+        try {
+            List<ItemInfo> list = commodityInfoService.getFollowList(userId);
+            return ResponseVO.getSuccessResponseVo(list);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new BusinessException("查询失败，请联系后台人" + "、员");
+        }
+    }
+
+    @GetMapping("history/{userId}")
+    @ApiOperation("根据用户id查询用户浏览商品历史-网店")
+    public ResponseVO historyList(@PathVariable("userId") String userId) {
+        try {
+            List<ShopCommodityVO> list = commodityInfoService.historyList(userId);
+            return ResponseVO.getSuccessResponseVo(list);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new BusinessException("查询失败，请联系后台人" + "、员");
         }
     }
 

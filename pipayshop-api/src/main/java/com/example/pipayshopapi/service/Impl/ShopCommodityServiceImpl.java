@@ -1,10 +1,15 @@
 package com.example.pipayshopapi.service.Impl;
 
 import com.example.pipayshopapi.entity.ShopCommodity;
+import com.example.pipayshopapi.entity.ShopInfo;
+import com.example.pipayshopapi.mapper.ShopCommodityHistoryMapper;
 import com.example.pipayshopapi.mapper.ShopCommodityMapper;
 import com.example.pipayshopapi.service.ShopCommodityService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -16,5 +21,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ShopCommodityServiceImpl extends ServiceImpl<ShopCommodityMapper, ShopCommodity> implements ShopCommodityService {
+
 
 }

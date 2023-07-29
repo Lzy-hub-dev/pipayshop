@@ -1,6 +1,9 @@
 package com.example.pipayshopapi.service.Impl;
 
+import com.example.pipayshopapi.entity.ItemCommodityInfo;
+import com.example.pipayshopapi.entity.ItemInfo;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
+import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.vo.ShopCommodityVO;
 import com.example.pipayshopapi.mapper.ShopCommodityInfoMapper;
 import com.example.pipayshopapi.service.ShopCommodityInfoService;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -47,6 +51,39 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
 
 
         return result>0;
+    }
+
+    /**
+     * 根据用户id查询 用户收藏的商品列表
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<ShopCommodityInfo> getCollectList(String userId) {
+        return shopCommodityInfoMapper.selectCollectProductByUserId(userId);
+    }
+
+    /**
+     * 根据用户id查询用户关注的网店列表
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<ShopInfo> getFollowList(String userId) {
+        return shopCommodityInfoMapper.selectFollowProductByUserId(userId);
+    }
+
+    /**
+     * 根据用户id查询用户浏览商品历史-实体店
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<ShopCommodityVO> historyList(String userId) {
+        return shopCommodityInfoMapper.selectHistoryProductByUserId(userId);
     }
 
 }

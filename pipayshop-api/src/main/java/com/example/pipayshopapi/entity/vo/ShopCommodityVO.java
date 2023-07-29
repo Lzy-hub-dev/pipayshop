@@ -11,6 +11,10 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class ShopCommodityVO {
     /**
+     * 商品的id
+     */
+    private String commodityId;
+    /**
      * 商品的名字
      */
     private String commodityName;
@@ -31,4 +35,13 @@ public class ShopCommodityVO {
      * 店铺地址
      */
     private String address;
+    /**
+     * 商品图片
+     */
+    private String image;
+
+    /**
+     * 访问时间
+     */
+    private String accessTime;
 }
