@@ -88,6 +88,19 @@ public class ShopCommodityInfo implements Serializable {
      */
     private Boolean status;
 
+    /**
+     * 我的评价
+     */
+    private String myEvaluate;
+
+    public String getMyEvaluate() {
+        return myEvaluate;
+    }
+
+    public void setMyEvaluate(String myEvaluate) {
+        this.myEvaluate = myEvaluate;
+    }
+
     public Long getId() {
         return id;
     }

@@ -2,7 +2,10 @@ package com.example.pipayshopapi.service;
 
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityVO;
+
+import java.awt.*;
 
 /**
  * <p>
@@ -21,5 +24,19 @@ public interface ShopCommodityInfoService extends IService<ShopCommodityInfo> {
      * @return
      */
     boolean issueShopCommodity(ShopCommodityVO shopCommodityVO, String commodityImgList);
+
+    /**
+     * 根据店铺id查找实体店商品的详情信息列表
+     * @param shopId
+     * @return
+     */
+    PageDataVO selectShopInfoListByShopId(Integer limit, Integer pages, String shopId);
+
+    /**
+     * 根据商品的id查找实体店商品的详情信息
+     */
+    ShopCommodityInfo selectShopInfoByCommodityId(String commodityId);
+
+
 
 }
