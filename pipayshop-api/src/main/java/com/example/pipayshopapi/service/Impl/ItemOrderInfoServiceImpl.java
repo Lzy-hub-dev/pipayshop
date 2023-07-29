@@ -48,4 +48,15 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
                                                                 .set("del_flag", 1));
         return update > 0;
     }
+
+    /**
+     * 根据用户id查询 订单列表
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<ItemOrderInfoVO> selectOrderByUerId(String userId) {
+        return itemOrderInfoMapper.selectOrderByUerId(userId);
+    }
 }

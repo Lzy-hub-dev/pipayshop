@@ -4,11 +4,59 @@
 
 
     <select id="selectItemOrders" resultType="com.example.pipayshopapi.entity.vo.ItemOrderInfoVO">
-        select o.order_id,o.transaction_amount,o.commodity_id,
-                o.uid,o.shop_id,o.create_time,c.imags_list,c.item_commodity_name
+        select o.order_id,
+               o.transaction_amount,
+               o.commodity_id,
+               o.uid,
+               o.item_id,
+               o.create_time,
+               c.imags_list,
+               c.item_commodity_name
+            i.item_name as seller_name
         from item_order_info o
-        left join item_commodity_info c
-        on o.commodity_id=c.commodity_id
-        where o.uid=#{userId} and o.del_flag=0
+                 left join item_commodity_info c
+                           on o.commodity_id = c.commodity_id
+        where o.uid = #{userId}
+          and o.del_flag = 0
+    </select>
+
+    <select id="selectOrderByUerId" resultType="com.example.pipayshopapi.entity.vo.ItemOrderInfoVO">
+        select o.order_id,
+               o.transaction_amount,
+               o.commodity_id,
+               o.uid,
+               o.item_id,
+               JSON_UNQUOTE(JSON_EXTRACT(c.imags_list, "$[0]")) AS first_picture,
+               c.imags_list,
+               c.item_commodity_name,
+               i.item_name                                      as seller_name,
+               CASE
+                   WHEN o.order_status = 0 THEN '待支付'
+                   WHEN o.order_status = 1 THEN '已支付'
+                   WHEN o.order_status = 2 THEN '已完成'
+                   WHEN order_status = 3 THEN '无效订单'
+                   END
+                                                                AS order_status
+        from item_order_info o
+                 inner join item_commodity_info c
+                            on o.commodity_id = c.commodity_id
+                 inner join item_info i
+                            on i.item_id = o.item_id
+        where o.uid =
+              #{userId}
+          and o.
+                  del_flag
+            =
+              0
+          and c
+                  .
+                  del_flag
+            =
+              0
+          and i
+                  .
+                  status
+            =
+              0
     </select>
 </mapper>

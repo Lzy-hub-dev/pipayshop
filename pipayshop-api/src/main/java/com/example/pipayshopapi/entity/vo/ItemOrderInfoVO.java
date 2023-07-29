@@ -15,8 +15,11 @@ public class ItemOrderInfoVO {
     private BigDecimal transactionAmount;
     private String commodityId;
     private String uId;
-    private String shopId;
+    private String itemId;
     private Date createTime;
     private String imagsList;
     private String itemCommodityName;
+    private String firstPicture;
+    private String sellerName;
+    private String orderStatus;
 }

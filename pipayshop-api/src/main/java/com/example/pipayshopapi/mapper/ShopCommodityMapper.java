@@ -4,6 +4,8 @@ import com.example.pipayshopapi.entity.ShopCommodity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * <p>
  * 实体店的商品表 Mapper 接口

@@ -2,18 +2,25 @@ package com.example.pipayshopapi.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.alibaba.fastjson.JSON;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.entity.ShopInfo;
+import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityVO;
 import com.example.pipayshopapi.mapper.ShopCommodityInfoMapper;
 import com.example.pipayshopapi.service.ShopCommodityInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.pipayshopapi.util.FileUploadUtil;
 import com.example.pipayshopapi.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -36,21 +43,61 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean issueShopCommodity(ShopCommodityVO shopCommodityVO, String commodityImgList) {
-        ShopCommodityInfo shopCommodity = new ShopCommodityInfo();
+    public boolean issueShopCommodity(ApplyShopCommodityDTO applyShopCommodityDTO, MultipartFile[] files) {
+        // 创建一个集合存储商品图片
+        List<String> imagesList = new ArrayList<>();
+        for (MultipartFile multipartFile : files) {
+            // 获取存储到本地空间并返回图片url
+            imagesList.add(FileUploadUtil.uploadFile(multipartFile));
+        }
+        // 将list集合转为string
+        String jsonString = JSON.toJSONString(imagesList);
+        // 属性转移
+        ShopCommodityInfo shopCommodityInfo = new ShopCommodityInfo();
+        shopCommodityInfo.setCommodityId(StringUtil.generateShortId());
+        shopCommodityInfo.setCommodityName(applyShopCommodityDTO.getCommodityName());
+        shopCommodityInfo.setCommodityImgList(jsonString);
+        shopCommodityInfo.setCommodityDetail(applyShopCommodityDTO.getCommodityDetail());
+        shopCommodityInfo.setPrice(applyShopCommodityDTO.getPrice());
+        shopCommodityInfo.setShopId(applyShopCommodityDTO.getShopId());
+        shopCommodityInfo.setResidue(applyShopCommodityDTO.getResidue());
+        shopCommodityInfo.setReservationInformation(applyShopCommodityDTO.getReservationInformation());
+//        shopCommodityInfo.setTagList(applyShopCommodityDTO.getTagList());
+        shopCommodityInfo.setMyEvaluate(applyShopCommodityDTO.getMyEvaluate());
+        return shopCommodityInfoMapper.insert(shopCommodityInfo) > 0;
+    }
 
-        shopCommodity.setCommodityImgList(commodityImgList);
+    /**
+     * 根据用户id查询 用户收藏的商品列表
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<ShopCommodityInfo> getCollectList(String userId) {
+        return shopCommodityInfoMapper.selectCollectProductByUserId(userId);
+    }
 
-        shopCommodity.setCommodityName(shopCommodityVO.getCommodityName());
-        shopCommodity.setCommodityId(StringUtil.generateShortId());
-        shopCommodity.setCommodityDetail(shopCommodityVO.getCommodityDetail());
-        shopCommodity.setShopId(shopCommodityVO.getShopId());
-        shopCommodity.setPrice(shopCommodityVO.getPrice());
+    /**
+     * 根据用户id查询用户关注的网店列表
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<ShopInfo> getFollowList(String userId) {
+        return shopCommodityInfoMapper.selectFollowProductByUserId(userId);
+    }
 
-        int result = shopCommodityInfoMapper.insert(shopCommodity);
-
-
-        return result>0;
+    /**
+     * 根据用户id查询用户浏览商品历史-实体店
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<ShopCommodityVO> historyList(String userId) {
+        return shopCommodityInfoMapper.selectHistoryProductByUserId(userId);
     }
 
     /**

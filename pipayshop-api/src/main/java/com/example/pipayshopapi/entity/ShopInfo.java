@@ -58,6 +58,11 @@ public class ShopInfo implements Serializable {
      */
 
     private String tagList;
+
+    /**
+     * 联系电话
+     */
+    private String phone;
     /**
      * 店铺地址
      */

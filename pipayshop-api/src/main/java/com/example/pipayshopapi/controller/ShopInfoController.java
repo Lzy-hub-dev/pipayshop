@@ -2,6 +2,7 @@ package com.example.pipayshopapi.controller;
 
 
 import com.example.pipayshopapi.entity.ShopInfo;
+import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
 import com.example.pipayshopapi.entity.dto.ShopDTO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <p>
@@ -23,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
  * @author nws
  * @since 2023-07-25
  */
-@Api(value = "实体店",tags = "实体店")
+
 @RestController
 @RequestMapping("/pipayshopapi/shop-info")
 public class ShopInfoController {
@@ -92,15 +94,18 @@ public class ShopInfoController {
         }
 
     }
-    @PostMapping("addShopInfo")
-    @ApiOperation("新增实体店")
-    public ResponseVO addShopInfo(@RequestBody ShopInfo shopInfo) {
+    @PostMapping("applyShop")
+    @ApiOperation("申请实体店")
+    public ResponseVO applyShop(ApplyShopDTO applyShopDTO,@RequestParam("files") MultipartFile[] files) {
         try {
-            Boolean aBoolean = infoService.addShopInfo(shopInfo);
-            return aBoolean ? ResponseVO.getSuccessResponseVo(null) : ResponseVO.getFalseResponseVo(null);
-        } catch (Exception e) {
+            Boolean insert = infoService.applyShop(applyShopDTO,files);
+            if (!insert){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("提交申请成功");
+         } catch (Exception e) {
             log.error(e.getMessage());
-            return ResponseVO.getFalseResponseVo(null);
+            return ResponseVO.getFalseResponseVo("提交申请失败，请联系后台管理员");
         }
     }
 

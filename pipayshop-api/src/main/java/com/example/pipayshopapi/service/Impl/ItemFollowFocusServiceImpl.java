@@ -1,8 +1,13 @@
 package com.example.pipayshopapi.service.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.example.pipayshopapi.entity.FollowFocus;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.pipayshopapi.entity.ItemFollowFocus;
+import com.example.pipayshopapi.entity.ShopFollowFocus;
 import com.example.pipayshopapi.mapper.ItemFollowFocusMapper;
+import com.example.pipayshopapi.mapper.ShopFollowFocusMapper;
+import com.example.pipayshopapi.mapper.ShopInfoMapper;
 import com.example.pipayshopapi.service.ItemFollowFocusService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
@@ -12,6 +17,8 @@ import java.util.Date;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 
 
@@ -28,6 +35,9 @@ public class ItemFollowFocusServiceImpl extends ServiceImpl<ItemFollowFocusMappe
 
     @Resource
     private ItemFollowFocusMapper itemFollowFocusMapper;
+    @Resource
+    private ShopFollowFocusMapper shopFollowFocusMapper;
+
 
     /**
      * 用户关注网店接口
@@ -61,5 +71,28 @@ public class ItemFollowFocusServiceImpl extends ServiceImpl<ItemFollowFocusMappe
                 .set("update_time", format)
                 .set("status", 1));
         return result>0;
+    }
+
+    /**
+     * 根据网店id或实体店id查询该网店粉丝列表
+     *
+     * @param id       网店id或实体店id
+     * @param itemFlag (0:网店  1:实体店)
+     * @return
+     */
+    @Override
+    public List getFollowList(String id, Integer itemFlag) {
+        List container;
+        // 网店
+        if (itemFlag == 0) {
+            container = itemFollowFocusMapper.selectList(new LambdaQueryWrapper<ItemFollowFocus>()
+                    .eq(ItemFollowFocus::getItemId, id)
+                    .eq(ItemFollowFocus::getStatus, 0));
+        } else {// 实体店
+            container = shopFollowFocusMapper.selectList(new LambdaQueryWrapper<ShopFollowFocus>()
+                    .eq(ShopFollowFocus::getShopId, id)
+                    .eq(ShopFollowFocus::getStatus, 0));
+        }
+        return container;
     }
 }

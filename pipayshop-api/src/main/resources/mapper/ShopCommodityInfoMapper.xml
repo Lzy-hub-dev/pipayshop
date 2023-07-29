@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.pipayshopapi.mapper.ShopCommodityInfoMapper">
+
+    <select id="selectAllTopContentList" resultType="com.example.pipayshopapi.entity.ShopCommodityInfo">
+        SELECT *
+        FROM shop_commodity_info c
+                 INNER JOIN shop_info i
+                            ON c.shop_id = i.shop_id
+                 INNER JOIN
+             shop_collection sc
+             ON sc.commodity_id = c.commodity_id
+        WHERE i.uid = 'user1'
+          AND i.`status` = 0
+          AND c.`status` = 0
+          AND sc.`status` = 0
+    </select>
+    <select id="selectCollectProductByUserId" resultType="com.example.pipayshopapi.entity.ShopCommodityInfo">
+        select *
+        FROM shop_collection sc
+                 INNER JOIN
+             shop_commodity_info i
+             ON
+                 sc.commodity_id = i.commodity_id
+        WHERE sc.user_id = #{userId}
+          AND i.`status` = 0
+          AND sc.`status` = 0
+    </select>
+    <select id="getCollectionList" resultType="java.util.List"></select>
+    <select id="selectFollowProductByUserId" resultType="com.example.pipayshopapi.entity.ShopInfo">
+        SELECT *
+        FROM shop_follow_focus f
+                 INNER JOIN
+             shop_info i
+             ON f.shop_id = i.shop_id
+        WHERE f.follow_id = #{userId}
+          and f.`status` = 0
+          and i.`status` = 0
+    </select>
+    <select id="selectHistoryProductByUserId" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityVO">
+        SELECT
+            JSON_UNQUOTE(JSON_EXTRACT(i.commodity_img_list,' $.bgImg[0]')) as image ,
+            i.commodity_name ,
+            i. price,
+            h.create_time  as accessTime,
+            i.commodity_id
+        FROM
+            shop_commodity_history h
+                INNER JOIN
+            shop_commodity_info i
+            ON
+                h.commodity_id=i.commodity_id
+        WHERE
+            h.user_id=1 AND
+            i.`status`=0
+    </select>
+</mapper>

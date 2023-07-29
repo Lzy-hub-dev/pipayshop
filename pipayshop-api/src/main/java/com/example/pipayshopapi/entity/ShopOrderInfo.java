@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author zxb
- * @since 2023-07-28
+ * @since 2023-07-29
  */
 @TableName("shop_order_info")
 public class ShopOrderInfo implements Serializable {
@@ -36,12 +36,12 @@ public class ShopOrderInfo implements Serializable {
     /**
      * 下单时间
      */
-    private LocalDateTime createTime;
+    private Date createTime;
 
     /**
      * 更新时间
      */
-    private LocalDateTime updateTime;
+    private Date updateTime;
 
     /**
      * 商品id
@@ -61,97 +61,12 @@ public class ShopOrderInfo implements Serializable {
     /**
      * 0:待支付1:已支付2：已完成3：无效订单
      */
-    private Boolean orderStatus;
+    private Integer orderStatus;
 
     /**
      * 0:未删除1：逻辑删除2：真实删除
      */
-    private Boolean delFlag;
+    private Integer delFlag;
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
-    }
-    public BigDecimal getTransactionAmount() {
-        return transactionAmount;
-    }
-
-    public void setTransactionAmount(BigDecimal transactionAmount) {
-        this.transactionAmount = transactionAmount;
-    }
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
-    public LocalDateTime getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(LocalDateTime updateTime) {
-        this.updateTime = updateTime;
-    }
-    public String getCommodityId() {
-        return commodityId;
-    }
-
-    public void setCommodityId(String commodityId) {
-        this.commodityId = commodityId;
-    }
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-    public String getShopId() {
-        return shopId;
-    }
-
-    public void setShopId(String shopId) {
-        this.shopId = shopId;
-    }
-    public Boolean getOrderStatus() {
-        return orderStatus;
-    }
-
-    public void setOrderStatus(Boolean orderStatus) {
-        this.orderStatus = orderStatus;
-    }
-    public Boolean getDelFlag() {
-        return delFlag;
-    }
-
-    public void setDelFlag(Boolean delFlag) {
-        this.delFlag = delFlag;
-    }
-
-    @Override
-    public String toString() {
-        return "ShopOrderInfo{" +
-            "id=" + id +
-            ", orderId=" + orderId +
-            ", transactionAmount=" + transactionAmount +
-            ", createTime=" + createTime +
-            ", updateTime=" + updateTime +
-            ", commodityId=" + commodityId +
-            ", uid=" + uid +
-            ", shopId=" + shopId +
-            ", orderStatus=" + orderStatus +
-            ", delFlag=" + delFlag +
-        "}";
-    }
 }

@@ -2,6 +2,9 @@ package com.example.pipayshopapi.service;
 
 import com.example.pipayshopapi.entity.ShopCommodity;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.pipayshopapi.entity.ShopInfo;
+
+import java.util.List;
 
 /**
  * <p>
