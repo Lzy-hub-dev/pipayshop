@@ -41,7 +41,7 @@ public class ItemCommodityInfo implements Serializable {
     /**
      * 品牌id 可有可无
      */
-    private Integer brandId;
+    private String brandId;
 
     /**
      * 商品原价
