@@ -1,6 +1,8 @@
 package com.example.pipayshopapi.controller;
 
 
+import com.example.pipayshopapi.entity.ShopCommodityInfo;
+import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
@@ -85,6 +87,7 @@ public class ShopCommodityInfoController {
             List<ShopCommodityInfo> list = shopCommodityService.getCollectList(userId);
             return ResponseVO.getSuccessResponseVo(list);
         } catch (Exception e) {
+//            log.error(e.getMessage());
             e.printStackTrace();
             throw new BusinessException("查询失败，请联系后台人" + "、员");
         }
@@ -97,6 +100,7 @@ public class ShopCommodityInfoController {
             return ResponseVO.getSuccessResponseVo(list);
         } catch (Exception e) {
             e.printStackTrace();
+//            log.error(e.getMessage());
             throw new BusinessException("查询失败，请联系后台人" + "、员");
         }
     }
@@ -108,6 +112,7 @@ public class ShopCommodityInfoController {
             List<ShopCommodityVO> list = shopCommodityService.historyList(userId);
             return ResponseVO.getSuccessResponseVo(list);
         } catch (Exception e) {
+//            log.error(e.getMessage());
             e.printStackTrace();
             throw new BusinessException("查询失败，请联系后台人" + "、员");
         }
