@@ -3,6 +3,7 @@ package com.example.pipayshopapi.controller;
 
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.ItemInfo;
+import com.example.pipayshopapi.entity.dto.ApplyItemCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
@@ -57,15 +58,15 @@ public class ItemCommodityInfoController {
 
     @PostMapping("issueItemCommodity")
     @ApiOperation("发布网店商品")
-    public ResponseVO issueItemCommodity(@RequestParam("files") MultipartFile[] files, ItemCommodityInfoVO itemCommodityInfoVO) {
-        System.out.println(itemCommodityInfoVO);
+    public ResponseVO issueItemCommodity(@RequestParam("files") MultipartFile[] files, ApplyItemCommodityDTO applyItemCommodityDTO){
+
         try {
-            boolean result = commodityInfoService.issueItemCommodity(itemCommodityInfoVO, files);
-            if (!result) {
+            boolean result = commodityInfoService.issueItemCommodity(applyItemCommodityDTO,files);
+            if (!result){
                 throw new Exception();
             }
             return ResponseVO.getSuccessResponseVo("发布网店商品成功");
-        } catch (Exception e) {
+        }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("发布网店商品失败，请联系后台人员");
         }
