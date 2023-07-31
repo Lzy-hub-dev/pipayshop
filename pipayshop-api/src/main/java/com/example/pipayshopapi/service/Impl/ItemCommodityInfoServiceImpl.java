@@ -6,6 +6,9 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.ItemInfo;
+import com.example.pipayshopapi.entity.OrderInfo;
+import com.example.pipayshopapi.entity.ShopCommodityInfo;
+import com.example.pipayshopapi.entity.dto.ApplyItemCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.mapper.ItemCommodityInfoMapper;
@@ -56,13 +59,13 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
 
     /**
      * 发布网店商品
-     *
-     * @param itemCommodityInfoVO
+     * @param applyItemCommodityDTO
+     * @param files
      * @return
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean issueItemCommodity(ItemCommodityInfoVO itemCommodityInfoVO, MultipartFile[] files) {
+    public boolean issueItemCommodity(ApplyItemCommodityDTO applyItemCommodityDTO, MultipartFile[] files) {
 
         // 创建集合放图片url
         List<String> iamgesList = new ArrayList<>();
@@ -75,13 +78,19 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         // 属性转移
         ItemCommodityInfo itemCommodityInfo = new ItemCommodityInfo();
         itemCommodityInfo.setCommodityId(StringUtil.generateShortId());
-        itemCommodityInfo.setBrandId(itemCommodityInfo.getBrandId());
-        itemCommodityInfo.setPrice(itemCommodityInfoVO.getPrice());
-        itemCommodityInfo.setDegreeLoss(itemCommodityInfoVO.getDegreeLoss());
-        itemCommodityInfo.setItemCommodityName(itemCommodityInfoVO.getItemCommodityName());
-        itemCommodityInfo.setOriginAddress(itemCommodityInfoVO.getOriginAddress());
-        itemCommodityInfo.setDetails(itemCommodityInfoVO.getDetails());
-        itemCommodityInfo.setCategoryId(itemCommodityInfoVO.getCategoryId());
+        itemCommodityInfo.setBrandId(applyItemCommodityDTO.getBrandId());
+        itemCommodityInfo.setOriginPrice(applyItemCommodityDTO.getOriginPrice());
+        itemCommodityInfo.setPrice(applyItemCommodityDTO.getPrice());
+        itemCommodityInfo.setDegreeLoss(applyItemCommodityDTO.getDegreeLoss());
+        itemCommodityInfo.setItemCommodityName(applyItemCommodityDTO.getItemCommodityName());
+        itemCommodityInfo.setOriginAddress(applyItemCommodityDTO.getOriginAddress());
+        itemCommodityInfo.setDetails(applyItemCommodityDTO.getDetails());
+        itemCommodityInfo.setFreeShippingNum(applyItemCommodityDTO.getFreeShippingNum());
+        itemCommodityInfo.setCategoryId(applyItemCommodityDTO.getCategoryId());
+        itemCommodityInfo.setInventory(applyItemCommodityDTO.getInventory());
+        itemCommodityInfo.setColorList(applyItemCommodityDTO.getColorList());
+        itemCommodityInfo.setAcceptAddressList(applyItemCommodityDTO.getAcceptAddressList());
+        itemCommodityInfo.setSizeList(applyItemCommodityDTO.getSizeList());
         itemCommodityInfo.setImagsList(jsonString);
         int result = commodityInfoMapper.insert(itemCommodityInfo);
         return result > 0;
@@ -107,7 +116,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
                 .between(itemSearchConditionDTO.getMaxPrice() != null && itemSearchConditionDTO.getMinPrice() != null, ItemCommodityInfo::getPrice, itemSearchConditionDTO.getMinPrice(), itemSearchConditionDTO.getMaxPrice())
         );
         // 封装数据
-        return new PageDataVO((int) page.getTotal(), page.getRecords());
+        return new PageDataVO((int)page.getTotal(), page.getRecords());
 
     }
 
