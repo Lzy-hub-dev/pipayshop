@@ -4,9 +4,7 @@ package com.example.pipayshopapi.controller;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
 import com.example.pipayshopapi.entity.dto.ShopDTO;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
-import com.example.pipayshopapi.entity.vo.ResponseVO;
-import com.example.pipayshopapi.entity.vo.ShopInfoVO;
+import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopInfoService;
 import io.swagger.annotations.Api;
@@ -25,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author nws
  * @since 2023-07-25
  */
-
+@Api(value = "实体店的信息接口",tags = "实体店的信息接口")
 @RestController
 @RequestMapping("/pipayshopapi/shop-info")
 public class ShopInfoController {
@@ -57,6 +55,42 @@ public class ShopInfoController {
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("根据条件筛选后获取实体店列表失败，请联系后台人员");
+        }
+    }
+
+    @GetMapping("getShopInfoVO/{shopId}")
+    @ApiOperation("根据实体店id查询实体店信息(我的)")
+    public ResponseVO getShopInfoVO(@PathVariable String shopId){
+        try {
+            ShopInfoVO1 shopInfoVO = infoService.getShopInfoVO(shopId);
+            return ResponseVO.getSuccessResponseVo(shopInfoVO);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("根据实体店id查询实体店信息失败，请联系后台人员");
+        }
+    }
+
+    @GetMapping("getShopList")
+    @ApiOperation("根据用户id查询实体店列表(我的)")
+    public ResponseVO getShopList(UidPageVO uidPageVO){
+        try {
+            PageDataVO shopList = infoService.getShopList(uidPageVO);
+            return ResponseVO.getSuccessResponseVo(shopList);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("根据用户id查询实体店列表失败，请联系后台人员");
+        }
+    }
+
+    @GetMapping("getShopNumber/{uid}")
+    @ApiOperation("根据用户id查询用户名下多少间实体店")
+    public ResponseVO getShopNumber(@PathVariable String uid){
+        try {
+            Integer shopNumber = infoService.getShopNumber(uid);
+            return ResponseVO.getSuccessResponseVo(shopNumber);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("根据用户id查询用户名下多少间实体店失败，请联系后台人员");
         }
     }
 

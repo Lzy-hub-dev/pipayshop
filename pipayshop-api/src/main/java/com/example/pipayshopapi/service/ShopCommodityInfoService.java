@@ -8,6 +8,8 @@ import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
+import com.example.pipayshopapi.entity.vo.CommodityStatusPageVO;
+import com.example.pipayshopapi.entity.vo.OrderPageVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityVO;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,6 +57,13 @@ public interface ShopCommodityInfoService extends IService<ShopCommodityInfo> {
     PageDataVO selectShopInfoListByShopId(Integer limit, Integer pages, String shopId);
 
     /**
+     * 根据店铺id查找实体店商品的上架和下架列表
+     * @param commodityStatusPageVO
+     * @return
+     */
+    PageDataVO selectStatusListByShopId(CommodityStatusPageVO commodityStatusPageVO);
+
+    /**
      * 根据商品的id查找实体店商品的详情信息
      */
     ShopCommodityInfo selectShopInfoByCommodityId(String commodityId);
@@ -67,4 +76,20 @@ public interface ShopCommodityInfoService extends IService<ShopCommodityInfo> {
      * @return
      */
     List<ShopCommodityVO> historyList(String userId);
+
+    /**
+     * 根据用户id查询，商品状态查询审核通过和未审核列表
+     *
+     * @param pageVO
+     * @return
+     */
+    PageDataVO selectCommodityByUidAndStatus(OrderPageVO pageVO);
+
+    /**
+     * 根据商品id，更改商品的状态
+     *
+     * @param commodityId
+     * @return
+     */
+    boolean updateCommodityStatus(String commodityId,Integer status);
 }

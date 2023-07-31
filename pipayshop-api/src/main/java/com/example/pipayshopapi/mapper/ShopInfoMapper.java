@@ -2,7 +2,11 @@ package com.example.pipayshopapi.mapper;
 
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.pipayshopapi.entity.vo.ShopInfoVO1;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -15,4 +19,20 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ShopInfoMapper extends BaseMapper<ShopInfo> {
 
+    /**
+     * 根据用户id查询实体店列表
+     */
+    List<ShopInfoVO1> getShopList(@Param("page") Integer page, @Param("limit") Integer limit,
+                                  @Param("uid") String uid);
+
+    /**
+     * 根据用户id查询实体店数量
+     */
+    Integer getShopNumber(@Param("uid") String uid);
+
+
+    /**
+     * 根据实体店id查询实体店信息
+     */
+    ShopInfoVO1 getShopInfoVO(@Param("shopId")String shopId);
 }

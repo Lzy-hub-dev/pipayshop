@@ -5,11 +5,14 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.example.pipayshopapi.entity.vo.GetOrderDataVO;
+import com.example.pipayshopapi.entity.vo.ItemOrderInfoVO;
 import com.example.pipayshopapi.entity.vo.OrderListVO;
 import com.example.pipayshopapi.entity.vo.OrderDetailVO;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.mapper.ItemOrderInfoMapper;
 import com.example.pipayshopapi.service.ItemOrderInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +38,6 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
     public List<OrderListVO> getOrderList(GetOrderDataVO getOrderDataVO) {
         return itemOrderInfoMapper.getOrderList(getOrderDataVO);
     }
-
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -81,4 +83,12 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
                 .set("del_flag", 1)
                 .set("update_time", new Date()));
     }
+
+
+
+    @Override
+    public OrderDetailVO getOrderDetail(String orderId) {
+        return itemOrderInfoMapper.getOrderDetail(orderId);
+    }
+
 }

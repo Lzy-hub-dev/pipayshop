@@ -4,86 +4,86 @@ package com.example.pipayshopapi.controller;
 import com.example.pipayshopapi.entity.BuyerData;
 import com.example.pipayshopapi.entity.vo.BuyerDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
+import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.BuyerDataService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
- * 买家的基本数据（多选） 前端控制器
+ * 买家的收货地址（多选） 前端控制器
  * </p>
  *
  * @author nws
  * @since 2023-07-25
  */
-@Api(value = "买家基本数据接口",tags = "买家基本数据接口")
+@Api(value = "买家收货地址接口",tags = "买家收货地址接口")
 @RestController
 @RequestMapping("/pipayshopapi/buyer-data")
 public class BuyerDataController {
     @Resource
     private BuyerDataService buyerDataService;
 
-    @GetMapping("selectBuyerDataById/{id}")
-    @ApiOperation("根据Id查找买家的基本信息")
-    public ResponseVO selectBuyerDataById(@PathVariable long id){
+    @GetMapping("selectAllAddress/{userId}")
+    @ApiOperation("根据用户Id查找用户的所有收货地址")
+    public ResponseVO selectAllAddress(@PathVariable String userId){
         try {
-            System.out.println(id);
-            BuyerDataVO buyerDataVO = buyerDataService.selectBuyerDataById(id);
-
-            return ResponseVO.getSuccessResponseVo(buyerDataVO);
+            List<BuyerData> buyerData = buyerDataService.selectAllAddress(userId);
+            return ResponseVO.getSuccessResponseVo(buyerData);
         }catch (Exception e){
             e.printStackTrace();
-            System.out.println(e.getMessage());
-            throw new RuntimeException("根据Id查找买家的基本信息失败，请联系后台人员");
+            throw new BusinessException("");
         }
     }
 
-    @PostMapping("updateBuyerDataById/{id}")
-    @ApiOperation("根据Id更改买家的基本信息")
-    public ResponseVO updateBuyerDataById(@RequestBody BuyerDataVO buyerDataVO,@PathVariable Long id){
+
+    @PostMapping("updateBuyerDataById")
+    @ApiOperation("根据收货Id更改买家的收货地址")
+    public ResponseVO updateBuyerDataById(@RequestBody BuyerData buyerData){
         try {
-            boolean result = buyerDataService.updateBuyerDataById(buyerDataVO,id);
+            boolean result = buyerDataService.updateBuyerDataById(buyerData);
             if (!result) {
                 throw new Exception();
             }
-            return ResponseVO.getSuccessResponseVo("根据Id更改买家的基本信息成功");
+            return ResponseVO.getSuccessResponseVo("根据收货Id更改买家的收货地址成功");
         }catch (Exception e){
             e.printStackTrace();
-            throw new RuntimeException("根据Id更改买家的基本信息失败，请联系后台人员");
+            throw new RuntimeException("根据收货Id更改买家的收货地址失败，请联系后台人员");
         }
     }
 
     @PostMapping("insectBuyerData")
-    @ApiOperation("插入买家的基本信息")
+    @ApiOperation("插入买家的收货地址")
     public ResponseVO insectBuyerData(@RequestBody BuyerData buyerData){
         try {
             boolean result = buyerDataService.insectBuyerData(buyerData);
             if (!result){
                 throw new Exception();
             }
-            return ResponseVO.getSuccessResponseVo("插入买家的基本信息成功");
+            return ResponseVO.getSuccessResponseVo("插入买家的收货地址成功");
         }catch (Exception e){
             e.printStackTrace();
-            throw new RuntimeException("插入买家的基本信息失败，请联系后台人员");
+            throw new RuntimeException("插入买家的收货地址失败，请联系后台人员");
         }
     }
 
 
     @PostMapping("deleteBuyerDataById/{id}")
-    @ApiOperation("根据Id删除买家的基本信息")
-    public ResponseVO deleteBuyerDataById(@PathVariable long id){
+    @ApiOperation("根据id删除买家的收货地址")
+    public ResponseVO deleteBuyerDataById(@PathVariable String buyerId){
         try {
-            boolean result = buyerDataService.deleteBuyerDataById(id);
+            boolean result = buyerDataService.deleteBuyerDataById(buyerId);
             if (!result){
                 throw new Exception();
             }
-            return ResponseVO.getSuccessResponseVo("根据Id删除买家的基本信息成功");
+            return ResponseVO.getSuccessResponseVo("根据id删除买家的收货地址");
         }catch (Exception e){
             e.printStackTrace();
-            throw new RuntimeException("根据Id删除买家的基本信息失败，请联系后台人员");
+            throw new RuntimeException("根据id删除买家的收货地址失败，请联系后台人员");
         }
     }
 

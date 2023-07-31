@@ -44,4 +44,6 @@ public class ShopCommodityVO {
      * 访问时间
      */
     private String accessTime;
+
+
 }

@@ -1,5 +1,6 @@
 package com.example.pipayshopapi.service.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.pipayshopapi.entity.BuyerData;
 import com.example.pipayshopapi.entity.vo.BuyerDataVO;
@@ -7,10 +8,12 @@ import com.example.pipayshopapi.mapper.BuyerDataMapper;
 import com.example.pipayshopapi.service.BuyerDataService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import com.example.pipayshopapi.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -27,46 +30,54 @@ public class BuyerDataServiceImpl extends ServiceImpl<BuyerDataMapper, BuyerData
     private BuyerDataMapper buyerDataMapper;
 
     /**
-     * 根据Id查找买家的基本信息
+     * 根据用户Id查找用户的所有收货地址
+     * @param userId
+     * @return
      * */
     @Override
-    public BuyerDataVO selectBuyerDataById(long id) {
-        BuyerDataVO buyerDataVO = buyerDataMapper.selectBuyerDataById(id);
-        return buyerDataVO;
+    public List<BuyerData> selectAllAddress(String userId) {
+        List<BuyerData> buyerData = buyerDataMapper.selectList(new QueryWrapper<BuyerData>()
+                                                                    .eq("user_id", userId)
+                                                                    .eq("del_flag", 0));
+        return buyerData;
     }
 
     /**
-     * 根据Id更改买家的基本信息
+     * 根据收货Id更改买家的收货地址
      * */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean updateBuyerDataById(BuyerDataVO buyerDataVO, long id) {
+    public boolean updateBuyerDataById(BuyerData buyerData) {
         int result = buyerDataMapper.update(null, new UpdateWrapper<BuyerData>()
-                                                                .eq("id", id)
-                                                                .set("user_name", buyerDataVO.getUserName())
-                                                                .set("address", buyerDataVO.getAddress())
-                                                                .set("phone", buyerDataVO.getPhone()));
+                                                                .eq("buyer_data_id", buyerData.getBuyerDataId())
+                                                                .set("user_id",buyerData.getUserId())
+                                                                .set("user_name", buyerData.getUserName())
+                                                                .set("address", buyerData.getAddress())
+                                                                .set("phone", buyerData.getPhone())
+                                                                .set("del_flag",0)
+                                                                .set("is_default",buyerData.getIsDefault()));
         return result > 0;
     }
 
     /**
-     * 插入买家的基本信息
+     * 插入买家的收货地址
      * */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean insectBuyerData(BuyerData buyerData) {
+        buyerData.setBuyerDataId(StringUtil.generateShortId());
         int result = buyerDataMapper.insert(buyerData);
         return result > 0;
     }
 
     /**
-     * 根据Id删除买家的基本信息
+     * 根据id删除买家的收货地址
      * */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean deleteBuyerDataById(long id) {
+    public boolean deleteBuyerDataById(String buyerId) {
         int result = buyerDataMapper.update(null, new UpdateWrapper<BuyerData>()
-                                                                .eq("id", id)
+                                                                .eq("buyer_data_id", buyerId)
                                                                 .set("del_flag", 1));
         return result > 0;
     }

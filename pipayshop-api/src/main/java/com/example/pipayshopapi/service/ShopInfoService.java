@@ -4,10 +4,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
 import com.example.pipayshopapi.entity.dto.ShopDTO;
-import com.example.pipayshopapi.entity.vo.ItemCommodityInfoVO;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.entity.vo.*;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.web.multipart.MultipartFile;
-import com.example.pipayshopapi.entity.vo.ShopInfoVO;
 
 /**
  * <p>
@@ -39,6 +38,21 @@ public interface ShopInfoService extends IService<ShopInfo> {
      * 根据实体店id查询实体店信息
      */
     ShopInfoVO getShopInfoById(String shopId);
+
+    /**
+     * 根据用户id查询用户名下多少间实体店
+     */
+    Integer getShopNumber(String uid);
+
+    /**
+     * 根据用户id查询实体店列表(我的)
+     */
+    PageDataVO getShopList(UidPageVO uidPageVO);
+
+    /**
+     * 根据实体店id查询实体店信息(我的)
+     */
+    ShopInfoVO1 getShopInfoVO(String shopId);
 
     /**
      * 根据实体店id删除实体店

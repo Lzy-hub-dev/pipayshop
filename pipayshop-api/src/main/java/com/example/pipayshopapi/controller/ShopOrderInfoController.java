@@ -2,6 +2,8 @@ package com.example.pipayshopapi.controller;
 
 
 import com.example.pipayshopapi.entity.vo.ItemOrderInfoVO;
+import com.example.pipayshopapi.entity.vo.OrderPageVO;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.Impl.ShopOrderInfoServiceImpl;
@@ -44,6 +46,18 @@ public class ShopOrderInfoController {
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new BusinessException("获取网店用户订单列表失败，请联系后台人员");
+        }
+    }
+
+    @GetMapping("selectOrderByUidAndStatus")
+    @ApiOperation("根据用户id查询，订单状态查询订单列表")
+    public ResponseVO selectOrderByUidAndStatus(OrderPageVO pageVO){
+        try {
+            PageDataVO pageDataVO = shopOrderInfoService.selectOrderByUidAndStatus(pageVO);
+            return ResponseVO.getSuccessResponseVo(pageDataVO);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("根据用户id查询，订单状态查询订单列表失败，请联系后台人员");
         }
     }
 }

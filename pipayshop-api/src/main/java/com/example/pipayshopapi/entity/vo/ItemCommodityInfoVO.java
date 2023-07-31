@@ -22,6 +22,10 @@ public class ItemCommodityInfoVO {
      */
     private String itemCommodityName;
     /**
+     * 网店名字
+     */
+    private String itemName;
+    /**
      * 发货地
      */
     private String originAddress;
@@ -53,9 +57,17 @@ public class ItemCommodityInfoVO {
     /**
      * 商品首图
      */
-    private String image;
+    private String commodityPic;
+    /**
+     * 网店首图
+     */
+    private String sellerPic;
     /**
      * 商品id
      */
     private String commodityId;
+    /**
+     * 商品状态0:审核 1:上架 2:下架3:绝对删除
+     */
+    private String status;
 }

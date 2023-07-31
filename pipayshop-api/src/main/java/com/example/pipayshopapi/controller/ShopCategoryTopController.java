@@ -12,8 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 /**
  * <p>
  * 实体店一级分类表 前端控制器
@@ -31,8 +29,6 @@ public class ShopCategoryTopController {
 
     private static final Logger log = LoggerFactory.getLogger(ShopCategoryTopController.class);
 
-
-
     @GetMapping("getShopCategoryTopList")
     @ApiOperation("查询一级分类列表")
     public ResponseVO getShopCategoryTopList(Integer pageNum, Integer pageSize) {
@@ -42,18 +38,6 @@ public class ShopCategoryTopController {
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseVO.getFalseResponseVo(null);
-        }
-    }
-
-    @GetMapping("getAllShopCategoryTopList")
-    @ApiOperation("获取所有一级分类列表")
-    public ResponseVO getAllShopCategoryTopList() {
-        try {
-            List<ShopCategoryTop> allShopCategoryTopList = categoryTopService.getAllShopCategoryTopList();
-            return ResponseVO.getSuccessResponseVo(allShopCategoryTopList);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseVO.getFalseResponseVo("获取所有一级分类失败");
         }
     }
     @GetMapping("getShopCategoryTopById/{categoryTopId}")

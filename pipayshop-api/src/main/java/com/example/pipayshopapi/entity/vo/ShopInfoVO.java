@@ -59,4 +59,9 @@ public class ShopInfoVO {
      */
     private List<ShopTags> shopTagsList;
 
+    /**
+     * 店铺图片的路径集合
+     */
+    private String shopImagList;
+
 }
