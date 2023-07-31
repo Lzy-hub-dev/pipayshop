@@ -16,10 +16,17 @@ public class ItemOrderInfoVO {
     private String commodityId;
     private String uId;
     private String itemId;
+    private String itemName;
     private Date createTime;
     private String imagsList;
     private String itemCommodityName;
-    private String firstPicture;
-    private String sellerName;
+    /**
+     * 卖家首图
+     */
+    private String sellerPic;
+    /**
+     * 商品首图
+     */
+    private String commodityPic;
     private String orderStatus;
 }

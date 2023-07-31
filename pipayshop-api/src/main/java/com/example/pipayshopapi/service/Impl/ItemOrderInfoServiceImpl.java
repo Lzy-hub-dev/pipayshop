@@ -59,4 +59,15 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
     public List<ItemOrderInfoVO> selectOrderByUerId(String userId) {
         return itemOrderInfoMapper.selectOrderByUerId(userId);
     }
+
+    /**
+     * 根据卖家id查询网店关联的订单
+     * @param userId 卖家id
+     * @param orderStatus 0:待支付;2:已完成;3:查询所有
+     * @return
+     */
+    @Override
+    public List<ItemOrderInfoVO> itemOrders(String userId, Integer orderStatus) {
+        return itemOrderInfoMapper.selectItemOrdersBySellerId(userId,orderStatus);
+    }
 }

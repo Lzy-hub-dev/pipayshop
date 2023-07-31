@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * @author ThinkPad
  */
@@ -17,4 +19,5 @@ public class ItemInfoVO {
     private Integer itemSum;
     private Integer fanSum;
     private String itemImagList;
+    private List<ItemCommodityInfoVO> commodityInfoList;
 }

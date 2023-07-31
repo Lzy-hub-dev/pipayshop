@@ -1,5 +1,7 @@
 package com.example.pipayshopapi.service.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.pipayshopapi.entity.ItemInfo;
 import com.example.pipayshopapi.entity.vo.ItemInfoVO;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
@@ -9,6 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -33,5 +36,29 @@ public class ItemInfoServiceImpl extends ServiceImpl<ItemInfoMapper, ItemInfo> i
     public ItemInfoVO getItemInfo(String commodityId) {
         ItemInfoVO itemInfo = itemInfoMapper.getItemInfo(commodityId);
         return itemInfo;
+    }
+
+    /**
+     * 根据用户id获取网店信息
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<ItemInfoVO> getItemInfoByUid(String userId) {
+        return itemInfoMapper.selectItemInfoByItemIdOrUserId(userId,null);
+    }
+
+    /**
+     * 根据用户id获取网店数量
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public Integer getItemCountByUserId(String userId) {
+        LambdaQueryWrapper<ItemInfo> wrapper = new LambdaQueryWrapper<ItemInfo>().eq(ItemInfo::getStatus, 0)
+                .eq(ItemInfo::getUid, userId);
+        return itemInfoMapper.selectCount(wrapper).intValue();
     }
 }

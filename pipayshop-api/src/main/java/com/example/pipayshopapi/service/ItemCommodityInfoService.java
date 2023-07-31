@@ -67,5 +67,27 @@ public interface ItemCommodityInfoService extends IService<ItemCommodityInfo> {
      * @param userId
      * @return
      */
-    List<ShopCommodityVO> historyList(String userId);
+    List<ItemCommodityInfoVO> historyList(String userId);
+
+    /**
+     * 根据卖家id查询网店的商品审核列表
+     * @param userId
+     * @param examineStatus 0:审核中;1:审核通过
+     * @return
+     */
+    List<ItemCommodityInfoVO> examineCommodityList(String userId, Integer examineStatus);
+    /**
+     * 根据网店id查询网店的商品列表
+     * @param itemId
+     * @return
+     */
+    ItemInfoVO commodityList(String itemId);
+
+    /**
+     *
+     * @param commodity
+     * @param status 1:上架;2:下架
+     * @return
+     */
+    boolean changeCommodityStatus(String commodity, String status);
 }

@@ -1,29 +1,25 @@
 package com.example.pipayshopapi.service.Impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.ItemInfo;
-import com.example.pipayshopapi.entity.OrderInfo;
-import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.mapper.ItemCommodityInfoMapper;
+import com.example.pipayshopapi.mapper.ItemInfoMapper;
 import com.example.pipayshopapi.service.ItemCommodityInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.util.FileUploadUtil;
 import com.example.pipayshopapi.util.StringUtil;
-import io.swagger.models.auth.In;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -39,25 +35,28 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
 
     @Resource
     private ItemCommodityInfoMapper commodityInfoMapper;
+    @Resource
+    private ItemInfoMapper itemInfoMapper;
 
     /**
-     *某一二级分类下的商品列表分页展示
+     * 某一二级分类下的商品列表分页展示
      */
     @Override
     public PageDataVO commodityOfCateList(commodityPageVO commodityPageVO) {
 
-        Integer page =commodityPageVO.getPage();
-        Integer limit=commodityPageVO.getLimit();
-        int startIndex= (page-1)*limit;
+        Integer page = commodityPageVO.getPage();
+        Integer limit = commodityPageVO.getLimit();
+        int startIndex = (page - 1) * limit;
 
-        List<commodityVO> commodityList = commodityInfoMapper.commodityOfCateList(commodityPageVO.getCategoryId(),startIndex,limit);
+        List<commodityVO> commodityList = commodityInfoMapper.commodityOfCateList(commodityPageVO.getCategoryId(), startIndex, limit);
 
-        return new PageDataVO( commodityInfoMapper.listCount(commodityPageVO.getCategoryId()),commodityList);
+        return new PageDataVO(commodityInfoMapper.listCount(commodityPageVO.getCategoryId()), commodityList);
 
     }
 
     /**
      * 发布网店商品
+     *
      * @param itemCommodityInfoVO
      * @return
      */
@@ -90,6 +89,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
 
     /**
      * 网店首页下面的搜索商品接口
+     *
      * @param itemSearchConditionDTO
      * @return
      */
@@ -97,22 +97,22 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     public PageDataVO itemSearchCommodity(ItemSearchConditionDTO itemSearchConditionDTO) {
 
         // 设置分页参数
-        Page<ItemCommodityInfo> page = new Page<>(itemSearchConditionDTO.getPage(),itemSearchConditionDTO.getLimit());
+        Page<ItemCommodityInfo> page = new Page<>(itemSearchConditionDTO.getPage(), itemSearchConditionDTO.getLimit());
 
         // 查询分页数据封装到page中
         commodityInfoMapper.selectPage(page, new LambdaQueryWrapper<ItemCommodityInfo>()
-        // 可选的条件查询，可要可不要
-.eq(itemSearchConditionDTO.getBrandId()!=null && !"".equals(itemSearchConditionDTO.getBrandId()),ItemCommodityInfo::getBrandId,itemSearchConditionDTO.getBrandId())
-.eq(itemSearchConditionDTO.getDegreeLoss() != null ,ItemCommodityInfo::getDegreeLoss,itemSearchConditionDTO.getDegreeLoss())
-.between(itemSearchConditionDTO.getMaxPrice()!=null && itemSearchConditionDTO.getMinPrice() != null,ItemCommodityInfo::getPrice,itemSearchConditionDTO.getMinPrice(),itemSearchConditionDTO.getMaxPrice())
+                // 可选的条件查询，可要可不要
+                .eq(itemSearchConditionDTO.getBrandId() != null && !"".equals(itemSearchConditionDTO.getBrandId()), ItemCommodityInfo::getBrandId, itemSearchConditionDTO.getBrandId())
+                .eq(itemSearchConditionDTO.getDegreeLoss() != null, ItemCommodityInfo::getDegreeLoss, itemSearchConditionDTO.getDegreeLoss())
+                .between(itemSearchConditionDTO.getMaxPrice() != null && itemSearchConditionDTO.getMinPrice() != null, ItemCommodityInfo::getPrice, itemSearchConditionDTO.getMinPrice(), itemSearchConditionDTO.getMaxPrice())
         );
         // 封装数据
-        return new PageDataVO((int)page.getTotal(), page.getRecords());
+        return new PageDataVO((int) page.getTotal(), page.getRecords());
 
     }
 
     @Override
-    public List<commodityVO> itemCommodityChoose(String itemId,String brandId) {
+    public List<commodityVO> itemCommodityChoose(String itemId, String brandId) {
         // 获取同一网店同一品牌的商品的vo
         List<commodityVO> commodityVOS = commodityInfoMapper.itemCommodityChoose(itemId, brandId);
         return commodityVOS;
@@ -154,8 +154,52 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
      * @return
      */
     @Override
-    public List<ShopCommodityVO> historyList(String userId) {
+    public List<ItemCommodityInfoVO> historyList(String userId) {
         return commodityInfoMapper.selectHistoryProductByUserId(userId);
+    }
+
+    /**
+     * @param commodity
+     * @param status    1:上架;2:下架
+     * @return
+     */
+    @Override
+    public boolean changeCommodityStatus(String commodity, String status) {
+        LambdaUpdateWrapper<ItemCommodityInfo> wr = new LambdaUpdateWrapper<ItemCommodityInfo>()
+                .eq(ItemCommodityInfo::getCommodityId, commodity);
+        if ("1".equals(status) || "2".equals(status)) {
+            wr.set(ItemCommodityInfo::getStatus, status);
+        }
+        return commodityInfoMapper.update(null, wr) > 0;
+    }
+
+    /**
+     * 根据网店id查询网店的商品列表
+     * @param itemId
+     * @return
+     */
+    @Override
+    public ItemInfoVO commodityList(String itemId) {
+        List<ItemCommodityInfoVO> voList = commodityInfoMapper.commodityList(itemId);
+        List<ItemInfoVO> itemInfoVO = itemInfoMapper.selectItemInfoByItemIdOrUserId(null,itemId);
+        if (itemInfoVO != null) {
+            ItemInfoVO vo = itemInfoVO.get(0);
+            vo.setCommodityInfoList(voList);
+            return vo;
+        }
+        return null;
+    }
+
+    /**
+     * 根据卖家id查询网店的商品审核列表
+     *
+     * @param userId
+     * @param examineStatus 0:审核中;1:审核通过
+     * @return
+     */
+    @Override
+    public List<ItemCommodityInfoVO> examineCommodityList(String userId, Integer examineStatus) {
+        return commodityInfoMapper.examineCommodityList(userId, examineStatus);
     }
 
 
