@@ -21,42 +21,89 @@
     </select>
 
     <select id="selectOrderByUerId" resultType="com.example.pipayshopapi.entity.vo.ItemOrderInfoVO">
-        select o.order_id,
+        SELECT o.order_id,
                o.transaction_amount,
                o.commodity_id,
                o.uid,
                o.item_id,
-               JSON_UNQUOTE(JSON_EXTRACT(c.imags_list, "$[0]")) AS first_picture,
+               JSON_UNQUOTE(
+                       JSON_EXTRACT(c.imags_list, "$[0]")) AS commodity_pic,
                c.imags_list,
                c.item_commodity_name,
-               i.item_name                                      as seller_name,
+               i.item_name,
                CASE
-                   WHEN o.order_status = 0 THEN '待支付'
-                   WHEN o.order_status = 1 THEN '已支付'
-                   WHEN o.order_status = 2 THEN '已完成'
-                   WHEN order_status = 3 THEN '无效订单'
-                   END
-                                                                AS order_status
-        from item_order_info o
-                 inner join item_commodity_info c
-                            on o.commodity_id = c.commodity_id
-                 inner join item_info i
-                            on i.item_id = o.item_id
-        where o.uid =
-              #{userId}
-          and o.
-                  del_flag
-            =
-              0
-          and c
-                  .
-                  del_flag
-            =
-              0
-          and i
-                  .
-                  status
-            =
-              0
+
+                   WHEN o.order_status = 0 THEN
+                       '待支付'
+                   WHEN o.order_status = 1 THEN
+                       '已支付'
+                   WHEN o.order_status = 2 THEN
+                       '已完成'
+                   WHEN order_status = 3 THEN
+                       '无效订单'
+                   END                                     AS order_status
+        FROM item_order_info o
+                 INNER JOIN item_commodity_info c ON o.commodity_id = c.commodity_id
+                 INNER JOIN item_info i ON i.item_id = o.item_id
+        WHERE o.uid = #{userId}
+
+          AND o.del_flag = 0
+          AND c.del_flag = 0
+          AND i.STATUS = 0
+    </select>
+    <select id="selectItemOrdersBySellerId" resultType="com.example.pipayshopapi.entity.vo.ItemOrderInfoVO">
+        SELECT
+        o.order_id,
+        i.item_name,
+        JSON_UNQUOTE(
+        JSON_EXTRACT( i.item_imag_list, '$[0]' )) AS seller_pic,
+        CASE
+        WHEN o.order_status = 0 THEN
+        '待支付'
+        WHEN o.order_status = 1 THEN
+        '已支付'
+        WHEN o.order_status = 2 THEN
+        '已完成'
+        WHEN order_status = 3 THEN
+        '无效订单'
+        END AS order_status,
+        JSON_UNQUOTE(
+        JSON_EXTRACT( c.imags_list, '$[0]' )) AS commodity_pic,
+        c.item_commodity_name,
+        c.price as transaction_amount
+        FROM
+        item_order_info o
+        INNER JOIN item_info i ON o.item_id = i.item_id
+        INNER JOIN item_commodity_info c ON c.commodity_id = o.commodity_id
+        INNER JOIN user_info u ON u.uid = o.uid
+        <where>
+            u.uid = #{userId} and
+            <if test="orderStatus!=null and orderStatus!=3">
+                o.order_status=#{orderStatus} and
+            </if>
+            u.`status` = 0 AND
+            o.del_flag = 0 AND
+            i.`status` = 0 AND
+            c.`status` =0
+        </where>
+    </select>
+    <resultMap id="paiedOrderDetailMap" type="com.example.pipayshopapi.entity.vo.OrderDetailVO">
+        <result property="orderId" column="order_id" />
+        <result property="createTime" column="create_time" />
+        <result property="payTime" column="update_time" />
+        <result property="address" column="address" />
+        <result property="phone" column="phone" />
+        <result property="buyerName" column="user_name" />
+    </resultMap>
+
+    <select id="getOrderDetail" resultMap="paiedOrderDetailMap">
+        SELECT
+            o.order_id ,o.create_time,o.update_time, u.address, u.phone, u.user_name
+        FROM
+            item_order_info o
+                JOIN
+            buyer_data u
+            ON
+                o.buyer_data_id = u.buyer_data_id AND o.order_id = #{orderId}
     </select>
 </mapper>
