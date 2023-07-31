@@ -4,6 +4,8 @@ import com.example.pipayshopapi.entity.BuyerData;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.vo.BuyerDataVO;
 
+import java.util.List;
+
 /**
  * <p>
  * 买家的基本数据（多选） 服务类
@@ -15,33 +17,32 @@ import com.example.pipayshopapi.entity.vo.BuyerDataVO;
 public interface BuyerDataService extends IService<BuyerData> {
 
     /**
-     * 根据Id查找买家的基本信息
-     * @param id
+     * 根据用户Id查找用户的所有收货地址
+     * @param userId
      * @return
      * */
-    BuyerDataVO selectBuyerDataById(long id);
+    List<BuyerData> selectAllAddress(String userId);
 
 
     /**
-     * 根据Id更改买家的基本信息
-     * @param buyerDataVO
-     * @param id
+     * 根据收货Id更改买家的收货地址
+     * @param buyerData
      * @return
      * */
-    boolean updateBuyerDataById(BuyerDataVO buyerDataVO,long id);
+    boolean updateBuyerDataById(BuyerData buyerData);
 
     /**
-     * 插入买家的基本信息
+     * 插入买家的收货地址
      * @param buyerData
      * @return
      * */
     boolean insectBuyerData(BuyerData buyerData);
 
     /**
-     * 根据id删除买家的基本信息
-     * @param id
+     * 根据id删除买家的收货地址
+     * @param buyerId
      * @return
      * */
-    boolean deleteBuyerDataById(long id);
+    boolean deleteBuyerDataById(String buyerId);
 
 }

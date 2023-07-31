@@ -14,6 +14,9 @@ import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
 import com.example.pipayshopapi.entity.dto.ShopDTO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ShopInfoVO;
+import com.example.pipayshopapi.entity.vo.ShopInfoVO1;
+import com.example.pipayshopapi.entity.vo.UidPageVO;
+import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.ShopInfoMapper;
 import com.example.pipayshopapi.mapper.ShopTagsMapper;
 import com.example.pipayshopapi.service.ShopInfoService;
@@ -199,6 +202,47 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
 
         return shopInfoVO;
 
+    }
+
+    /**
+     * 根据用户id查询用户名下多少间实体店
+     */
+    @Override
+    public Integer getShopNumber(String uid) {
+        Long count = shopInfoMapper.selectCount(new QueryWrapper<ShopInfo>()
+                                                .eq("uid", uid));
+        return Math.toIntExact(count);
+    }
+
+    /**
+     * 根据用户id查询实体店列表(我的)
+     */
+    @Override
+    public PageDataVO getShopList(UidPageVO uidPageVO) {
+
+        Integer shopNumber = shopInfoMapper.getShopNumber(uidPageVO.getUid());
+        Integer page = uidPageVO.getPage();
+        try {
+            if (page==0){
+                throw new Exception();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("分页不能为0");
+        }
+        Integer limit = uidPageVO.getLimit()*page;
+        int pages = page - 1;
+        List<ShopInfoVO1> shopList = shopInfoMapper.getShopList(pages, limit, uidPageVO.getUid());
+        return new PageDataVO(shopNumber,shopList);
+    }
+
+    /**
+     * 根据实体店id查询实体店信息(我的)
+     */
+    @Override
+    public ShopInfoVO1 getShopInfoVO(String shopId) {
+        ShopInfoVO1 shopInfoVO = shopInfoMapper.getShopInfoVO(shopId);
+        return shopInfoVO;
     }
 
     /**

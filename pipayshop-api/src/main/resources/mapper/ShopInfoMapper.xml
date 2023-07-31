@@ -13,4 +13,24 @@
                                         c.category_pid = ct.category_id
                                WHERE c.category_id = #{categorySecId});
     </select>
+    <select id="getShopInfoVO" resultType="com.example.pipayshopapi.entity.vo.ShopInfoVO1">
+        SELECT shop_id,shop_name,score,shop_imag_list, (
+            SELECT COUNT(*) FROM shop_follow_focus
+            where `status`=0 and shop_id=#{shopId}
+        ) as follows
+        from shop_info
+        WHERE shop_id=#{shopId}
+    </select>
+    <select id="getShopList" resultType="com.example.pipayshopapi.entity.vo.ShopInfoVO1">
+        SELECT shop_id,shop_name,score,shop_imag_list, (
+            SELECT COUNT(*) FROM shop_follow_focus
+            where `status`=0 and shop_id=shop_info.shop_id
+        ) as follows
+        from shop_info
+        WHERE uid=#{uid}
+            LIMIT #{page},#{limit}
+    </select>
+    <select id="getShopNumber" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM shop_info where uid=#{uid}
+    </select>
 </mapper>
