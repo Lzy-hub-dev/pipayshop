@@ -28,6 +28,14 @@ public interface ItemFollowFocusService extends IService<ItemFollowFocus> {
     Boolean userFollowItem(String followId,String itemId);
 
     /**
+     * 用户取消关注
+     * @param followId
+     * @param itemId
+     * @return
+     * */
+    Boolean userUnfollow(String followId,String itemId);
+
+    /**
      * 根据网店id或实体店id查询该网店粉丝列表
      *
      * @param id 网店id或实体店id

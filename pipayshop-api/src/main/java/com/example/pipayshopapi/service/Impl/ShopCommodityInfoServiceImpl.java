@@ -1,7 +1,10 @@
 package com.example.pipayshopapi.service.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.alibaba.fastjson.JSON;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityVO;
@@ -15,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,5 +101,32 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
     public List<ShopCommodityVO> historyList(String userId) {
         return shopCommodityInfoMapper.selectHistoryProductByUserId(userId);
     }
+
+    /**
+     * 根据店铺id查找实体店商品的详情信息列表
+     */
+    @Override
+    public PageDataVO selectShopInfoListByShopId(Integer limit, Integer pages, String shopId) {
+        Page<ShopCommodityInfo> page = new Page<>(pages,limit);
+        shopCommodityInfoMapper.selectPage(page,new QueryWrapper<ShopCommodityInfo>()
+                                                    .eq("shop_id",shopId));
+        return new PageDataVO((int) page.getTotal(),page.getRecords());
+    }
+
+    /**
+     * 根据商品的id查找实体店商品的详情信息
+     */
+    @Override
+    public ShopCommodityInfo selectShopInfoByCommodityId(String commodityId) {
+        ShopCommodityInfo shopCommodityInfo = shopCommodityInfoMapper.selectOne(new QueryWrapper<ShopCommodityInfo>()
+                                                                                .eq("commodity_id", commodityId));
+        return shopCommodityInfo;
+    }
+
+
+
+
+
+
 
 }

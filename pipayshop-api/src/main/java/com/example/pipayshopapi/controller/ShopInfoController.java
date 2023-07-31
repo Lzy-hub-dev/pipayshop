@@ -6,6 +6,7 @@ import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
 import com.example.pipayshopapi.entity.dto.ShopDTO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
+import com.example.pipayshopapi.entity.vo.ShopInfoVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopInfoService;
 import io.swagger.annotations.Api;
@@ -63,8 +64,8 @@ public class ShopInfoController {
     @ApiOperation("根据id查询实体店详情")
     public ResponseVO getShopInfoById(@PathVariable String shopId) {
         try {
-            ShopInfo shopById = infoService.getShopInfoById(shopId);
-            return ResponseVO.getSuccessResponseVo(shopById);
+            ShopInfoVO shopByIdVO = infoService.getShopInfoById(shopId);
+            return ResponseVO.getSuccessResponseVo(shopByIdVO);
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseVO.getFalseResponseVo(null);

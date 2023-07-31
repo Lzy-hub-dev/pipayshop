@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -173,10 +174,31 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
      * 根据实体店id查询实体店信息
      */
     @Override
-    public ShopInfo getShopInfoById(String shopId) {
-        return shopInfoMapper.selectOne(new LambdaQueryWrapper<ShopInfo>()
-                .eq(ShopInfo::getStatus, 0)
-                .eq(ShopInfo::getShopId, shopId));
+    public ShopInfoVO getShopInfoById(String shopId) {
+        ShopInfoVO shopInfoVO = new ShopInfoVO();
+        List<ShopTags> list1=new ArrayList<>();
+
+        ShopInfo shopInfo = shopInfoMapper.selectOne(new QueryWrapper<ShopInfo>()
+                .eq("status", 0)
+                .eq("shop_id",shopId));
+        List<String> list = JSON.parseArray(shopInfo.getTagList(), String.class);
+        System.out.println(list);
+        for (String s : list) {
+            System.out.println(s);
+            ShopTags tag_id = tagMapper.selectOne(new QueryWrapper<ShopTags>().eq("tag_id", s));
+            list1.add(tag_id);
+        }
+        shopInfoVO.setShopId(shopInfo.getShopId());
+        shopInfoVO.setShopName(shopInfo.getShopName());
+        shopInfoVO.setLocalhostLatitude(shopInfo.getLocalhostLatitude());
+        shopInfoVO.setLocalhostLongitude(shopInfo.getLocalhostLongitude());
+        shopInfoVO.setAddress(shopInfo.getAddress());
+        shopInfoVO.setScore(shopInfo.getScore());
+        shopInfoVO.setShopIntroduce(shopInfo.getShopIntroduce());
+        shopInfoVO.setShopTagsList(list1);
+
+        return shopInfoVO;
+
     }
 
     /**

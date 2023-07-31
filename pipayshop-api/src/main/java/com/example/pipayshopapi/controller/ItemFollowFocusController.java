@@ -10,12 +10,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -51,6 +48,22 @@ public class ItemFollowFocusController {
             throw new BusinessException("关注网店失败，请联系后台人" + "、员");
         }
     }
+
+    @PostMapping("userUnfollow/{followId}/{itemId}")
+    @ApiOperation("用户取消关注")
+    private ResponseVO userUnfollow(@PathVariable String followId,@PathVariable String itemId){
+        try {
+            Boolean result = followFocusService.userUnfollow(followId, itemId);
+            if (!result){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("用户取消关注成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("用户取消关注失败，请联系后台人员");
+        }
+    }
+
     @GetMapping("followList/{id}/{itemFlag}")
     @ApiOperation("根据网店id或实体店id查询该网店粉丝列表")
     public ResponseVO userFollow(@ApiParam(value = "网店id/实体店id")@PathVariable("id") String id,
@@ -63,5 +76,5 @@ public class ItemFollowFocusController {
             throw new BusinessException("查询失败，请联系后台人" + "、员");
         }
     }
-    
+
 }

@@ -3,8 +3,11 @@ package com.example.pipayshopapi.controller;
 
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopInfo;
+import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
+import com.example.pipayshopapi.entity.ShopCommodityInfo;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityVO;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -27,7 +30,8 @@ import java.util.List;
  * @author zxb
  * @since 2023-07-27
  */
-@Controller
+@Api(value = "实体店的商品表",tags = "实体店的商品表")
+@RestController
 @RequestMapping("/pipayshopapi/shop-commodity-info")
 public class ShopCommodityInfoController {
 
@@ -50,6 +54,32 @@ public class ShopCommodityInfoController {
         }
     }
 
+    @GetMapping("selectShopInfoListByShopId/{pages}/{limit}/{shopId}")
+    @ApiOperation("根据店铺id查找实体店商品的详情信息列表")
+    public ResponseVO selectShopInfoListByShopId(@PathVariable Integer pages, @PathVariable Integer limit,@PathVariable String shopId){
+        try {
+            PageDataVO pageDataVO = shopCommodityService.selectShopInfoListByShopId(limit, pages, shopId);
+            return ResponseVO.getSuccessResponseVo(pageDataVO.getList());
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("根据店铺id查找实体店商品的详情信息列表失败，请联系后台人员");
+        }
+    }
+
+    @GetMapping("selectShopInfoByCommodityId/{commodityId}")
+    @ApiOperation("根据商品的id查找实体店商品的详情信息")
+    public ResponseVO selectShopInfoByCommodityId(@PathVariable String commodityId){
+        try {
+            ShopCommodityInfo shopCommodityInfo = shopCommodityService.selectShopInfoByCommodityId(commodityId);
+            return ResponseVO.getSuccessResponseVo(shopCommodityInfo);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("根据商品的id查找实体店商品的详情信息失败，请联系后台人员");
+        }
+
+    }
+
+
     @GetMapping("collectList/{userId}")
     @ApiOperation("根据用户id查询用户收藏的商品列表")
     public ResponseVO collectList(@PathVariable("userId") String userId) {
@@ -58,6 +88,7 @@ public class ShopCommodityInfoController {
             return ResponseVO.getSuccessResponseVo(list);
         } catch (Exception e) {
 //            log.error(e.getMessage());
+            e.printStackTrace();
             throw new BusinessException("查询失败，请联系后台人" + "、员");
         }
     }
@@ -68,6 +99,7 @@ public class ShopCommodityInfoController {
             List<ShopInfo> list = shopCommodityService.getFollowList(userId);
             return ResponseVO.getSuccessResponseVo(list);
         } catch (Exception e) {
+            e.printStackTrace();
 //            log.error(e.getMessage());
             throw new BusinessException("查询失败，请联系后台人" + "、员");
         }
@@ -81,6 +113,7 @@ public class ShopCommodityInfoController {
             return ResponseVO.getSuccessResponseVo(list);
         } catch (Exception e) {
 //            log.error(e.getMessage());
+            e.printStackTrace();
             throw new BusinessException("查询失败，请联系后台人" + "、员");
         }
     }
