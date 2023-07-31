@@ -2,7 +2,10 @@ package com.example.pipayshopapi.service;
 
 import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.pipayshopapi.entity.vo.GetOrderDataVO;
 import com.example.pipayshopapi.entity.vo.ItemOrderInfoVO;
+import com.example.pipayshopapi.entity.vo.OrderDetailVO;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 
 import java.util.List;
 
@@ -43,4 +46,16 @@ public interface ItemOrderInfoService extends IService<ItemOrderInfo> {
      * @return
      */
     List<ItemOrderInfoVO> itemOrders(String userId, Integer orderStatus);
+
+    PageDataVO getOrderList(GetOrderDataVO getOrderDataVO);
+
+    int delOrderByOrderId(String orderId);
+
+    OrderDetailVO getOrderDetail(String orderId);
+
+    int completedOrder(String orderId);
+
+    int failOrder(String orderId);
+
+    void deleteFailOrders();
 }

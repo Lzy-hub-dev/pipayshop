@@ -87,8 +87,6 @@
             c.`status` =0
         </where>
     </select>
-
-
     <resultMap id="paiedOrderDetailMap" type="com.example.pipayshopapi.entity.vo.OrderDetailVO">
         <result property="orderId" column="order_id" />
         <result property="createTime" column="create_time" />
@@ -103,11 +101,9 @@
             o.order_id ,o.create_time,o.update_time, u.address, u.phone, u.user_name
         FROM
             item_order_info o
-        JOIN
+                JOIN
             buyer_data u
-        ON
-            o.buyer_data_id = u.buyer_data_id AND o.order_id = #{orderId}
+            ON
+                o.buyer_data_id = u.buyer_data_id AND o.order_id = #{orderId}
     </select>
-
-
 </mapper>
