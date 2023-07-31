@@ -15,5 +15,7 @@ public class ApplyShopDTO {
     private String address;
     private String shopName;
     private String phone;
+    private String shopIntroduce;
+    private Integer categoryId;
     private String uid;
 }

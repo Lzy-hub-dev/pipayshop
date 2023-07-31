@@ -1,6 +1,8 @@
 package com.example.pipayshopapi.controller;
 
 
+import com.example.pipayshopapi.entity.ShopCommodityInfo;
+import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
@@ -9,12 +11,9 @@ import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopCommodityInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -58,7 +57,7 @@ public class ShopCommodityInfoController {
             List<ShopCommodityInfo> list = shopCommodityService.getCollectList(userId);
             return ResponseVO.getSuccessResponseVo(list);
         } catch (Exception e) {
-            log.error(e.getMessage());
+//            log.error(e.getMessage());
             throw new BusinessException("查询失败，请联系后台人" + "、员");
         }
     }
@@ -69,7 +68,7 @@ public class ShopCommodityInfoController {
             List<ShopInfo> list = shopCommodityService.getFollowList(userId);
             return ResponseVO.getSuccessResponseVo(list);
         } catch (Exception e) {
-            log.error(e.getMessage());
+//            log.error(e.getMessage());
             throw new BusinessException("查询失败，请联系后台人" + "、员");
         }
     }
@@ -81,7 +80,7 @@ public class ShopCommodityInfoController {
             List<ShopCommodityVO> list = shopCommodityService.historyList(userId);
             return ResponseVO.getSuccessResponseVo(list);
         } catch (Exception e) {
-            log.error(e.getMessage());
+//            log.error(e.getMessage());
             throw new BusinessException("查询失败，请联系后台人" + "、员");
         }
     }
