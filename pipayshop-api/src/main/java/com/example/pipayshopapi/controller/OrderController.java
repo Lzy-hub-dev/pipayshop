@@ -1,9 +1,6 @@
 package com.example.pipayshopapi.controller;
 
-import com.example.pipayshopapi.entity.vo.GetOrderDataVO;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
-import com.example.pipayshopapi.entity.vo.OrderDetailVO;
-import com.example.pipayshopapi.entity.vo.ResponseVO;
+import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ItemOrderInfoService;
 import io.swagger.annotations.Api;
@@ -12,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author wzx
@@ -30,17 +28,17 @@ public class OrderController {
      *  标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单
      */
     @GetMapping("getOrderList")
-    @ApiOperation("用户的全部订单列表分页展示标识id 0：所有订单   1：未支付订单    2：已支付订单   3：已完成（已经收货）订单")
-    public ResponseVO<PageDataVO> getOrderList(GetOrderDataVO getOrderDataVO) {
+    @ApiOperation("用户的全部订单列表分页展示标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单")
+    public ResponseVO<List<OrderListVO>> getOrderList(GetOrderDataVO getOrderDataVO) {
         try {
-            PageDataVO pageDataVO = itemOrderInfoService.getOrderList(getOrderDataVO);
-            if (pageDataVO == null){
+            List<OrderListVO> list = itemOrderInfoService.getOrderList(getOrderDataVO);
+            if (list == null){
                 throw new Exception();
             }
-            return ResponseVO.getSuccessResponseVo(pageDataVO);
+            return ResponseVO.getSuccessResponseVo(list);
         } catch (Exception e) {
             log.error(e.getMessage());
-            throw new BusinessException("用户的订单列表展示失败，请联系后台人员");
+            throw new BusinessException("用户的订单列表展示数据为0");
         }
     }
 

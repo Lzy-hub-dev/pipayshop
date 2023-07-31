@@ -89,5 +89,10 @@ public class ItemInfo implements Serializable {
      */
     private Integer status;
 
+    /**
+     * 用户头像
+     */
+    private String userImage;
+
 
 }

@@ -3,8 +3,11 @@ package com.example.pipayshopapi.service;
 import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.vo.GetOrderDataVO;
+import com.example.pipayshopapi.entity.vo.OrderListVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.OrderDetailVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,7 +20,7 @@ import com.example.pipayshopapi.entity.vo.OrderDetailVO;
 public interface ItemOrderInfoService extends IService<ItemOrderInfo> {
 
 
-    PageDataVO getOrderList(GetOrderDataVO getOrderDataVO);
+    List<OrderListVO> getOrderList(GetOrderDataVO getOrderDataVO);
 
     int delOrderByOrderId(String orderId);
 

@@ -144,5 +144,9 @@ public class ItemCommodityInfo implements Serializable {
      */
     private  Integer degreeLoss;
 
+    /**
+     * 商品的展示图路径
+     */
+    private String avatarImag;
 
 }

@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.example.pipayshopapi.entity.vo.GetOrderDataVO;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.entity.vo.OrderListVO;
 import com.example.pipayshopapi.entity.vo.OrderDetailVO;
 import com.example.pipayshopapi.mapper.ItemOrderInfoMapper;
 import com.example.pipayshopapi.service.ItemOrderInfoService;
@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -31,16 +32,8 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
     private ItemOrderInfoMapper itemOrderInfoMapper;
 
     @Override
-    // TODO 这里的返回数据是不正确的。因该再特定一点
-    public PageDataVO getOrderList(GetOrderDataVO getOrderDataVO) {
-        Integer currentPage =getOrderDataVO.getCurrentPage();
-        Integer pageSize = getOrderDataVO.getPageSize();
-        Page<ItemOrderInfo> page = new Page<>(currentPage, pageSize);
-        itemOrderInfoMapper.selectPage(page, new QueryWrapper<ItemOrderInfo>()
-                .eq("uid", getOrderDataVO.getUserId())
-                .eq("order_status", getOrderDataVO.getCategoryId())
-                .eq("del_flag", 0));
-        return new PageDataVO((int)page.getTotal(), page.getRecords());
+    public List<OrderListVO> getOrderList(GetOrderDataVO getOrderDataVO) {
+        return itemOrderInfoMapper.getOrderList(getOrderDataVO);
     }
 
 
