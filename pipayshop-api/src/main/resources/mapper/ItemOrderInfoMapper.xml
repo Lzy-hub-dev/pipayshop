@@ -59,4 +59,27 @@
             =
               0
     </select>
+
+
+    <resultMap id="paiedOrderDetailMap" type="com.example.pipayshopapi.entity.vo.OrderDetailVO">
+        <result property="orderId" column="order_id" />
+        <result property="createTime" column="create_time" />
+        <result property="payTime" column="update_time" />
+        <result property="address" column="address" />
+        <result property="phone" column="phone" />
+        <result property="buyerName" column="user_name" />
+    </resultMap>
+
+    <select id="getOrderDetail" resultMap="paiedOrderDetailMap">
+        SELECT
+            o.order_id ,o.create_time,o.update_time, u.address, u.phone, u.user_name
+        FROM
+            item_order_info o
+        JOIN
+            buyer_data u
+        ON
+            o.buyer_data_id = u.buyer_data_id AND o.order_id = #{orderId}
+    </select>
+
+
 </mapper>
