@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ShopCategoryTop;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 
+import java.util.List;
+
 /**
  * <p>
  * 实体店一级分类表 服务类
@@ -42,4 +44,13 @@ public interface ShopCategoryTopService extends IService<ShopCategoryTop> {
      * @return
      */
     Boolean updateShopCategoryTopById(ShopCategoryTop shopCategoryTop);
+
+
+
+    /**
+     * 实体店申请商品获取所有一级分类
+     * @return  List<ShopCategoryTop>
+     */
+    List<ShopCategoryTop> getAllShopCategoryTopList();
+
 }
