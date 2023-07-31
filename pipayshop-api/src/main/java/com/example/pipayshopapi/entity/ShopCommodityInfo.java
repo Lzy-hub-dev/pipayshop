@@ -105,4 +105,15 @@ public class ShopCommodityInfo implements Serializable {
      */
     private String tagList;
 
+
+    /**
+     * 一级分类
+     */
+    private Integer categoryTopId;
+
+    /**
+     * 二级分类
+     */
+    private Integer categoryId;
+
 }
