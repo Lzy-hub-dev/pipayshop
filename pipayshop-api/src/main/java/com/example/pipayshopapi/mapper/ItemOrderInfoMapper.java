@@ -2,8 +2,10 @@ package com.example.pipayshopapi.mapper;
 
 import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.pipayshopapi.entity.vo.GetOrderDataVO;
 import com.example.pipayshopapi.entity.vo.ItemOrderInfoVO;
 import com.example.pipayshopapi.entity.vo.OrderDetailVO;
+import com.example.pipayshopapi.entity.vo.OrderListVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -47,4 +49,7 @@ public interface ItemOrderInfoMapper extends BaseMapper<ItemOrderInfo> {
      * 订单详情数据
      */
     OrderDetailVO getOrderDetail(@Param("orderId") String orderId);
+
+
+    List<OrderListVO> getOrderList(@Param("getOrderDataVO") GetOrderDataVO getOrderDataVO);
 }

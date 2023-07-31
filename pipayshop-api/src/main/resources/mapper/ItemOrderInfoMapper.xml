@@ -87,6 +87,8 @@
             c.`status` =0
         </where>
     </select>
+
+
     <resultMap id="paiedOrderDetailMap" type="com.example.pipayshopapi.entity.vo.OrderDetailVO">
         <result property="orderId" column="order_id" />
         <result property="createTime" column="create_time" />
@@ -101,9 +103,44 @@
             o.order_id ,o.create_time,o.update_time, u.address, u.phone, u.user_name
         FROM
             item_order_info o
-                JOIN
+        JOIN
             buyer_data u
-            ON
-                o.buyer_data_id = u.buyer_data_id AND o.order_id = #{orderId}
+        ON
+            o.buyer_data_id = u.buyer_data_id AND o.order_id = #{orderId}
     </select>
+
+    <resultMap id="orderListResultMap" type="com.example.pipayshopapi.entity.vo.OrderListVO">
+        <result property="orderId" column="order_id" />
+        <result property="orderStatus" column="order_status" />
+        <result property="commodityId" column="commodity_id" />
+        <result property="transactionAmount" column="transaction_amount" />
+        <result property="sellerImg" column="user_image" />
+        <result property="sellerName" column="item_name" />
+        <result property="commodityImg" column="avatar_image" />
+        <result property="details" column="details"/>
+    </resultMap>
+
+    <select id="getOrderList" resultMap="orderListResultMap">
+        select
+            o.order_id, o.order_status, o.commodity_id, o.transaction_amount,
+            u.user_image, u.item_name, i.avatar_imag
+        from
+            item_order_info o
+        JOIN
+            item_info u
+        JOIN
+            item_commodity_info i
+        where
+            o.uid = #{getOrderDataVO.userId}
+            <if test="getOrderDataVO.orderStatus != -1">
+                and o.order_status = #{getOrderDataVO.orderStatus}
+            </if>
+            AND o.del_flag = 0
+            AND o.commodity_id = i.commodity_id
+            AND o.item_id = u.item_id
+        ORDER BY
+            o.update_time ASC;
+    </select>
+
+
 </mapper>

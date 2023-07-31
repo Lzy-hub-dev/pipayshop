@@ -15,8 +15,8 @@ public class GetOrderDataVO {
 
     /**
      标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单
-     */
-    private Integer categoryId;
+    */
+    private Integer orderStatus;
 
     /**
      * 用户id
