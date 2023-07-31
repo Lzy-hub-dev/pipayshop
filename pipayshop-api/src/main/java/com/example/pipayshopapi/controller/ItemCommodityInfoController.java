@@ -3,7 +3,6 @@ package com.example.pipayshopapi.controller;
 
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.ItemInfo;
-import com.example.pipayshopapi.entity.dto.ApplyItemCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
@@ -58,10 +57,10 @@ public class ItemCommodityInfoController {
 
     @PostMapping("issueItemCommodity")
     @ApiOperation("发布网店商品")
-    public ResponseVO issueItemCommodity(@RequestParam("files") MultipartFile[] files, ApplyItemCommodityDTO applyItemCommodityDTO){
-
+    public ResponseVO issueItemCommodity(@RequestParam("files") MultipartFile[] files, ItemCommodityInfoVO itemCommodityInfoVO) {
+        System.out.println(itemCommodityInfoVO);
         try {
-            boolean result = commodityInfoService.issueItemCommodity(applyItemCommodityDTO,files);
+            boolean result = commodityInfoService.issueItemCommodity(itemCommodityInfoVO, files);
             if (!result) {
                 throw new Exception();
             }
@@ -134,6 +133,7 @@ public class ItemCommodityInfoController {
             throw new BusinessException("查询失败，请联系后台人" + "、员");
         }
     }
+
     @GetMapping("followList/{userId}")
     @ApiOperation("根据用户id查询 用户关注的网店列表")
     public ResponseVO followList(@PathVariable("userId") String userId) {
@@ -191,7 +191,7 @@ public class ItemCommodityInfoController {
     @PostMapping("changeCommodityStatus/{commodity}/{status}")
     @ApiOperation("根据商品id上架/下架 商品")
     public ResponseVO changeCommodityStatus(@PathVariable("commodity") String commodity,
-                                            @PathVariable(value = "status")
+                                            @PathVariable("status")
                                             @ApiParam("1:上架;2:下架")
                                             String status) {
         try {

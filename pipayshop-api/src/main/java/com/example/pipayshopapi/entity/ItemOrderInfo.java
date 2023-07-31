@@ -65,9 +65,5 @@ public class ItemOrderInfo implements Serializable {
      */
     private LocalDateTime updateTime;
 
-    /**
-     * 外键关联用户的地址电话等信息方案
-     */
-    private Long buyerDataId;
 
 }

@@ -14,8 +14,7 @@ public class ApplyShopCommodityDTO {
     private String commodityName;
     private  String commodityDetail;
     private BigDecimal price;
-    private Integer categoryTopId;
-    private Integer categoryId;
+
     private String shopId;
     private Integer residue;
     private String reservationInformation;

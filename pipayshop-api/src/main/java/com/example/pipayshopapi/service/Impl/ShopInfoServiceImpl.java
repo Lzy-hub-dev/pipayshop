@@ -252,8 +252,6 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         shopInfo.setShopName(applyShopDTO.getShopName());
         shopInfo.setPhone(applyShopDTO.getPhone());
         shopInfo.setUid(applyShopDTO.getUid());
-        shopInfo.setCategoryId(applyShopDTO.getCategoryId());
-        shopInfo.setShopIntroduce(applyShopDTO.getShopIntroduce());
         return shopInfoMapper.insert(shopInfo) > 0;
     }
 
