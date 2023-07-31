@@ -28,4 +28,26 @@
           and c.`status` = 0
           and i.`status` = 0
     </select>
+    <select id="selectOrderByUidAndStatus" resultType="com.example.pipayshopapi.entity.vo.ShopOrderInfoVO">
+        SELECT ui.uid,ui.user_name,ui.user_image,  sci.commodity_id,sci.commodity_name,sci.commodity_img_list,  soi.order_id,soi.transaction_amount
+        FROM user_info as ui
+                 INNER JOIN shop_info as si on ui.uid=si.uid
+                 INNER JOIN shop_commodity_info as sci on si.shop_id=sci.shop_id
+                 INNER JOIN shop_order_info as soi on sci.shop_id=soi.shop_id
+        WHERE sci.`status`=1 and soi.del_flag=0
+          and si.uid=#{uid}
+          and order_status=#{status}
+            LIMIT #{page},#{limit}
+    </select>
+    <select id="selectAllOrderByUidAndStatus" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM user_info as ui
+                 INNER JOIN shop_info as si on ui.uid=si.uid
+                 INNER JOIN shop_commodity_info as sci on si.shop_id=sci.shop_id
+                 INNER JOIN shop_order_info as soi on sci.shop_id=soi.shop_id
+        WHERE sci.`status`=1 and soi.del_flag=0
+          and si.uid=#{uid}
+          and order_status=#{status}
+    </select>
+
 </mapper>

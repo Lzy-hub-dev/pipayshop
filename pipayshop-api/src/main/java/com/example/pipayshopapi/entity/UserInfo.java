@@ -88,6 +88,10 @@ public class UserInfo implements Serializable {
      * 0:正常使用1:禁用
      */
     private Boolean status;
+    /**
+     * 用户头像
+     */
+    private String userImage;
 
 
 }

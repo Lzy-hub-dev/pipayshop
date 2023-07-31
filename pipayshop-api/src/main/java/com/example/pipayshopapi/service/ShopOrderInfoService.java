@@ -3,6 +3,8 @@ package com.example.pipayshopapi.service;
 import com.example.pipayshopapi.entity.ShopOrderInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.vo.ItemOrderInfoVO;
+import com.example.pipayshopapi.entity.vo.OrderPageVO;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 
 import java.util.List;
 
@@ -22,4 +24,12 @@ public interface ShopOrderInfoService extends IService<ShopOrderInfo> {
      * @return
      */
     List<ItemOrderInfoVO> selectOrderByUerId(String userId);
+
+    /**
+     * 根据用户id查询，订单状态查询订单列表
+     *
+     * @param pageVO
+     * @return
+     */
+    PageDataVO selectOrderByUidAndStatus (OrderPageVO pageVO);
 }

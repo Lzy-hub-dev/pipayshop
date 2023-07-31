@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.alibaba.fastjson.JSON;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
+import com.example.pipayshopapi.entity.vo.CommodityStatusPageVO;
+import com.example.pipayshopapi.entity.vo.OrderPageVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
@@ -102,6 +104,16 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
         return shopCommodityInfoMapper.selectHistoryProductByUserId(userId);
     }
 
+    @Override
+    public PageDataVO selectCommodityByUidAndStatus(OrderPageVO pageVO) {
+        return null;
+    }
+
+    @Override
+    public boolean updateCommodityStatus(String commodityId, Integer status) {
+        return false;
+    }
+
     /**
      * 根据店铺id查找实体店商品的详情信息列表
      */
@@ -111,6 +123,18 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
         shopCommodityInfoMapper.selectPage(page,new QueryWrapper<ShopCommodityInfo>()
                                                     .eq("shop_id",shopId));
         return new PageDataVO((int) page.getTotal(),page.getRecords());
+    }
+
+    /**
+     * 根据店铺id查找实体店商品的上架和下架列表
+     * @param commodityStatusPageVO
+     * @return
+     */
+    @Override
+    public PageDataVO selectStatusListByShopId(CommodityStatusPageVO commodityStatusPageVO) {
+//        new Page<>()
+//        shopCommodityInfoMapper.selectPage()
+        return null;
     }
 
     /**

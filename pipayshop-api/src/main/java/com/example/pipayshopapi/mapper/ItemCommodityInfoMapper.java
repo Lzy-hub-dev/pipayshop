@@ -10,7 +10,7 @@ import com.example.pipayshopapi.entity.vo.commodityVO;
 import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.omg.CORBA.INTERNAL;
+
 
 import java.util.ArrayList;
 import java.util.List;
