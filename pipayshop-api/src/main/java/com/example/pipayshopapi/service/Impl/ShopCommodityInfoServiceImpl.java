@@ -38,7 +38,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
 
     /**
      * 发布实体店商品
-     * @param shopCommodityVO
+     * @param applyShopCommodityDTO
      * @return
      */
     @Override
