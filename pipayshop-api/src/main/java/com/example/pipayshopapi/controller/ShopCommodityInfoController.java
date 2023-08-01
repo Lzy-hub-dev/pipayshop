@@ -5,9 +5,7 @@ import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
-import com.example.pipayshopapi.entity.vo.ResponseVO;
-import com.example.pipayshopapi.entity.vo.ShopCommodityVO;
+import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopCommodityInfoService;
 import io.swagger.annotations.Api;
@@ -75,6 +73,44 @@ public class ShopCommodityInfoController {
             throw new BusinessException("根据商品的id查找实体店商品的详情信息失败，请联系后台人员");
         }
 
+    }
+
+    @GetMapping("selectCommodityByUidAndStatus")
+    @ApiOperation("根据用户id查询，商品状态查询审核通过和未审核列表")
+    public ResponseVO selectCommodityByUidAndStatus(OrderPageVO pageVO){
+        try {
+            PageDataVO pageDataVO = shopCommodityService.selectCommodityByUidAndStatus(pageVO);
+            return ResponseVO.getSuccessResponseVo(pageDataVO);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("根据用户id查询，商品状态查询审核通过和未审核列表失败，请联系后台人员");
+        }
+    }
+
+    @GetMapping("selectStatusListByShopId")
+    @ApiOperation("根据店铺id查找实体店商品的上架和下架列表")
+    public ResponseVO selectStatusListByShopId(CommodityStatusPageVO commodityStatusPageVO){
+        try {
+            PageDataVO pageDataVO = shopCommodityService.selectStatusListByShopId(commodityStatusPageVO);
+            return ResponseVO.getSuccessResponseVo(pageDataVO);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("根据店铺id查找实体店商品的上架和下架列表失败，请联系后台人员");
+        }
+    }
+
+    @PostMapping("updateCommodityStatus/{commodityId}/{status}")
+    @ApiOperation("根据商品id，更改商品的上下架状态")
+    public ResponseVO updateCommodityStatus(@PathVariable String commodityId,@PathVariable Integer status){
+        try {
+            boolean result = shopCommodityService.updateCommodityStatus(commodityId, status);
+            if (!result){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("根据商品id，更改商品的上下架状态成功");
+        }catch (Exception e){
+            throw new BusinessException("根据商品id，更改商品的上下架状态失败，请联系后台人员");
+        }
     }
 
 

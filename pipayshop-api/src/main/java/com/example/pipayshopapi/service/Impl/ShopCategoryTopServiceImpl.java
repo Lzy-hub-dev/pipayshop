@@ -1,6 +1,7 @@
 package com.example.pipayshopapi.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -10,6 +11,8 @@ import com.example.pipayshopapi.mapper.ShopCategoryTopMapper;
 import com.example.pipayshopapi.service.ShopCategoryTopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -93,5 +96,11 @@ public class ShopCategoryTopServiceImpl extends ServiceImpl<ShopCategoryTopMappe
         return shopCategoryTopMapper.update(shopCategoryTop,new LambdaQueryWrapper<ShopCategoryTop>()
                 .eq(ShopCategoryTop::getDelFlag,0)
                 .eq(ShopCategoryTop::getCategoryId,shopCategoryTop.getCategoryId()))>0;
+    }
+    @Override
+    public List<ShopCategoryTop> getAllShopCategoryTopList() {
+        List<ShopCategoryTop> categoryTopList = shopCategoryTopMapper.selectList(new QueryWrapper<ShopCategoryTop>().
+                eq("del_flag", 0));
+        return categoryTopList;
     }
 }

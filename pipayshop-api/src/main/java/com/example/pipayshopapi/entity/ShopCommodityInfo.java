@@ -105,23 +105,13 @@ public class ShopCommodityInfo implements Serializable {
      */
     private String tagList;
 
-    @Override
-    public String toString() {
-        return "ShopCommodityInfo{" +
-            "id=" + id +
-            ", commodityId=" + commodityId +
-            ", commodityName=" + commodityName +
-            ", commodityImgList=" + commodityImgList +
-            ", commodityDetail=" + commodityDetail +
-            ", price=" + price +
-            ", monthlySales=" + monthlySales +
-            ", shopId=" + shopId +
-            ", createTime=" + createTime +
-            ", updateTime=" + updateTime +
-            ", validityTime=" + validityTime +
-            ", residue=" + residue +
-            ", reservationInformation=" + reservationInformation +
-            ", status=" + status +
-        "}";
-    }
+    /**
+     * 一级分类
+     */
+    private Integer categoryTopId;
+
+    /**
+     * 二级分类
+     */
+    private Integer categoryId;
 }
