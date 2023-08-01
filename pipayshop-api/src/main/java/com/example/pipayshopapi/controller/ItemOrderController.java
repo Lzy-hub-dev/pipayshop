@@ -1,5 +1,6 @@
 package com.example.pipayshopapi.controller;
 
+import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ItemOrderInfoService;
@@ -18,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/pipayshopapi/order")
 @Slf4j
-public class OrderController {
+public class ItemOrderController {
 
     @Resource
     private ItemOrderInfoService itemOrderInfoService;
@@ -133,10 +134,38 @@ public class OrderController {
         }
     }
 
+    /**
+     * 生成未支付订单
+     */
+    @PostMapping("generateUnpaidOrder")
+    @ApiOperation("生成未支付订单")
+    public ResponseVO<String> generateUnpaidOrder(@RequestBody ItemOrderInfo itemOrderInfo) {
+        try {
+            String orderId = itemOrderInfoService.generateUnpaidOrder(itemOrderInfo);
+            return ResponseVO.getSuccessResponseVo("生成未支付订单成功" + "订单id为：" + orderId);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new BusinessException("生成未支付订单失败，请联系后台人员");
+        }
+    }
 
-    /*
+
+    /**
     支付下单接口
      */
-
+    @PostMapping("payOrder")
+    @ApiOperation("支付下单接口")
+    public ResponseVO<String> payOrder(@RequestBody PayOrderVO payOrderVO) {
+        try {
+            boolean flag = itemOrderInfoService.payOrder(payOrderVO);
+            if (!flag) {
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("支付下单成功!");
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new BusinessException("支付下单失败，请联系后台人员");
+        }
+    }
 
 }

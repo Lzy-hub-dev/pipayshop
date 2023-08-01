@@ -1,16 +1,22 @@
 package com.example.pipayshopapi.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.example.pipayshopapi.entity.AccountInfo;
+import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.example.pipayshopapi.entity.vo.GetOrderDataVO;
 import com.example.pipayshopapi.entity.vo.OrderListVO;
 import com.example.pipayshopapi.entity.vo.OrderDetailVO;
+import com.example.pipayshopapi.entity.vo.PayOrderVO;
+import com.example.pipayshopapi.exception.BusinessException;
+import com.example.pipayshopapi.mapper.AccountInfoMapper;
+import com.example.pipayshopapi.mapper.ItemCommodityInfoMapper;
 import com.example.pipayshopapi.mapper.ItemOrderInfoMapper;
 import com.example.pipayshopapi.service.ItemOrderInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.pipayshopapi.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
@@ -27,7 +33,13 @@ import java.util.List;
 public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, ItemOrderInfo> implements ItemOrderInfoService {
 
     @Resource
-    private ItemOrderInfoMapper itemOrderInfoMapper;
+    ItemOrderInfoMapper itemOrderInfoMapper;
+
+    @Resource
+    AccountInfoMapper accountInfoMapper;
+
+    @Resource
+    ItemCommodityInfoMapper itemCommodityInfoMapper;
 
     @Override
     public List<OrderListVO> getOrderList(GetOrderDataVO getOrderDataVO) {
@@ -77,5 +89,43 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
                 .eq("order_status", 3)
                 .set("del_flag", 1)
                 .set("update_time", new Date()));
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String generateUnpaidOrder(ItemOrderInfo itemOrderInfo) {
+        // 生成orderId
+        String orderId = StringUtil.generateShortId();
+        itemOrderInfo.setOrderId(orderId);
+        int insert = itemOrderInfoMapper.insert(itemOrderInfo);
+        if (insert < 1){
+            String message = "生成未支付订单失败";
+            throw new BusinessException(message);
+        }
+        return orderId;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean payOrder(PayOrderVO payOrderVO) {
+        // 用户余额更新
+        int uid = accountInfoMapper.update(null, new UpdateWrapper<AccountInfo>()
+                .eq("uid", payOrderVO.getUid())
+                .setSql("point_balance = point_balance - " + payOrderVO.getTransactionAmount())
+                .set("update_time", new Date()));
+        if (uid < 1){throw new RuntimeException();}
+        // 商品库存更新
+        int update = itemCommodityInfoMapper.update(null, new UpdateWrapper<ItemCommodityInfo>()
+                .eq("commodity_id", payOrderVO.getCommodityId())
+                .setSql("inventory = inventory - 1")
+                .set("update_time", new Date()));
+        if (update < 1){throw new RuntimeException();}
+        // 订单状态、修改时间更新
+        int update1 = itemOrderInfoMapper.update(null, new UpdateWrapper<ItemOrderInfo>()
+                .eq("order_id", payOrderVO.getOrderId())
+                .set("order_status", 1)
+                .set("update_time", new Date()));
+        if (update1 < 1){throw new RuntimeException();}
+        return true;
     }
 }

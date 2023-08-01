@@ -5,7 +5,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.vo.GetOrderDataVO;
 import com.example.pipayshopapi.entity.vo.OrderListVO;
 import com.example.pipayshopapi.entity.vo.OrderDetailVO;
+import com.example.pipayshopapi.entity.vo.PayOrderVO;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -30,4 +33,8 @@ public interface ItemOrderInfoService extends IService<ItemOrderInfo> {
     int failOrder(String orderId);
 
     void deleteFailOrders();
+
+    String generateUnpaidOrder(ItemOrderInfo itemOrderInfo);
+
+    boolean payOrder(PayOrderVO payOrderVO);
 }
