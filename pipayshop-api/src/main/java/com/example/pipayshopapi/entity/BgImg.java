@@ -7,11 +7,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.omg.CORBA.INTERNAL;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -60,4 +58,8 @@ public class BgImg implements Serializable {
      */
     private Integer delFlag;
 
+    /**
+     * 该图片对应的内容的id
+     */
+    private String contentId;
 }

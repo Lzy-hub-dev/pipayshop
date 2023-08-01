@@ -3,8 +3,14 @@ package com.example.pipayshopapi.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -15,6 +21,9 @@ import java.time.LocalDateTime;
  * @since 2023-07-27
  */
 @TableName("item_follow_focus")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ItemFollowFocus implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -35,70 +44,15 @@ public class ItemFollowFocus implements Serializable {
     /**
      * 关注时间
      */
-    private LocalDateTime createTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
 
     /**
      * 修改时间
      */
-    private LocalDateTime updateTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date updateTime;
 
-    /**
-     * 关注状态(0关注 1取消)
-     */
-    private Boolean status;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getItemId() {
-        return itemId;
-    }
-
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
-    }
-    public String getFollowId() {
-        return followId;
-    }
-
-    public void setFollowId(String followId) {
-        this.followId = followId;
-    }
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
-    public LocalDateTime getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(LocalDateTime updateTime) {
-        this.updateTime = updateTime;
-    }
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return "ItemFollowFocus{" +
-            "id=" + id +
-            ", itemId=" + itemId +
-            ", followId=" + followId +
-            ", createTime=" + createTime +
-            ", updateTime=" + updateTime +
-            ", status=" + status +
-        "}";
-    }
 }

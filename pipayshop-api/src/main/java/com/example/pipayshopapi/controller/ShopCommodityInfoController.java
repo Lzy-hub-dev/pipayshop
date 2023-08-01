@@ -1,18 +1,15 @@
 package com.example.pipayshopapi.controller;
 
 
+import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
-import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
-import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopCommodityInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
-
-import org.springframework.stereotype.Controller;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -115,7 +112,7 @@ public class ShopCommodityInfoController {
 
 
     @GetMapping("collectList/{userId}")
-    @ApiOperation("根据用户id查询用户收藏的商品列表")
+    @ApiOperation("根据用户id查询用户收藏的实体类商品列表")
     public ResponseVO collectList(@PathVariable("userId") String userId) {
         try {
             List<ShopCommodityInfo> list = shopCommodityService.getCollectList(userId);
@@ -126,7 +123,7 @@ public class ShopCommodityInfoController {
         }
     }
     @GetMapping("followList/{userId}")
-    @ApiOperation("根据用户id查询用户关注的网店列表")
+    @ApiOperation("根据用户id查询用户关注的实体店店列表")
     public ResponseVO followList(@PathVariable("userId") String userId) {
         try {
             List<ShopInfo> list = shopCommodityService.getFollowList(userId);

@@ -2,7 +2,6 @@ package com.example.pipayshopapi.controller;
 
 
 import com.example.pipayshopapi.entity.ItemCommodityCategory;
-import com.example.pipayshopapi.entity.ItemCommodityInfoCategoryTop;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ItemCommodityCategoryService;
@@ -12,8 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -37,7 +34,7 @@ public class ItemCommodityCategoryController {
     private ItemCommodityCategoryService categoryService;
 
     @PostMapping("secondCateList/{categoryPid}")
-    @ApiOperation("二级分类列表展示")
+    @ApiOperation("网店二级分类标签列表展示")
     public ResponseVO secondCateList(@PathVariable Integer categoryPid){
 
         try{

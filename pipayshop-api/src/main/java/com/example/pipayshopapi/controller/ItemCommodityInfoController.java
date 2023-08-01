@@ -4,7 +4,6 @@ package com.example.pipayshopapi.controller;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.ItemInfo;
 import com.example.pipayshopapi.entity.dto.ApplyItemCommodityDTO;
-import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -14,8 +13,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
-import org.springframework.stereotype.Controller;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -41,7 +38,7 @@ public class ItemCommodityInfoController {
 
 
     @GetMapping("commodityOfCateList")
-    @ApiOperation("某二级分类下的商品列表分页展示")
+    @ApiOperation("商品某二级分类下的商品列表分页展示")
     public ResponseVO<PageDataVO> commodityOfCateList(@ModelAttribute commodityPageVO commodityPageVO) {
         try {
             PageDataVO pageDataVO = commodityInfoService.commodityOfCateList(commodityPageVO);
@@ -74,7 +71,7 @@ public class ItemCommodityInfoController {
 
 
     @GetMapping("itemSearchCommodity")
-    @ApiOperation("网店首页条件搜索")
+    @ApiOperation("网店首页条件过滤列表展示")
     public ResponseVO<PageDataVO> itemSearchCommodity(ItemSearchConditionDTO itemSearchConditionDTO) {
         try {
             PageDataVO pageDataVO = commodityInfoService.itemSearchCommodity(itemSearchConditionDTO);
@@ -92,9 +89,9 @@ public class ItemCommodityInfoController {
 
     @GetMapping("itemCommodityChoose/{itemId}/{brandId}")
     @ApiOperation("获取同一网店同一品牌的商品接口")
-    public ResponseVO<List<commodityVO>> itemCommodityChoose(@PathVariable("itemId") String itemId, @PathVariable("brandId") String brandId) {
+    public ResponseVO<List<CommodityVO>> itemCommodityChoose(@PathVariable("itemId") String itemId, @PathVariable("brandId") String brandId) {
         try {
-            List<commodityVO> commodityVOS = commodityInfoService.itemCommodityChoose(itemId, brandId);
+            List<CommodityVO> commodityVOS = commodityInfoService.itemCommodityChoose(itemId, brandId);
             if (commodityVOS == null) {
                 throw new Exception();
             }

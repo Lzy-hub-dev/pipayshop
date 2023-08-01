@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class commodityVO {
+public class CommodityVO {
 
 
     private String commodityId;
@@ -15,6 +15,6 @@ public class commodityVO {
     private String originPrice;
     private String price;
     private String details;
-    private String imagsList;
+    private String avatarImag;
 
 }

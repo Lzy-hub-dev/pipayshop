@@ -32,7 +32,7 @@ public class ShopInfoController {
     private static final Logger log = LoggerFactory.getLogger(ShopTagsController.class);
 
     @GetMapping("getShopInfoList")
-    @ApiOperation("根据条件查询实体店列表")
+        @ApiOperation("根据条件查询实体店列表")
     public ResponseVO getShopInfoList(ShopDTO shopDTO) {
         try {
             PageDataVO list = infoService.getShopInfoList(shopDTO);

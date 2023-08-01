@@ -2,12 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.pipayshopapi.mapper.ItemCommodityInfoMapper">
 
-    <select id="commodityOfCateList" resultType="com.example.pipayshopapi.entity.vo.commodityVO">
+    <select id="commodityOfCateList" resultType="com.example.pipayshopapi.entity.vo.CommodityVO">
 
-        SELECT commodity_id, item_commodity_name, origin_price, price, details, imags_list
+        SELECT commodity_id, item_commodity_name, origin_price, price, details, avatar_imag
         FROM item_commodity_info
-        where category_id = #{categoryId} limit #{startIndex}
-            , #{number}
+        where category_id = #{categoryId} limit ${startIndex}
+            , ${number}
 
     </select>
 
@@ -16,7 +16,7 @@
         from item_commodity_info
         where category_id = #{categoryId}
     </select>
-    <select id="itemCommodityChoose" resultType="com.example.pipayshopapi.entity.vo.commodityVO">
+    <select id="itemCommodityChoose" resultType="com.example.pipayshopapi.entity.vo.CommodityVO">
         select commodity_id,item_commodity_name,origin_price,price,details,imags_list
         FROM item_commodity_info
         where item_id=#{itemId}

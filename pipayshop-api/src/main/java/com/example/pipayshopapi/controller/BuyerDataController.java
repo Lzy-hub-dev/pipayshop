@@ -2,7 +2,6 @@ package com.example.pipayshopapi.controller;
 
 
 import com.example.pipayshopapi.entity.BuyerData;
-import com.example.pipayshopapi.entity.vo.BuyerDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.BuyerDataService;
@@ -36,7 +35,7 @@ public class BuyerDataController {
             return ResponseVO.getSuccessResponseVo(buyerData);
         }catch (Exception e){
             e.printStackTrace();
-            throw new BusinessException("");
+            throw new BusinessException("根据用户Id查找用户的所有收货地址失败");
         }
     }
 
@@ -73,7 +72,7 @@ public class BuyerDataController {
 
 
     @PostMapping("deleteBuyerDataById/{id}")
-    @ApiOperation("根据id删除买家的收货地址")
+    @ApiOperation("根据id删除买家的收货地址等数据")
     public ResponseVO deleteBuyerDataById(@PathVariable String buyerId){
         try {
             boolean result = buyerDataService.deleteBuyerDataById(buyerId);

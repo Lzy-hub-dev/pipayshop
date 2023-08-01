@@ -30,7 +30,7 @@ public class ShopCategoryController {
     private static final Logger log = LoggerFactory.getLogger(ShopCategoryController.class);
 
     @GetMapping("getShopCategoryList")
-    @ApiOperation("查询一级分类对应的二级分列表")
+    @ApiOperation("查询实体店一级分类对应的二级分列表")
     public ResponseVO getShopCategoryList(Integer pageNum, Integer pageSize,Integer topId) {
         try {
             PageDataVO list = categoryService.getShopCategoryList(pageNum, pageSize,topId);
@@ -41,7 +41,7 @@ public class ShopCategoryController {
         }
     }
     @GetMapping("getShopCategoryById/{categoryId}")
-    @ApiOperation("根据分类id查询分类")
+    @ApiOperation("根据实体店分类id查询分类")
     public ResponseVO getShopCategoryById(@PathVariable String categoryId) {
         try {
             ShopCategory category = categoryService.getShopCategoryById(categoryId);

@@ -1,16 +1,14 @@
 package com.example.pipayshopapi.mapper;
 
-import com.example.pipayshopapi.entity.ItemCollection;
-import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.ItemInfo;
-import com.example.pipayshopapi.entity.vo.*;
-import io.swagger.models.auth.In;
+import com.example.pipayshopapi.entity.vo.CommodityDetailVO;
+import com.example.pipayshopapi.entity.vo.CommodityVO;
+import com.example.pipayshopapi.entity.vo.ItemCommodityInfoVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,11 +22,11 @@ import java.util.List;
 @Mapper
 public interface ItemCommodityInfoMapper extends BaseMapper<ItemCommodityInfo> {
 
-    List<commodityVO> commodityOfCateList(@Param("categoryId") Integer categoryId, @Param("startIndex")Integer startIndex, @Param("number")Integer number);
+    List<CommodityVO> commodityOfCateList(@Param("categoryId") Integer categoryId, @Param("startIndex")Integer startIndex, @Param("number")Integer number);
 
     Integer  listCount(@Param("categoryId") Integer categoryId);
 
-    List<commodityVO> itemCommodityChoose(String itemId,String brandId);
+    List<CommodityVO> itemCommodityChoose(String itemId, String brandId);
 
     CommodityDetailVO itemCommodityDetail(String commodityId);
 

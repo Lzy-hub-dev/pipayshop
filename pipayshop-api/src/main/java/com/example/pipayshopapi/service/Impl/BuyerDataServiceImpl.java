@@ -2,12 +2,10 @@ package com.example.pipayshopapi.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.BuyerData;
-import com.example.pipayshopapi.entity.vo.BuyerDataVO;
 import com.example.pipayshopapi.mapper.BuyerDataMapper;
 import com.example.pipayshopapi.service.BuyerDataService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-
 import com.example.pipayshopapi.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,11 +48,9 @@ public class BuyerDataServiceImpl extends ServiceImpl<BuyerDataMapper, BuyerData
     public boolean updateBuyerDataById(BuyerData buyerData) {
         int result = buyerDataMapper.update(null, new UpdateWrapper<BuyerData>()
                                                                 .eq("buyer_data_id", buyerData.getBuyerDataId())
-                                                                .set("user_id",buyerData.getUserId())
                                                                 .set("user_name", buyerData.getUserName())
                                                                 .set("address", buyerData.getAddress())
                                                                 .set("phone", buyerData.getPhone())
-                                                                .set("del_flag",0)
                                                                 .set("is_default",buyerData.getIsDefault()));
         return result > 0;
     }

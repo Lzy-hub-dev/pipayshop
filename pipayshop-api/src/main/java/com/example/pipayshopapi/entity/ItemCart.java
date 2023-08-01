@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -19,6 +21,9 @@ import java.util.Date;
  * @since 2023-07-28
  */
 @TableName("item_cart")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ItemCart implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -47,50 +52,8 @@ public class ItemCart implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
-    public String getCartId() {
-        return cartId;
-    }
-
-    public void setCartId(String cartId) {
-        this.cartId = cartId;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-    public String getCommodityId() {
-        return commodityId;
-    }
-
-    public void setCommodityId(String commodityId) {
-        this.commodityId = commodityId;
-    }
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    @Override
-    public String toString() {
-        return "ItemCart{" +
-            "id=" + id +
-            ", userId=" + userId +
-            ", commodityId=" + commodityId +
-            ", createTime=" + createTime +
-        "}";
-    }
+    /**
+     * 删除标识
+     */
+    private Integer delFlag;
 }

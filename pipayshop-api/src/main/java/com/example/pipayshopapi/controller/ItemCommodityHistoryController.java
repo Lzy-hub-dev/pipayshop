@@ -4,7 +4,6 @@ package com.example.pipayshopapi.controller;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @Slf4j
-@Api(value = "网店浏览历史接口", tags = "网店浏览历史接口")
+@Api(value = "网店商品浏览历史接口", tags = "网店商品浏览历史接口")
 @RequestMapping("/pipayshopapi/item-commodity-history")
 public class ItemCommodityHistoryController {
 

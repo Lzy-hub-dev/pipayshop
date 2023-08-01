@@ -1,7 +1,6 @@
 package com.example.pipayshopapi.controller;
 
 
-import com.example.pipayshopapi.entity.vo.ItemCartVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -27,11 +26,12 @@ public class ItemCartController {
     @Resource
     private ItemCartService itemCartService;
 
-    @GetMapping("selectItemCartByIds/{pages}/{limit}/{userId}")
-    @ApiOperation("根据用户id查找购物车")
-    public ResponseVO selectItemCartByIds(@PathVariable Integer pages, @PathVariable Integer limit,@PathVariable String userId){
+    // TODO 错
+    @GetMapping("selectItemCartByIds/{currentPage}/{limit}/{userId}")
+    @ApiOperation("根据用户id展示购物车列表")
+    public ResponseVO selectItemCartByIds(@PathVariable Integer currentPage, @PathVariable Integer limit,@PathVariable String userId){
         try {
-            PageDataVO pageDataVO = itemCartService.selectItemCartByIds(limit, pages, userId);
+            PageDataVO pageDataVO = itemCartService.selectItemCartByIds(limit, currentPage, userId);
             return ResponseVO.getSuccessResponseVo(pageDataVO.getList());
         }catch (Exception e){
             e.printStackTrace();

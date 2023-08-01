@@ -1,10 +1,7 @@
 package com.example.pipayshopapi.service;
 
-import com.example.pipayshopapi.entity.FollowFocus;
-import com.example.pipayshopapi.entity.ItemCollection;
 import com.baomidou.mybatisplus.extension.service.IService;
-
-import java.util.List;
+import com.example.pipayshopapi.entity.ItemCollection;
 
 /**
  * <p>

@@ -1,11 +1,11 @@
 package com.example.pipayshopapi.service.Impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ItemCommodityEvaluate;
 import com.example.pipayshopapi.entity.vo.ItemCommodityEvaluateVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.mapper.ItemCommodityEvaluateMapper;
 import com.example.pipayshopapi.service.ItemCommodityEvaluateService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -27,10 +27,6 @@ public class ItemCommodityEvaluateServiceImpl extends ServiceImpl<ItemCommodityE
 
     /**
      * 获取网店商品评价
-     * @param commodityId
-     * @param page
-     * @param limit
-     * @return
      */
     @Override
     public PageDataVO getItemCommodityEvaluates(String commodityId, Integer page, Integer limit) {

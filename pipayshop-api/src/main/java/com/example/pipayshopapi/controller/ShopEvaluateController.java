@@ -1,13 +1,12 @@
 package com.example.pipayshopapi.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * <p>
- * 网店评价 前端控制器
+ * 实体店评价 前端控制器
  * </p>
  *
  * @author zxb
