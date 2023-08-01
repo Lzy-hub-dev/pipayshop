@@ -181,9 +181,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <mainClass>com.easypan.EasyPanApplication</mainClass>
-                </configuration>
             </plugin>
         </plugins>
     </build>
