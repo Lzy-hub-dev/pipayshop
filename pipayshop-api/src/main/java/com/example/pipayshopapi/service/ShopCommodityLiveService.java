@@ -2,6 +2,7 @@ package com.example.pipayshopapi.service;
 
 import com.example.pipayshopapi.entity.ShopCommodityLive;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.pipayshopapi.entity.vo.LivePageVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 
 import java.time.LocalDateTime;
@@ -30,6 +31,5 @@ public interface ShopCommodityLiveService extends IService<ShopCommodityLive> {
     /**
      * 条件筛选查找实体店住的服务列表
      */
-    PageDataVO selectShopLiveVOByCondition(Integer limit, Integer pages, Date checkInTime,
-                                           Date departureTime,Integer adult,Integer children);
+    PageDataVO selectShopLiveVOByCondition(LivePageVO livePageVO);
 }
