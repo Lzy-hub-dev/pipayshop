@@ -1,9 +1,16 @@
 package com.example.pipayshopapi.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -14,6 +21,9 @@ import java.time.LocalDateTime;
  * @since 2023-07-28
  */
 @TableName("item_order_info")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ItemOrderInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -58,12 +68,16 @@ public class ItemOrderInfo implements Serializable {
     /**
      * 下单时间
      */
-    private LocalDateTime createTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
 
     /**
      * 更新时间
      */
-    private LocalDateTime updateTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date updateTime;
     /**
      * 外键关联用户的地址电话等信息方案
      */
