@@ -1,15 +1,14 @@
 package com.example.pipayshopapi.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.alibaba.fastjson.JSON;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
-import com.example.pipayshopapi.entity.vo.CommodityStatusPageVO;
-import com.example.pipayshopapi.entity.vo.OrderPageVO;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
-import com.example.pipayshopapi.entity.vo.ShopCommodityVO;
+import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.ShopCommodityInfoMapper;
 import com.example.pipayshopapi.service.ShopCommodityInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -23,6 +22,7 @@ import javax.annotation.Resource;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * <p>
@@ -104,18 +104,55 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
         return shopCommodityInfoMapper.selectHistoryProductByUserId(userId);
     }
 
+    /**
+     * 根据用户id查询，商品状态查询审核通过和未审核列表
+     *
+     * @param pageVO
+     * @return
+     */
     @Override
     public PageDataVO selectCommodityByUidAndStatus(OrderPageVO pageVO) {
-        return null;
-    }
-
-    @Override
-    public boolean updateCommodityStatus(String commodityId, Integer status) {
-        return false;
+        Integer integer = shopCommodityInfoMapper.selectAllCommodity(pageVO.getUid(), pageVO.getStatus());
+        Integer page = pageVO.getPage();
+        try {
+            if (page==0){
+                throw new Exception();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("分页不能为0");
+        }
+        Integer limit = pageVO.getLimit()*page;
+        int pages = page - 1;
+        List<ShopCommodityInfoVO> shopCommodityInfoVOS = shopCommodityInfoMapper.selectCommodityByUidAndStatus(pages, limit, pageVO.getUid(), pageVO.getStatus());
+        return new PageDataVO(integer,shopCommodityInfoVOS);
     }
 
     /**
-     * 根据店铺id查找实体店商品的详情信息列表
+     * 根据商品id，更改商品的上下架状态
+     *
+     * @param commodityId
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateCommodityStatus(String commodityId, Integer status) {
+        try {
+            if (!(status==1||status==2)){
+                throw new Exception();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("你没有此权限");
+        }
+        int result = shopCommodityInfoMapper.update(null, new UpdateWrapper<ShopCommodityInfo>()
+                .eq("commodity_id", commodityId)
+                .set("status", status));
+        return result>0;
+    }
+
+    /**
+     * 根据店铺id查找实体店商品的详情信息列表a
      */
     @Override
     public PageDataVO selectShopInfoListByShopId(Integer limit, Integer pages, String shopId) {
@@ -132,9 +169,19 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
      */
     @Override
     public PageDataVO selectStatusListByShopId(CommodityStatusPageVO commodityStatusPageVO) {
-//        new Page<>()
-//        shopCommodityInfoMapper.selectPage()
-        return null;
+        Page<ShopCommodityInfo> page = new Page<>(commodityStatusPageVO.getPage(),commodityStatusPageVO.getLimit());
+        shopCommodityInfoMapper.selectPage(page,new QueryWrapper<ShopCommodityInfo>()
+                .eq("shop_Id",commodityStatusPageVO.getShopId())
+                .and(new Consumer<QueryWrapper<ShopCommodityInfo>>() {
+                    @Override
+                    public void accept(QueryWrapper<ShopCommodityInfo> wrapper) {
+                        wrapper.eq("status",1)
+                                .or()
+                                .eq("status",2);
+                    }
+                }));
+
+        return new PageDataVO((int) page.getTotal(),page.getRecords());
     }
 
     /**
