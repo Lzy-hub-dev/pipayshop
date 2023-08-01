@@ -36,4 +36,12 @@ public interface ItemInfoService extends IService<ItemInfo> {
      * @return
      */
     Integer getItemCountByUserId(String userId);
+
+    /**
+     * 根据网店id获取网店地址
+     * @param itemId
+     * @return
+     */
+
+    String getItemAddressById(String itemId);
 }

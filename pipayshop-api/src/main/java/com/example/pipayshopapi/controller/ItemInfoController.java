@@ -53,6 +53,19 @@ public class ItemInfoController {
             throw new BusinessException("获取网店信息失败，请联系后台人员");
         }
     }
+
+    @GetMapping("getItemAddressById/{itemId}")
+    @ApiOperation("根据网店id获取网店地址")
+    public ResponseVO getItemAddressById(String itemId){
+        try {
+            String itemAddressById = itemInfoService.getItemAddressById(itemId);
+            return ResponseVO.getSuccessResponseVo(itemAddressById);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("根据网店id获取网店地址失败，请联系后台人员");
+        }
+    }
+
     @GetMapping("getItemInfoByUid/{userId}")
     @ApiOperation("根据用户id获取网店信息")
     public ResponseVO getItemInfoByUid(@PathVariable String userId) {

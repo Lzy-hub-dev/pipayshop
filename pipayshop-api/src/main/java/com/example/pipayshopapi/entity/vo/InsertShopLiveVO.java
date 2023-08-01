@@ -1,43 +1,18 @@
-package com.example.pipayshopapi.entity;
+package com.example.pipayshopapi.entity.vo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Date;
 
-/**
- * <p>
- * 实体店住的服务表
- * </p>
- *
- * @author zxb
- * @since 2023-07-29
- */
-@TableName("shop_commodity_live")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ShopCommodityLive implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
-
-    /**
-     * 服务id
-     */
-    private String commodityId;
-
+public class InsertShopLiveVO {
     /**
      * 实体店id
      */
@@ -126,26 +101,8 @@ public class ShopCommodityLive implements Serializable {
      * 价格
      */
     private BigDecimal price;
-
-    /**
-     * 服务状态 0:未删除 1：逻辑删除 2：物理删除
-     */
-    private Integer delFlag;
-
-    /**
-     * 推荐服务 0:不推荐 1：推荐
-     */
-    private Boolean recommended;
-
     /**
      * 服务的头像
      */
     private String avatarImag;
-
-    /**
-     * 0:审核 1:上架 2:下架3:绝对删除
-     */
-    private Integer status;
-
-
 }

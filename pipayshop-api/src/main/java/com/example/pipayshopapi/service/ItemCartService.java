@@ -6,6 +6,8 @@ import com.example.pipayshopapi.entity.vo.ItemCartVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -27,9 +29,9 @@ public interface ItemCartService extends IService<ItemCart> {
     boolean putItemCartById(String userId,String commodityId);
 
     /**
-     * 放出购物车
+     * 批量放出购物车
      */
-    boolean outItemCartById(String cartId);
+    boolean outItemCartById(List<String> cartIds);
 
 
 

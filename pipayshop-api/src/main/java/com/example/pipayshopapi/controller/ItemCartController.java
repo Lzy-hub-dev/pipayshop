@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -54,18 +55,18 @@ public class ItemCartController {
         }
     }
 
-    @PostMapping("outItemCartById/{cartId}")
-    @ApiOperation("放出购物车")
-    public ResponseVO outItemCartById(@PathVariable String cartId){
+    @PostMapping("outItemCartById/{cartIds}")
+    @ApiOperation("批量放出购物车")
+    public ResponseVO outItemCartById(@PathVariable List<String> cartIds){
         try {
-            boolean result = itemCartService.outItemCartById(cartId);
+            boolean result = itemCartService.outItemCartById(cartIds);
             if (!result){
                 throw new Exception();
             }
-            return ResponseVO.getSuccessResponseVo("放出购物车成功");
+            return ResponseVO.getSuccessResponseVo("批量放出购物车成功");
         }catch (Exception e){
             e.printStackTrace();
-            throw new BusinessException("放出购物车失败，请联系后台人员");
+            throw new BusinessException("批量放出购物车失败，请联系后台人员");
         }
     }
 }

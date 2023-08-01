@@ -4,17 +4,19 @@
 
 
     <select id="selectItemCartByIds" resultType="com.example.pipayshopapi.entity.vo.ItemCartVO">
-        SELECT c.cart_id,c.user_id,c.commodity_id,i.price,i.item_commodity_name,i.avatar_imag,i.free_shipping_num,i.coupons_list,i.status,i.tag_list
+        SELECT c.cart_id,c.user_id,c.commodity_id,COUNT(c.commodity_id)as sumNumber , i.price,i.item_commodity_name,i.avatar_imag,i.free_shipping_num,i.coupons_list,i.status,i.tag_list,i.color_list,i.size_list
         from item_cart as c
                  LEFT JOIN item_commodity_info as i on c.commodity_id=i.commodity_id
         WHERE
             c.user_id=#{userId}
+        GROUP BY c.commodity_id
             limit #{pages},#{limit};
     </select>
     <select id="selectItemCartTotal" resultType="java.lang.Integer">
-        SELECT COUNT(*) as total from item_cart as c
-        LEFT JOIN item_commodity_info as i on c.commodity_id=i.commodity_id
-        WHERE
-            c.user_id=#{userId};
+        SELECT COUNT(*) FROM (SELECT COUNT(*) from item_cart as c
+                              LEFT JOIN item_commodity_info as i on c.commodity_id=i.commodity_id
+                              WHERE
+                                  c.user_id=#{userId}
+                              GROUP BY c.commodity_id) p;
     </select>
 </mapper>

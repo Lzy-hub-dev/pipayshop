@@ -61,4 +61,18 @@ public class ItemInfoServiceImpl extends ServiceImpl<ItemInfoMapper, ItemInfo> i
                 .eq(ItemInfo::getUid, userId);
         return itemInfoMapper.selectCount(wrapper).intValue();
     }
+
+    /**
+     * 根据网店id获取网店地址
+     * @param itemId
+     * @return
+     */
+    @Override
+    public String getItemAddressById(String itemId) {
+        ItemInfo itemInfo = itemInfoMapper.selectOne(new QueryWrapper<ItemInfo>()
+                .eq("item_id", itemId)
+                .select("address"));
+
+        return itemInfo.getAddress();
+    }
 }

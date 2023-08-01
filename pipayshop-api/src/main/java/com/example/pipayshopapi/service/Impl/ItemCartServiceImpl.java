@@ -37,8 +37,8 @@ public class ItemCartServiceImpl extends ServiceImpl<ItemCartMapper, ItemCart> i
     @Override
     public PageDataVO selectItemCartByIds(Integer limit, Integer pages, String userId) {
         Integer integer = itemCartMapper.selectItemCartTotal(userId);
-        int p=(pages-1)*limit;
-        List<ItemCartVO> itemCartVOS = itemCartMapper.selectItemCartByIds(limit, p, userId);
+        int i = limit * pages;
+        List<ItemCartVO> itemCartVOS = itemCartMapper.selectItemCartByIds(i, pages-1, userId);
         return new PageDataVO(integer,itemCartVOS);
     }
 
@@ -57,14 +57,20 @@ public class ItemCartServiceImpl extends ServiceImpl<ItemCartMapper, ItemCart> i
     }
 
     /**
-     * 放出购物车
+     * 批量放出购物车
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean outItemCartById(String cartId) {
-        int result = itemCartMapper.delete(new QueryWrapper<ItemCart>()
-                .eq("cart_id", cartId));
-        return result>0;
+    public boolean outItemCartById(List<String> cartIds) {
+        System.out.println(cartIds);
+        if (!cartIds.isEmpty()&&cartIds.size()==0){
+            return false;
+        }else {
+            QueryWrapper<ItemCart> wrapper = new QueryWrapper<>();
+            wrapper.in("cart_id",cartIds);
+            int result = itemCartMapper.delete(wrapper);
+            return result>0;
+        }
     }
 
 

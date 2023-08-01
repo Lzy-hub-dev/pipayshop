@@ -58,4 +58,19 @@ public class ItemCartVO {
      */
     private String tagList;
 
+    /**
+     * 商品的数量
+     */
+    private String sumNumber;
+
+    /**
+     * 商品的颜色集合
+     */
+    private String colorList;
+
+    /**
+     * 商品的尺寸集合
+     */
+    private String sizeList;
+
 }
