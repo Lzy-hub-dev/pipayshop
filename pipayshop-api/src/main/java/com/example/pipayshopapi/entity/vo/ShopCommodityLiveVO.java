@@ -31,9 +31,9 @@ public class ShopCommodityLiveVO {
     private String tagList;
 
     /**
-     * 服务图片集合
+     * 服务的头像
      */
-    private String imageList;
+    private String avatarImag;
 
     /**
      * 价格

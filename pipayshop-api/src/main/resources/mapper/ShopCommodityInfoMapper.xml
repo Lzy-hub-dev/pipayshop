@@ -39,7 +39,7 @@
     </select>
     <select id="selectHistoryProductByUserId" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityVO">
         SELECT
-            JSON_UNQUOTE(JSON_EXTRACT(i.commodity_img_list,' $.bgImg[0]')) as image ,
+            i.avatar_imag
             i.commodity_name ,
             i. price,
             h.create_time  as accessTime,
@@ -56,7 +56,7 @@
     </select>
     <select id="selectCommodityByUidAndStatus"
             resultType="com.example.pipayshopapi.entity.vo.ShopCommodityInfoVO">
-        SELECT ui.uid,ui.user_name,ui.user_image,  sci.commodity_id,sci.commodity_name,sci.commodity_img_list,sci.price,sci.status
+        SELECT ui.uid,ui.user_name,ui.user_image,  sci.commodity_id,sci.commodity_name,sci.avatar_imag,sci.price,sci.status
         FROM user_info as ui
                  INNER JOIN shop_info as si on ui.uid=si.uid
                  INNER JOIN shop_commodity_info as sci on si.shop_id=sci.shop_id

@@ -19,7 +19,7 @@ public class ShopCommodityInfoVO {
     /**
      * 商店的商品第一张照片
      */
-    private String firstPicture;
+    private String avatarImag;
     /**
      * 商品的状态
      */

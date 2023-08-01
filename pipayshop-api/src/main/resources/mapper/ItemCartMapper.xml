@@ -4,7 +4,7 @@
 
 
     <select id="selectItemCartByIds" resultType="com.example.pipayshopapi.entity.vo.ItemCartVO">
-        SELECT c.cart_id,c.user_id,c.commodity_id,i.price,i.item_commodity_name,i.imags_list,i.free_shipping_num,i.coupons_list,i.del_flag,i.tag_list
+        SELECT c.cart_id,c.user_id,c.commodity_id,i.price,i.item_commodity_name,i.avatar_imag,i.free_shipping_num,i.coupons_list,i.status,i.tag_list
         from item_cart as c
                  LEFT JOIN item_commodity_info as i on c.commodity_id=i.commodity_id
         WHERE

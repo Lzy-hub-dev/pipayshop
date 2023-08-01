@@ -18,4 +18,5 @@ public class ApplyShopDTO {
     private String shopIntroduce;
     private Integer categoryId;
     private String uid;
+    private String userImage;
 }

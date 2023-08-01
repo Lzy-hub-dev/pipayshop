@@ -149,7 +149,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
     }
 
     /**
-     * 根据店铺id查找实体店商品的详情信息列表a
+     * 根据店铺id查找实体店商品的详情信息列表
      */
     @Override
     public PageDataVO selectShopInfoListByShopId(Integer limit, Integer pages, String shopId) {

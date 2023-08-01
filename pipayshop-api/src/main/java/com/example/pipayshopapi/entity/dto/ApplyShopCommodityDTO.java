@@ -20,4 +20,5 @@ public class ApplyShopCommodityDTO {
     private Integer residue;
     private String reservationInformation;
     private String myEvaluate;
+    private String avatarImag;
 }

@@ -42,6 +42,11 @@ public class ShopCommodityInfo implements Serializable {
     private String commodityName;
 
     /**
+     * 实体店商品的头像
+     */
+    private String avatarImag;
+
+    /**
      * 商品的图片路径集合
      */
     private String commodityImgList;

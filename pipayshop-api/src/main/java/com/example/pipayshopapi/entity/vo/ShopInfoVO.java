@@ -64,4 +64,9 @@ public class ShopInfoVO {
      */
     private String shopImagList;
 
+    /**
+     * 实体店的头像
+     */
+    private String userImage;
+
 }

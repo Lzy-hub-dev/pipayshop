@@ -2,8 +2,10 @@ package com.example.pipayshopapi.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.pipayshopapi.entity.ShopCommodityLive;
+import com.example.pipayshopapi.entity.vo.LivePageVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityLiveVO;
+import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.ShopCommodityLiveMapper;
 import com.example.pipayshopapi.service.ShopCommodityLiveService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -34,8 +36,17 @@ public class ShopCommodityLiveServiceImpl extends ServiceImpl<ShopCommodityLiveM
     @Override
     public PageDataVO selectShopCommodityLiveVO(Integer limit, Integer pages) {
         Integer integer = shopCommodityLiveMapper.selectAllShopCommodityLiveVO();
-        int p=(pages-1)*limit;
-        List<ShopCommodityLiveVO> shopCommodityLiveVOS = shopCommodityLiveMapper.selectShopCommodityLiveVO(limit, p);
+        try {
+            if (pages==0){
+                throw new Exception();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("分页不能为0");
+        }
+        Integer limits = (pages-1)*limit;
+
+        List<ShopCommodityLiveVO> shopCommodityLiveVOS = shopCommodityLiveMapper.selectShopCommodityLiveVO(limits, pages-1);
         return new PageDataVO(integer,shopCommodityLiveVOS);
     }
 
@@ -53,10 +64,20 @@ public class ShopCommodityLiveServiceImpl extends ServiceImpl<ShopCommodityLiveM
      * 条件筛选查找实体店住的服务列表
      */
     @Override
-    public PageDataVO selectShopLiveVOByCondition(Integer limit, Integer pages, Date checkInTime, Date departureTime, Integer adult, Integer children) {
-        Integer integer = shopCommodityLiveMapper.selectAllShopLiveVOByCondition(checkInTime, departureTime, adult, children);
-        int p=(pages-1)*limit;
-        List<ShopCommodityLiveVO> shopCommodityLiveVOS = shopCommodityLiveMapper.selectShopLiveVOByCondition(limit, p, checkInTime, departureTime, adult, children);
+    public PageDataVO selectShopLiveVOByCondition(LivePageVO livePageVO) {
+        Integer integer = shopCommodityLiveMapper.selectAllShopLiveVOByCondition(livePageVO.getCheckInTime(),livePageVO.getDepartureTime(),livePageVO.getAdult(),livePageVO.getChildren());
+        Integer page = livePageVO.getPage();
+        try {
+            if (page==0){
+                throw new Exception();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("分页不能为0");
+        }
+        Integer limit = livePageVO.getLimit()*page;
+        int pages = page - 1;
+        List<ShopCommodityLiveVO> shopCommodityLiveVOS = shopCommodityLiveMapper.selectShopLiveVOByCondition(limit, pages, livePageVO.getCheckInTime(),livePageVO.getDepartureTime(),livePageVO.getAdult(),livePageVO.getChildren());
         return new PageDataVO(integer,shopCommodityLiveVOS);
     }
 }

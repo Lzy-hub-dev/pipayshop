@@ -84,6 +84,11 @@ public class ShopInfo implements Serializable {
     private String shopImagList;
 
     /**
+     * 实体店的头像
+     */
+    private String userImage;
+
+    /**
      * 店铺类别
      */
     private Integer categoryId;

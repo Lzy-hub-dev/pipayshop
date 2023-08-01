@@ -22,9 +22,9 @@ public class ShopInfoVO1 {
      */
     private Double score;
     /**
-     * 店铺图片的路径集合
+     * 实体店的头像
      */
-    private String shopImagList;
+    private String userImage;
     /**
      * 粉丝总数
      */

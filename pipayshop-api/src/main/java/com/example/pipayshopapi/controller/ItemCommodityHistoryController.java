@@ -1,25 +1,11 @@
 package com.example.pipayshopapi.controller;
 
 
-import com.example.pipayshopapi.entity.ShopInfo;
-import com.example.pipayshopapi.entity.vo.ResponseVO;
-import com.example.pipayshopapi.entity.vo.ShopCommodityVO;
-import com.example.pipayshopapi.exception.BusinessException;
-import com.example.pipayshopapi.service.ItemCommodityHistoryService;
-import com.example.pipayshopapi.service.ShopCommodityHistoryService;
-import com.example.pipayshopapi.service.ShopCommodityService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * <p>

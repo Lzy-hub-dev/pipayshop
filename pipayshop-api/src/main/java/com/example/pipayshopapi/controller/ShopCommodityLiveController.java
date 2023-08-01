@@ -2,6 +2,7 @@ package com.example.pipayshopapi.controller;
 
 
 import com.example.pipayshopapi.entity.ShopCommodityLive;
+import com.example.pipayshopapi.entity.vo.LivePageVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -41,17 +42,12 @@ public class ShopCommodityLiveController {
         }
     }
 
-//    @RequestParam("checkInTime") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date checkInTime
-//    @RequestParam("departureTime") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date departureTime
-    @GetMapping("selectShopLiveVOByCondition/{pages}/{limit}/{checkInTime}/{departureTime}/{adult}/{children}")
+    @GetMapping("selectShopLiveVOByCondition")
     @ApiOperation("条件筛选查找实体店住的服务列表")
-    public ResponseVO selectShopLiveVOByCondition(@PathVariable Integer pages, @PathVariable Integer limit,
-                                                  @RequestParam("checkInTime") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date checkInTime,
-                                                  @RequestParam("departureTime") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date departureTime,
-                                                  @PathVariable Integer adult,@PathVariable Integer children){
+    public ResponseVO selectShopLiveVOByCondition(LivePageVO livePageVO){
         try {
-            PageDataVO pageDataVO = shopCommodityLiveService.selectShopLiveVOByCondition(limit, pages,checkInTime, departureTime, adult, children);
-            return ResponseVO.getSuccessResponseVo(pageDataVO.getList());
+            PageDataVO pageDataVO = shopCommodityLiveService.selectShopLiveVOByCondition(livePageVO);
+            return ResponseVO.getSuccessResponseVo(pageDataVO);
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("条件筛选查找实体店住的服务列表失败，请联系后台人员");
