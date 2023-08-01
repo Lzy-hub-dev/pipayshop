@@ -1,10 +1,12 @@
 package com.example.pipayshopapi.service;
 
-import com.example.pipayshopapi.entity.ShopOrderInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.pipayshopapi.entity.vo.ItemOrderInfoVO;
-import com.example.pipayshopapi.entity.vo.OrderPageVO;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.entity.ItemOrderInfo;
+import com.example.pipayshopapi.entity.ShopOrderInfo;
+import com.example.pipayshopapi.entity.vo.GetOrderDataVO;
+import com.example.pipayshopapi.entity.vo.OrderListVO;
+import com.example.pipayshopapi.entity.vo.PayOrderVO;
+import com.example.pipayshopapi.entity.vo.ShopOrderDetailVO;
 
 import java.util.List;
 
@@ -17,19 +19,20 @@ import java.util.List;
  * @since 2023-07-29
  */
 public interface ShopOrderInfoService extends IService<ShopOrderInfo> {
-    /**
-     * 根据用户id查询 订单列表
-     *
-     * @param userId
-     * @return
-     */
-    List<ItemOrderInfoVO> selectOrderByUerId(String userId);
 
-    /**
-     * 根据用户id查询，订单状态查询订单列表
-     *
-     * @param pageVO
-     * @return
-     */
-    PageDataVO selectOrderByUidAndStatus (OrderPageVO pageVO);
+    List<OrderListVO> getOrderList(GetOrderDataVO getOrderDataVO);
+
+    int delOrderByOrderId(String orderId);
+
+    ShopOrderDetailVO getOrderDetail(String orderId);
+
+    int completedOrder(String orderId);
+
+    int failOrder(String orderId);
+
+    void deleteFailOrders();
+
+    String generateUnpaidOrder(ItemOrderInfo itemOrderInfo);
+
+    boolean payOrder(PayOrderVO payOrderVO);
 }

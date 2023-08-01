@@ -123,7 +123,7 @@
     <select id="getOrderList" resultMap="orderListResultMap">
         select
             o.order_id, o.order_status, o.commodity_id, o.transaction_amount,
-            u.user_image, u.item_name, i.avatar_imag
+            u.user_image, u.item_name, i.avatar_imag, i.details
         from
             item_order_info o
         JOIN
