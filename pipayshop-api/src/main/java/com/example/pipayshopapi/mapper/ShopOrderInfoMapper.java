@@ -1,10 +1,10 @@
 package com.example.pipayshopapi.mapper;
 
-import com.example.pipayshopapi.entity.ShopOrderInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.pipayshopapi.entity.vo.ItemOrderInfoVO;
-import com.example.pipayshopapi.entity.vo.OrderPageVO;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.entity.ShopOrderInfo;
+import com.example.pipayshopapi.entity.vo.GetOrderDataVO;
+import com.example.pipayshopapi.entity.vo.OrderListVO;
+import com.example.pipayshopapi.entity.vo.ShopOrderDetailVO;
 import com.example.pipayshopapi.entity.vo.ShopOrderInfoVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -21,13 +21,6 @@ import java.util.List;
  */
 @Mapper
 public interface ShopOrderInfoMapper extends BaseMapper<ShopOrderInfo> {
-    /**
-     * 根据用户id查询 订单列表
-     *
-     * @param userId
-     * @return
-     */
-    List<ItemOrderInfoVO> selectOrderByUerId(String userId);
 
     /**
      * 根据用户id查询，订单状态查询订单列表
@@ -47,4 +40,7 @@ public interface ShopOrderInfoMapper extends BaseMapper<ShopOrderInfo> {
     Integer selectAllOrderByUidAndStatus(@Param("uid") String uid,@Param("status") Integer status);
 
 
+    List<OrderListVO> getOrderList(@Param("getOrderDataVO") GetOrderDataVO getOrderDataVO);
+
+    ShopOrderDetailVO getShopOrderDetailVO(@Param("orderId") String orderId);
 }

@@ -4,11 +4,13 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -20,6 +22,9 @@ import java.util.Date;
  * @since 2023-07-29
  */
 @TableName("shop_order_info")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ShopOrderInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;

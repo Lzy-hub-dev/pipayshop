@@ -1,17 +1,17 @@
 package com.example.pipayshopapi.service.Impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
-import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
+import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.ShopCommodityInfoMapper;
 import com.example.pipayshopapi.service.ShopCommodityInfoService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.util.FileUploadUtil;
 import com.example.pipayshopapi.util.StringUtil;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -40,8 +39,6 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
 
     /**
      * 发布实体店商品
-     * @param applyShopCommodityDTO
-     * @return
      */
     @Override
     @Transactional(rollbackFor = Exception.class)

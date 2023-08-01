@@ -50,4 +50,53 @@
           and order_status=#{status}
     </select>
 
+    <resultMap id="orderListResultMap" type="com.example.pipayshopapi.entity.vo.OrderListVO">
+        <result property="orderId" column="order_id" />
+        <result property="orderStatus" column="order_status" />
+        <result property="commodityId" column="commodity_id" />
+        <result property="transactionAmount" column="transaction_amount" />
+        <result property="sellerImg" column="user_image" />
+        <result property="sellerName" column="shop_name" />
+        <result property="commodityImg" column="avatar_image" />
+        <result property="details" column="commodity_detail"/>
+    </resultMap>
+
+    <select id="getOrderList" resultMap="orderListResultMap">
+        select
+        o.order_id, o.order_status, o.commodity_id, o.transaction_amount,
+        u.user_image, u.shop_name, i.avatar_imag, i.commodity_detail
+        from
+        shop_order_info o
+        JOIN
+        shop_info u
+        JOIN
+        shop_commodity_info i
+        where
+        o.uid = #{getOrderDataVO.userId}
+        <if test="getOrderDataVO.orderStatus != -1">
+            and o.order_status = #{getOrderDataVO.orderStatus}
+        </if>
+        AND o.del_flag = 0
+        AND o.commodity_id = i.commodity_id
+        AND o.shop_id = u.shop_id
+        ORDER BY
+        o.update_time ASC;
+    </select>
+
+
+    <resultMap id="paiedOrderDetailMap" type="com.example.pipayshopapi.entity.vo.ShopOrderDetailVO">
+        <result property="orderId" column="order_id" />
+        <result property="createTime" column="create_time" />
+        <result property="payTime" column="update_time" />
+    </resultMap>
+    <select id="getShopOrderDetailVO" resultMap="paiedOrderDetailMap" >
+        select
+            create_time, update_time
+        from
+            shop_order_info
+        where
+            order_id = #{orderId}
+    </select>
+
+
 </mapper>
