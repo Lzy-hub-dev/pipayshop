@@ -37,9 +37,9 @@ public class ItemCartVO {
      */
     private String itemCommodityName;
     /**
-     * 商品图片的地址集合
+     * 商品的展示图路径
      */
-    private String imagsList;
+    private String avatarImag;
     /**
      * 免运费的起始订购数量
      */
