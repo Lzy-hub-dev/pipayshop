@@ -38,7 +38,7 @@ public class ShopCommodityVO {
     /**
      * 商品图片
      */
-    private String image;
+    private String avatarImag;
 
     /**
      * 访问时间
