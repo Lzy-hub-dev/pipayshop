@@ -199,6 +199,8 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         shopInfoVO.setScore(shopInfo.getScore());
         shopInfoVO.setShopIntroduce(shopInfo.getShopIntroduce());
         shopInfoVO.setShopTagsList(list1);
+        shopInfoVO.setUserImage(shopInfo.getUserImage());
+
 
         return shopInfoVO;
 

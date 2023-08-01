@@ -20,7 +20,7 @@ import java.util.List;
 public interface ShopInfoMapper extends BaseMapper<ShopInfo> {
 
     /**
-     * 根据用户id查询实体店列表
+     * 根据用户id查询实体店列表(我的）
      */
     List<ShopInfoVO1> getShopList(@Param("page") Integer page, @Param("limit") Integer limit,
                                   @Param("uid") String uid);

@@ -14,7 +14,7 @@
                                WHERE c.category_id = #{categorySecId});
     </select>
     <select id="getShopInfoVO" resultType="com.example.pipayshopapi.entity.vo.ShopInfoVO1">
-        SELECT shop_id,shop_name,score,shop_imag_list, (
+        SELECT shop_id,shop_name,score,user_image, (
             SELECT COUNT(*) FROM shop_follow_focus
             where `status`=0 and shop_id=#{shopId}
         ) as follows
@@ -22,7 +22,7 @@
         WHERE shop_id=#{shopId}
     </select>
     <select id="getShopList" resultType="com.example.pipayshopapi.entity.vo.ShopInfoVO1">
-        SELECT shop_id,shop_name,score,shop_imag_list, (
+        SELECT shop_id,shop_name,score,user_image, (
             SELECT COUNT(*) FROM shop_follow_focus
             where `status`=0 and shop_id=shop_info.shop_id
         ) as follows
