@@ -1,17 +1,20 @@
 package com.example.pipayshopapi.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.pipayshopapi.entity.ItemCart;
 import com.example.pipayshopapi.entity.vo.ItemCartVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.mapper.ItemCartMapper;
 import com.example.pipayshopapi.service.ItemCartService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -32,10 +35,10 @@ public class ItemCartServiceImpl extends ServiceImpl<ItemCartMapper, ItemCart> i
      * 根据用户id查找购物车
      */
     @Override
-    public PageDataVO selectItemCartByIds(Integer limit, Integer currentPage, String userId) {
+    public PageDataVO selectItemCartByIds(Integer limit, Integer pages, String userId) {
         Integer integer = itemCartMapper.selectItemCartTotal(userId);
-        int page = (currentPage-1)*limit;
-        List<ItemCartVO> itemCartVOS = itemCartMapper.selectItemCartByIds(limit, page, userId);
+        int p=(pages-1)*limit;
+        List<ItemCartVO> itemCartVOS = itemCartMapper.selectItemCartByIds(limit, p, userId);
         return new PageDataVO(integer,itemCartVOS);
     }
 

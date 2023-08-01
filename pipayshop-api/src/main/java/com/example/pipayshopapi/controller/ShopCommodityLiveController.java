@@ -2,6 +2,7 @@ package com.example.pipayshopapi.controller;
 
 
 import com.example.pipayshopapi.entity.ShopCommodityLive;
+import com.example.pipayshopapi.entity.vo.InsertShopLiveVO;
 import com.example.pipayshopapi.entity.vo.LivePageVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
@@ -66,6 +67,34 @@ public class ShopCommodityLiveController {
         }
     }
 
+    @PostMapping("insertShopLive")
+    @ApiOperation("发布实体店住的服务")
+    public ResponseVO insertShopLive(@RequestBody ShopCommodityLive shopCommodityLive){
+        try {
+            boolean result = shopCommodityLiveService.insertShopLive(shopCommodityLive);
+            if (!result){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("发布实体店住的服务成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("发布实体店住的服务失败，请联系后台人员");
+        }
+    }
 
+    @PostMapping("updateShopLive")
+    @ApiOperation("根据服务id更改服务信息")
+    public ResponseVO updateShopLive(@RequestBody ShopCommodityLive shopCommodityLive){
+        try {
+            boolean result = shopCommodityLiveService.updateShopLive(shopCommodityLive);
+            if (!result){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("根据服务id更改服务信息成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("根据服务id更改服务信息失败，请联系后台人员");
+        }
+    }
 
 }
