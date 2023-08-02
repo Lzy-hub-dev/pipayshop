@@ -57,6 +57,6 @@ public class ItemCollection implements Serializable {
     /**
      * 收藏状态(0收藏 1取消)
      */
-    private Boolean status;
+    private Integer status;
 
 }

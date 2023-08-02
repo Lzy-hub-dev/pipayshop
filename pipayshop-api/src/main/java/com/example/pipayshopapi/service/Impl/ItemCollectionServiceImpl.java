@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ItemCollection;
+import com.example.pipayshopapi.entity.ShopCollection;
 import com.example.pipayshopapi.mapper.ItemCollectionMapper;
 import com.example.pipayshopapi.service.ItemCollectionService;
 import com.example.pipayshopapi.util.StringUtil;
@@ -29,8 +30,17 @@ public class ItemCollectionServiceImpl extends ServiceImpl<ItemCollectionMapper,
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int AddItemCommodityToCollection(String userId, String commodityId) {
-        ItemCollection itemCollection = new ItemCollection(null, StringUtil.generateShortId(), commodityId, userId, null, null, null);
-        return collectionMapper.insert(itemCollection);
+        ItemCollection itemCollection = collectionMapper.selectOne(new QueryWrapper<ItemCollection>()
+                .eq("user_id", userId)
+                .eq("commodity_id", commodityId));
+        if(itemCollection != null){
+            //收藏状态修改为0
+            itemCollection.setStatus(0);
+            return collectionMapper.updateById(itemCollection);
+        }else{
+            ItemCollection itemCollection1 = new ItemCollection(null, StringUtil.generateShortId(), commodityId, userId, null, null, null);
+            return collectionMapper.insert(itemCollection1);
+        }
     }
 
     @Override
