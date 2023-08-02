@@ -13,4 +13,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ShopCollectionService extends IService<ShopCollection> {
 
+    int addShopCollection(String userId, String commodityId);
+
+    int removeShopCollection(String userId, String commodityId);
+
+    boolean isCommodityToCollection(String userId, String commodityId);
 }

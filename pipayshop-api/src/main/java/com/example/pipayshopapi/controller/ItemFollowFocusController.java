@@ -1,6 +1,7 @@
 package com.example.pipayshopapi.controller;
 
 
+import com.example.pipayshopapi.entity.vo.FansVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ItemFollowFocusService;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -21,7 +23,7 @@ import javax.annotation.Resource;
  */
 
 @RequestMapping("/pipayshopapi/item-follow-focus")
-@Api(value = "网店关注接口",tags = "网店关注接口")
+@Api(value = "网店粉丝关注接口",tags = "网店粉丝关注接口")
 @RestController
 @Slf4j
 public class ItemFollowFocusController {
@@ -55,6 +57,19 @@ public class ItemFollowFocusController {
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("用户取消关注失败，请联系后台人员");
+        }
+    }
+
+    @GetMapping("itemFans/{itemId}")
+    @ApiOperation("网店粉丝列表")
+    private ResponseVO itemFans(@PathVariable String itemId,Integer pageNum,Integer pageSize){
+        try {
+            List<FansVO> result = followFocusService.itemFans(itemId,pageNum,pageSize);
+
+            return ResponseVO.getSuccessResponseVo(result);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("查询网店粉丝列表失败，请联系后台人员");
         }
     }
 

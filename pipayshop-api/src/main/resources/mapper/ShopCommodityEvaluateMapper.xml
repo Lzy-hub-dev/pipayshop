@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.pipayshopapi.mapper.ShopCommodityEvaluateMapper">
+
+
+    <select id="commodityEvaluateList" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityEvaluateVO">
+        select e.item_id
+        , e.commodity_id
+        , e.evaluate
+        , e.create_time
+        , e.evaluate_id
+        , e.user_id
+        , u.user_name
+        , u.user_image
+        from shop_commodity_evaluate e
+        left join user_info u on u.uid = e.user_id
+        where commodity_id = #{commodityId}
+        and e.status = 0
+        and u.status = 0
+        LIMIT #{pageNum},#{pageSize}
+    </select>
+
+</mapper>

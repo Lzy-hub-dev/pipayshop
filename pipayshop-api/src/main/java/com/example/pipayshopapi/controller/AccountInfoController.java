@@ -6,10 +6,7 @@ import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.service.AccountInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -29,7 +26,7 @@ public class AccountInfoController {
     private AccountInfoService accountInfoService;
 
 
-    @GetMapping ("selectAccountById/{uid}")
+    @PostMapping("selectAccountById/{uid}")
     @ApiOperation("根据用户Id查找用户账户表的积分余额和pi币余额")
     public ResponseVO selectAccountById(@PathVariable String uid){
         try {
