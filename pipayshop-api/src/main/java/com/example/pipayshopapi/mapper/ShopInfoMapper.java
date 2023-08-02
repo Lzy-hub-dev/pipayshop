@@ -2,6 +2,7 @@ package com.example.pipayshopapi.mapper;
 
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.pipayshopapi.entity.vo.IndexShopInfoVO;
 import com.example.pipayshopapi.entity.vo.ShopInfoVO1;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -35,4 +36,16 @@ public interface ShopInfoMapper extends BaseMapper<ShopInfo> {
      * 根据实体店id查询实体店信息
      */
     ShopInfoVO1 getShopInfoVO(@Param("shopId")String shopId);
+
+    /**
+     * 首页获取商家信息列表
+     * @param categoryId
+     * @param page
+     * @param limit
+     * @return
+     */
+    List<IndexShopInfoVO> getIndexShopInfoVO(@Param("categoryId") String categoryId,@Param("page") Integer page,@Param("limit") Integer limit,@Param("state")Integer state );
+
+
+    Integer getIndexShopInfoVOCount(@Param("categoryId") String categoryId,@Param("state")Integer state);
 }

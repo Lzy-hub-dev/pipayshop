@@ -1,11 +1,15 @@
 package com.example.pipayshopapi.service.Impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.pipayshopapi.entity.ShopCategory;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.ShopTags;
 import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
@@ -53,14 +57,14 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
      */
     @Override
     public PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId, Integer state) {
-        Page<ShopInfo> page = new Page<>(pages, limit);
-        //stata==1,按评分从低到高；stata==2,按评分从高到低
-        shopInfoMapper.selectPage(page,new QueryWrapper<ShopInfo>()
-                .eq(categoryId != null && !"-1".equals(categoryId), "category_id",categoryId)
-                .orderByAsc(state==1,"score")
-                .orderByDesc(state==2,"score"));
 
-        return new PageDataVO((int) page.getTotal(),page.getRecords());
+        // 获取所有店铺数量
+        Integer indexShopInfoVOCount = shopInfoMapper.getIndexShopInfoVOCount(categoryId, state);
+
+        //stata==1,按评分从低到高；stata==2,按评分从高到低
+        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(categoryId, (pages - 1) * limit, limit,state);
+
+        return new PageDataVO(indexShopInfoVOCount,indexShopInfoVO);
     }
 
     /**

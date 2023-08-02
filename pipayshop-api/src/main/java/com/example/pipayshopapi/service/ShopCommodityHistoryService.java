@@ -1,5 +1,6 @@
 package com.example.pipayshopapi.service;
 
+import com.example.pipayshopapi.entity.ItemCommodityHistory;
 import com.example.pipayshopapi.entity.ShopCommodityHistory;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
@@ -18,10 +19,17 @@ import java.util.List;
 public interface ShopCommodityHistoryService extends IService<ShopCommodityHistory> {
 
     /**
-     * 删除用户浏览网店商品的历史记录
+     * 删除用户浏览商品的历史记录
      * @param userId
      * @param commodityId
      * @return
      */
     boolean deleteHistory(String userId, String commodityId);
+
+    /**
+     * 添加用户浏览商品的历史记录
+     * @param shopCommodityHistory
+     * @return
+     */
+    boolean addHistory(ShopCommodityHistory shopCommodityHistory);
 }

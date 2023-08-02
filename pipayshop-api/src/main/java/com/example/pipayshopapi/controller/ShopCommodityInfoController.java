@@ -31,8 +31,7 @@ public class ShopCommodityInfoController {
 
     @Resource
     private ShopCommodityInfoService shopCommodityService;
-    @Resource
-    private ShopCommodityHistoryService shopCommodityHistoryService;
+
 
     @PostMapping(" issueShopCommodity")
     @ApiOperation("发布实体店商品")
@@ -150,22 +149,7 @@ public class ShopCommodityInfoController {
         }
     }
 
-    @PostMapping("deleteHistory")
-    @ApiOperation("删除用户浏览网店商品的历史记录")
-    public ResponseVO deleteHistory(String userId,
-                                    String commodityId) {
 
-        try {
-            boolean flag = shopCommodityHistoryService.deleteHistory(userId, commodityId);
-            if (!flag) {
-                throw new Exception();
-            }
-            return ResponseVO.getSuccessResponseVo(null);
-        } catch (Exception e) {
-            // log.error(e.getMessage());
-            throw new BusinessException("删除，请联系后台人" + "、员");
-        }
-    }
 }
 
 

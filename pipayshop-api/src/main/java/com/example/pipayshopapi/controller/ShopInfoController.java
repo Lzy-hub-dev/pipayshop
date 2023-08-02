@@ -3,6 +3,7 @@ package com.example.pipayshopapi.controller;
 
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
+import com.example.pipayshopapi.entity.dto.ShopDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopInfoService;
