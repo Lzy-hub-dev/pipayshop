@@ -55,11 +55,11 @@ public class ItemCartController {
         }
     }
 
-    @PostMapping("outItemCartById/{cartIds}")
+    @PostMapping("outItemCartById/{cartId}/{commodityIds}")
     @ApiOperation("批量放出购物车")
-    public ResponseVO outItemCartById(@PathVariable List<String> cartIds){
+    public ResponseVO outItemCartById(@PathVariable List<String> commodityIds,@PathVariable String cartId){
         try {
-            boolean result = itemCartService.outItemCartById(cartIds);
+            boolean result = itemCartService.outItemCartById(commodityIds,cartId);
             if (!result){
                 throw new Exception();
             }
