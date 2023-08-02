@@ -26,6 +26,10 @@ public class ShopCommodityEvaluateVO {
      * 商品id
      */
     private String commodityId;
+    /**
+     * 商品名称
+     */
+    private String commodityName;
 
     /**
      * 评价

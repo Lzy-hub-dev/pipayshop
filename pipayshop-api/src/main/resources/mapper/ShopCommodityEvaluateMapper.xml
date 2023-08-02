@@ -12,10 +12,13 @@
         , e.user_id
         , u.user_name
         , u.user_image
+        , s.commodity_name
         from shop_commodity_evaluate e
             left join user_info u
         on u.uid = e.user_id
-        where commodity_id = #{commodityId}
+        left join shop_commodity_info s
+        on s.commodity_id=e.commodity_id
+        where e.commodity_id = #{commodityId}
         and e.status = 0
         and u.status = 0
         LIMIT ${pageNum},${pageSize}
