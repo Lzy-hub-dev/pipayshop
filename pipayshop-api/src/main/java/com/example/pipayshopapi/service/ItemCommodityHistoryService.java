@@ -2,6 +2,7 @@ package com.example.pipayshopapi.service;
 
 import com.example.pipayshopapi.entity.ItemCommodityHistory;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 
 /**
  * <p>
@@ -12,6 +13,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2023-07-29
  */
 public interface ItemCommodityHistoryService extends IService<ItemCommodityHistory> {
+
+
     /**
      * 删除用户浏览网店商品的历史记录
      * @param userId
@@ -19,4 +22,11 @@ public interface ItemCommodityHistoryService extends IService<ItemCommodityHisto
      * @return
      */
     boolean deleteHistory(String userId, String commodityId);
+
+    /**
+     * 新增用户浏览网店商品的历史记录
+     * @param itemCommodityHistory
+     * @return
+     */
+    boolean addHistory(ItemCommodityHistory itemCommodityHistory);
 }
