@@ -65,7 +65,6 @@ public class ItemFollowFocusController {
     private ResponseVO itemFans(@PathVariable String itemId,Integer pageNum,Integer pageSize){
         try {
             List<FansVO> result = followFocusService.itemFans(itemId,pageNum,pageSize);
-
             return ResponseVO.getSuccessResponseVo(result);
         }catch (Exception e){
             e.printStackTrace();

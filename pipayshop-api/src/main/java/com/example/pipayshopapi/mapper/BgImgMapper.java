@@ -2,7 +2,10 @@ package com.example.pipayshopapi.mapper;
 
 import com.example.pipayshopapi.entity.BgImg;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.pipayshopapi.entity.vo.BgImgVO;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,5 +17,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface BgImgMapper extends BaseMapper<BgImg> {
-
+    List<BgImgVO> selectBgImgList();
 }
