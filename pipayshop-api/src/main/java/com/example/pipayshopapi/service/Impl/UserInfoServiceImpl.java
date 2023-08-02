@@ -95,6 +95,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
      */
     @Override
     public boolean uploadUserImage(String userId, MultipartFile file) {
+
         String uploadFile = FileUploadUtil.uploadFile(file, FileUploadUtil.AVATAR);
         if (StringUtils.isEmpty(uploadFile)) {
             throw new BusinessException("文件上传失败");

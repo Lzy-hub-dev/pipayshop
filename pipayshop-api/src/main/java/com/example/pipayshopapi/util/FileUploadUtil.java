@@ -14,14 +14,19 @@ import java.io.InputStream;
  * @Description 文件上传工具类
  */
 public class FileUploadUtil {
-    private static String PRE="images/";
-    private static String UPLOAD_PRE = "pipayshop-api/src/main/resources/static/";
-
+    private static String PRE="images\\";
+    private static String UPLOAD_PRE = "pipayshop-api\\src\\main\\resources\\static\\";
+    //用户头像存储位置
     public static String AVATAR="avatar";
+    //首页轮播图存储位置
     public static String BG_IMG="bg_img";
+    //网店商品图存储位置
     public static String ITEM_COMMODITY_IMG="item_commodity_img";
+    //网店背景广告图存储位置
     public static String ITEM_IMG="item_img";
+    //实体店商品图存储位置
     public static String SHOP_COMMODITY_IMG="shop_commodity_img";
+    //实体店背景广告图存储位置
     public static String SHOP_IMG="shop_img";
 
 
@@ -61,7 +66,7 @@ public class FileUploadUtil {
             e.printStackTrace();
         }
 
-        return PRE+path+"/"+fileName;
+        return PRE+path+File.separator+fileName;
     }
     /**
      *删除文件
@@ -74,7 +79,7 @@ public class FileUploadUtil {
         if(!file.exists()){
             System.out.println("删除文件失败："+fileName+"不存在！");
             return false;
-        }else{
+        }else{;
             //判断这是不是一个文件，ps：有可能是文件夹
             if(file.isFile()){
                 return file.delete();

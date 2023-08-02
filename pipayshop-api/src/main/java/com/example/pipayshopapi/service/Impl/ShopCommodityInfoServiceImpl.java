@@ -192,12 +192,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
     public ShopCommodityInfo selectShopInfoByCommodityId(String commodityId,String userId) {
         ShopCommodityInfo shopCommodityInfo = shopCommodityInfoMapper.selectOne(new QueryWrapper<ShopCommodityInfo>()
                 .eq("commodity_id", commodityId));
-        //添加商品浏览记录
-        int insert = shopCommodityHistoryMapper.insert(new ShopCommodityHistory(commodityId, userId));
-        if (insert <= 0) {
-            log.error("新增商品浏览记录失败");
-            return null;
-        }
+
         return shopCommodityInfo;
     }
 
