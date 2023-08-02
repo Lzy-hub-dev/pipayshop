@@ -60,7 +60,7 @@ public class ItemCommodityEvaluateController {
 
     @PostMapping("deleteItemEvaluates/{evaluateId}")
     @ApiOperation("根据评价Id删除网店商品的评价")
-    public ResponseVO deleteItemEvaluates(@PathVariable String evaluateId){
+    public ResponseVO<String> deleteItemEvaluates(@PathVariable String evaluateId){
         try {
             boolean result = itemCommodityEvaluateService.deleteItemEvaluates(evaluateId);
             if (!result){
