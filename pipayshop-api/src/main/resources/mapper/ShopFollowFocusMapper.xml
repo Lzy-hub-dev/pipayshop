@@ -2,10 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.pipayshopapi.mapper.ShopFollowFocusMapper">
 
-    <select id="selectFollowIdListByShopId" resultType="com.example.pipayshopapi.entity.ShopFollowFocus">
-        select follow_id,create_time from shop_follow_focus
-        where shop_id = #{shopId}
-        order by create_time desc
+    <select id="shopFollowFocusList" resultType="com.example.pipayshopapi.entity.vo.ShopUserFollowInfoVO">
+        SELECT s.create_time
+        ,u.uid
+        ,u.user_name
+        ,u.user_image
+        FROM shop_follow_focus s
+            LEFT JOIN user_info u
+        ON u.uid = s.follow_id
+        WHERE u.uid in
+            (
+            SELECT follow_id
+			FROM shop_follow_focus
+			WHERE shop_id = #{shopId}
+		    )
+        ORDER BY s.create_time DESC
+        LIMIT ${pageNum},${pageSize}
     </select>
 
 </mapper>

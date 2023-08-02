@@ -2,6 +2,7 @@ package com.example.pipayshopapi.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ShopFollowFocus;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ShopUserFollowInfoVO;
 import java.util.*;
 
@@ -31,5 +32,5 @@ public interface ShopFollowFocusService extends IService<ShopFollowFocus> {
      */
     Boolean userUnfollow(String followId, String shopId);
 
-    List<ShopUserFollowInfoVO> getFollowList(String shopId);
+    PageDataVO getFollowList(String shopId, Integer pageNum, Integer pageSize);
 }

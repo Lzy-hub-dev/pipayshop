@@ -1,6 +1,7 @@
 package com.example.pipayshopapi.controller;
 
 
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.entity.vo.ShopUserFollowInfoVO;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -8,8 +9,9 @@ import com.example.pipayshopapi.service.ShopFollowFocusService;
 import com.example.pipayshopapi.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
-
+import java.util.List;
 import javax.annotation.Resource;
 
 /**
@@ -59,15 +61,16 @@ public class ShopFollowFocusController {
         }
     }
 
-    @GetMapping("getFollowList/{shopId}")
+    @GetMapping("getFollowList/{shopId}/{pageNum}/{pageSize}")
     @ApiOperation("获取实体店的粉丝列表")
-    public ResponseVO getFollowList(@PathVariable String shopId){
+    public ResponseVO<PageDataVO> getFollowList(@PathVariable String shopId,
+                                    @ApiParam("当前页")
+                                    @PathVariable Integer pageNum,
+                                    @ApiParam("展示条数")
+                                    @PathVariable Integer pageSize){
         try{
-            List<ShopUserFollowInfoVO> data = followFocusService.getFollowList(shopId);
-            if (data.size() == 0){
-                throw new Exception();
-            }
-            return ResponseVO.getSuccessResponseVo(data);
+            PageDataVO result = followFocusService.getFollowList(shopId,pageNum,pageSize);
+            return ResponseVO.getSuccessResponseVo(result);
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("粉丝列表获取失败，请联系后台人员");

@@ -2,6 +2,7 @@ package com.example.pipayshopapi.mapper;
 
 import com.example.pipayshopapi.entity.ShopFollowFocus;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.pipayshopapi.entity.vo.ShopUserFollowInfoVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -18,5 +19,8 @@ import java.util.List;
 @Mapper
 public interface ShopFollowFocusMapper extends BaseMapper<ShopFollowFocus> {
 
-    List<ShopFollowFocus> selectFollowIdListByShopId(@Param("shopId")String shopId);
+
+    List<ShopUserFollowInfoVO> shopFollowFocusList(@Param("shopId") String shopId,
+                                                   @Param("pageNum") Integer pageNum,
+                                                   @Param("pageSize") Integer pageSize);
 }
