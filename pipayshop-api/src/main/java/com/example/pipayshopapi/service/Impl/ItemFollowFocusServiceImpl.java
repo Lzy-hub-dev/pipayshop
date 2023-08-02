@@ -1,5 +1,6 @@
 package com.example.pipayshopapi.service.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ItemFollowFocus;
@@ -58,13 +59,17 @@ public class ItemFollowFocusServiceImpl extends ServiceImpl<ItemFollowFocusMappe
 
     /**
      * 查询网店粉丝列表
-     *
-     * @param itemId
-     * @return
+
      */
     @Override
     public List<FansVO> itemFans(String itemId,Integer pageNum,Integer pageSize) {
         return itemFollowFocusMapper.itemFans(itemId,pageNum-1,pageSize);
     }
 
+    @Override
+    public Integer itemFansSum(String itemId) {
+        return itemFollowFocusMapper.selectCount(new QueryWrapper<ItemFollowFocus>()
+                .eq("item_id", itemId)
+                .eq("status", 0)).intValue();
+    }
 }
