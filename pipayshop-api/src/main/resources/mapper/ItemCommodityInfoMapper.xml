@@ -4,17 +4,19 @@
 
     <select id="commodityOfCateList" resultType="com.example.pipayshopapi.entity.vo.CommodityVO">
 
-        SELECT commodity_id, item_commodity_name, origin_price, price, details, avatar_imag
-        FROM item_commodity_info
-        where category_id = #{categoryId} limit ${startIndex}
-            , ${number}
+        SELECT i.commodity_id, i.item_commodity_name, i.origin_price, i.price, i.details, i.avatar_imag
+        FROM item_commodity_info as i
+                 JOIN item_commodity_category as c on i.category_id=c.category_id
+        where c.category_pid = #{categoryPid}
+        limit ${startIndex}, ${number}
 
     </select>
 
     <select id="listCount" resultType="java.lang.Integer">
-        select count(*)
-        from item_commodity_info
-        where category_id = #{categoryId}
+        SELECT COUNT(*)
+        FROM item_commodity_info as i
+                 JOIN item_commodity_category as c on i.category_id=c.category_id
+        where c.category_pid = #{categoryPid}
     </select>
     <select id="itemCommodityChoose" resultType="com.example.pipayshopapi.entity.vo.CommodityVO">
         select commodity_id,item_commodity_name,origin_price,price,details,imags_list
