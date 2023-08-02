@@ -1,8 +1,10 @@
 package com.example.pipayshopapi.controller;
 
 
-import org.springframework.stereotype.Controller;
+import io.swagger.annotations.Api;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -12,8 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author zxb
  * @since 2023-07-29
  */
-@Controller
+@RestController
 @RequestMapping("/pipayshopapi/shop-evaluate")
+@Api(value = "店首页背景图片接口",tags = "店首页背景图片接口")
+@Slf4j
 public class ShopEvaluateController {
+
 
 }

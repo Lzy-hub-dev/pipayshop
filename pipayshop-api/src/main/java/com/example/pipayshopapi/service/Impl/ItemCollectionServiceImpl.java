@@ -29,8 +29,19 @@ public class ItemCollectionServiceImpl extends ServiceImpl<ItemCollectionMapper,
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int AddItemCommodityToCollection(String userId, String commodityId) {
-        ItemCollection itemCollection = new ItemCollection(null, StringUtil.generateShortId(), commodityId, userId, null, null, null);
-        return collectionMapper.insert(itemCollection);
+        // 先判断是否已经是关注过的，是就直接把状态改为0
+        Long count = collectionMapper.selectCount(new QueryWrapper<ItemCollection>()
+                .eq("user_id", userId)
+                .eq("commodity_id", commodityId));
+        if (count == 0L){
+            ItemCollection itemCollection2 = new ItemCollection(null, StringUtil.generateShortId(), commodityId, userId, null, null, null);
+            return collectionMapper.insert(itemCollection2);
+        }
+        return collectionMapper.update(null, new UpdateWrapper<ItemCollection>()
+                .eq("user_id", userId)
+                .eq("commodity_id", commodityId)
+                .set("status", 0));
+
     }
 
     @Override
