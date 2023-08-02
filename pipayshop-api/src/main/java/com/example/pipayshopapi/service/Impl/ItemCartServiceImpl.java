@@ -56,15 +56,22 @@ public class ItemCartServiceImpl extends ServiceImpl<ItemCartMapper, ItemCart> i
         return result>0;
     }
 
+
     /**
-     * 放出购物车
+     * 批量放出购物车
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean outItemCartById(String cartId) {
-        int result = itemCartMapper.delete(new QueryWrapper<ItemCart>()
-                .eq("cart_id", cartId));
-        return result>0;
+    public boolean outItemCartById(List<String> cartIds) {
+        System.out.println(cartIds);
+        if (!cartIds.isEmpty()&&cartIds.size()==0){
+            return false;
+        }else {
+            QueryWrapper<ItemCart> wrapper = new QueryWrapper<>();
+            wrapper.in("cart_id",cartIds);
+            int result = itemCartMapper.delete(wrapper);
+            return result>0;
+        }
     }
 
 

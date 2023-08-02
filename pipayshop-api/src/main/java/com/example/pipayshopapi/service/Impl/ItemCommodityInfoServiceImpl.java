@@ -4,11 +4,13 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.pipayshopapi.entity.ItemCommodityHistory;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.ItemInfo;
 import com.example.pipayshopapi.entity.dto.ApplyItemCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
+import com.example.pipayshopapi.mapper.ItemCommodityHistoryMapper;
 import com.example.pipayshopapi.mapper.ItemCommodityInfoMapper;
 import com.example.pipayshopapi.mapper.ItemInfoMapper;
 import com.example.pipayshopapi.service.ItemCommodityInfoService;
@@ -38,7 +40,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     private ItemCommodityInfoMapper commodityInfoMapper;
     @Resource
     private ItemInfoMapper itemInfoMapper;
-@Resource
+    @Resource
     private ItemCommodityHistoryMapper itemCommodityHistoryMapper;
 
 

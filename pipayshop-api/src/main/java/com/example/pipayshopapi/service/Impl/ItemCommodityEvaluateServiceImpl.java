@@ -35,4 +35,14 @@ public class ItemCommodityEvaluateServiceImpl extends ServiceImpl<ItemCommodityE
 
         return new PageDataVO(itemCommodityEvaluatesSum,itemCommodityEvaluates);
     }
+
+    @Override
+    public boolean addItemEvaluates(ItemCommodityEvaluate itemCommodityEvaluate) {
+        return false;
+    }
+
+    @Override
+    public boolean deleteItemEvaluates(String userId) {
+        return false;
+    }
 }
