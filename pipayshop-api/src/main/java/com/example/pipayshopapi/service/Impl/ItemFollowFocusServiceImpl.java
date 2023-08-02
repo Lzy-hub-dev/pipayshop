@@ -3,13 +3,14 @@ package com.example.pipayshopapi.service.Impl;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ItemFollowFocus;
+import com.example.pipayshopapi.entity.vo.FansVO;
 import com.example.pipayshopapi.mapper.ItemFollowFocusMapper;
 import com.example.pipayshopapi.service.ItemFollowFocusService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
-
+import java.util.List;
 
 
 /**
@@ -53,6 +54,17 @@ public class ItemFollowFocusServiceImpl extends ServiceImpl<ItemFollowFocusMappe
                 .set("update_time", new Date())
                 .set("status", 1));
         return result>0;
+    }
+
+    /**
+     * 查询网店粉丝列表
+     *
+     * @param itemId
+     * @return
+     */
+    @Override
+    public List<FansVO> itemFans(String itemId,Integer pageNum,Integer pageSize) {
+        return itemFollowFocusMapper.itemFans(itemId,pageNum-1,pageSize);
     }
 
 }

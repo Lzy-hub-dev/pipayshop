@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.pipayshopapi.mapper.ItemFollowFocusMapper">
+
+
+    <select id="itemFans" resultType="com.example.pipayshopapi.entity.vo.FansVO">
+        select f.item_id,
+        f.follow_id,
+        f.create_time,
+        i.user_name,
+        i.user_image
+        FROM item_follow_focus f
+        left JOIN
+        user_info i
+        ON
+        f.follow_id=i.uid
+        WHERE
+        f.item_id=#{itemId}
+        and i.status=0
+        and f.status = 0
+        limit #{pageNum},#{pageSize}
+    </select>
+</mapper>
