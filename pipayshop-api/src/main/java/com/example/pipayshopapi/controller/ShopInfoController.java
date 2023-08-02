@@ -3,7 +3,6 @@ package com.example.pipayshopapi.controller;
 
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
-import com.example.pipayshopapi.entity.dto.ShopDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopInfoService;
@@ -14,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * <p>
@@ -34,13 +35,13 @@ public class ShopInfoController {
 
     @GetMapping("getShopInfoListByCondition/{limit}/{pages}/{categoryId}/{state}")
     @ApiOperation("根据条件筛选后获取实体店列表")
-    public ResponseVO getShopInfoListByCondition(@PathVariable Integer limit,@PathVariable Integer pages,@PathVariable String categoryId,@PathVariable Integer state){
+    public ResponseVO<List<IndexShopInfoVO>> getShopInfoListByCondition(@PathVariable Integer limit,@PathVariable Integer pages,@PathVariable String categoryId,@PathVariable Integer state){
         try {
-            PageDataVO list = infoService.getShopInfoListByCondition(limit,pages,categoryId,state);
+            List<IndexShopInfoVO> list = infoService.getShopInfoListByCondition(limit,pages,categoryId,state);
             if (list==null){
                 throw new Exception();
             }
-            return ResponseVO.getSuccessResponseVo(list.getList());
+            return ResponseVO.getSuccessResponseVo(list);
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("根据条件筛选后获取实体店列表失败，请联系后台人员");

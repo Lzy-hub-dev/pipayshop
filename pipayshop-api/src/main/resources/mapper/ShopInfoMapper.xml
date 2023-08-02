@@ -36,16 +36,11 @@
     <select id="getIndexShopInfoVO" resultType="com.example.pipayshopapi.entity.vo.IndexShopInfoVO">
         select shop_id,shop_name,score,localhost_latitude,localhost_longitude,user_image
         from shop_info
-        where
-        <if test="categoryId != null and categoryId != '-1' ">category_id=#{categoryId} </if>
-        <if test="state==1">ORDER BY score ASC</if>
-        <if test="state==2">ORDER BY score DESC</if>
+            <where>
+                <if test="categoryId != null and categoryId != '-1' ">category_id=#{categoryId} </if>
+                <if test="state==1">ORDER BY score ASC</if>
+                <if test="state==2">ORDER BY score DESC</if>
+            </where>
         LIMIT ${page},${limit}
-    </select>
-    <select id="getIndexShopInfoVOCount" resultType="java.lang.Integer">
-        select COUNT(*)
-        from shop_info
-        where
-        <if test="categoryId != null and categoryId != '-1' ">category_id=#{categoryId} </if>
     </select>
 </mapper>

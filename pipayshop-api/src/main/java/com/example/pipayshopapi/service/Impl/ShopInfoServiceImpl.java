@@ -1,23 +1,15 @@
 package com.example.pipayshopapi.service.Impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.pipayshopapi.entity.ShopCategory;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.ShopTags;
 import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
 import com.example.pipayshopapi.entity.dto.ShopDTO;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
-import com.example.pipayshopapi.entity.vo.ShopInfoVO;
-import com.example.pipayshopapi.entity.vo.ShopInfoVO1;
-import com.example.pipayshopapi.entity.vo.UidPageVO;
+import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.ShopInfoMapper;
 import com.example.pipayshopapi.mapper.ShopTagsMapper;
@@ -56,15 +48,11 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
      * 根据条件筛选后获取实体店列表
      */
     @Override
-    public PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId, Integer state) {
+    public List<IndexShopInfoVO> getShopInfoListByCondition(Integer limit, Integer pages, String categoryId, Integer state) {
 
-        // 获取所有店铺数量
-        Integer indexShopInfoVOCount = shopInfoMapper.getIndexShopInfoVOCount(categoryId, state);
-
-        //stata==1,按评分从低到高；stata==2,按评分从高到低
+        // stata==1,按评分从低到高；stata==2,按评分从高到低
         List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(categoryId, (pages - 1) * limit, limit,state);
-
-        return new PageDataVO(indexShopInfoVOCount,indexShopInfoVO);
+        return indexShopInfoVO;
     }
 
     /**

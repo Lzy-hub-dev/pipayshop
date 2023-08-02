@@ -3,11 +3,10 @@ package com.example.pipayshopapi.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
-import com.example.pipayshopapi.entity.vo.ShopInfoVO;
-import com.example.pipayshopapi.entity.vo.ShopInfoVO1;
-import com.example.pipayshopapi.entity.vo.UidPageVO;
+import com.example.pipayshopapi.entity.vo.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * <p>
@@ -22,13 +21,14 @@ public interface ShopInfoService extends IService<ShopInfo> {
 
     /**
      * 根据条件筛选后获取实体店列表
+     *
      * @param limit
      * @param pages
      * @param categoryId
      * @param state
      * @return
      */
-    PageDataVO getShopInfoListByCondition(Integer limit,Integer pages,String categoryId,Integer state);
+    List<IndexShopInfoVO> getShopInfoListByCondition(Integer limit, Integer pages, String categoryId, Integer state);
 
     /**
      * 根据实体店id查询实体店信息
