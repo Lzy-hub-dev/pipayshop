@@ -2,6 +2,7 @@ package com.example.pipayshopapi.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.UserInfo;
 import com.example.pipayshopapi.entity.enums.Country;
 import com.example.pipayshopapi.entity.enums.Language;
@@ -9,17 +10,13 @@ import com.example.pipayshopapi.entity.vo.UserInfoVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.UserInfoMapper;
 import com.example.pipayshopapi.service.UserInfoService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.util.FileUploadUtil;
-import com.example.pipayshopapi.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.File;
 
 /**
  * <p>
@@ -51,11 +48,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     public boolean updateUserInfoByUid(UserInfoVO userInfoVO) {
         int result = userInfoMapper.update(null, new UpdateWrapper<UserInfo>()
                                                             .eq("uid", userInfoVO.getUid())
-                                                            .set("user_name", userInfoVO.getUserName())
-                                                            .set("personal_profile", userInfoVO.getPersonalProfile())
-                                                            .set("language", userInfoVO.getLanguage())
-                                                            .set("email", userInfoVO.getEmail())
-                                                            .set("age", userInfoVO.getAge()));
+                                                            .set(!"".equals(userInfoVO.getUserName()) && userInfoVO.getUserName() != null,"user_name", userInfoVO.getUserName())
+                                                            .set(!"".equals(userInfoVO.getPersonalProfile() ) && userInfoVO.getPersonalProfile() != null,"personal_profile", userInfoVO.getPersonalProfile())
+                                                            .set(userInfoVO.getLanguage() != null ,"language", userInfoVO.getLanguage())
+                                                            .set(!"".equals(userInfoVO.getEmail()) && userInfoVO.getEmail() != null,"email", userInfoVO.getEmail())
+                                                            .set(userInfoVO.getAge() != null,"age", userInfoVO.getAge()));
         return result > 0;
     }
 

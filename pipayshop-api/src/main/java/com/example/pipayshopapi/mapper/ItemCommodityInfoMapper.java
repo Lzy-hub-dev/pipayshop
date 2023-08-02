@@ -22,9 +22,9 @@ import java.util.List;
 @Mapper
 public interface ItemCommodityInfoMapper extends BaseMapper<ItemCommodityInfo> {
 
-    List<CommodityVO> commodityOfCateList(@Param("categoryPid") Integer categoryPid, @Param("startIndex")Integer startIndex, @Param("number")Integer number);
+    List<CommodityVO> commodityOfCateList(@Param("secondCategoryId") Integer secondCategoryId, @Param("startIndex")Integer startIndex, @Param("number")Integer number);
 
-    Integer  listCount(@Param("categoryPid") Integer categoryPid);
+    Integer  listCount(@Param("secondCategoryId") Integer secondCategoryId);
 
     List<CommodityVO> itemCommodityChoose(String itemId, String brandId);
 

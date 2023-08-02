@@ -13,6 +13,6 @@ public class CommodityPageVO {
     private Integer limit;
     private Integer page;
 
-    private Integer categoryPid;
+    private Integer secondCategoryId;
 
 }

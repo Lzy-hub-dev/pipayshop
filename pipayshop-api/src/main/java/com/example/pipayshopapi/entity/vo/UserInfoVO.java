@@ -34,4 +34,14 @@ public class UserInfoVO {
      * 年龄
      */
     private Integer age;
+
+    /**
+     * 性別
+     */
+    private Integer gender;
+
+    /**
+     * 用户头像
+     */
+    private String userImage;
 }

@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.pipayshopapi.entity.ItemCommodityHistory;
 import com.example.pipayshopapi.entity.ShopCommodityHistory;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopInfo;
@@ -74,9 +73,6 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
 
     /**
      * 根据用户id查询 用户收藏的商品列表
-     *
-     * @param userId
-     * @return
      */
     @Override
     public List<ShopCommodityInfo> getCollectList(String userId) {
@@ -165,8 +161,6 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
 
     /**
      * 根据店铺id查找实体店商品的上架和下架列表
-     * @param commodityStatusPageVO
-     * @return
      */
     @Override
     public PageDataVO selectStatusListByShopId(CommodityStatusPageVO commodityStatusPageVO) {

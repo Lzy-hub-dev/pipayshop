@@ -1,22 +1,20 @@
 package com.example.pipayshopapi.service.Impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.pipayshopapi.entity.ShopCategory;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.ShopTags;
 import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
 import com.example.pipayshopapi.entity.dto.ShopDTO;
-import com.example.pipayshopapi.entity.vo.*;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.entity.vo.ShopInfoVO;
+import com.example.pipayshopapi.entity.vo.ShopInfoVO1;
+import com.example.pipayshopapi.entity.vo.UidPageVO;
 import com.example.pipayshopapi.exception.BusinessException;
-import com.example.pipayshopapi.mapper.ShopCategoryMapper;
 import com.example.pipayshopapi.mapper.ShopInfoMapper;
 import com.example.pipayshopapi.mapper.ShopTagsMapper;
 import com.example.pipayshopapi.service.ShopInfoService;
@@ -28,16 +26,11 @@ import com.javadocmd.simplelatlng.util.LengthUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -55,86 +48,15 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     @Autowired
     private ShopTagsMapper tagMapper;
 
-    @Autowired
-    private ShopCategoryMapper shopCategoryMapper;
-
-
-    /**
-     * 获取实体店列表
-     *
-     * @return
-     */
-    @Override
-    public PageDataVO getShopInfoList(ShopDTO shopDTO) {
-
-        LambdaQueryWrapper<ShopInfo> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(ShopInfo::getStatus, 0);
-        wrapper.eq(ShopInfo::getCategoryId, shopDTO.getCategorySecId())
-                .like(shopDTO.getShopIntroduce()!=null,ShopInfo::getShopIntroduce,shopDTO.getShopIntroduce());
-        Page<ShopInfo> page = new Page<>(shopDTO.getPageNumber(), shopDTO.getPageSize());
-        Page<ShopInfo> info = shopInfoMapper.selectPage(page, wrapper);
-        List<ShopInfo> records = info.getRecords();
-        if (CollectionUtils.isEmpty(records)) {
-            return new PageDataVO();
-        }
-        // 过滤掉不符合 标签 的实体店
-        if (shopDTO.getTagId() != null) {
-            records = records.stream().filter(shopInfo -> {
-                String tagList = shopInfo.getTagList();
-                if (tagList == null) {
-                    return false;
-                }
-                JSONArray objects = JSONObject.parseArray(tagList);
-                return objects.contains(shopDTO.getTagId());
-            }).collect(Collectors.toList());
-        }
-        List<ShopInfoVO> shopVO = getShopVO(records, shopDTO);
-        return new PageDataVO(Integer.valueOf(info.getTotal() + ""), shopVO);
-    }
-    public PageDataVO getShopListByFirstCategory(ShopDTO shopDTO) {
-        List<ShopCategory> categoryList = shopCategoryMapper.selectList(new LambdaQueryWrapper<ShopCategory>()
-                .eq(ShopCategory::getCategoryPid, shopDTO.getCategoryTopId()));
-        LambdaQueryWrapper<ShopInfo> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(ShopInfo::getStatus, 0)
-                .in(ShopInfo::getCategoryId, categoryList)
-                .like(shopDTO.getShopIntroduce() != null, ShopInfo::getShopIntroduce, shopDTO.getShopIntroduce());
-        Page<ShopInfo> page = new Page<>(shopDTO.getPageNumber(), shopDTO.getPageSize());
-        Page<ShopInfo> info = shopInfoMapper.selectPage(page, wrapper);
-        List<ShopInfo> records = info.getRecords();
-        if (CollectionUtils.isEmpty(records)) {
-            return new PageDataVO();
-        }
-        List<ShopInfoVO> shopVO = getShopVO(records, shopDTO);
-
-        if (shopDTO.getDistanceOrder() != null) {
-            shopVO.sort((o1, o2) -> {
-                String d1 = o1.getDistance();
-                String d2 = o2.getDistance();
-                int distance1 = Integer.parseInt(d1.substring(0, d1.length() - 2));
-                int distance2 = Integer.parseInt(d2.substring(0, d2.length() - 2));
-                return shopDTO.getDistanceOrder().equals("asc") ? distance1 - distance2 : distance2 - distance1;
-            });
-        }
-        List list = new ArrayList();
-        list.add(categoryList);
-        list.add(shopVO);
-        return new PageDataVO(Integer.valueOf(info.getTotal() + ""), list);
-    }
-
     /**
      * 根据条件筛选后获取实体店列表
-     * @param limit
-     * @param pages
-     * @param categoryId
-     * @param state
-     * @return
      */
     @Override
     public PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId, Integer state) {
         Page<ShopInfo> page = new Page<>(pages, limit);
         //stata==1,按评分从低到高；stata==2,按评分从高到低
         shopInfoMapper.selectPage(page,new QueryWrapper<ShopInfo>()
-                .eq(!categoryId.equals(0),"category_id",categoryId)
+                .eq(categoryId != null && !"-1".equals(categoryId), "category_id",categoryId)
                 .orderByAsc(state==1,"score")
                 .orderByDesc(state==2,"score"));
 
@@ -143,9 +65,6 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
 
     /**
      * 处理实体店响应实体(距离)
-     * @param result
-     * @param shopDTO
-     * @return
      */
     private List<ShopInfoVO> getShopVO(List<ShopInfo> result, ShopDTO shopDTO) {
         List<ShopInfoVO> container = new ArrayList<>();

@@ -7,7 +7,7 @@
         SELECT i.commodity_id, i.item_commodity_name, i.origin_price, i.price, i.details, i.avatar_imag
         FROM item_commodity_info as i
                  JOIN item_commodity_category as c on i.category_id=c.category_id
-        where c.category_pid = #{categoryPid}
+        where c.category_id = #{secondCategoryId}
         limit ${startIndex}, ${number}
 
     </select>
@@ -16,7 +16,7 @@
         SELECT COUNT(*)
         FROM item_commodity_info as i
                  JOIN item_commodity_category as c on i.category_id=c.category_id
-        where c.category_pid = #{categoryPid}
+        where c.category_id = #{secondCategoryId}
     </select>
     <select id="itemCommodityChoose" resultType="com.example.pipayshopapi.entity.vo.CommodityVO">
         select commodity_id,item_commodity_name,origin_price,price,details,imags_list

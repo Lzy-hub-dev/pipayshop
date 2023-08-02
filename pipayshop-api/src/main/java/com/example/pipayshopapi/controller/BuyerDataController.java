@@ -29,7 +29,7 @@ public class BuyerDataController {
 
     @GetMapping("selectAllAddress/{userId}")
     @ApiOperation("根据用户Id查找用户的所有收货地址")
-    public ResponseVO selectAllAddress(@PathVariable String userId){
+    public ResponseVO<List<BuyerData>> selectAllAddress(@PathVariable String userId){
         try {
             List<BuyerData> buyerData = buyerDataService.selectAllAddress(userId);
             return ResponseVO.getSuccessResponseVo(buyerData);
@@ -71,7 +71,7 @@ public class BuyerDataController {
     }
 
 
-    @PostMapping("deleteBuyerDataById/{id}")
+    @PostMapping("deleteBuyerDataById/{buyerId}")
     @ApiOperation("根据id删除买家的收货地址等数据")
     public ResponseVO deleteBuyerDataById(@PathVariable String buyerId){
         try {

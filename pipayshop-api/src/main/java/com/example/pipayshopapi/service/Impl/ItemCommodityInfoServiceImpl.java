@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ItemCommodityHistory;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.ItemInfo;
@@ -14,7 +15,6 @@ import com.example.pipayshopapi.mapper.ItemCommodityHistoryMapper;
 import com.example.pipayshopapi.mapper.ItemCommodityInfoMapper;
 import com.example.pipayshopapi.mapper.ItemInfoMapper;
 import com.example.pipayshopapi.service.ItemCommodityInfoService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.util.FileUploadUtil;
 import com.example.pipayshopapi.util.StringUtil;
 import org.springframework.stereotype.Service;
@@ -54,9 +54,9 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         Integer limit = commodityPageVO.getLimit();
         int startIndex = (page - 1) * limit;
 
-        List<CommodityVO> commodityList = commodityInfoMapper.commodityOfCateList(commodityPageVO.getCategoryPid(), startIndex, limit);
+        List<CommodityVO> commodityList = commodityInfoMapper.commodityOfCateList(commodityPageVO.getSecondCategoryId(), startIndex, limit);
 
-        return new PageDataVO(commodityInfoMapper.listCount(commodityPageVO.getCategoryPid()), commodityList);
+        return new PageDataVO(commodityInfoMapper.listCount(commodityPageVO.getSecondCategoryId()), commodityList);
 
     }
 
@@ -68,9 +68,6 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
      */
     /**
      * 发布网店商品
-     * @param applyItemCommodityDTO
-     * @param files
-     * @return
      */
     @Override
     @Transactional(rollbackFor = Exception.class)

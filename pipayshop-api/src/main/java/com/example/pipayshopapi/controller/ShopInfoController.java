@@ -3,7 +3,6 @@ package com.example.pipayshopapi.controller;
 
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
-import com.example.pipayshopapi.entity.dto.ShopDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopInfoService;
@@ -31,17 +30,6 @@ public class ShopInfoController {
     private ShopInfoService infoService;
     private static final Logger log = LoggerFactory.getLogger(ShopTagsController.class);
 
-    @GetMapping("getShopInfoList")
-    @ApiOperation("根据条件查询实体店首页列表")
-    public ResponseVO getShopInfoList(ShopDTO shopDTO) {
-        try {
-            PageDataVO list = infoService.getShopInfoList(shopDTO);
-            return ResponseVO.getSuccessResponseVo(list);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseVO.getFalseResponseVo(null);
-        }
-    }
 
     @GetMapping("getShopInfoListByCondition/{limit}/{pages}/{categoryId}/{state}")
     @ApiOperation("根据条件筛选后获取实体店列表")
