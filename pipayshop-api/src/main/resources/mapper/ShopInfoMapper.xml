@@ -40,7 +40,7 @@
         <if test="categoryId != null and categoryId != '-1' ">category_id=#{categoryId} </if>
         <if test="state==1">ORDER BY score ASC</if>
         <if test="state==2">ORDER BY score DESC</if>
-        LIMIT ${page},#{limit}
+        LIMIT ${page},${limit}
     </select>
     <select id="getIndexShopInfoVOCount" resultType="java.lang.Integer">
         select COUNT(*)
