@@ -3,6 +3,10 @@ package com.example.pipayshopapi.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -15,6 +19,9 @@ import java.time.LocalDateTime;
  * @since 2023-07-29
  */
 @TableName("shop_follow_focus")
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class ShopFollowFocus implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -47,58 +54,4 @@ public class ShopFollowFocus implements Serializable {
      */
     private Boolean status;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getShopId() {
-        return shopId;
-    }
-
-    public void setShopId(String shopId) {
-        this.shopId = shopId;
-    }
-    public String getFollowId() {
-        return followId;
-    }
-
-    public void setFollowId(String followId) {
-        this.followId = followId;
-    }
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
-    public LocalDateTime getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(LocalDateTime updateTime) {
-        this.updateTime = updateTime;
-    }
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return "ShopFollowFocus{" +
-            "id=" + id +
-            ", shopId=" + shopId +
-            ", followId=" + followId +
-            ", createTime=" + createTime +
-            ", updateTime=" + updateTime +
-            ", status=" + status +
-        "}";
-    }
 }

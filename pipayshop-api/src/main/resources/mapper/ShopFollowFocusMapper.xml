@@ -2,4 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.pipayshopapi.mapper.ShopFollowFocusMapper">
 
+    <select id="selectFollowIdListByShopId" resultType="com.example.pipayshopapi.entity.ShopFollowFocus">
+        select follow_id,create_time from shop_follow_focus
+        where shop_id = #{shopId}
+        order by create_time desc
+    </select>
+
 </mapper>

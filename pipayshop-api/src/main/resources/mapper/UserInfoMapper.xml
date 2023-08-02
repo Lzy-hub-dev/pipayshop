@@ -5,4 +5,8 @@
     <select id="selectUserInfoByUid" resultType="com.example.pipayshopapi.entity.vo.UserInfoVO">
         SELECT uid,user_name,personal_profile,language,email,age FROM user_info where uid=#{uid};
     </select>
+
+    <select id="getUserFollowInfoById" resultType="com.example.pipayshopapi.entity.UserInfo">
+        select user_name,user_image from user_info where uid=#{uid}
+    </select>
 </mapper>

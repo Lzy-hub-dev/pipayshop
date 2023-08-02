@@ -1,14 +1,20 @@
 package com.example.pipayshopapi.service.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.pipayshopapi.entity.ShopFollowFocus;
+import com.example.pipayshopapi.entity.UserInfo;
+import com.example.pipayshopapi.entity.vo.ShopUserFollowInfoVO;
 import com.example.pipayshopapi.mapper.ShopFollowFocusMapper;
+import com.example.pipayshopapi.mapper.UserInfoMapper;
 import com.example.pipayshopapi.service.ShopFollowFocusService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.pipayshopapi.service.UserInfoService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +31,12 @@ public class ShopFollowFocusServiceImpl extends ServiceImpl<ShopFollowFocusMappe
 
     @Resource
     private ShopFollowFocusMapper shopFollowFocusMapper;
+
+    @Resource
+    private UserInfoService userInfoService;
+
+    @Resource
+    private UserInfoMapper userInfoMapper;
 
     /**
      * 关注实体店
@@ -60,5 +72,26 @@ public class ShopFollowFocusServiceImpl extends ServiceImpl<ShopFollowFocusMappe
                 .set("update_time", format)
                 .set("status", 1));
         return result>0;
+    }
+
+    @Override
+    public List<ShopUserFollowInfoVO> getFollowList(String shopId) {
+        List<ShopUserFollowInfoVO> list = new ArrayList<>();
+        //根据shopId来获取followId(uid)
+        List<ShopFollowFocus> shopFollowFocusList = shopFollowFocusMapper.selectFollowIdListByShopId(shopId);
+
+        for(ShopFollowFocus shopFollowFocus:shopFollowFocusList){
+            String uid = shopFollowFocus.getFollowId();
+            //根据uid查出用户名，用户id,用户头像，创建时间
+            UserInfo userInfo = userInfoMapper.getUserFollowInfoById(uid);
+            ShopUserFollowInfoVO shopUserFollowInfoVO = new ShopUserFollowInfoVO();
+            shopUserFollowInfoVO.setUid(uid);
+            shopUserFollowInfoVO.setCreateTime(shopFollowFocus.getCreateTime());
+            shopUserFollowInfoVO.setUserName(userInfo.getUserName());
+            shopUserFollowInfoVO.setUserImage(userInfo.getUserImage());
+
+            list.add(shopUserFollowInfoVO);
+        }
+        return list;
     }
 }

@@ -57,6 +57,7 @@
             <artifactId>spring-boot-starter-mail</artifactId>
             <version>${springboot.version}</version>
         </dependency>
+
         <!--redis -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -68,7 +69,8 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
         </dependency>
-        <!--        lombok-->
+
+        <!--       lombok-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

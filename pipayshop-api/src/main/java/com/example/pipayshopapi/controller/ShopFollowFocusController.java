@@ -2,8 +2,10 @@ package com.example.pipayshopapi.controller;
 
 
 import com.example.pipayshopapi.entity.vo.ResponseVO;
+import com.example.pipayshopapi.entity.vo.ShopUserFollowInfoVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopFollowFocusService;
+import com.example.pipayshopapi.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -28,6 +30,9 @@ import java.util.List;
 public class ShopFollowFocusController {
     @Resource
     private ShopFollowFocusService followFocusService;
+
+    @Resource
+    private UserInfoService userInfoService;
 
     @GetMapping("userFollowItem/{followId}/{shopId}")
     @ApiOperation("关注实体店")
@@ -57,6 +62,22 @@ public class ShopFollowFocusController {
             throw new BusinessException("用户取消关注失败，请联系后台人员");
         }
     }
+
+    @GetMapping("getFollowList/{shopId}")
+    @ApiOperation("获取实体店的粉丝列表")
+    public ResponseVO getFollowList(@PathVariable String shopId){
+        try{
+            List<ShopUserFollowInfoVO> data = followFocusService.getFollowList(shopId);
+            if (data.size() == 0){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo(data);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("粉丝列表获取失败，请联系后台人员");
+        }
+    }
+
 
 
 }
