@@ -1,18 +1,19 @@
 package com.example.pipayshopapi.controller;
 
 
+import com.example.pipayshopapi.entity.BgImg;
+import com.example.pipayshopapi.entity.vo.BgImgVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.BgImgService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -46,5 +47,29 @@ public class BgImgController {
             throw new BusinessException("逻辑删除首页背景图片失败，请联系后台人员");
         }
     }
-
+    @GetMapping("selectBgImgList")
+    @ApiOperation("查询首页轮播背景图列表")
+    public ResponseVO selectBgImgList(){
+        try{
+            List<BgImgVO> voList = bgImgService.selectBgImgList();
+            return ResponseVO.getSuccessResponseVo(voList);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            throw new BusinessException("查询首页轮播背景图片失败，请联系后台人员");
+        }
+    }
+    @PostMapping("addBgImg")
+    @ApiOperation("新增首页背景轮播图")
+    public ResponseVO addBgImg(MultipartFile file, BgImg bgImg){
+        try{
+            Boolean result= bgImgService.addBgImg(file,bgImg);
+            if (!result) {
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("新增首页背景轮播图成功");
+        }catch (Exception e){
+            log.error(e.getMessage());
+            throw new BusinessException("新增首页背景轮播图片失败，请联系后台人员");
+        }
+    }
 }

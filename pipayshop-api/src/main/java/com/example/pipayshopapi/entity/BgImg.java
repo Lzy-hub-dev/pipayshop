@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -44,6 +45,7 @@ public class BgImg implements Serializable {
     /**
      * 0:网点  1:实体店
      */
+    @ApiModelProperty(required = true)
     private Integer category;
 
     /**
@@ -59,7 +61,8 @@ public class BgImg implements Serializable {
     private Integer delFlag;
 
     /**
-     * 该图片对应的内容的id
+     * 该图片对应的内容的id (网店商品id/实体店铺id)
      */
+    @ApiModelProperty(required = true)
     private String contentId;
 }

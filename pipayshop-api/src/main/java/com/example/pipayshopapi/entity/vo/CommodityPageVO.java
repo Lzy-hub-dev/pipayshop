@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class commodityPageVO {
+public class CommodityPageVO {
 
     private Integer limit;
     private Integer page;
 
-    private Integer categoryId;
+    private Integer categoryPid;
 
 }
