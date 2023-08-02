@@ -1,9 +1,12 @@
 package com.example.pipayshopapi.controller;
 
 
+import io.swagger.annotations.Api;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -13,7 +16,8 @@ import org.springframework.stereotype.Controller;
  * @author zxb
  * @since 2023-07-29
  */
-@Controller
+@RestController
+@Slf4j
 @RequestMapping("/pipayshopapi/shop-commodity-history")
 public class ShopCommodityHistoryController {
 

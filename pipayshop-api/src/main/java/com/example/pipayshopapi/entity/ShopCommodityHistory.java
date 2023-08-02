@@ -44,4 +44,8 @@ public class ShopCommodityHistory implements Serializable {
      */
     private LocalDateTime createTime;
 
+    public ShopCommodityHistory(String commodityId, String userId) {
+        this.commodityId = commodityId;
+        this.userId = userId;
+    }
 }

@@ -12,5 +12,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2023-07-29
  */
 public interface ItemCommodityHistoryService extends IService<ItemCommodityHistory> {
-
+    /**
+     * 删除用户浏览网店商品的历史记录
+     * @param userId
+     * @param commodityId
+     * @return
+     */
+    boolean deleteHistory(String userId, String commodityId);
 }

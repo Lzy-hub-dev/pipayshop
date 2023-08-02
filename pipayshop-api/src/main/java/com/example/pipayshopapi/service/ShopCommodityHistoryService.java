@@ -17,5 +17,11 @@ import java.util.List;
  */
 public interface ShopCommodityHistoryService extends IService<ShopCommodityHistory> {
 
-
+    /**
+     * 删除用户浏览网店商品的历史记录
+     * @param userId
+     * @param commodityId
+     * @return
+     */
+    boolean deleteHistory(String userId, String commodityId);
 }

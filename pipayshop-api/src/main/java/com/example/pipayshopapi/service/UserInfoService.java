@@ -3,6 +3,7 @@ package com.example.pipayshopapi.service;
 import com.example.pipayshopapi.entity.UserInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <p>
@@ -44,4 +45,12 @@ public interface UserInfoService extends IService<UserInfo> {
      * @return
      * */
     boolean updateCountryByUid(String uid,Integer country);
+
+    /**
+     *根据用户Id更改用户国家标识
+     * @param userId
+     * @param file
+     * @return
+     */
+    boolean uploadUserImage(String userId, MultipartFile file);
 }

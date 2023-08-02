@@ -49,7 +49,7 @@ public interface ItemCommodityInfoService extends IService<ItemCommodityInfo> {
     /**
      *商品详情展示
      */
-    CommodityDetailVO itemCommodityDetail(String commodityId);
+    CommodityDetailVO itemCommodityDetail(String commodityId,String userId);
 
     /**
      * 根据用户id查询 对应的 网店收藏列表
@@ -92,4 +92,6 @@ public interface ItemCommodityInfoService extends IService<ItemCommodityInfo> {
      * @return
      */
     boolean changeCommodityStatus(String commodity, String status);
+
+
 }

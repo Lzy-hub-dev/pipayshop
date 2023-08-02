@@ -1,5 +1,6 @@
 package com.example.pipayshopapi.service.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.pipayshopapi.entity.UserInfo;
 import com.example.pipayshopapi.entity.enums.Country;
@@ -9,10 +10,16 @@ import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.UserInfoMapper;
 import com.example.pipayshopapi.service.UserInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.pipayshopapi.util.FileUploadUtil;
+import com.example.pipayshopapi.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.File;
 
 /**
  * <p>
@@ -76,6 +83,30 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                                                             .eq("uid", uid)
                                                             .set("language", language1.getLanguageId()));
         return result > 0;
+    }
+
+
+    /**
+     * 根据用户Id更改用户国家标识
+     *
+     * @param userId
+     * @param file
+     * @return
+     */
+    @Override
+    public boolean uploadUserImage(String userId, MultipartFile file) {
+        String uploadFile = FileUploadUtil.uploadFile(file, FileUploadUtil.AVATAR);
+        if (StringUtils.isEmpty(uploadFile)) {
+            throw new BusinessException("文件上传失败");
+        }
+        int update = userInfoMapper.update(null, new LambdaUpdateWrapper<UserInfo>()
+                .eq(UserInfo::getUid, userId)
+                .set(UserInfo::getUserImage, uploadFile));
+        if (update <= 0) {
+            FileUploadUtil.deleteFile(uploadFile);
+            return false;
+        }
+        return true;
     }
 
 

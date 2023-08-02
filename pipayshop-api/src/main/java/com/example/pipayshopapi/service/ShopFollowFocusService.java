@@ -13,4 +13,19 @@ import com.example.pipayshopapi.entity.ShopFollowFocus;
  */
 public interface ShopFollowFocusService extends IService<ShopFollowFocus> {
 
+    /**
+     * 关注实体店
+     * @param followId
+     * @param shopId
+     * @return
+     */
+    Boolean userFollowItem(String followId, String shopId);
+
+    /**
+     * 用户取消关注
+     * @param followId
+     * @param shopId
+     * @return
+     */
+    Boolean userUnfollow(String followId, String shopId);
 }

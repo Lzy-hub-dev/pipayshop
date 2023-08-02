@@ -44,5 +44,8 @@ public class ItemCommodityHistory implements Serializable {
      */
     private LocalDateTime createTime;
 
-
+    public ItemCommodityHistory(String commodityId, String userId) {
+        this.commodityId = commodityId;
+        this.userId = userId;
+    }
 }

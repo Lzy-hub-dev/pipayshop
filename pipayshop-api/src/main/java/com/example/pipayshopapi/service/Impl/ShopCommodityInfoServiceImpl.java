@@ -5,11 +5,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.pipayshopapi.entity.ItemCommodityHistory;
+import com.example.pipayshopapi.entity.ShopCommodityHistory;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
+import com.example.pipayshopapi.mapper.ShopCommodityHistoryMapper;
 import com.example.pipayshopapi.mapper.ShopCommodityInfoMapper;
 import com.example.pipayshopapi.service.ShopCommodityInfoService;
 import com.example.pipayshopapi.util.FileUploadUtil;
@@ -36,7 +39,8 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
 
     @Resource
     private ShopCommodityInfoMapper shopCommodityInfoMapper;
-
+    @Resource
+    private ShopCommodityHistoryMapper shopCommodityHistoryMapper;
     /**
      * 发布实体店商品
      */
@@ -47,7 +51,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
         List<String> imagesList = new ArrayList<>();
         for (MultipartFile multipartFile : files) {
             // 获取存储到本地空间并返回图片url
-            imagesList.add(FileUploadUtil.uploadFile(multipartFile));
+            imagesList.add(FileUploadUtil.uploadFile(multipartFile,FileUploadUtil.SHOP_COMMODITY_IMG));
         }
         // 将list集合转为string
         String jsonString = JSON.toJSONString(imagesList);
@@ -185,9 +189,15 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
      * 根据商品的id查找实体店商品的详情信息
      */
     @Override
-    public ShopCommodityInfo selectShopInfoByCommodityId(String commodityId) {
+    public ShopCommodityInfo selectShopInfoByCommodityId(String commodityId,String userId) {
         ShopCommodityInfo shopCommodityInfo = shopCommodityInfoMapper.selectOne(new QueryWrapper<ShopCommodityInfo>()
-                                                                                .eq("commodity_id", commodityId));
+                .eq("commodity_id", commodityId));
+        //添加商品浏览记录
+        int insert = shopCommodityHistoryMapper.insert(new ShopCommodityHistory(commodityId, userId));
+        if (insert <= 0) {
+            log.error("新增商品浏览记录失败");
+            return null;
+        }
         return shopCommodityInfo;
     }
 
