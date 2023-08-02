@@ -13,4 +13,9 @@ import com.example.pipayshopapi.entity.ItemCollection;
  */
 public interface ItemCollectionService extends IService<ItemCollection> {
 
+    int AddItemCommodityToCollection(String userId, String commodityId);
+
+    int closeItemCommodityToCollection(String userId, String commodityId);
+
+    boolean isItemCommodityToCollection(String userId, String commodityId);
 }
