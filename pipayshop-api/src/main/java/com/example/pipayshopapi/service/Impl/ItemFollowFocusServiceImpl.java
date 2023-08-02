@@ -64,7 +64,7 @@ public class ItemFollowFocusServiceImpl extends ServiceImpl<ItemFollowFocusMappe
      */
     @Override
     public List<FansVO> itemFans(String itemId,Integer pageNum,Integer pageSize) {
-        return itemFollowFocusMapper.itemFans(itemId,pageNum,pageSize);
+        return itemFollowFocusMapper.itemFans(itemId,pageNum-1,pageSize);
     }
 
 }

@@ -1,5 +1,4 @@
 package com.example.pipayshopapi.service.Impl;
-
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.example.pipayshopapi.entity.ShopCommodityEvaluate;
 import com.example.pipayshopapi.entity.dto.EvaluateDTO;
@@ -10,7 +9,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 /**
@@ -34,7 +32,7 @@ public class ShopCommodityEvaluateServiceImpl extends ServiceImpl<ShopCommodityE
      */
     @Override
     public List<ShopCommodityEvaluateVO> commodityEvaluateList(String commodityId,Integer pageNum,Integer pageSize) {
-        return shopCommodityEvaluateMapper.commodityEvaluateList(commodityId,pageNum,pageSize);
+        return shopCommodityEvaluateMapper.commodityEvaluateList(commodityId,pageNum-1,pageSize);
     }
 
     /**

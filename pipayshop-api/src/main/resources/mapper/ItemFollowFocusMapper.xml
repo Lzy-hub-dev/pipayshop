@@ -18,6 +18,6 @@
         f.item_id=#{itemId}
         and i.status=0
         and f.status = 0
-        limit #{pageNum-1},#{pageSize}
+        limit #{pageNum},#{pageSize}
     </select>
 </mapper>
