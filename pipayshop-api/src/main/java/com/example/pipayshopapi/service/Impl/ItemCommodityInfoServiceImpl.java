@@ -139,12 +139,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     @Override
     public CommodityDetailVO itemCommodityDetail(String commodityId,String userId) {
         CommodityDetailVO commodityDetailVO = commodityInfoMapper.itemCommodityDetail(commodityId);
-        //添加商品浏览记录
-        int insert = itemCommodityHistoryMapper.insert(new ItemCommodityHistory(commodityId, userId));
-        if (insert <= 0) {
-            log.error("新增商品浏览记录失败");
-            return null;
-        }
+
         return commodityDetailVO;
     }
 
