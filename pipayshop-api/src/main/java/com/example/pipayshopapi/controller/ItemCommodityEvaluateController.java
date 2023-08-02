@@ -1,5 +1,6 @@
 package com.example.pipayshopapi.controller;
 
+import com.example.pipayshopapi.entity.ItemCommodityEvaluate;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -7,10 +8,7 @@ import com.example.pipayshopapi.service.ItemCommodityEvaluateService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -45,4 +43,33 @@ public class ItemCommodityEvaluateController {
         }
     }
 
+    @PostMapping("addItemEvaluates")
+    @ApiOperation("新增网店商品的评价")
+    public ResponseVO addItemEvaluates(ItemCommodityEvaluate itemCommodityEvaluate){
+        try {
+            boolean result = itemCommodityEvaluateService.addItemEvaluates(itemCommodityEvaluate);
+            if (!result){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("新增网店商品的评价成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("新增网店商品的评价失败，请联系后台人员");
+        }
+    }
+
+    @PostMapping("deleteItemEvaluates/{evaluateId}")
+    @ApiOperation("根据评价Id删除网店商品的评价")
+    public ResponseVO deleteItemEvaluates(@PathVariable String evaluateId){
+        try {
+            boolean result = itemCommodityEvaluateService.deleteItemEvaluates(evaluateId);
+            if (!result){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("根据评价Id删除网店商品的评价成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("根据评价Id删除网店商品的评价失败，请联系后台人员");
+        }
+    }
 }

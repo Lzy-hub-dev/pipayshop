@@ -2,6 +2,7 @@ package com.example.pipayshopapi.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.pipayshopapi.entity.ItemCommodityHistory;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.mapper.ItemCommodityHistoryMapper;
 import com.example.pipayshopapi.service.ItemCommodityHistoryService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -23,6 +24,12 @@ public class ItemCommodityHistoryServiceImpl extends ServiceImpl<ItemCommodityHi
     @Resource
     private ItemCommodityHistoryMapper itemCommodityHistoryMapper;
 
+    /**
+     * 删除用户浏览网店商品的历史记录
+     * @param userId
+     * @param commodityId
+     * @return
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean deleteHistory(String userId, String commodityId) {
@@ -35,5 +42,17 @@ public class ItemCommodityHistoryServiceImpl extends ServiceImpl<ItemCommodityHi
                     .eq(ItemCommodityHistory::getUserId, userId)) > 0;
         }
         return false;
+    }
+
+    /**
+     * 新增用户浏览网店商品的历史记录
+     * @param itemCommodityHistory
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean addHistory(ItemCommodityHistory itemCommodityHistory) {
+        int result = itemCommodityHistoryMapper.insert(itemCommodityHistory);
+        return result>0;
     }
 }
