@@ -1,18 +1,14 @@
 package com.example.pipayshopapi.controller;
 
 
-import com.example.pipayshopapi.entity.vo.GetOrderDataVO;
-import com.example.pipayshopapi.entity.vo.OrderListVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopCollectionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 
 /**
@@ -72,7 +68,7 @@ public class ShopCollectionController {
             boolean flag = shopCollectionService.isCommodityToCollection(userId, commodityId);
             return ResponseVO.getSuccessResponseVo(flag);
         } catch (Exception e) {
-            throw new BusinessException("取消收藏失败，请联系后台人员");
+            throw new BusinessException("获取收藏信息失败，请联系后台人员");
         }
     }
 
