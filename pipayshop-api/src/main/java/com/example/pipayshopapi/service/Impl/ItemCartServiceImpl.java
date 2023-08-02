@@ -1,17 +1,20 @@
 package com.example.pipayshopapi.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.pipayshopapi.entity.ItemCart;
 import com.example.pipayshopapi.entity.vo.ItemCartVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.mapper.ItemCartMapper;
 import com.example.pipayshopapi.service.ItemCartService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -59,12 +62,12 @@ public class ItemCartServiceImpl extends ServiceImpl<ItemCartMapper, ItemCart> i
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean outItemCartById(List<String> cartIds) {
-        if (!cartIds.isEmpty()&&cartIds.size()==0){
+    public boolean outItemCartById(List<String> commodityId,String cartId) {
+        if (!commodityId.isEmpty()&&commodityId.size()==0){
             return false;
         }else {
             QueryWrapper<ItemCart> wrapper = new QueryWrapper<>();
-            wrapper.in("cart_id",cartIds);
+            wrapper.eq("cart_id",cartId).in("commodity_id",commodityId);
             int result = itemCartMapper.delete(wrapper);
             return result>0;
         }

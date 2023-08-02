@@ -31,7 +31,7 @@ public interface ItemCartService extends IService<ItemCart> {
     /**
      * 批量放出购物车
      */
-    boolean outItemCartById(List<String> cartIds);
+    boolean outItemCartById(List<String> commodityId,String cartId);
 
 
 

@@ -1,12 +1,16 @@
 package com.example.pipayshopapi.service.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ItemCommodityEvaluate;
 import com.example.pipayshopapi.entity.vo.ItemCommodityEvaluateVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.mapper.ItemCommodityEvaluateMapper;
 import com.example.pipayshopapi.service.ItemCommodityEvaluateService;
+import com.example.pipayshopapi.util.StringUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -36,13 +40,29 @@ public class ItemCommodityEvaluateServiceImpl extends ServiceImpl<ItemCommodityE
         return new PageDataVO(itemCommodityEvaluatesSum,itemCommodityEvaluates);
     }
 
+    /**
+     * 新增网店商品的评价
+     * @return
+     */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean addItemEvaluates(ItemCommodityEvaluate itemCommodityEvaluate) {
-        return false;
+        itemCommodityEvaluate.setEvaluateId(StringUtil.generateShortId());
+        int result = itemCommodityEvaluateMapper.insert(itemCommodityEvaluate);
+        return result>0;
     }
 
+
+    /**
+     * 根据评价Id删除网店商品的评价
+     * @return
+     */
     @Override
-    public boolean deleteItemEvaluates(String userId) {
-        return false;
+    @Transactional(rollbackFor = Exception.class)
+    public boolean deleteItemEvaluates(String evaluateId) {
+        int result = itemCommodityEvaluateMapper.update(null, new UpdateWrapper<ItemCommodityEvaluate>()
+                                                                    .eq("evaluate_id", evaluateId)
+                                                                    .set("status", 1));
+        return result>0;
     }
 }

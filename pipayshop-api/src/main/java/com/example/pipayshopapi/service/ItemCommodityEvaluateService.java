@@ -31,9 +31,9 @@ public interface ItemCommodityEvaluateService extends IService<ItemCommodityEval
     boolean addItemEvaluates(ItemCommodityEvaluate itemCommodityEvaluate);
 
     /**
-     * 根据用户Id删除网店商品的评价
+     * 根据评价Id删除网店商品的评价
      * @return
      */
-    boolean deleteItemEvaluates(String userId);
+    boolean deleteItemEvaluates(String evaluateId);
 
 }
