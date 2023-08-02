@@ -3,8 +3,15 @@ package com.example.pipayshopapi.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -15,6 +22,9 @@ import java.time.LocalDateTime;
  * @since 2023-07-29
  */
 @TableName("shop_evaluate")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ShopEvaluate implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -50,81 +60,14 @@ public class ShopEvaluate implements Serializable {
     /**
      * 评价时间
      */
-    private LocalDateTime createTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
 
     /**
      * 评价状态(0发布 1取消)
      */
-    private Boolean status;
+    private Integer status;
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getItemId() {
-        return itemId;
-    }
-
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
-    }
-    public String getEvaluateId() {
-        return evaluateId;
-    }
-
-    public void setEvaluateId(String evaluateId) {
-        this.evaluateId = evaluateId;
-    }
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-    public String getCommodityId() {
-        return commodityId;
-    }
-
-    public void setCommodityId(String commodityId) {
-        this.commodityId = commodityId;
-    }
-    public String getEvaluate() {
-        return evaluate;
-    }
-
-    public void setEvaluate(String evaluate) {
-        this.evaluate = evaluate;
-    }
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return "ShopEvaluate{" +
-            "id=" + id +
-            ", itemId=" + itemId +
-            ", evaluateId=" + evaluateId +
-            ", userId=" + userId +
-            ", commodityId=" + commodityId +
-            ", evaluate=" + evaluate +
-            ", createTime=" + createTime +
-            ", status=" + status +
-        "}";
-    }
 }

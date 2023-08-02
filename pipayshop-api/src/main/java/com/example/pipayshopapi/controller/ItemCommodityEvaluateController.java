@@ -72,8 +72,4 @@ public class ItemCommodityEvaluateController {
             throw new BusinessException("根据评价Id删除网店商品的评价失败，请联系后台人员");
         }
     }
-
-    /**
-     *
-     */
 }
