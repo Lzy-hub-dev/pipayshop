@@ -2,6 +2,7 @@ package com.example.pipayshopapi.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopFollowFocus;
 import com.example.pipayshopapi.entity.UserInfo;
 import com.example.pipayshopapi.entity.vo.ShopUserFollowInfoVO;
@@ -16,7 +17,6 @@ import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * <p>
@@ -40,10 +40,6 @@ public class ShopFollowFocusServiceImpl extends ServiceImpl<ShopFollowFocusMappe
 
     /**
      * 关注实体店
-     *
-     * @param followId
-     * @param shopId
-     * @return
      */
     @Override
     public Boolean userFollowItem(String followId, String shopId) {
@@ -56,10 +52,6 @@ public class ShopFollowFocusServiceImpl extends ServiceImpl<ShopFollowFocusMappe
 
     /**
      * 用户取消关注
-     *
-     * @param followId
-     * @param shopId
-     * @return
      */
     @Override
     public Boolean userUnfollow(String followId, String shopId) {

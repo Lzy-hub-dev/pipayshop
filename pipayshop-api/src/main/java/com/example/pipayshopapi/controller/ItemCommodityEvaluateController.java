@@ -45,7 +45,7 @@ public class ItemCommodityEvaluateController {
 
     @PostMapping("addItemEvaluates")
     @ApiOperation("新增网店商品的评价")
-    public ResponseVO addItemEvaluates(ItemCommodityEvaluate itemCommodityEvaluate){
+    public ResponseVO<String> addItemEvaluates(ItemCommodityEvaluate itemCommodityEvaluate){
         try {
             boolean result = itemCommodityEvaluateService.addItemEvaluates(itemCommodityEvaluate);
             if (!result){
@@ -58,11 +58,11 @@ public class ItemCommodityEvaluateController {
         }
     }
 
-    @PostMapping("deleteItemEvaluates/{evaluateId}")
-    @ApiOperation("根据评价Id删除网店商品的评价")
-    public ResponseVO deleteItemEvaluates(@PathVariable String evaluateId){
+    @PostMapping("deleteItemEvaluates/{evaluateId}/{userId}")
+    @ApiOperation("根据评价Id删除网店商品自己评价")
+    public ResponseVO<String> deleteItemEvaluates(@PathVariable String evaluateId, @PathVariable String userId){
         try {
-            boolean result = itemCommodityEvaluateService.deleteItemEvaluates(evaluateId);
+            boolean result = itemCommodityEvaluateService.deleteItemEvaluates(evaluateId, userId);
             if (!result){
                 throw new Exception();
             }
