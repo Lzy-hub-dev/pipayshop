@@ -51,7 +51,7 @@ public class BuyerDataServiceImpl extends ServiceImpl<BuyerDataMapper, BuyerData
                                                                 .set("user_name", buyerData.getUserName())
                                                                 .set("address", buyerData.getAddress())
                                                                 .set("phone", buyerData.getPhone())
-                                                                .set("is_default",buyerData.getIsDefault()));
+                                                                .set(buyerData.getIsDefault() != null,"is_default",buyerData.getIsDefault()));
         return result > 0;
     }
 

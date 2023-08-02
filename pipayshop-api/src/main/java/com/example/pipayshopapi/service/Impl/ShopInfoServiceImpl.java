@@ -58,69 +58,6 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     @Autowired
     private ShopCategoryMapper shopCategoryMapper;
 
-
-    /**
-     * 获取实体店列表
-     *
-     * @return
-     */
-    @Override
-    public PageDataVO getShopInfoList(ShopDTO shopDTO) {
-
-        LambdaQueryWrapper<ShopInfo> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(ShopInfo::getStatus, 0);
-        wrapper.eq(ShopInfo::getCategoryId, shopDTO.getCategorySecId())
-                .like(shopDTO.getShopIntroduce()!=null,ShopInfo::getShopIntroduce,shopDTO.getShopIntroduce());
-        Page<ShopInfo> page = new Page<>(shopDTO.getPageNumber(), shopDTO.getPageSize());
-        Page<ShopInfo> info = shopInfoMapper.selectPage(page, wrapper);
-        List<ShopInfo> records = info.getRecords();
-        if (CollectionUtils.isEmpty(records)) {
-            return new PageDataVO();
-        }
-        // 过滤掉不符合 标签 的实体店
-        if (shopDTO.getTagId() != null) {
-            records = records.stream().filter(shopInfo -> {
-                String tagList = shopInfo.getTagList();
-                if (tagList == null) {
-                    return false;
-                }
-                JSONArray objects = JSONObject.parseArray(tagList);
-                return objects.contains(shopDTO.getTagId());
-            }).collect(Collectors.toList());
-        }
-        List<ShopInfoVO> shopVO = getShopVO(records, shopDTO);
-        return new PageDataVO(Integer.valueOf(info.getTotal() + ""), shopVO);
-    }
-    public PageDataVO getShopListByFirstCategory(ShopDTO shopDTO) {
-        List<ShopCategory> categoryList = shopCategoryMapper.selectList(new LambdaQueryWrapper<ShopCategory>()
-                .eq(ShopCategory::getCategoryPid, shopDTO.getCategoryTopId()));
-        LambdaQueryWrapper<ShopInfo> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(ShopInfo::getStatus, 0)
-                .in(ShopInfo::getCategoryId, categoryList)
-                .like(shopDTO.getShopIntroduce() != null, ShopInfo::getShopIntroduce, shopDTO.getShopIntroduce());
-        Page<ShopInfo> page = new Page<>(shopDTO.getPageNumber(), shopDTO.getPageSize());
-        Page<ShopInfo> info = shopInfoMapper.selectPage(page, wrapper);
-        List<ShopInfo> records = info.getRecords();
-        if (CollectionUtils.isEmpty(records)) {
-            return new PageDataVO();
-        }
-        List<ShopInfoVO> shopVO = getShopVO(records, shopDTO);
-
-        if (shopDTO.getDistanceOrder() != null) {
-            shopVO.sort((o1, o2) -> {
-                String d1 = o1.getDistance();
-                String d2 = o2.getDistance();
-                int distance1 = Integer.parseInt(d1.substring(0, d1.length() - 2));
-                int distance2 = Integer.parseInt(d2.substring(0, d2.length() - 2));
-                return shopDTO.getDistanceOrder().equals("asc") ? distance1 - distance2 : distance2 - distance1;
-            });
-        }
-        List list = new ArrayList();
-        list.add(categoryList);
-        list.add(shopVO);
-        return new PageDataVO(Integer.valueOf(info.getTotal() + ""), list);
-    }
-
     /**
      * 根据条件筛选后获取实体店列表
      * @param limit
@@ -131,14 +68,14 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
      */
     @Override
     public PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId, Integer state) {
-        Page<ShopInfo> page = new Page<>(pages, limit);
-        //stata==1,按评分从低到高；stata==2,按评分从高到低
-        shopInfoMapper.selectPage(page,new QueryWrapper<ShopInfo>()
-                .eq(!categoryId.equals(0),"category_id",categoryId)
-                .orderByAsc(state==1,"score")
-                .orderByDesc(state==2,"score"));
 
-        return new PageDataVO((int) page.getTotal(),page.getRecords());
+        // 获取所有店铺数量
+        Integer indexShopInfoVOCount = shopInfoMapper.getIndexShopInfoVOCount(categoryId, state);
+
+        //stata==1,按评分从低到高；stata==2,按评分从高到低
+        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(categoryId, (pages - 1) * limit, limit,state);
+
+        return new PageDataVO(indexShopInfoVOCount,indexShopInfoVO);
     }
 
     /**

@@ -19,12 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 public interface ShopInfoService extends IService<ShopInfo> {
 
     /**
-     * 获取实体店列表
-     * @return
-     */
-    PageDataVO getShopInfoList(ShopDTO shopDTO);
-
-    /**
      * 根据条件筛选后获取实体店列表
      * @param limit
      * @param pages

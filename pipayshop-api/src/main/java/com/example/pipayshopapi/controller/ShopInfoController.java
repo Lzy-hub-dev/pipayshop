@@ -31,18 +31,6 @@ public class ShopInfoController {
     private ShopInfoService infoService;
     private static final Logger log = LoggerFactory.getLogger(ShopTagsController.class);
 
-    @GetMapping("getShopInfoList")
-    @ApiOperation("根据条件查询实体店首页列表")
-    public ResponseVO getShopInfoList(ShopDTO shopDTO) {
-        try {
-            PageDataVO list = infoService.getShopInfoList(shopDTO);
-            return ResponseVO.getSuccessResponseVo(list);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseVO.getFalseResponseVo(null);
-        }
-    }
-
     @GetMapping("getShopInfoListByCondition/{limit}/{pages}/{categoryId}/{state}")
     @ApiOperation("根据条件筛选后获取实体店列表")
     public ResponseVO getShopInfoListByCondition(@PathVariable Integer limit,@PathVariable Integer pages,@PathVariable String categoryId,@PathVariable Integer state){
@@ -51,7 +39,7 @@ public class ShopInfoController {
             if (list==null){
                 throw new Exception();
             }
-            return ResponseVO.getSuccessResponseVo(list.getList());
+            return ResponseVO.getSuccessResponseVo(list);
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("根据条件筛选后获取实体店列表失败，请联系后台人员");
