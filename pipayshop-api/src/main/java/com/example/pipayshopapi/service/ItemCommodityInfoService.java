@@ -24,7 +24,7 @@ public interface ItemCommodityInfoService extends IService<ItemCommodityInfo> {
     /**
      *某二级分类下的商品列表分页展示
      */
-    PageDataVO commodityOfCateList(commodityPageVO commodityPageVO);
+    PageDataVO commodityOfCateList(CommodityPageVO commodityPageVO);
 
     /**
      * 发布网店商品

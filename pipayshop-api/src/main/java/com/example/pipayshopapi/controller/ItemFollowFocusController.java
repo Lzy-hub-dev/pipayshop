@@ -32,7 +32,7 @@ public class ItemFollowFocusController {
 
     @GetMapping("userFollowItem/{followId}/{itemId}")
     @ApiOperation("关注网店")
-    public ResponseVO userFollowItem(@PathVariable String followId,@PathVariable String itemId) {
+    public ResponseVO<String> userFollowItem(@PathVariable String followId,@PathVariable String itemId) {
         try {
             Boolean update = followFocusService.userFollowItem(followId, itemId);
             if (! update ){
@@ -47,7 +47,7 @@ public class ItemFollowFocusController {
 
     @PostMapping("userUnfollow/{followId}/{itemId}")
     @ApiOperation("用户取消关注")
-    private ResponseVO userUnfollow(@PathVariable String followId,@PathVariable String itemId){
+    private ResponseVO<String> userUnfollow(@PathVariable String followId,@PathVariable String itemId){
         try {
             Boolean result = followFocusService.userUnfollow(followId, itemId);
             if (!result){
@@ -62,13 +62,28 @@ public class ItemFollowFocusController {
 
     @GetMapping("itemFans/{itemId}")
     @ApiOperation("网店粉丝列表")
-    private ResponseVO itemFans(@PathVariable String itemId,Integer pageNum,Integer pageSize){
+    private ResponseVO<List<FansVO>> itemFans(@PathVariable String itemId,Integer pageNum,Integer pageSize){
         try {
             List<FansVO> result = followFocusService.itemFans(itemId,pageNum,pageSize);
             return ResponseVO.getSuccessResponseVo(result);
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("查询网店粉丝列表失败，请联系后台人员");
+        }
+    }
+
+    /**
+     * 查询网店粉丝总数接口
+     */
+    @GetMapping("itemFansSum/{itemId}")
+    @ApiOperation("查询网店粉丝总数接口")
+    private ResponseVO<Integer> itemFansSum(@PathVariable String itemId){
+        try {
+            Integer result = followFocusService.itemFansSum(itemId);
+            return ResponseVO.getSuccessResponseVo(result);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("查询网店粉丝总数失败，请联系后台人员");
         }
     }
 

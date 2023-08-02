@@ -48,15 +48,15 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
      * 某一二级分类下的商品列表分页展示
      */
     @Override
-    public PageDataVO commodityOfCateList(commodityPageVO commodityPageVO) {
+    public PageDataVO commodityOfCateList(CommodityPageVO commodityPageVO) {
 
         Integer page = commodityPageVO.getPage();
         Integer limit = commodityPageVO.getLimit();
         int startIndex = (page - 1) * limit;
 
-        List<CommodityVO> commodityList = commodityInfoMapper.commodityOfCateList(commodityPageVO.getCategoryId(), startIndex, limit);
+        List<CommodityVO> commodityList = commodityInfoMapper.commodityOfCateList(commodityPageVO.getCategoryPid(), startIndex, limit);
 
-        return new PageDataVO(commodityInfoMapper.listCount(commodityPageVO.getCategoryId()), commodityList);
+        return new PageDataVO(commodityInfoMapper.listCount(commodityPageVO.getCategoryPid()), commodityList);
 
     }
 

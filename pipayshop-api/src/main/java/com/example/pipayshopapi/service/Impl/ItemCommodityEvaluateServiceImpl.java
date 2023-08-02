@@ -1,6 +1,5 @@
 package com.example.pipayshopapi.service.Impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ItemCommodityEvaluate;
@@ -54,14 +53,14 @@ public class ItemCommodityEvaluateServiceImpl extends ServiceImpl<ItemCommodityE
 
 
     /**
-     * 根据评价Id删除网店商品的评价
-     * @return
+     * 根据评价Id删除网店商品自己评价
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean deleteItemEvaluates(String evaluateId) {
+    public boolean deleteItemEvaluates(String evaluateId, String userId) {
         int result = itemCommodityEvaluateMapper.update(null, new UpdateWrapper<ItemCommodityEvaluate>()
                                                                     .eq("evaluate_id", evaluateId)
+                                                                    .eq("user_id", userId)
                                                                     .set("status", 1));
         return result>0;
     }

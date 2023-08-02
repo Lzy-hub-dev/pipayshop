@@ -42,7 +42,7 @@ public class ItemCommodityInfoController {
 
     @GetMapping("commodityOfCateList")
     @ApiOperation("商品某二级分类下的商品列表分页展示")
-    public ResponseVO<PageDataVO> commodityOfCateList(@ModelAttribute commodityPageVO commodityPageVO) {
+    public ResponseVO<PageDataVO> commodityOfCateList(@ModelAttribute CommodityPageVO commodityPageVO) {
         try {
             PageDataVO pageDataVO = commodityInfoService.commodityOfCateList(commodityPageVO);
             if (pageDataVO == null) {
