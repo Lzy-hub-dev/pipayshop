@@ -3,18 +3,25 @@ package com.example.pipayshopapi.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author zxb
  * @since 2023-07-27
  */
 @TableName("shop_commodity_evaluate")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ShopCommodityEvaluate implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -65,6 +72,7 @@ public class ShopCommodityEvaluate implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getItemId() {
         return itemId;
     }
@@ -72,6 +80,7 @@ public class ShopCommodityEvaluate implements Serializable {
     public void setItemId(String itemId) {
         this.itemId = itemId;
     }
+
     public String getCommodityId() {
         return commodityId;
     }
@@ -79,6 +88,7 @@ public class ShopCommodityEvaluate implements Serializable {
     public void setCommodityId(String commodityId) {
         this.commodityId = commodityId;
     }
+
     public String getEvaluate() {
         return evaluate;
     }
@@ -86,6 +96,7 @@ public class ShopCommodityEvaluate implements Serializable {
     public void setEvaluate(String evaluate) {
         this.evaluate = evaluate;
     }
+
     public LocalDateTime getCreateTime() {
         return createTime;
     }
@@ -93,6 +104,7 @@ public class ShopCommodityEvaluate implements Serializable {
     public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
     }
+
     public Boolean getStatus() {
         return status;
     }
@@ -104,12 +116,12 @@ public class ShopCommodityEvaluate implements Serializable {
     @Override
     public String toString() {
         return "ShopCommodityEvaluate{" +
-            "id=" + id +
-            ", itemId=" + itemId +
-            ", commodityId=" + commodityId +
-            ", evaluate=" + evaluate +
-            ", createTime=" + createTime +
-            ", status=" + status +
-        "}";
+                "id=" + id +
+                ", itemId=" + itemId +
+                ", commodityId=" + commodityId +
+                ", evaluate=" + evaluate +
+                ", createTime=" + createTime +
+                ", status=" + status +
+                "}";
     }
 }
