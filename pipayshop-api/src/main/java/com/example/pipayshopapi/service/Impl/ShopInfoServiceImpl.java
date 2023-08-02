@@ -6,17 +6,17 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.pipayshopapi.entity.ShopCategory;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.ShopTags;
 import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
 import com.example.pipayshopapi.entity.dto.ShopDTO;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
-import com.example.pipayshopapi.entity.vo.ShopInfoVO;
-import com.example.pipayshopapi.entity.vo.ShopInfoVO1;
-import com.example.pipayshopapi.entity.vo.UidPageVO;
+import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
+import com.example.pipayshopapi.mapper.ShopCategoryMapper;
 import com.example.pipayshopapi.mapper.ShopInfoMapper;
 import com.example.pipayshopapi.mapper.ShopTagsMapper;
 import com.example.pipayshopapi.service.ShopInfoService;
@@ -34,6 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -54,6 +55,9 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     @Autowired
     private ShopTagsMapper tagMapper;
 
+    @Autowired
+    private ShopCategoryMapper shopCategoryMapper;
+
 
     /**
      * 获取实体店列表
@@ -62,9 +66,11 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
      */
     @Override
     public PageDataVO getShopInfoList(ShopDTO shopDTO) {
+
         LambdaQueryWrapper<ShopInfo> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(ShopInfo::getStatus, 0);
-        wrapper.eq(ShopInfo::getCategoryId, shopDTO.getCategorySecId());
+        wrapper.eq(ShopInfo::getCategoryId, shopDTO.getCategorySecId())
+                .like(shopDTO.getShopIntroduce()!=null,ShopInfo::getShopIntroduce,shopDTO.getShopIntroduce());
         Page<ShopInfo> page = new Page<>(shopDTO.getPageNumber(), shopDTO.getPageSize());
         Page<ShopInfo> info = shopInfoMapper.selectPage(page, wrapper);
         List<ShopInfo> records = info.getRecords();
@@ -82,19 +88,37 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
                 return objects.contains(shopDTO.getTagId());
             }).collect(Collectors.toList());
         }
-        // 过滤掉不符合 一级分类 的实体店
-        if (shopDTO.getCategoryTopId() != null) {
-            records = records.stream().filter(shopInfo -> {
-                String tagList = shopInfo.getTagList();
-                if (tagList == null) {
-                    return false;
-                }
-                JSONArray objects = JSONObject.parseArray(tagList);
-                return objects.contains(shopDTO.getTagId());
-            }).collect(Collectors.toList());
-        }
         List<ShopInfoVO> shopVO = getShopVO(records, shopDTO);
         return new PageDataVO(Integer.valueOf(info.getTotal() + ""), shopVO);
+    }
+    public PageDataVO getShopListByFirstCategory(ShopDTO shopDTO) {
+        List<ShopCategory> categoryList = shopCategoryMapper.selectList(new LambdaQueryWrapper<ShopCategory>()
+                .eq(ShopCategory::getCategoryPid, shopDTO.getCategoryTopId()));
+        LambdaQueryWrapper<ShopInfo> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(ShopInfo::getStatus, 0)
+                .in(ShopInfo::getCategoryId, categoryList)
+                .like(shopDTO.getShopIntroduce() != null, ShopInfo::getShopIntroduce, shopDTO.getShopIntroduce());
+        Page<ShopInfo> page = new Page<>(shopDTO.getPageNumber(), shopDTO.getPageSize());
+        Page<ShopInfo> info = shopInfoMapper.selectPage(page, wrapper);
+        List<ShopInfo> records = info.getRecords();
+        if (CollectionUtils.isEmpty(records)) {
+            return new PageDataVO();
+        }
+        List<ShopInfoVO> shopVO = getShopVO(records, shopDTO);
+
+        if (shopDTO.getDistanceOrder() != null) {
+            shopVO.sort((o1, o2) -> {
+                String d1 = o1.getDistance();
+                String d2 = o2.getDistance();
+                int distance1 = Integer.parseInt(d1.substring(0, d1.length() - 2));
+                int distance2 = Integer.parseInt(d2.substring(0, d2.length() - 2));
+                return shopDTO.getDistanceOrder().equals("asc") ? distance1 - distance2 : distance2 - distance1;
+            });
+        }
+        List list = new ArrayList();
+        list.add(categoryList);
+        list.add(shopVO);
+        return new PageDataVO(Integer.valueOf(info.getTotal() + ""), list);
     }
 
     /**
@@ -285,7 +309,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         List<String> imagesList = new ArrayList<>();
         for (MultipartFile multipartFile : file) {
             // 获取存储到本地空间并返回图片url
-            imagesList.add(FileUploadUtil.uploadFile(multipartFile));
+            imagesList.add(FileUploadUtil.uploadFile(multipartFile,FileUploadUtil.SHOP_IMG));
         }
         // 将list集合转为string
         String jsonString = JSON.toJSONString(imagesList);

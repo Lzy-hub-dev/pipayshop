@@ -1,5 +1,6 @@
 package com.example.pipayshopapi.entity.dto;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,4 +38,20 @@ public class ShopDTO extends PageDTO {
      * 经度
      */
     private BigDecimal longitude;
+
+    /**
+     * 模糊查字段
+     */
+    private String shopIntroduce;
+
+    /**
+     * 距离排序 asc/desc
+     */
+    @ApiModelProperty(value = "距离排序 asc/desc")
+    private String distanceOrder;
+
+    /**
+     * 价格排序 asc/desc
+     */
+    private String priceOrder;
 }

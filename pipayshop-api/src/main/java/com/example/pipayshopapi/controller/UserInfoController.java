@@ -4,12 +4,16 @@ package com.example.pipayshopapi.controller;
 import com.example.pipayshopapi.entity.enums.Language;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
+import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.File;
 
 /**
  * <p>
@@ -84,5 +88,21 @@ public class UserInfoController {
             throw new RuntimeException("根据用户Id更改用户国家标识失败，请联系后台人员");
         }
     }
+    @PostMapping("uploadUserImage")
+    @ApiOperation("根据用户Id上传头像")
+    public ResponseVO uploadUserImage(String userId, MultipartFile file){
+        try {
+            boolean result = userInfoService.uploadUserImage(userId, file);
+            if (!result){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("上传成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("上传失败，请联系后台人员");
+        }
+    }
+
+
 
 }

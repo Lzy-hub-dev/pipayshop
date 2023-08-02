@@ -7,6 +7,7 @@ import com.example.pipayshopapi.entity.dto.ApplyItemCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
+import com.example.pipayshopapi.service.ItemCommodityHistoryService;
 import com.example.pipayshopapi.service.ItemCommodityInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,6 +36,8 @@ public class ItemCommodityInfoController {
 
     @Resource
     private ItemCommodityInfoService commodityInfoService;
+    @Resource
+    private ItemCommodityHistoryService itemCommodityHistoryService;
 
 
     @GetMapping("commodityOfCateList")
@@ -103,12 +106,13 @@ public class ItemCommodityInfoController {
         }
     }
 
-    @GetMapping("itemCommodityDetail/{commodityId}")
+    @GetMapping("itemCommodityDetail/{commodityId}/{userId}")
     @ApiOperation("获取网店商品详情接口")
-    public ResponseVO<CommodityDetailVO> itemCommodityDetail(@PathVariable("commodityId") String commodityId) {
+    public ResponseVO<CommodityDetailVO> itemCommodityDetail(@PathVariable("commodityId") String commodityId,
+                                                             @PathVariable("userId")String userId) {
         try {
 
-            CommodityDetailVO commodityDetailVO = commodityInfoService.itemCommodityDetail(commodityId);
+            CommodityDetailVO commodityDetailVO = commodityInfoService.itemCommodityDetail(commodityId,userId);
             if (commodityDetailVO == null) {
                 throw new Exception();
             }
@@ -201,6 +205,23 @@ public class ItemCommodityInfoController {
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new BusinessException("查询失败，请联系后台人" + "、员");
+        }
+    }
+
+    @PostMapping("deleteHistory")
+    @ApiOperation("删除用户浏览网店商品的历史记录")
+    public ResponseVO deleteHistory( String userId,
+                                    String commodityId) {
+
+        try {
+            boolean flag = itemCommodityHistoryService.deleteHistory(userId, commodityId);
+            if (!flag) {
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo(null);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new BusinessException("删除，请联系后台人" + "、员");
         }
     }
 

@@ -66,7 +66,7 @@ public interface ShopCommodityInfoService extends IService<ShopCommodityInfo> {
     /**
      * 根据商品的id查找实体店商品的详情信息
      */
-    ShopCommodityInfo selectShopInfoByCommodityId(String commodityId);
+    ShopCommodityInfo selectShopInfoByCommodityId(String commodityId,String userId);
 
 
 
