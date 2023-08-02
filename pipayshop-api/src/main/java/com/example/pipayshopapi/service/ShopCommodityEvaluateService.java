@@ -1,11 +1,8 @@
 package com.example.pipayshopapi.service;
 
-import com.example.pipayshopapi.entity.ShopCommodityEvaluate;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.pipayshopapi.entity.dto.EvaluateDTO;
-import com.example.pipayshopapi.entity.vo.ShopCommodityEvaluateVO;
-
-import java.util.List;
+import com.example.pipayshopapi.entity.ShopCommodityEvaluate;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 
 /**
  * <p>
@@ -19,10 +16,8 @@ public interface ShopCommodityEvaluateService extends IService<ShopCommodityEval
 
     /**
      * 实体店-商品-评论列表
-     * @param commodityId
-     * @return
      */
-    List<ShopCommodityEvaluateVO> commodityEvaluateList(String commodityId,Integer pageNum,Integer pageSize);
+    PageDataVO commodityEvaluateList(String commodityId, Integer pageNum, Integer pageSize);
 
     /**
      * 实体店-商品-添加评论

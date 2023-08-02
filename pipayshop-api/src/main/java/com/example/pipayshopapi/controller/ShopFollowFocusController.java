@@ -6,13 +6,9 @@ import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopFollowFocusService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.stereotype.Controller;
-
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * <p>
