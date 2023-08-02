@@ -23,11 +23,4 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
          * @return
          */
         UserInfoVO selectUserInfoByUid(@Param("uid") String uid);
-
-    /**
-     * 查找用户名字、用户头像
-     * @param uid
-     * @return
-     */
-    UserInfo getUserFollowInfoById(@Param("uid") String uid);
 }
