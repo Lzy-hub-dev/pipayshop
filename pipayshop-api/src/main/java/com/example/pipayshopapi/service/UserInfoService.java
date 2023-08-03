@@ -53,4 +53,6 @@ public interface UserInfoService extends IService<UserInfo> {
      * @return
      */
     boolean uploadUserImage(String userId, MultipartFile file);
+
+    String selectItemByUid(String uid);
 }
