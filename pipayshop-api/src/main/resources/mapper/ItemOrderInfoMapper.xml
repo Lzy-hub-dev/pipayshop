@@ -100,7 +100,7 @@
 
     <select id="getOrderDetail" resultMap="paiedOrderDetailMap">
         SELECT
-            o.order_id ,o.create_time,o.update_time, u.address, u.phone, u.user_name
+            o.order_id ,o.create_time,o.update_time, u.address, u.phone, u.user_name,o.number
         FROM
             item_order_info o
         JOIN
@@ -122,7 +122,7 @@
 
     <select id="getOrderList" resultMap="orderListResultMap">
         select
-            o.order_id, o.order_status, o.commodity_id, o.transaction_amount,
+            o.order_id, o.order_status, o.commodity_id, o.transaction_amount,o.number,
             u.user_image, u.item_name, i.avatar_imag, i.details
         from
             item_order_info o

@@ -114,7 +114,7 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
         // 商品库存更新
         int update = itemCommodityInfoMapper.update(null, new UpdateWrapper<ItemCommodityInfo>()
                 .eq("commodity_id", payOrderVO.getCommodityId())
-                .setSql("inventory = inventory - 1")
+                .setSql("inventory = inventory - "+payOrderVO.getNumber())
                 .set("update_time", new Date()));
         if (update < 1){throw new RuntimeException();}
         // 订单状态、修改时间更新

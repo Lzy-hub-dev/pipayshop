@@ -20,6 +20,14 @@ public class PayOrderVO {
 
     private String commodityId;
 
+    /**
+     * 交易金额
+     */
     private BigDecimal transactionAmount;
+
+    /**
+     * 交易商品数量
+     */
+    private Integer number;
 
 }

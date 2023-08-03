@@ -5,6 +5,7 @@ import com.example.pipayshopapi.entity.enums.Language;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
 import com.example.pipayshopapi.exception.BusinessException;
+import com.example.pipayshopapi.service.ShopInfoService;
 import com.example.pipayshopapi.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,7 +31,6 @@ public class UserInfoController {
 
     @Resource
     private UserInfoService userInfoService;
-
 
     @GetMapping("selectUserInfoByUid/{uid}")
     @ApiOperation("根据用户Id查找用户数据表的基本信息")
@@ -102,7 +102,4 @@ public class UserInfoController {
             throw new RuntimeException("上传失败，请联系后台人员");
         }
     }
-
-
-
 }
