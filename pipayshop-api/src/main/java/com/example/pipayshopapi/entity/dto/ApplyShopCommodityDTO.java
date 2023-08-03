@@ -21,4 +21,6 @@ public class ApplyShopCommodityDTO {
     private String reservationInformation;
     private String myEvaluate;
     private String avatarImag;
+    private String originPhone;
+    private String originName;
 }

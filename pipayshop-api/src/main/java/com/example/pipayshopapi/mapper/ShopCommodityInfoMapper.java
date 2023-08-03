@@ -3,6 +3,7 @@ package com.example.pipayshopapi.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopInfo;
+import com.example.pipayshopapi.entity.vo.ShopCommodityInfo1VO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityInfoVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -57,5 +58,21 @@ public interface ShopCommodityInfoMapper extends BaseMapper<ShopCommodityInfo> {
      * @return
      */
     Integer selectAllCommodity(@Param("uid") String uid, @Param("status") Integer status);
+
+    /**
+     * 根据店铺id查询，实体店的商品列表
+     *
+     * @param page
+     * @return
+     */
+    List<ShopCommodityInfo1VO>selectCommodityByShopId(@Param("page") Integer page, @Param("limit") Integer limit,@Param("shopId") String shopId);
+
+    /**
+     * 根据店铺id查询，实体店的商品列表总数
+     *
+     * @param shopId
+     * @return
+     */
+    Integer selectAllCommodityByShopId(@Param("shopId")String shopId);
 
 }

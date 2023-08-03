@@ -7,10 +7,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopInfo;
+import com.example.pipayshopapi.entity.ShopTags;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.ShopCommodityInfoMapper;
+import com.example.pipayshopapi.mapper.ShopTagsMapper;
 import com.example.pipayshopapi.service.ShopCommodityInfoService;
 import com.example.pipayshopapi.util.FileUploadUtil;
 import com.example.pipayshopapi.util.StringUtil;
@@ -38,6 +40,9 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
 
     @Resource
     private ShopCommodityInfoMapper shopCommodityInfoMapper;
+
+    @Resource
+    private ShopTagsMapper shopTagsMapper;
     /**
      * 发布实体店商品
      */
@@ -139,10 +144,31 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
      */
     @Override
     public PageDataVO selectShopInfoListByShopId(Integer limit, Integer pages, String shopId) {
-        Page<ShopCommodityInfo> page = new Page<>(pages,limit);
-        shopCommodityInfoMapper.selectPage(page,new QueryWrapper<ShopCommodityInfo>()
-                                                    .eq("shop_id",shopId));
-        return new PageDataVO((int) page.getTotal(),page.getRecords());
+        Integer integer = shopCommodityInfoMapper.selectAllCommodityByShopId(shopId);
+        try {
+            if (pages==0){
+                throw new Exception();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("分页不能为0");
+        }
+        Integer limits = limit*pages;
+        int page = pages- 1;
+        List<ShopCommodityInfo1VO> shopCommodityInfo1VOS = shopCommodityInfoMapper.selectCommodityByShopId(page, limits, shopId);
+        ArrayList<ShopTags> list1 = new ArrayList<>();
+        for (ShopCommodityInfo1VO shopCommodityInfo1VO : shopCommodityInfo1VOS) {
+            List<String> list = JSON.parseArray(shopCommodityInfo1VO.getTagList(), String.class);
+            if (list==null||list.isEmpty()){
+                continue;
+            }
+            for (String s : list) {
+                ShopTags tag_ids = shopTagsMapper.selectOne(new QueryWrapper<ShopTags>().eq("tag_id", s));
+                list1.add(tag_ids);
+            }
+            shopCommodityInfo1VO.setShopTagsList(list1);
+        }
+        return new PageDataVO(integer,shopCommodityInfo1VOS);
     }
 
     /**
