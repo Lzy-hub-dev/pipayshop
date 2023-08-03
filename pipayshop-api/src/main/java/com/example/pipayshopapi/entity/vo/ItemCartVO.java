@@ -49,9 +49,9 @@ public class ItemCartVO {
      */
     private String couponsList;
     /**
-     * 0:正常 1:逻辑删除 2:真正删除
+     * 0:正常 1:上架 2:下架
      */
-    private Boolean delFlag;
+    private Integer status;
 
     /**
      * 商品的标签id集合
@@ -61,7 +61,7 @@ public class ItemCartVO {
     /**
      * 商品的数量
      */
-    private String sumNumber;
+    private String sumCount;
 
     /**
      * 商品的颜色集合
