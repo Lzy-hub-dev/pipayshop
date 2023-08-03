@@ -36,12 +36,10 @@ public class ShopCategoryTopServiceImpl extends ServiceImpl<ShopCategoryTopMappe
      * @return
      */
     @Override
-    public PageDataVO getShopCategoryTopList(Integer pageNum, Integer pageSize) {
+    public List<ShopCategoryTop> getShopCategoryTopList() {
         LambdaQueryWrapper<ShopCategoryTop> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(ShopCategoryTop::getDelFlag, 0);
-        Page<ShopCategoryTop> page = new Page<>(pageNum, pageSize);
-        Page<ShopCategoryTop> selectPage = shopCategoryTopMapper.selectPage(page, wrapper);
-        return new PageDataVO(Integer.valueOf(selectPage.getTotal()+""),selectPage.getRecords());
+        return shopCategoryTopMapper.selectList(wrapper);
     }
 
     /**

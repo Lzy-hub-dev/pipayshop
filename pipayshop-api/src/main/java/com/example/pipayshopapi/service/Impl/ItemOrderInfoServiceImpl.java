@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.pipayshopapi.entity.AccountInfo;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.ItemOrderInfo;
-import com.example.pipayshopapi.entity.vo.GetOrderDataVO;
-import com.example.pipayshopapi.entity.vo.OrderListVO;
-import com.example.pipayshopapi.entity.vo.OrderDetailVO;
-import com.example.pipayshopapi.entity.vo.PayOrderVO;
+import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.AccountInfoMapper;
 import com.example.pipayshopapi.mapper.ItemCommodityInfoMapper;
@@ -127,5 +124,16 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
                 .set("update_time", new Date()));
         if (update1 < 1){throw new RuntimeException();}
         return true;
+    }
+
+
+    /**
+     * 根据用户id查询网店的所有订单
+     */
+    @Override
+    public PageDataVO getMyOrderByUid(Integer page,Integer limit,String uid,Integer status) {
+        Integer allMyOrderByUid = itemOrderInfoMapper.getAllMyOrderByUid(uid,status);
+        List<MyItemOrderInfoVO> myOrderByUid = itemOrderInfoMapper.getMyOrderByUid((page - 1) * limit, limit, uid,status);
+        return new PageDataVO(allMyOrderByUid,myOrderByUid);
     }
 }

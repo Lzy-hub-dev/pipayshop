@@ -130,4 +130,9 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
         if (update1 < 1){throw new RuntimeException();}
         return true;
     }
+
+    @Override
+    public List<OrderListVO> getOrderListByShopId(GetOrderDataVO getOrderDataVO) {
+        return shopOrderInfoMapper.getOrderListByShopId(getOrderDataVO);
+    }
 }

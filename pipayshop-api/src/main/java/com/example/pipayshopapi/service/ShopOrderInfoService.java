@@ -35,4 +35,6 @@ public interface ShopOrderInfoService extends IService<ShopOrderInfo> {
     String generateUnpaidOrder(ItemOrderInfo itemOrderInfo);
 
     boolean payOrder(PayOrderVO payOrderVO);
+
+    List<OrderListVO> getOrderListByShopId(GetOrderDataVO getOrderDataVO);
 }

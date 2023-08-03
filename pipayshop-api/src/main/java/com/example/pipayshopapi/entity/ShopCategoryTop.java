@@ -48,6 +48,9 @@ public class ShopCategoryTop implements Serializable {
      * 0:启用1:禁用
      */
     private Boolean delFlag;
-
+    /**
+     * 分类图片
+     */
+    private String categoryImg;
 
 }

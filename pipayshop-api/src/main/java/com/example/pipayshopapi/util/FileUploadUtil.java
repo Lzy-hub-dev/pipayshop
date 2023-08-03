@@ -28,8 +28,11 @@ public class FileUploadUtil {
     public static String SHOP_COMMODITY_IMG="shop_commodity_img";
     //实体店背景广告图存储位置
     public static String SHOP_IMG="shop_img";
-    //酒店头像图片储存位置image_list
+    //酒店头像图片储存位置
     public static String ROOM_TOP_IMG="room_top_img";
+
+    //实体店分类图片储存位置
+    public static String CATEGORY_IMG="shop_category_img";
     //酒店轮播图储存位置
     public static String ROOM_IMAGE_LIST="room_image_list";
 

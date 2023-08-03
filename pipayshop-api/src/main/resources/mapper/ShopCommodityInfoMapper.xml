@@ -15,74 +15,73 @@
           AND c.`status` = 0
           AND sc.`status` = 0
     </select>
-    <select id="selectCollectProductByUserId" resultType="com.example.pipayshopapi.entity.ShopCommodityInfo">
-        select *
+    <select id="selectCollectProductByUserId" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityInfoVO">
+        select avatar_imag,
+               i.commodity_name as shop_commodity_name,
+               i.price,
+               i.commodity_id,
+               info.shop_name,
+               info.user_image
         FROM shop_collection sc
                  INNER JOIN
              shop_commodity_info i
              ON
                  sc.commodity_id = i.commodity_id
+                 inner join shop_info info
+                            on info.shop_id = i.shop_id
         WHERE sc.user_id = #{userId}
-          AND i.`status` = 0
+          AND i.`status` = 1
           AND sc.`status` = 0
     </select>
     <select id="getCollectionList" resultType="java.util.List"></select>
-    <select id="selectFollowProductByUserId" resultType="com.example.pipayshopapi.entity.ShopInfo">
-        SELECT *
-        FROM shop_follow_focus f
-                 INNER JOIN
-             shop_info i
-             ON f.shop_id = i.shop_id
-        WHERE f.follow_id = #{userId}
-          and f.`status` = 0
-          and i.`status` = 0
-    </select>
+
     <select id="selectHistoryProductByUserId" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityVO">
-        SELECT
-            i.avatar_imag
-            i.commodity_name ,
-            i. price,
-            h.create_time  as accessTime,
-            i.commodity_id
-        FROM
-            shop_commodity_history h
-                INNER JOIN
-            shop_commodity_info i
-            ON
-                h.commodity_id=i.commodity_id
-        WHERE
-            h.user_id=1 AND
-            i.`status`=0
+        SELECT i.avatar_imag i.commodity_name , i.price,
+               h.create_time as accessTime,
+               i.commodity_id
+        FROM shop_commodity_history h
+                 INNER JOIN
+             shop_commodity_info i
+             ON
+                 h.commodity_id = i.commodity_id
+        WHERE h.user_id = 1
+          AND i.`status` = 0
     </select>
     <select id="selectCommodityByUidAndStatus"
             resultType="com.example.pipayshopapi.entity.vo.ShopCommodityInfoVO">
-        SELECT ui.uid,ui.user_name,ui.user_image,  sci.commodity_id,sci.commodity_name,sci.avatar_imag,sci.price,sci.status
+        SELECT ui.uid,
+               ui.user_name,
+               ui.user_image,
+               sci.commodity_id,
+               sci.commodity_name,
+               sci.avatar_imag,
+               sci.price,
+               sci.status
         FROM user_info as ui
-                 INNER JOIN shop_info as si on ui.uid=si.uid
-                 INNER JOIN shop_commodity_info as sci on si.shop_id=sci.shop_id
-        WHERE
-            si.uid=#{uid}
-          and sci.status=#{status}
-            LIMIT #{page},#{limit}
+                 INNER JOIN shop_info as si on ui.uid = si.uid
+                 INNER JOIN shop_commodity_info as sci on si.shop_id = sci.shop_id
+        WHERE si.uid = #{uid}
+          and sci.status = #{status} LIMIT #{page}
+            , #{limit}
     </select>
     <select id="selectAllCommodity" resultType="java.lang.Integer">
         SELECT COUNT(*)
         FROM user_info as ui
-                 INNER JOIN shop_info as si on ui.uid=si.uid
-                 INNER JOIN shop_commodity_info as sci on si.shop_id=sci.shop_id
-        WHERE
-            si.uid=#{uid}
-          and sci.status=#{status}
+                 INNER JOIN shop_info as si on ui.uid = si.uid
+                 INNER JOIN shop_commodity_info as sci on si.shop_id = sci.shop_id
+        WHERE si.uid = #{uid}
+          and sci.status = #{status}
     </select>
     <select id="selectCommodityByShopId" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityInfo1VO">
-        SELECT commodity_id,commodity_name,avatar_imag,price,monthly_sales,tag_list
+        SELECT commodity_id, commodity_name, avatar_imag, price, monthly_sales, tag_list
         from shop_commodity_info
-        WHERE shop_id=#{shopId}
-            LIMIT #{page},#{limit}
+        WHERE shop_id = #{shopId} LIMIT #{page}
+            , #{limit}
     </select>
     <select id="selectAllCommodityByShopId" resultType="java.lang.Integer">
-        SELECT COUNT(*) from shop_commodity_info
-        WHERE shop_id=#{shopId}
+        SELECT COUNT(*)
+        from shop_commodity_info
+        WHERE shop_id = #{shopId}
     </select>
 
     <select id="selectShopInfoByCommodityId" resultType="com.example.pipayshopapi.entity.ShopDetailInfoVO">

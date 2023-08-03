@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -38,4 +40,13 @@ public class ShopCommodityInfoVO {
      * 用户头像
      */
     private String userImage;
+    /**
+     * 实体店名
+     */
+    private String shopName;
+
+    /**
+     * 商品的价格
+     */
+    private BigDecimal price;
 }

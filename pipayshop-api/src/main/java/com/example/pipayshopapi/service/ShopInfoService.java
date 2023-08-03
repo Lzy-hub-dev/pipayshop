@@ -29,7 +29,12 @@ public interface ShopInfoService extends IService<ShopInfo> {
      * @return
      */
     List<IndexShopInfoVO> getShopInfoListByCondition(Integer limit, Integer pages, String categoryId, Integer state);
-
+    /**
+     * 根据用户id查询用户关注的实体店列表
+     * @param userId
+     * @return
+     */
+    List<ShopInfo> getFollowList(String userId);
     /**
      * 根据实体店id查询实体店信息
      */

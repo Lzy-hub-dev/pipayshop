@@ -54,5 +54,4 @@ public class ItemCommodityInfoCategoryTop implements Serializable {
      */
     private Integer delFlag;
 
-
 }
