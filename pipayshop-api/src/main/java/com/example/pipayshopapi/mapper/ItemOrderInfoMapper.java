@@ -53,7 +53,8 @@ public interface ItemOrderInfoMapper extends BaseMapper<ItemOrderInfo> {
     /**
      * 根据用户id查询网店的所有订单
      */
-    List<MyItemOrderInfoVO> getMyOrderByUid(@Param("page") Integer page, @Param("limit") Integer limit,@Param("Uid") String uid);
+    List<MyItemOrderInfoVO> getMyOrderByUid(@Param("page") Integer page, @Param("limit") Integer limit,@Param("Uid") String uid
+            ,@Param("status") Integer status);
 
     Integer getAllMyOrderByUid(@Param("Uid") String uid);
 }

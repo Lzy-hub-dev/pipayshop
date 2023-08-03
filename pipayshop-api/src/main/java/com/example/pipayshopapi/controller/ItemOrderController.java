@@ -168,11 +168,11 @@ public class ItemOrderController {
         }
     }
 
-    @GetMapping("getMyOrderByUid/{page}/{limit}/{uid}")
+    @GetMapping("getMyOrderByUid/{page}/{limit}/{uid}/{status}")
     @ApiOperation("根据用户id查询网店的所有订单")
-    public ResponseVO<PageDataVO> getMyOrderByUid(@PathVariable Integer page,@PathVariable Integer limit,@PathVariable String uid){
+    public ResponseVO<PageDataVO> getMyOrderByUid(@PathVariable Integer page,@PathVariable Integer limit,@PathVariable String uid,@PathVariable Integer status){
         try {
-            PageDataVO myOrderByUid = itemOrderInfoService.getMyOrderByUid(page, limit, uid);
+            PageDataVO myOrderByUid = itemOrderInfoService.getMyOrderByUid(page, limit, uid,status);
             return ResponseVO.getSuccessResponseVo(myOrderByUid);
         }catch (Exception e){
             e.printStackTrace();

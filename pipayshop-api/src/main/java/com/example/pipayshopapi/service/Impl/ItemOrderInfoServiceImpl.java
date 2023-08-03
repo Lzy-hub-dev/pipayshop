@@ -131,9 +131,9 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
      * 根据用户id查询网店的所有订单
      */
     @Override
-    public PageDataVO getMyOrderByUid(Integer page,Integer limit,String uid) {
+    public PageDataVO getMyOrderByUid(Integer page,Integer limit,String uid,Integer status) {
         Integer allMyOrderByUid = itemOrderInfoMapper.getAllMyOrderByUid(uid);
-        List<MyItemOrderInfoVO> myOrderByUid = itemOrderInfoMapper.getMyOrderByUid((page - 1) * limit, limit, uid);
+        List<MyItemOrderInfoVO> myOrderByUid = itemOrderInfoMapper.getMyOrderByUid((page - 1) * limit, limit, uid,status);
         return new PageDataVO(allMyOrderByUid,myOrderByUid);
     }
 }
