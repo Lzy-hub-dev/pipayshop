@@ -3,7 +3,6 @@ package com.example.pipayshopapi.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.BgImg;
 import com.example.pipayshopapi.entity.vo.BgImgVO;
-import com.example.pipayshopapi.entity.vo.ResponseVO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -37,5 +36,5 @@ public interface BgImgService extends IService<BgImg> {
      * 查询首页轮播背景图列表
      * @return
      */
-    List<BgImgVO> selectBgImgList();
+    List<BgImgVO> selectBgImgList(int category);
 }

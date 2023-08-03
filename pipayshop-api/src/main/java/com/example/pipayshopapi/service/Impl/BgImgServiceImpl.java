@@ -4,18 +4,15 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.BgImg;
 import com.example.pipayshopapi.entity.vo.BgImgVO;
-import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.mapper.BgImgMapper;
 import com.example.pipayshopapi.service.BgImgService;
 import com.example.pipayshopapi.util.FileUploadUtil;
 import com.example.pipayshopapi.util.StringUtil;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -62,8 +59,8 @@ public class BgImgServiceImpl extends ServiceImpl<BgImgMapper, BgImg> implements
      * @return
      */
     @Override
-    public List<BgImgVO> selectBgImgList() {
-        return bgImgMapper.selectBgImgList();
+    public List<BgImgVO> selectBgImgList(int category) {
+        return bgImgMapper.selectBgImgList(category);
     }
 
     /**

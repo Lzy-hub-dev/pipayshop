@@ -36,6 +36,8 @@ import java.util.function.Consumer;
 @Service
 public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoMapper, ShopCommodityInfo> implements ShopCommodityInfoService {
 
+
+
     @Resource
     private ShopCommodityInfoMapper shopCommodityInfoMapper;
 
@@ -193,7 +195,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
      * 根据商品的id查找实体店商品的详情信息
      */
     @Override
-    public ShopCommodityInfo selectShopInfoByCommodityId(String commodityId,String userId) {
+    public ShopCommodityInfo selectShopInfoByCommodityId(String commodityId) {
         return shopCommodityInfoMapper.selectOne(new QueryWrapper<ShopCommodityInfo>()
                 .eq("commodity_id", commodityId));
     }

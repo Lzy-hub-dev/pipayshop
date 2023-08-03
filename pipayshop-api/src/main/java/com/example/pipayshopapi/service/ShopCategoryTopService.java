@@ -53,4 +53,5 @@ public interface ShopCategoryTopService extends IService<ShopCategoryTop> {
      */
     List<ShopCategoryTop> getAllShopCategoryTopList();
 
+
 }

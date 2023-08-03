@@ -1,14 +1,11 @@
 package com.example.pipayshopapi.mapper;
 
-import com.example.pipayshopapi.entity.ItemCommodityInfo;
-import com.example.pipayshopapi.entity.ItemInfo;
-import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.vo.ShopCommodityInfo1VO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityInfoVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityVO;
-import com.example.pipayshopapi.entity.vo.ShopOrderInfoVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -42,9 +39,6 @@ public interface ShopCommodityInfoMapper extends BaseMapper<ShopCommodityInfo> {
 
     /**
      * 根据用户id查询用户商品浏览历史
-     *
-     * @param userId
-     * @return
      */
     List<ShopCommodityVO> selectHistoryProductByUserId(String userId);
 

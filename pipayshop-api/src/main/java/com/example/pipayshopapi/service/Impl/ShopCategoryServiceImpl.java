@@ -5,12 +5,16 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopCategory;
+import com.example.pipayshopapi.entity.ShopCategoryTop;
+import com.example.pipayshopapi.entity.vo.IndexShopInfoVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.mapper.ShopCategoryMapper;
+import com.example.pipayshopapi.mapper.ShopInfoMapper;
 import com.example.pipayshopapi.service.ShopCategoryService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -24,6 +28,8 @@ import javax.annotation.Resource;
 public class ShopCategoryServiceImpl extends ServiceImpl<ShopCategoryMapper, ShopCategory> implements ShopCategoryService {
     @Resource
     private ShopCategoryMapper shopCategoryMapper;
+    @Resource
+    private ShopInfoMapper shopInfoMapper;
 
     /**
      * 查询一级分类对应的二级分列表
@@ -59,5 +65,21 @@ public class ShopCategoryServiceImpl extends ServiceImpl<ShopCategoryMapper, Sho
                 .set(ShopCategory::getDelFlag, 1)) > 0;
     }
 
+    /**
+     * 查询二级分类列表
+     *
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PageDataVO getShopCategorySecList(String categoryPid, Integer pageNum, Integer pageSize) {
+        LambdaQueryWrapper<ShopCategory> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(ShopCategory::getDelFlag, 0);
+        wrapper.eq(ShopCategory::getCategoryPid, categoryPid);
+        Page<ShopCategory> page = new Page<>(pageNum, pageSize);
+        Page<ShopCategory> selectPage = shopCategoryMapper.selectPage(page, wrapper);
+        return new PageDataVO(Integer.valueOf(selectPage.getTotal() + ""), selectPage.getRecords());
+    }
 
 }

@@ -47,11 +47,11 @@ public class BgImgController {
             throw new BusinessException("逻辑删除首页背景图片失败，请联系后台人员");
         }
     }
-    @GetMapping("selectBgImgList")
-    @ApiOperation("查询首页轮播背景图列表")
-    public ResponseVO selectBgImgList(){
+    @GetMapping("selectBgImgList/{category}")
+    @ApiOperation("查询网店 / 实体店首页轮播背景图列表")
+    public ResponseVO<List<BgImgVO>> selectBgImgList(@PathVariable int category){
         try{
-            List<BgImgVO> voList = bgImgService.selectBgImgList();
+            List<BgImgVO> voList = bgImgService.selectBgImgList(category);
             return ResponseVO.getSuccessResponseVo(voList);
         }catch (Exception e){
             log.error(e.getMessage());
