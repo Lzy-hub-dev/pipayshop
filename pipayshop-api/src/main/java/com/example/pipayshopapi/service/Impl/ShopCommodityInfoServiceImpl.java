@@ -6,11 +6,13 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
+import com.example.pipayshopapi.entity.ShopDetailInfoVO;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.ShopTags;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
+import com.example.pipayshopapi.mapper.ShopCommodityEvaluateMapper;
 import com.example.pipayshopapi.mapper.ShopCommodityInfoMapper;
 import com.example.pipayshopapi.mapper.ShopTagsMapper;
 import com.example.pipayshopapi.service.ShopCommodityInfoService;
@@ -40,7 +42,8 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
 
     @Resource
     private ShopCommodityInfoMapper shopCommodityInfoMapper;
-
+    @Resource
+    private ShopCommodityEvaluateMapper shopCommodityEvaluateMapper;
     @Resource
     private ShopTagsMapper shopTagsMapper;
     /**
@@ -175,15 +178,14 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
      * 根据商品的id查找实体店商品的详情信息
      */
     @Override
-    public ShopCommodityInfo selectShopInfoByCommodityId(String commodityId) {
-        return shopCommodityInfoMapper.selectOne(new QueryWrapper<ShopCommodityInfo>()
-                .eq("commodity_id", commodityId));
+    public ShopDetailInfoVO selectShopInfoByCommodityId(String commodityId) {
+        //获取商品基本信息
+        ShopDetailInfoVO shopDetailInfoVO = shopCommodityInfoMapper.selectShopInfoByCommodityId(commodityId);
+        //根据商品ID 查十条商品评论列表
+        List<EvaluateVO> list = shopCommodityEvaluateMapper.getEvaluateList(shopDetailInfoVO.getCommodityId());
+        System.out.println(list);
+        shopDetailInfoVO.setEvaluateVOList(list);
+        return shopDetailInfoVO;
     }
-
-
-
-
-
-
 
 }

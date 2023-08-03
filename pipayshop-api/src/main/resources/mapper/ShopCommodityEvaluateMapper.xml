@@ -24,4 +24,11 @@
         LIMIT ${pageNum},${pageSize}
     </select>
 
+    <select id="getEvaluateList" resultType="com.example.pipayshopapi.entity.vo.EvaluateVO">
+        SELECT e.evaluate,e.evaluate_id,e.create_time,u.`uid`,u.`user_image`,u.`user_name`
+        FROM shop_commodity_evaluate e LEFT JOIN user_info u ON e.`user_id` = u.`uid`
+        WHERE commodity_id = #{commodityId}
+        LIMIT 0,10
+    </select>
+
 </mapper>

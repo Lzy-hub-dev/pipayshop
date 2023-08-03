@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDateTime;
+
 /**
  * @author wzx
  */
@@ -24,7 +26,7 @@ public class EvaluateVO {
     /**
      * 用户id
      */
-    private String userId;
+    private String uid;
     /**
      * 评价内容
      */
@@ -36,7 +38,5 @@ public class EvaluateVO {
     /**
      * 评价时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Data createTime;
+    private LocalDateTime createTime;
 }
