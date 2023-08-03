@@ -104,18 +104,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
     @Override
     public PageDataVO selectCommodityByUidAndStatus(OrderPageVO pageVO) {
         Integer integer = shopCommodityInfoMapper.selectAllCommodity(pageVO.getUid(), pageVO.getStatus());
-        Integer page = pageVO.getPage();
-        try {
-            if (page==0){
-                throw new Exception();
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new BusinessException("分页不能为0");
-        }
-        Integer limit = pageVO.getLimit()*page;
-        int pages = page - 1;
-        List<ShopCommodityInfoVO> shopCommodityInfo = shopCommodityInfoMapper.selectCommodityByUidAndStatus(pages, limit, pageVO.getUid(), pageVO.getStatus());
+        List<ShopCommodityInfoVO> shopCommodityInfo = shopCommodityInfoMapper.selectCommodityByUidAndStatus((pageVO.getPage()*pageVO.getLimit()), pageVO.getLimit(), pageVO.getUid(), pageVO.getStatus());
         return new PageDataVO(integer,shopCommodityInfo);
     }
 

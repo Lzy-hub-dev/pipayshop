@@ -158,18 +158,15 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     public PageDataVO getShopList(UidPageVO uidPageVO) {
 
         Integer shopNumber = shopInfoMapper.getShopNumber(uidPageVO.getUid());
-        Integer page = uidPageVO.getPage();
         try {
-            if (page==0){
+            if (uidPageVO.getPage()==0){
                 throw new Exception();
             }
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("分页不能为0");
         }
-        Integer limit = uidPageVO.getLimit()*page;
-        int pages = page - 1;
-        List<ShopInfoVO1> shopList = shopInfoMapper.getShopList(pages, limit, uidPageVO.getUid());
+        List<ShopInfoVO1> shopList = shopInfoMapper.getShopList((uidPageVO.getPage()-1)*uidPageVO.getLimit(), uidPageVO.getLimit(), uidPageVO.getUid());
         return new PageDataVO(shopNumber,shopList);
     }
 
