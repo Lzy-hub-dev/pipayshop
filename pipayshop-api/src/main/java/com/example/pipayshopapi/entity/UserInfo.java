@@ -61,12 +61,12 @@ public class UserInfo implements Serializable {
     /**
      * 国家标识（枚举类)
      */
-    private Integer country;
+    private String country;
 
     /**
      * 语言标识（枚举类)
      */
-    private Integer language;
+    private String language;
 
     /**
      * 邮箱

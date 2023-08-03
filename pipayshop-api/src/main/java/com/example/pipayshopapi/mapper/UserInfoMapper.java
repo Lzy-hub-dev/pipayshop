@@ -1,7 +1,7 @@
 package com.example.pipayshopapi.mapper;
 
-import com.example.pipayshopapi.entity.UserInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.pipayshopapi.entity.UserInfo;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -19,8 +19,6 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
 
         /**
          * 查找基本信息
-         * @param uid
-         * @return
          */
         UserInfoVO selectUserInfoByUid(@Param("uid") String uid);
 }

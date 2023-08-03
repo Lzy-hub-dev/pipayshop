@@ -1,19 +1,15 @@
 package com.example.pipayshopapi.controller;
 
 
-import com.example.pipayshopapi.entity.enums.Language;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
-import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.File;
 
 /**
  * <p>
@@ -61,7 +57,7 @@ public class UserInfoController {
 
     @PostMapping("updateLanguageByUid/{uid}/{language}")
     @ApiOperation("根据用户Id更改用户语言标识")
-    public ResponseVO updateLanguageByUid(@PathVariable String uid,@PathVariable Integer language){
+    public ResponseVO updateLanguageByUid(@PathVariable String uid,@PathVariable String language){
         try {
             boolean result = userInfoService.updateLanguageByUid(uid, language);
             if (!result){
@@ -76,7 +72,7 @@ public class UserInfoController {
 
     @PostMapping("updateCountryByUid/{uid}/{country}")
     @ApiOperation("根据用户Id更改用户国家标识")
-    public ResponseVO updateCountryByUid(@PathVariable String uid,@PathVariable Integer country){
+    public ResponseVO updateCountryByUid(@PathVariable String uid,@PathVariable String country){
         try {
             boolean result = userInfoService.updateCountryByUid(uid, country);
             if (!result){

@@ -9,7 +9,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -81,6 +80,5 @@ public class ItemOrderInfo implements Serializable {
     /**
      * 外键关联用户的地址电话等信息方案
      */
-    private Long buyerDataId;
-
+    private String buyerDataId;
 }
