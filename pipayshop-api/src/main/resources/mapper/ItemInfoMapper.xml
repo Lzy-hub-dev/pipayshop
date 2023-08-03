@@ -31,4 +31,16 @@
           and f.`status` = 0
           and i.`status` = 0
     </select>
+
+    <select id="getItemInfoByUid" resultType="com.example.pipayshopapi.entity.vo.ItemMinInfoVo">
+    SELECT COUNT(item_id) as num,item_id
+    FROM item_commodity_info
+    WHERE item_id IN
+    (
+	    SELECT item_id
+	    FROM item_info
+	    WHERE uid = #{uid}
+    )
+    </select>
+
 </mapper>

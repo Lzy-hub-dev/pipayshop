@@ -3,6 +3,7 @@ package com.example.pipayshopapi.mapper;
 import com.example.pipayshopapi.entity.ItemInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.pipayshopapi.entity.vo.ItemInfoVO;
+import com.example.pipayshopapi.entity.vo.ItemMinInfoVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,4 +24,6 @@ public interface ItemInfoMapper extends BaseMapper<ItemInfo> {
     List<ItemInfoVO> selectItemInfoByItemIdOrUserId(@Param("userId") String userId, @Param("itemId")String itemId);
 
     List<ItemInfo> selectFollowItemByUserId(String userId);
+
+    ItemMinInfoVo getItemInfoByUid(@Param("uid")String userId);
 }

@@ -6,8 +6,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.UserInfo;
 import com.example.pipayshopapi.entity.enums.Country;
 import com.example.pipayshopapi.entity.enums.Language;
+import com.example.pipayshopapi.entity.vo.ItemMinInfoVo;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
 import com.example.pipayshopapi.exception.BusinessException;
+import com.example.pipayshopapi.mapper.ItemInfoMapper;
 import com.example.pipayshopapi.mapper.UserInfoMapper;
 import com.example.pipayshopapi.service.UserInfoService;
 import com.example.pipayshopapi.util.FileUploadUtil;
@@ -31,6 +33,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Resource
     private UserInfoMapper userInfoMapper;
+
+    @Resource
+    private ItemInfoMapper itemInfoMapper;
 
     /**
      * 根据用户Id查找用户数据表的基本信息
@@ -105,6 +110,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             return false;
         }
         return true;
+    }
+
+    @Override
+    public ItemMinInfoVo getItemInfoByUid(String userId) {
+        return itemInfoMapper.getItemInfoByUid(userId);
     }
 
 

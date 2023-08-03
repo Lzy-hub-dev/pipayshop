@@ -2,6 +2,7 @@ package com.example.pipayshopapi.service;
 
 import com.example.pipayshopapi.entity.UserInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.pipayshopapi.entity.vo.ItemMinInfoVo;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -53,4 +54,6 @@ public interface UserInfoService extends IService<UserInfo> {
      * @return
      */
     boolean uploadUserImage(String userId, MultipartFile file);
+
+    ItemMinInfoVo getItemInfoByUid(String userId);
 }
