@@ -33,9 +33,9 @@ public class ShopCategoryTopController {
 
     @GetMapping("getShopCategoryTopList")
     @ApiOperation("查询一级分类列表")
-    public ResponseVO getShopCategoryTopList(Integer pageNum, Integer pageSize) {
+    public ResponseVO getShopCategoryTopList() {
         try {
-            PageDataVO list = categoryTopService.getShopCategoryTopList(pageNum, pageSize);
+            List<ShopCategoryTop> list = categoryTopService.getShopCategoryTopList();
             return ResponseVO.getSuccessResponseVo(list);
         } catch (Exception e) {
             log.error(e.getMessage());

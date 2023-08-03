@@ -18,11 +18,9 @@ public interface ShopCategoryTopService extends IService<ShopCategoryTop> {
 
     /**
      *查询一级分类列表
-     * @param pageNum
-     * @param pageSize
      * @return
      */
-    PageDataVO getShopCategoryTopList(Integer pageNum, Integer pageSize);
+    List<ShopCategoryTop> getShopCategoryTopList();
 
     /**
      * 根据分类id查询分类
