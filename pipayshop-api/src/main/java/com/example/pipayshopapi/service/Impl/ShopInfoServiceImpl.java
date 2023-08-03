@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +52,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     public PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId, Integer state) {
 
         // 获取总条数
-        Integer indexShopInfoVOCount = shopInfoMapper.getIndexShopInfoVOCount(categoryId, (pages - 1) * limit, limit, state);
+        Integer indexShopInfoVOCount = shopInfoMapper.getIndexShopInfoVOCount(categoryId);
         // stata==1,按评分从低到高；stata==2,按评分从高到低
         List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(categoryId, (pages - 1) * limit, limit,state);
         List<ShopTags> list1 = new ArrayList<>();

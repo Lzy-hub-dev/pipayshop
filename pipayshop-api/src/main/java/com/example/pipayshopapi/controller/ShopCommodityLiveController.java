@@ -34,7 +34,7 @@ public class ShopCommodityLiveController {
     public ResponseVO selectShopCommodityLiveVO(@PathVariable Integer pages, @PathVariable Integer limit){
         try {
             PageDataVO pageDataVO = shopCommodityLiveService.selectShopCommodityLiveVO(limit, pages);
-            return ResponseVO.getSuccessResponseVo(pageDataVO.getList());
+            return ResponseVO.getSuccessResponseVo(pageDataVO);
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("查找实体店住的服务列表失败，请联系后台人员");

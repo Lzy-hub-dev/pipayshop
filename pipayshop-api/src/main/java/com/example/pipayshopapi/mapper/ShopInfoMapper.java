@@ -42,7 +42,7 @@ public interface ShopInfoMapper extends BaseMapper<ShopInfo> {
     /**
      * 首页获取商家信息列表总条数
      */
-    Integer getIndexShopInfoVOCount(@Param("categoryId") String categoryId,@Param("page") Integer page,@Param("limit") Integer limit,@Param("state")Integer state );
+    Integer getIndexShopInfoVOCount(@Param("categoryId") String categoryId);
 
     /**
      * 首页获取商家信息列表
