@@ -32,7 +32,7 @@ public class FileUploadUtil {
     public static String ROOM_TOP_IMG="room_top_img";
 
     //实体店分类图片储存位置
-    public static String CATEGORY_IMG="category_img";
+    public static String CATEGORY_IMG="shop_category_img";
     //酒店轮播图储存位置
     public static String ROOM_IMAGE_LIST="room_image_list";
 
