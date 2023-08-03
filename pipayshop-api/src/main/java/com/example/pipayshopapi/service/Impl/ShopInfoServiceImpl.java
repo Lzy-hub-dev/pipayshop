@@ -50,8 +50,10 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
      * 根据条件筛选后获取实体店列表
      */
     @Override
-    public List<IndexShopInfoVO> getShopInfoListByCondition(Integer limit, Integer pages, String categoryId, Integer state) {
+    public PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId, Integer state) {
 
+        // 获取总条数
+        Integer indexShopInfoVOCount = shopInfoMapper.getIndexShopInfoVOCount(categoryId, (pages - 1) * limit, limit, state);
         // stata==1,按评分从低到高；stata==2,按评分从高到低
         List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(categoryId, (pages - 1) * limit, limit,state);
         List<ShopTags> list1 = new ArrayList<>();
@@ -68,7 +70,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
             }
             shopInfoVO.setShopTagsList(list1);
         }
-        return indexShopInfoVO;
+        return new PageDataVO(indexShopInfoVOCount,indexShopInfoVO);
     }
 
     /**

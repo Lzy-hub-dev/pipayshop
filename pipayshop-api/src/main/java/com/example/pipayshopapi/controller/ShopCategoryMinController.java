@@ -2,6 +2,7 @@ package com.example.pipayshopapi.controller;
 
 import com.example.pipayshopapi.entity.ShopCategoryMin;
 import com.example.pipayshopapi.entity.vo.IndexShopInfoVO;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopCategoryMinService;
@@ -45,13 +46,13 @@ public class ShopCategoryMinController {
 
     @GetMapping("getShopInfoMinListByCondition/{limit}/{pages}/{categoryId}/{state}")
     @ApiOperation("实体店三级分类标签列表对应的店铺列表条件分页展示")
-    public ResponseVO<List<IndexShopInfoVO>> getShopInfoMinListByCondition(@PathVariable Integer limit, @PathVariable Integer pages, @PathVariable String categoryId, @PathVariable Integer state){
+    public ResponseVO<PageDataVO> getShopInfoMinListByCondition(@PathVariable Integer limit, @PathVariable Integer pages, @PathVariable String categoryId, @PathVariable Integer state){
         try {
-            List<IndexShopInfoVO> list = shopCategoryMinService.getShopInfoMinListByCondition(limit,pages,categoryId,state);
-            if (list==null){
+            PageDataVO shopInfoMinListByCondition = shopCategoryMinService.getShopInfoMinListByCondition(limit, pages, categoryId, state);
+            if (shopInfoMinListByCondition==null){
                 throw new Exception();
             }
-            return ResponseVO.getSuccessResponseVo(list);
+            return ResponseVO.getSuccessResponseVo(shopInfoMinListByCondition);
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("根据条件筛选后获取实体店列表失败，请联系后台人员");

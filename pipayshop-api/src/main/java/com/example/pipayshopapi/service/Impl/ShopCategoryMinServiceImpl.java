@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopCategoryMin;
 import com.example.pipayshopapi.entity.vo.IndexShopInfoVO;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.mapper.ShopCategoryMinMapper;
 import com.example.pipayshopapi.mapper.ShopInfoMapper;
 import com.example.pipayshopapi.service.ShopCategoryMinService;
@@ -36,10 +37,12 @@ public class ShopCategoryMinServiceImpl extends ServiceImpl<ShopCategoryMinMappe
      * 根据三级ID来查二级ID
      */
     @Override
-    public List<IndexShopInfoVO> getShopInfoMinListByCondition(Integer limit, Integer pages, String categoryId, Integer state) {
+    public PageDataVO getShopInfoMinListByCondition(Integer limit, Integer pages, String categoryId, Integer state) {
+        // 获取总条数
+        Integer indexShopInfoVOCount = shopInfoMapper.getIndexShopInfoVOCount(categoryId, (pages - 1) * limit, limit, state);
         // stata==1,按评分从低到高；stata==2,按评分从高到低
         List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(categoryId, (pages - 1) * limit, limit,state);
-        return indexShopInfoVO;
+        return new PageDataVO(indexShopInfoVOCount,indexShopInfoVO);
     }
 
 }

@@ -30,12 +30,19 @@ public interface ShopInfoMapper extends BaseMapper<ShopInfo> {
      * 根据用户id查询实体店数量
      */
     Integer getShopNumber(@Param("uid") String uid);
-
+    /**
+     * 根据实体店id查询实体店信息条数
+     */
+    Integer getShopInfoVOCount(@Param("shopId")String shopId);
 
     /**
      * 根据实体店id查询实体店信息
      */
     ShopInfoVO1 getShopInfoVO(@Param("shopId")String shopId);
+    /**
+     * 首页获取商家信息列表总条数
+     */
+    Integer getIndexShopInfoVOCount(@Param("categoryId") String categoryId,@Param("page") Integer page,@Param("limit") Integer limit,@Param("state")Integer state );
 
     /**
      * 首页获取商家信息列表

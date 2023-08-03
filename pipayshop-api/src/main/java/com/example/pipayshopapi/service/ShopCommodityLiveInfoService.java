@@ -2,6 +2,10 @@ package com.example.pipayshopapi.service;
 
 import com.example.pipayshopapi.entity.ShopCommodityLiveInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoListVO;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -32,5 +36,14 @@ public interface ShopCommodityLiveInfoService extends IService<ShopCommodityLive
      * 根据房型id删除房型的详细信息
      */
     boolean deleteShopLiveInfo(String roomId);
+
+    /**
+     * 根据实体店id和入住时间和离店时间来搜索房型
+     * @param shopId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    List<ShopCommodityLiveInfoListVO> selectShopCommodityLiveInfoList(String shopId, Date startTime,Date endTime);
 
 }

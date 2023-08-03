@@ -35,13 +35,13 @@ public class ShopInfoController {
 
     @GetMapping("getShopInfoListByCondition/{limit}/{pages}/{categoryId}/{state}")
     @ApiOperation("根据条件筛选后获取实体店首页列表")
-    public ResponseVO<List<IndexShopInfoVO>> getShopInfoListByCondition(@PathVariable Integer limit,@PathVariable Integer pages,@PathVariable String categoryId,@PathVariable Integer state){
+    public ResponseVO<PageDataVO> getShopInfoListByCondition(@PathVariable Integer limit,@PathVariable Integer pages,@PathVariable String categoryId,@PathVariable Integer state){
         try {
-            List<IndexShopInfoVO> list = infoService.getShopInfoListByCondition(limit,pages,categoryId,state);
-            if (list==null){
+            PageDataVO shopInfoListByCondition = infoService.getShopInfoListByCondition(limit, pages, categoryId, state);
+            if (shopInfoListByCondition==null){
                 throw new Exception();
             }
-            return ResponseVO.getSuccessResponseVo(list);
+            return ResponseVO.getSuccessResponseVo(shopInfoListByCondition);
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("根据条件筛选后获取实体店列表失败，请联系后台人员");
