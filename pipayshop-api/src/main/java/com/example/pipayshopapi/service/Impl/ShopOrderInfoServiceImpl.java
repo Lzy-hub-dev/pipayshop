@@ -97,7 +97,7 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
         // 生成orderId
         String orderId = StringUtil.generateShortId();
         ShopOrderInfo shopOrderInfo = new ShopOrderInfo(null, orderId, itemOrderInfo.getTransactionAmount(), null, null, itemOrderInfo.getCommodityId()
-                , itemOrderInfo.getUid(), itemOrderInfo.getItemId(), null, null);
+                , itemOrderInfo.getUid(), itemOrderInfo.getItemId(), null, null,itemOrderInfo.getNumber());
         int insert = shopOrderInfoMapper.insert(shopOrderInfo);
         if (insert < 1){
             String message = "生成未支付订单失败";
@@ -118,8 +118,8 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
         // 商品库存 、 月售量更新
         int update = shopCommodityInfoMapper.update(null, new UpdateWrapper<ShopCommodityInfo>()
                 .eq("commodity_id", payOrderVO.getCommodityId())
-                .setSql("residue = residue - 1")
-                .setSql("monthly_sales = monthly_sales + 1")
+                .setSql("residue = residue - " + payOrderVO.getNumber())
+                .setSql("monthly_sales = monthly_sales + " + payOrderVO.getNumber())
                 .set("update_time", new Date()));
         if (update < 1){throw new RuntimeException();}
         // 订单状态、修改时间更新
