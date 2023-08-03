@@ -29,7 +29,9 @@ public class ShopDetailInfoVO {
      */
     private List<String> commodityImgList1;
 
-    //路经集合(数据库接收)
+    /**
+     *     路经集合(数据库接收)
+     */
     private String commodityImgList;
 
     /**

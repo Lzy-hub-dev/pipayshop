@@ -5,10 +5,7 @@ import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopDetailInfoVO;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
-import com.example.pipayshopapi.entity.vo.CommodityStatusPageVO;
-import com.example.pipayshopapi.entity.vo.OrderPageVO;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
-import com.example.pipayshopapi.entity.vo.ShopCommodityVO;
+import com.example.pipayshopapi.entity.vo.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -25,24 +22,30 @@ public interface ShopCommodityInfoService extends IService<ShopCommodityInfo> {
 
     /**
      * 发布实体店商品
+     * @param applyShopCommodityDTO
+     * @param files
+     * @return
      */
     boolean issueShopCommodity(ApplyShopCommodityDTO applyShopCommodityDTO, MultipartFile[] files);
     /**
      * 根据用户id查询 用户收藏的商品列表
+     * @param userId
+     * @return
      */
-    List<ShopCommodityInfo> getCollectList(String userId);
-    /**
-     * 根据用户id查询用户关注的网店列表
-     */
-    List<ShopInfo> getFollowList(String userId);
+    List<ShopCommodityInfoVO> getCollectList(String userId);
+
 
     /**
      * 根据店铺id查找实体店商品的详情信息列表
+     * @param shopId
+     * @return
      */
     PageDataVO selectShopInfoListByShopId(Integer limit, Integer pages, String shopId);
 
     /**
      * 根据店铺id查找实体店商品的上架和下架列表
+     * @param commodityStatusPageVO
+     * @return
      */
     PageDataVO selectStatusListByShopId(CommodityStatusPageVO commodityStatusPageVO);
 
@@ -55,16 +58,24 @@ public interface ShopCommodityInfoService extends IService<ShopCommodityInfo> {
 
     /**
      * 根据用户id查询用户浏览商品历史-实体店
+     * @param userId
+     * @return
      */
     List<ShopCommodityVO> historyList(String userId);
 
     /**
      * 根据用户id查询，商品状态查询审核通过和未审核列表
+     *
+     * @param pageVO
+     * @return
      */
     PageDataVO selectCommodityByUidAndStatus(OrderPageVO pageVO);
 
     /**
      * 根据商品id，更改商品的状态
+     *
+     * @param commodityId
+     * @return
      */
     boolean updateCommodityStatus(String commodityId,Integer status);
 }

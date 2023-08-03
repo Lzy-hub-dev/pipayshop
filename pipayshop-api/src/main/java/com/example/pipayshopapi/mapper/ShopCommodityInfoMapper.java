@@ -29,14 +29,8 @@ public interface ShopCommodityInfoMapper extends BaseMapper<ShopCommodityInfo> {
      * @param userId
      * @return
      */
-    List<ShopCommodityInfo> selectCollectProductByUserId(String userId);
-    /**
-     * 根据用户id查询用户关注的网店列表
-     *
-     * @param userId
-     * @return
-     */
-    List<ShopInfo> selectFollowProductByUserId(String userId);
+    List<ShopCommodityInfoVO> selectCollectProductByUserId(String userId);
+
 
     /**
      * 根据用户id查询用户商品浏览历史

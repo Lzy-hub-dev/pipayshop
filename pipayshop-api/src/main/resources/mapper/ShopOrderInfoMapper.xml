@@ -57,7 +57,7 @@
         <result property="transactionAmount" column="transaction_amount" />
         <result property="sellerImg" column="user_image" />
         <result property="sellerName" column="shop_name" />
-        <result property="commodityImg" column="avatar_image" />
+        <result property="commodityImg" column="avatar_imag" />
         <result property="details" column="commodity_detail"/>
     </resultMap>
 
@@ -73,6 +73,27 @@
         shop_commodity_info i
         where
         o.uid = #{getOrderDataVO.userId}
+        <if test="getOrderDataVO.orderStatus != -1">
+            and o.order_status = #{getOrderDataVO.orderStatus}
+        </if>
+        AND o.del_flag = 0
+        AND o.commodity_id = i.commodity_id
+        AND o.shop_id = u.shop_id
+        ORDER BY
+        o.update_time ASC;
+    </select>
+    <select id="getOrderListByShopId" resultMap="orderListResultMap">
+        select
+        o.order_id, o.order_status, o.commodity_id, o.transaction_amount,
+        u.user_image, u.shop_name, i.avatar_imag, i.commodity_detail
+        from
+        shop_order_info o
+        JOIN
+        shop_info u
+        JOIN
+        shop_commodity_info i
+        where
+        o.shop_id = #{getOrderDataVO.shopId}
         <if test="getOrderDataVO.orderStatus != -1">
             and o.order_status = #{getOrderDataVO.orderStatus}
         </if>

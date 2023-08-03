@@ -10,10 +10,6 @@ import java.util.List;
 
 /**
  * @author: jiangjiafeng
- * @ClassName ShopInfoVO
- * @Description 实体店VO
- * @date 2023/7/26 17:26
- * @Version 1.0
  */
 @Data
 @NoArgsConstructor
@@ -62,7 +58,7 @@ public class ShopInfoVO {
     /**
      * 店铺图片的路径集合
      */
-    private String shopImagList;
+    private List<String> shopImagList;
 
     /**
      * 实体店的头像

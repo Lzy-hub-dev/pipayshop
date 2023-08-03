@@ -27,7 +27,6 @@ public class ItemCartController {
     @Resource
     private ItemCartService itemCartService;
 
-    // TODO 错
     @GetMapping("selectItemCartByIds/{currentPage}/{limit}/{userId}")
     @ApiOperation("根据用户id展示购物车列表")
     public ResponseVO selectItemCartByIds(@PathVariable Integer currentPage, @PathVariable Integer limit,@PathVariable String userId){
