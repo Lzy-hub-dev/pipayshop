@@ -2,6 +2,7 @@ package com.example.pipayshopapi.controller;
 
 
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
+import com.example.pipayshopapi.entity.ShopDetailInfoVO;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.vo.*;
@@ -50,11 +51,10 @@ public class ShopCommodityInfoController {
 
     @GetMapping("selectShopInfoListByShopId/{pages}/{limit}/{shopId}")
     @ApiOperation("根据店铺id查找实体店商品的列表")
-    // Todo
-    public ResponseVO selectShopInfoListByShopId(@PathVariable Integer pages, @PathVariable Integer limit, @PathVariable String shopId) {
+    public ResponseVO<PageDataVO> selectShopInfoListByShopId(@PathVariable Integer pages, @PathVariable Integer limit, @PathVariable String shopId) {
         try {
             PageDataVO pageDataVO = shopCommodityService.selectShopInfoListByShopId(limit, pages, shopId);
-            return ResponseVO.getSuccessResponseVo(pageDataVO.getList());
+            return ResponseVO.getSuccessResponseVo(pageDataVO);
         } catch (Exception e) {
             e.printStackTrace();
             throw new BusinessException("根据店铺id查找实体店商品的详情信息列表失败，请联系后台人员");
@@ -63,10 +63,10 @@ public class ShopCommodityInfoController {
 
     @GetMapping("selectShopInfoByCommodityId/{commodityId}")
     @ApiOperation("根据商品的id查找实体店商品的详情信息")
-    public ResponseVO<ShopCommodityInfo> selectShopInfoByCommodityId(@PathVariable String commodityId) {
+    public ResponseVO<ShopDetailInfoVO> selectShopInfoByCommodityId(@PathVariable String commodityId) {
         try {
-            ShopCommodityInfo shopCommodityInfo = shopCommodityService.selectShopInfoByCommodityId(commodityId);
-            return ResponseVO.getSuccessResponseVo(shopCommodityInfo);
+            ShopDetailInfoVO shopDetailInfoVO = shopCommodityService.selectShopInfoByCommodityId(commodityId);
+            return ResponseVO.getSuccessResponseVo(shopDetailInfoVO);
         } catch (Exception e) {
             e.printStackTrace();
             throw new BusinessException("根据商品的id查找实体店商品的详情信息失败，请联系后台人员");

@@ -83,4 +83,11 @@
         from shop_commodity_info
         WHERE shop_id = #{shopId}
     </select>
+
+    <select id="selectShopInfoByCommodityId" resultType="com.example.pipayshopapi.entity.ShopDetailInfoVO">
+        select commodity_id,commodity_name,commodity_img_list,commodity_detail,price,monthly_sales,shop_id,validity_time,residue,reservation_information
+        from shop_commodity_info
+        where  commodity_id = #{commodityId}
+    </select>
+
 </mapper>

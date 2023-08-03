@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
-import com.example.pipayshopapi.entity.vo.*;
+import com.example.pipayshopapi.entity.vo.CommodityStatusPageVO;
+import com.example.pipayshopapi.entity.vo.OrderPageVO;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.entity.vo.ShopCommodityVO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -51,7 +54,7 @@ public interface ShopCommodityInfoService extends IService<ShopCommodityInfo> {
     /**
      * 根据商品的id查找实体店商品的详情信息
      */
-    ShopCommodityInfo selectShopInfoByCommodityId(String commodityId);
+    ShopDetailInfoVO selectShopInfoByCommodityId(String commodityId);
 
 
 

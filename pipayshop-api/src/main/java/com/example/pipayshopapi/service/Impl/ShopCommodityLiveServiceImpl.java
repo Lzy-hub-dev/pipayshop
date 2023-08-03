@@ -40,17 +40,7 @@ public class ShopCommodityLiveServiceImpl extends ServiceImpl<ShopCommodityLiveM
     @Override
     public PageDataVO selectShopCommodityLiveVO(Integer limit, Integer pages) {
         Integer integer = shopCommodityLiveMapper.selectAllShopCommodityLiveVO();
-        try {
-            if (pages==0){
-                throw new Exception();
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new BusinessException("分页不能为0");
-        }
-        Integer limits = (pages-1)*limit;
-
-        List<ShopCommodityLiveVO> shopCommodityLiveVOS = shopCommodityLiveMapper.selectShopCommodityLiveVO(limits, pages-1);
+        List<ShopCommodityLiveVO> shopCommodityLiveVOS = shopCommodityLiveMapper.selectShopCommodityLiveVO(limit, (pages-1)*limit);
         return new PageDataVO(integer,shopCommodityLiveVOS);
     }
 
@@ -70,18 +60,7 @@ public class ShopCommodityLiveServiceImpl extends ServiceImpl<ShopCommodityLiveM
     @Override
     public PageDataVO selectShopLiveVOByCondition(LivePageVO livePageVO) {
         Integer integer = shopCommodityLiveMapper.selectAllShopLiveVOByCondition(livePageVO.getCheckInTime(),livePageVO.getDepartureTime(),livePageVO.getAdult(),livePageVO.getChildren());
-        Integer page = livePageVO.getPage();
-        try {
-            if (page==0){
-                throw new Exception();
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new BusinessException("分页不能为0");
-        }
-        Integer limit = livePageVO.getLimit()*page;
-        int pages = page - 1;
-        List<ShopCommodityLiveVO> shopCommodityLiveVOS = shopCommodityLiveMapper.selectShopLiveVOByCondition(limit, pages, livePageVO.getCheckInTime(),livePageVO.getDepartureTime(),livePageVO.getAdult(),livePageVO.getChildren());
+        List<ShopCommodityLiveVO> shopCommodityLiveVOS = shopCommodityLiveMapper.selectShopLiveVOByCondition(livePageVO.getLimit(),(livePageVO.getPage()-1)*livePageVO.getLimit(), livePageVO.getCheckInTime(),livePageVO.getDepartureTime(),livePageVO.getAdult(),livePageVO.getChildren());
         return new PageDataVO(integer,shopCommodityLiveVOS);
     }
 

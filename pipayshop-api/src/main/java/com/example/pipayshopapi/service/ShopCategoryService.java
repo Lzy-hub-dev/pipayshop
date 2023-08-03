@@ -2,7 +2,6 @@ package com.example.pipayshopapi.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ShopCategory;
-import com.example.pipayshopapi.entity.vo.IndexShopInfoVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 
 import java.util.List;
@@ -32,9 +31,6 @@ public interface ShopCategoryService extends IService<ShopCategory> {
 
     /**
      * 查询二级分类列表
-     * @param pageNum
-     * @param pageSize
-     * @return
      */
-    PageDataVO getShopCategorySecList(String categoryPid,Integer pageNum, Integer pageSize);
+    List<ShopCategory> getShopCategorySecList(String categoryPid);
 }

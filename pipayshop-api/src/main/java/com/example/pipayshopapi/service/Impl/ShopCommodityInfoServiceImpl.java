@@ -6,11 +6,13 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
+import com.example.pipayshopapi.entity.ShopDetailInfoVO;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.ShopTags;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
+import com.example.pipayshopapi.mapper.ShopCommodityEvaluateMapper;
 import com.example.pipayshopapi.mapper.ShopCommodityInfoMapper;
 import com.example.pipayshopapi.mapper.ShopTagsMapper;
 import com.example.pipayshopapi.service.ShopCommodityInfoService;
@@ -40,7 +42,8 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
 
     @Resource
     private ShopCommodityInfoMapper shopCommodityInfoMapper;
-
+    @Resource
+    private ShopCommodityEvaluateMapper shopCommodityEvaluateMapper;
     @Resource
     private ShopTagsMapper shopTagsMapper;
     /**
@@ -98,18 +101,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
     @Override
     public PageDataVO selectCommodityByUidAndStatus(OrderPageVO pageVO) {
         Integer integer = shopCommodityInfoMapper.selectAllCommodity(pageVO.getUid(), pageVO.getStatus());
-        Integer page = pageVO.getPage();
-        try {
-            if (page==0){
-                throw new Exception();
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new BusinessException("分页不能为0");
-        }
-        Integer limit = pageVO.getLimit()*page;
-        int pages = page - 1;
-        List<ShopCommodityInfoVO> shopCommodityInfo = shopCommodityInfoMapper.selectCommodityByUidAndStatus(pages, limit, pageVO.getUid(), pageVO.getStatus());
+        List<ShopCommodityInfoVO> shopCommodityInfo = shopCommodityInfoMapper.selectCommodityByUidAndStatus((pageVO.getPage()*pageVO.getLimit()), pageVO.getLimit(), pageVO.getUid(), pageVO.getStatus());
         return new PageDataVO(integer,shopCommodityInfo);
     }
 
@@ -138,19 +130,10 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
      */
     @Override
     public PageDataVO selectShopInfoListByShopId(Integer limit, Integer pages, String shopId) {
-        Integer integer = shopCommodityInfoMapper.selectAllCommodityByShopId(shopId);
-        try {
-            if (pages==0){
-                throw new Exception();
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new BusinessException("分页不能为0");
-        }
-        Integer limits = limit*pages;
-        int page = pages- 1;
-        List<ShopCommodityInfo1VO> shopCommodityInfo1VOS = shopCommodityInfoMapper.selectCommodityByShopId(page, limits, shopId);
-        ArrayList<ShopTags> list1 = new ArrayList<>();
+        Integer count = shopCommodityInfoMapper.selectAllCommodityByShopId(shopId);
+        int page = (pages - 1) * limit;
+        List<ShopCommodityInfo1VO> shopCommodityInfo1VOS = shopCommodityInfoMapper.selectCommodityByShopId(page, limit, shopId);
+        List<ShopTags> list1 = new ArrayList<>();
         for (ShopCommodityInfo1VO shopCommodityInfo1VO : shopCommodityInfo1VOS) {
             List<String> list = JSON.parseArray(shopCommodityInfo1VO.getTagList(), String.class);
             if (list==null||list.isEmpty()){
@@ -162,7 +145,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
             }
             shopCommodityInfo1VO.setShopTagsList(list1);
         }
-        return new PageDataVO(integer,shopCommodityInfo1VOS);
+        return new PageDataVO(count,shopCommodityInfo1VOS);
     }
 
     /**
@@ -189,15 +172,14 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
      * 根据商品的id查找实体店商品的详情信息
      */
     @Override
-    public ShopCommodityInfo selectShopInfoByCommodityId(String commodityId) {
-        return shopCommodityInfoMapper.selectOne(new QueryWrapper<ShopCommodityInfo>()
-                .eq("commodity_id", commodityId));
+    public ShopDetailInfoVO selectShopInfoByCommodityId(String commodityId) {
+        //获取商品基本信息
+        ShopDetailInfoVO shopDetailInfoVO = shopCommodityInfoMapper.selectShopInfoByCommodityId(commodityId);
+        //根据商品ID 查十条商品评论列表
+        List<EvaluateVO> list = shopCommodityEvaluateMapper.getEvaluateList(shopDetailInfoVO.getCommodityId());
+        System.out.println(list);
+        shopDetailInfoVO.setEvaluateVOList(list);
+        return shopDetailInfoVO;
     }
-
-
-
-
-
-
 
 }

@@ -119,12 +119,11 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         ShopInfo shopInfo = shopInfoMapper.selectOne(new QueryWrapper<ShopInfo>()
                 .eq("status", 0)
                 .eq("shop_id",shopId));
-        List<String> list = JSON.parseArray(shopInfo.getTagList(), String.class);
-        System.out.println(list);
-        for (String s : list) {
-            System.out.println(s);
-            ShopTags tag_id = tagMapper.selectOne(new QueryWrapper<ShopTags>().eq("tag_id", s));
-            list1.add(tag_id);
+        List<String> taglist = JSON.parseArray(shopInfo.getTagList(), String.class);
+        List<String> imagelist = JSON.parseArray(shopInfo.getShopImagList(), String.class);
+        for (String s : taglist) {
+            ShopTags tagId = tagMapper.selectOne(new QueryWrapper<ShopTags>().eq("tag_id", s));
+            list1.add(tagId);
         }
         shopInfoVO.setShopId(shopInfo.getShopId());
         shopInfoVO.setShopName(shopInfo.getShopName());
@@ -134,9 +133,8 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         shopInfoVO.setScore(shopInfo.getScore());
         shopInfoVO.setShopIntroduce(shopInfo.getShopIntroduce());
         shopInfoVO.setShopTagsList(list1);
+        shopInfoVO.setShopImagList(imagelist);
         shopInfoVO.setUserImage(shopInfo.getUserImage());
-
-
         return shopInfoVO;
 
     }
@@ -158,18 +156,15 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     public PageDataVO getShopList(UidPageVO uidPageVO) {
 
         Integer shopNumber = shopInfoMapper.getShopNumber(uidPageVO.getUid());
-        Integer page = uidPageVO.getPage();
         try {
-            if (page==0){
+            if (uidPageVO.getPage()==0){
                 throw new Exception();
             }
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("分页不能为0");
         }
-        Integer limit = uidPageVO.getLimit()*page;
-        int pages = page - 1;
-        List<ShopInfoVO1> shopList = shopInfoMapper.getShopList(pages, limit, uidPageVO.getUid());
+        List<ShopInfoVO1> shopList = shopInfoMapper.getShopList((uidPageVO.getPage()-1)*uidPageVO.getLimit(), uidPageVO.getLimit(), uidPageVO.getUid());
         return new PageDataVO(shopNumber,shopList);
     }
 

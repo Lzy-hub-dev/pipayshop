@@ -1,12 +1,9 @@
 package com.example.pipayshopapi.service.Impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopCategoryMin;
-import com.example.pipayshopapi.entity.ShopCategoryTop;
 import com.example.pipayshopapi.entity.vo.IndexShopInfoVO;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.mapper.ShopCategoryMinMapper;
 import com.example.pipayshopapi.mapper.ShopInfoMapper;
 import com.example.pipayshopapi.service.ShopCategoryMinService;
@@ -29,12 +26,9 @@ public class ShopCategoryMinServiceImpl extends ServiceImpl<ShopCategoryMinMappe
 
 
     @Override
-    public PageDataVO getShopCategoryMinList(Integer pageNum, Integer pageSize) {
-        LambdaQueryWrapper<ShopCategoryMin> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(ShopCategoryMin::getDelFlag, 0);
-        Page<ShopCategoryMin> page = new Page<>(pageNum, pageSize);
-        Page<ShopCategoryMin> selectPage = shopCategoryMinMapper.selectPage(page, wrapper);
-        return new PageDataVO(Integer.valueOf(selectPage.getTotal()+""),selectPage.getRecords());
+    public List<ShopCategoryMin> getShopCategoryMinList(String categoryPid) {
+        return shopCategoryMinMapper.selectList(new QueryWrapper<ShopCategoryMin>().
+                eq("del_flag", 0).eq("category_pid", categoryPid));
     }
 
     /**

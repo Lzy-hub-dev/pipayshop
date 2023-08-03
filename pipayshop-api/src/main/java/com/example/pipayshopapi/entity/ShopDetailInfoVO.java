@@ -25,9 +25,15 @@ public class ShopDetailInfoVO {
      */
     private String commodityName;
     /**
-     * 商品的图片路径集合
+     * 商品的图片路径集合(前端接收)
      */
-    private List<String> commodityImgList;
+    private List<String> commodityImgList1;
+
+    /**
+     *     路经集合(数据库接收)
+     */
+    private String commodityImgList;
+
     /**
      * 商品详情
      */

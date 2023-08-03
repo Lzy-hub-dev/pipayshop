@@ -19,7 +19,7 @@ public class ShopCommodityInfo1VO {
     /**
      * 商店的商品名字
      */
-    private String shopCommodityName;
+    private String commodityName;
     /**
      * 实体店商品的头像
      */
