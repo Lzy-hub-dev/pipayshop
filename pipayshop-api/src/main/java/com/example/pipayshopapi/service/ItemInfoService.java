@@ -29,7 +29,12 @@ public interface ItemInfoService extends IService<ItemInfo> {
      * @return
      */
     List<ItemInfoVO> getItemInfoByUid(String userId);
-
+    /**
+     * 根据用户id查询 对应的 网店关注列表
+     * @param userId
+     * @return
+     */
+    List<ItemInfo> getFollowList(String userId);
     /**
      * 根据用户id获取网店数量
      * @param userId

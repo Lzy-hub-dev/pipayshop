@@ -30,9 +30,9 @@ public interface ItemCommodityInfoMapper extends BaseMapper<ItemCommodityInfo> {
 
     CommodityDetailVO itemCommodityDetail(String commodityId);
 
-    List<ItemCommodityInfo> selectCollectProductByUserId(String userId);
+    List<ItemCommodityInfoVO> selectCollectProductByUserId(String userId);
 
-    List<ItemInfo> selectFollowItemByUserId(String userId);
+
 
 
     List<ItemCommodityInfoVO> selectHistoryProductByUserId(String userId);
