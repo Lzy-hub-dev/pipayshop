@@ -47,11 +47,12 @@ public class ItemCartServiceImpl extends ServiceImpl<ItemCartMapper, ItemCart> i
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean putItemCartById(String userId, String commodityId) {
+    public boolean putItemCartById(String userId, String commodityId,Integer sumCount) {
         ItemCart itemCart = new ItemCart();
         itemCart.setCartId(StringUtil.generateShortId());
         itemCart.setUserId(userId);
         itemCart.setCommodityId(commodityId);
+        itemCart.setSumCount(sumCount);
         int result = itemCartMapper.insert(itemCart);
         return result>0;
     }

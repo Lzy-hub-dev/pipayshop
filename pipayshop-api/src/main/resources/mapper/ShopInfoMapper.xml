@@ -34,7 +34,7 @@
         SELECT COUNT(*) FROM shop_info where uid=#{uid}
     </select>
     <select id="getIndexShopInfoVO" resultType="com.example.pipayshopapi.entity.vo.IndexShopInfoVO">
-        select shop_id,shop_name,score,localhost_latitude,localhost_longitude,user_image,shop_introduce
+        select shop_id,shop_name,score,localhost_latitude,localhost_longitude,user_image, shop_introduce
         from shop_info
             <where>
                 <if test="categoryId != null and categoryId != '-1' ">category_id=#{categoryId} </if>

@@ -74,4 +74,14 @@
             si.uid=#{uid}
           and sci.status=#{status}
     </select>
+    <select id="selectCommodityByShopId" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityInfo1VO">
+        SELECT commodity_id,commodity_name,avatar_imag,price,monthly_sales,tag_list
+        from shop_commodity_info
+        WHERE shop_id=#{shopId}
+            LIMIT #{page},#{limit}
+    </select>
+    <select id="selectAllCommodityByShopId" resultType="java.lang.Integer">
+        SELECT COUNT(*) from shop_commodity_info
+        WHERE shop_id=#{shopId}
+    </select>
 </mapper>

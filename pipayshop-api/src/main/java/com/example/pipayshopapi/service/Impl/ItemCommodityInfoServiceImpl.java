@@ -98,6 +98,8 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         itemCommodityInfo.setAcceptAddressList(applyItemCommodityDTO.getAcceptAddressList());
         itemCommodityInfo.setSizeList(applyItemCommodityDTO.getSizeList());
         itemCommodityInfo.setImagsList(jsonString);
+        itemCommodityInfo.setOriginName(applyItemCommodityDTO.getOriginName());
+        itemCommodityInfo.setOriginPhone(applyItemCommodityDTO.getOriginPhone());
         int result = commodityInfoMapper.insert(itemCommodityInfo);
         return result > 0;
     }

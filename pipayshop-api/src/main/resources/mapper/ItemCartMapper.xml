@@ -4,19 +4,18 @@
 
 
     <select id="selectItemCartByIds" resultType="com.example.pipayshopapi.entity.vo.ItemCartVO">
-        SELECT c.cart_id,c.user_id,c.commodity_id,COUNT(c.commodity_id)as sumNumber , i.price,i.item_commodity_name,i.avatar_imag,i.free_shipping_num,i.coupons_list,i.status,i.tag_list,i.color_list,i.size_list
+        SELECT c.cart_id,c.user_id,c.commodity_id,c.sum_count, i.price,i.item_commodity_name,i.avatar_imag,i.free_shipping_num,i.coupons_list,i.status,i.tag_list,i.color_list,i.size_list, ii.item_id
         from item_cart as c
                  LEFT JOIN item_commodity_info as i on c.commodity_id=i.commodity_id
-        WHERE
-            c.user_id=#{userId}
-        GROUP BY c.commodity_id
+                 JOIN item_info as ii on ii.item_id=i.item_id
+        WHERE  c.user_id=#{userId}
             limit #{pages},#{limit};
     </select>
     <select id="selectItemCartTotal" resultType="java.lang.Integer">
-        SELECT COUNT(*) FROM (SELECT COUNT(*) from item_cart as c
-                              LEFT JOIN item_commodity_info as i on c.commodity_id=i.commodity_id
-                              WHERE
-                                  c.user_id=#{userId}
-                              GROUP BY c.commodity_id) p;
+        SELECT COUNT(*)
+        from item_cart as c
+                 LEFT JOIN item_commodity_info as i on c.commodity_id=i.commodity_id
+                 JOIN item_info as ii on ii.item_id=i.item_id
+        WHERE  c.user_id=#{userId}
     </select>
 </mapper>

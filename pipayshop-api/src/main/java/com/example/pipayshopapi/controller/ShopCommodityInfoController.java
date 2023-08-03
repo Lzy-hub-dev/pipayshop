@@ -49,7 +49,7 @@ public class ShopCommodityInfoController {
     }
 
     @GetMapping("selectShopInfoListByShopId/{pages}/{limit}/{shopId}")
-    @ApiOperation("根据店铺id查找实体店商品的详情信息列表")
+    @ApiOperation("根据店铺id查找实体店商品的列表")
     // Todo
     public ResponseVO selectShopInfoListByShopId(@PathVariable Integer pages, @PathVariable Integer limit, @PathVariable String shopId) {
         try {
@@ -61,12 +61,11 @@ public class ShopCommodityInfoController {
         }
     }
 
-    @GetMapping("selectShopInfoByCommodityId/{commodityId}/{userId}")
+    @GetMapping("selectShopInfoByCommodityId/{commodityId}")
     @ApiOperation("根据商品的id查找实体店商品的详情信息")
-    // TODO
-    public ResponseVO<ShopCommodityInfo> selectShopInfoByCommodityId(@PathVariable String commodityId,String userId) {
+    public ResponseVO<ShopCommodityInfo> selectShopInfoByCommodityId(@PathVariable String commodityId) {
         try {
-            ShopCommodityInfo shopCommodityInfo = shopCommodityService.selectShopInfoByCommodityId(commodityId,userId);
+            ShopCommodityInfo shopCommodityInfo = shopCommodityService.selectShopInfoByCommodityId(commodityId);
             return ResponseVO.getSuccessResponseVo(shopCommodityInfo);
         } catch (Exception e) {
             e.printStackTrace();
