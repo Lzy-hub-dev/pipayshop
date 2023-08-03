@@ -28,5 +28,7 @@ public class ApplyItemCommodityDTO {
     private Integer freeShippingNum;
     private Integer categoryId;
     private Integer degreeLoss;
+    private String originPhone;
+    private String originName;
 
 }

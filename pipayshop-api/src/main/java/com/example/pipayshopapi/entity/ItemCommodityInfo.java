@@ -149,4 +149,14 @@ public class ItemCommodityInfo implements Serializable {
      */
     private String avatarImag;
 
+    /**
+     * 发货人名字
+     */
+    private String originPhone;
+
+    /**
+     * 发货人电话
+     */
+    private String originName;
+
 }
