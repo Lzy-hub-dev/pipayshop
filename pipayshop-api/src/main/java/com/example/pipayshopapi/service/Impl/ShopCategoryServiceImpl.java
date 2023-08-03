@@ -8,8 +8,9 @@ import com.example.pipayshopapi.entity.ShopCategory;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.mapper.ShopCategoryMapper;
 import com.example.pipayshopapi.service.ShopCategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * <p>
@@ -21,15 +22,11 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ShopCategoryServiceImpl extends ServiceImpl<ShopCategoryMapper, ShopCategory> implements ShopCategoryService {
-    @Autowired
+    @Resource
     private ShopCategoryMapper shopCategoryMapper;
 
     /**
      * 查询一级分类对应的二级分列表
-     *
-     * @param pageNum
-     * @param pageSize
-     * @return
      */
     @Override
     public PageDataVO getShopCategoryList(Integer pageNum, Integer pageSize, Integer topId) {
@@ -43,9 +40,6 @@ public class ShopCategoryServiceImpl extends ServiceImpl<ShopCategoryMapper, Sho
 
     /**
      * 根据分类id查询分类
-     *
-     * @param categoryId
-     * @return
      */
     @Override
     public ShopCategory getShopCategoryById(String categoryId) {
@@ -56,9 +50,6 @@ public class ShopCategoryServiceImpl extends ServiceImpl<ShopCategoryMapper, Sho
 
     /**
      * 根据分类id删除分类
-     *
-     * @param categoryId
-     * @return
      */
     @Override
     public Boolean deleteShopCategoryById(String categoryId) {

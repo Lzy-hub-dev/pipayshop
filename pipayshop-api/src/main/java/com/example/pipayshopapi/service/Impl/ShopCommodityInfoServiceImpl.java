@@ -5,13 +5,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.pipayshopapi.entity.ShopCommodityHistory;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
-import com.example.pipayshopapi.mapper.ShopCommodityHistoryMapper;
 import com.example.pipayshopapi.mapper.ShopCommodityInfoMapper;
 import com.example.pipayshopapi.service.ShopCommodityInfoService;
 import com.example.pipayshopapi.util.FileUploadUtil;
@@ -38,8 +36,6 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
 
     @Resource
     private ShopCommodityInfoMapper shopCommodityInfoMapper;
-    @Resource
-    private ShopCommodityHistoryMapper shopCommodityHistoryMapper;
     /**
      * 发布实体店商品
      */
@@ -81,9 +77,6 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
 
     /**
      * 根据用户id查询用户关注的网店列表
-     *
-     * @param userId
-     * @return
      */
     @Override
     public List<ShopInfo> getFollowList(String userId) {
@@ -92,9 +85,6 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
 
     /**
      * 根据用户id查询用户浏览商品历史-实体店
-     *
-     * @param userId
-     * @return
      */
     @Override
     public List<ShopCommodityVO> historyList(String userId) {
@@ -103,9 +93,6 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
 
     /**
      * 根据用户id查询，商品状态查询审核通过和未审核列表
-     *
-     * @param pageVO
-     * @return
      */
     @Override
     public PageDataVO selectCommodityByUidAndStatus(OrderPageVO pageVO) {
@@ -121,15 +108,12 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
         }
         Integer limit = pageVO.getLimit()*page;
         int pages = page - 1;
-        List<ShopCommodityInfoVO> shopCommodityInfoVOS = shopCommodityInfoMapper.selectCommodityByUidAndStatus(pages, limit, pageVO.getUid(), pageVO.getStatus());
-        return new PageDataVO(integer,shopCommodityInfoVOS);
+        List<ShopCommodityInfoVO> shopCommodityInfo = shopCommodityInfoMapper.selectCommodityByUidAndStatus(pages, limit, pageVO.getUid(), pageVO.getStatus());
+        return new PageDataVO(integer,shopCommodityInfo);
     }
 
     /**
      * 根据商品id，更改商品的上下架状态
-     *
-     * @param commodityId
-     * @return
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -184,10 +168,8 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
      */
     @Override
     public ShopCommodityInfo selectShopInfoByCommodityId(String commodityId,String userId) {
-        ShopCommodityInfo shopCommodityInfo = shopCommodityInfoMapper.selectOne(new QueryWrapper<ShopCommodityInfo>()
+        return shopCommodityInfoMapper.selectOne(new QueryWrapper<ShopCommodityInfo>()
                 .eq("commodity_id", commodityId));
-
-        return shopCommodityInfo;
     }
 
 
