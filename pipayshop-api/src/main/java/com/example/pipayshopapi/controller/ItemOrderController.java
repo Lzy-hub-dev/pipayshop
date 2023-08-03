@@ -168,4 +168,16 @@ public class ItemOrderController {
         }
     }
 
+    @GetMapping("getMyOrderByUid/{page}/{limit}/{uid}")
+    @ApiOperation("根据用户id查询网店的所有订单")
+    public ResponseVO<PageDataVO> getMyOrderByUid(@PathVariable Integer page,@PathVariable Integer limit,@PathVariable String uid){
+        try {
+            PageDataVO myOrderByUid = itemOrderInfoService.getMyOrderByUid(page, limit, uid);
+            return ResponseVO.getSuccessResponseVo(myOrderByUid);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("根据用户id查询网店的所有订单失败，请联系后台人员");
+        }
+    }
+
 }

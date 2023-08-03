@@ -2,10 +2,7 @@ package com.example.pipayshopapi.service;
 
 import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.pipayshopapi.entity.vo.GetOrderDataVO;
-import com.example.pipayshopapi.entity.vo.OrderListVO;
-import com.example.pipayshopapi.entity.vo.OrderDetailVO;
-import com.example.pipayshopapi.entity.vo.PayOrderVO;
+import com.example.pipayshopapi.entity.vo.*;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.math.BigDecimal;
@@ -37,4 +34,9 @@ public interface ItemOrderInfoService extends IService<ItemOrderInfo> {
     String generateUnpaidOrder(ItemOrderInfo itemOrderInfo);
 
     boolean payOrder(PayOrderVO payOrderVO);
+
+    /**
+     * 根据用户id查询网店的所有订单
+     */
+    PageDataVO getMyOrderByUid(Integer page,Integer limit,String uid);
 }
