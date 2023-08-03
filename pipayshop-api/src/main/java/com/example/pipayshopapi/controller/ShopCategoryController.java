@@ -2,6 +2,7 @@ package com.example.pipayshopapi.controller;
 
 import com.example.pipayshopapi.entity.ShopCategory;
 import com.example.pipayshopapi.entity.vo.IndexShopInfoVO;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopCategoryService;
@@ -46,13 +47,11 @@ public class ShopCategoryController {
     }
     @GetMapping("getSecShopInfoListByCondition/{limit}/{pages}/{categoryId}/{state}")
     @ApiOperation("根据条件筛选后获取实体店列表")
-    public ResponseVO<List<IndexShopInfoVO>> getSecShopInfoListByCondition(@PathVariable Integer limit, @PathVariable Integer pages, @PathVariable String categoryId, @PathVariable Integer state){
+    public ResponseVO<PageDataVO> getSecShopInfoListByCondition(@PathVariable Integer limit, @PathVariable Integer pages, @PathVariable String categoryId, @PathVariable Integer state){
         try {
-            List<IndexShopInfoVO> list = shopInfoService.getSecShopInfoListByCondition(limit,pages,categoryId,state);
-            if (list==null){
-                throw new Exception();
-            }
-            return ResponseVO.getSuccessResponseVo(list);
+            PageDataVO secShopInfoListByCondition = shopInfoService.getSecShopInfoListByCondition(limit, pages, categoryId, state);
+
+            return ResponseVO.getSuccessResponseVo(secShopInfoListByCondition);
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("根据条件筛选后获取实体店列表失败，请联系后台人员");

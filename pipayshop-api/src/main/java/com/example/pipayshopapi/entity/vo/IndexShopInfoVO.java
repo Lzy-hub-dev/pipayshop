@@ -1,10 +1,12 @@
 package com.example.pipayshopapi.entity.vo;
 
+import com.example.pipayshopapi.entity.ShopTags;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author ThinkPad
@@ -20,4 +22,6 @@ public class IndexShopInfoVO {
     private String shopIntroduce;
     private BigDecimal localhostLongitude;
     private String userImage;
+    private String tagList;
+    private List<ShopTags> shopTagsList;
 }
