@@ -43,6 +43,7 @@ public class ShopInfo implements Serializable {
      */
     private String shopName;
 
+
     /**
      * 坐标维度
      */

@@ -2,7 +2,10 @@ package com.example.pipayshopapi.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ShopCategory;
+import com.example.pipayshopapi.entity.vo.IndexShopInfoVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -25,4 +28,13 @@ public interface ShopCategoryService extends IService<ShopCategory> {
      * 根据分类id删除分类
      */
     Boolean deleteShopCategoryById(String categoryId);
+
+
+    /**
+     * 查询二级分类列表
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    PageDataVO getShopCategorySecList(String categoryPid,Integer pageNum, Integer pageSize);
 }

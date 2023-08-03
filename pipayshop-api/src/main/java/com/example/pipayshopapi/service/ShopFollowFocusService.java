@@ -32,5 +32,12 @@ public interface ShopFollowFocusService extends IService<ShopFollowFocus> {
      */
     Boolean userUnfollow(String followId, String shopId);
 
+    /**
+     * 获取粉丝列表
+     * @param shopId
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
     PageDataVO getFollowList(String shopId, Integer pageNum, Integer pageSize);
 }

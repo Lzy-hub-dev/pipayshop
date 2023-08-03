@@ -237,6 +237,21 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         shopInfo.setShopIntroduce(applyShopDTO.getShopIntroduce());
         return shopInfoMapper.insert(shopInfo) > 0;
     }
+    /**
+     * 根据条件筛选后获取实体店列表
+     *
+     * @param limit
+     * @param pages
+     * @param categoryId
+     * @param state
+     * @return
+     */
+    @Override
+    public List<IndexShopInfoVO> getSecShopInfoListByCondition(Integer limit, Integer pages, String categoryId, Integer state) {
+        // stata==1,按评分从低到高；stata==2,按评分从高到低
+        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(categoryId, (pages - 1) * limit, limit,state);
+        return indexShopInfoVO;
 
+    }
 
 }
