@@ -132,7 +132,7 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
      */
     @Override
     public PageDataVO getMyOrderByUid(Integer page,Integer limit,String uid,Integer status) {
-        Integer allMyOrderByUid = itemOrderInfoMapper.getAllMyOrderByUid(uid);
+        Integer allMyOrderByUid = itemOrderInfoMapper.getAllMyOrderByUid(uid,status);
         List<MyItemOrderInfoVO> myOrderByUid = itemOrderInfoMapper.getMyOrderByUid((page - 1) * limit, limit, uid,status);
         return new PageDataVO(allMyOrderByUid,myOrderByUid);
     }
