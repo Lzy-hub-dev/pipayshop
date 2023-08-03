@@ -105,9 +105,4 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         return result > 0;
     }
 
-    @Override
-    public String selectItemByUid(String uid) {
-
-        return null;
-    }
 }
