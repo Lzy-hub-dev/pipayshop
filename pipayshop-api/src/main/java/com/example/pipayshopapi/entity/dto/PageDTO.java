@@ -17,6 +17,7 @@ import java.lang.annotation.Inherited;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PageDTO {
-    private Integer pageNumber;
+
+    private Integer pageNumber=1;
     private Integer pageSize;
 }

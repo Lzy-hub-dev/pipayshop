@@ -23,7 +23,7 @@ public class GetOrderDataVO {
      */
     private String userId;
     /**
-     * 用户id
+     * 实体店id
      */
     private String shopId;
 

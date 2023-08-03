@@ -31,8 +31,6 @@ public class ShopCategoryTopServiceImpl extends ServiceImpl<ShopCategoryTopMappe
     /**
      * 查询一级分类列表
      *
-     * @param pageNum
-     * @param pageSize
      * @return
      */
     @Override

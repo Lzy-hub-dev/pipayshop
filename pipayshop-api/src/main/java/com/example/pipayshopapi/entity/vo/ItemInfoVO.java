@@ -14,10 +14,11 @@ import java.util.List;
 @AllArgsConstructor
 public class ItemInfoVO {
     private String itemId;
+    private String userImage;
     private String itemName;
     private double score;
     private Integer itemSum;
     private Integer fanSum;
     private String itemImagList;
-    private List<ItemCommodityInfoVO> commodityInfoList;
+    private List<ItemCommodityVO> commodityInfoList;
 }

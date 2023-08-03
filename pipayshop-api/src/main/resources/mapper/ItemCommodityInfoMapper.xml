@@ -72,21 +72,28 @@
         WHERE h.user_id = #{userId}
           AND i.`status` = 1
     </select>
-    <select id="examineCommodityList" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityInfoVO">
+    <select id="examineCommodityList" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityVO">
         SELECT c.commodity_id,
-               i.item_name,
-               i.user_image  AS seller_pic,
-               c.`status`,
-               c.avatar_imag AS commodity_pic,
-               c.item_commodity_name,
-               c.price
+        i.item_name,
+        i.user_image AS seller_pic,
+        c.`status`,
+        c.avatar_imag AS commodity_pic,
+        c.item_commodity_name,
+        c.price
         FROM item_info i
-                 INNER JOIN user_info u ON i.uid = u.uid
-                 INNER JOIN item_commodity_info c ON i.item_id = c.item_id
-        WHERE u.uid = #{userId}
-          AND c.`status` = #{examineStatus}
+        INNER JOIN user_info u ON i.uid = u.uid
+        INNER JOIN item_commodity_info c ON i.item_id = c.item_id
+        <where>
+            ${ew.sqlSegment}
+        </where>
+
     </select>
-    <select id="commodityList" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityInfoVO">
+    <!-- WHERE u.uid = #{userId}
+        <if test="examineStatus!=2">
+            AND c.`status` = #{examineStatus}
+        </if>
+        limit #{pageNumber},#{pageSize}-->
+    <select id="commodityList" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityVO">
         SELECT c.commodity_id,
                i.item_name,
                i.user_image  AS seller_pic,
