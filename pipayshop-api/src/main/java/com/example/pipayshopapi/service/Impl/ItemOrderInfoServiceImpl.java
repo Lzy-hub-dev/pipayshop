@@ -114,7 +114,7 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
         // 商品库存更新
         int update = itemCommodityInfoMapper.update(null, new UpdateWrapper<ItemCommodityInfo>()
                 .eq("commodity_id", payOrderVO.getCommodityId())
-                .setSql("inventory = inventory - 1")
+                .setSql("inventory = inventory - "+payOrderVO.getNumber())
                 .set("update_time", new Date()));
         if (update < 1){throw new RuntimeException();}
         // 订单状态、修改时间更新
@@ -131,9 +131,9 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
      * 根据用户id查询网店的所有订单
      */
     @Override
-    public PageDataVO getMyOrderByUid(Integer page,Integer limit,String uid) {
-        Integer allMyOrderByUid = itemOrderInfoMapper.getAllMyOrderByUid(uid);
-        List<MyItemOrderInfoVO> myOrderByUid = itemOrderInfoMapper.getMyOrderByUid((page - 1) * limit, limit, uid);
+    public PageDataVO getMyOrderByUid(Integer page,Integer limit,String uid,Integer status) {
+        Integer allMyOrderByUid = itemOrderInfoMapper.getAllMyOrderByUid(uid,status);
+        List<MyItemOrderInfoVO> myOrderByUid = itemOrderInfoMapper.getMyOrderByUid((page - 1) * limit, limit, uid,status);
         return new PageDataVO(allMyOrderByUid,myOrderByUid);
     }
 }

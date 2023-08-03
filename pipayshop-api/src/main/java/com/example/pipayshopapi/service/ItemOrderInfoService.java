@@ -38,5 +38,5 @@ public interface ItemOrderInfoService extends IService<ItemOrderInfo> {
     /**
      * 根据用户id查询网店的所有订单
      */
-    PageDataVO getMyOrderByUid(Integer page,Integer limit,String uid);
+    PageDataVO getMyOrderByUid(Integer page,Integer limit,String uid,Integer status);
 }

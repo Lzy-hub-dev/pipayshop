@@ -112,7 +112,7 @@
     </resultMap>
     <select id="getShopOrderDetailVO" resultMap="paiedOrderDetailMap" >
         select
-            create_time, update_time
+            create_time, update_time,number
         from
             shop_order_info
         where

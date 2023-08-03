@@ -81,5 +81,10 @@ public class ShopOrderInfo implements Serializable {
      */
     private Integer delFlag;
 
+    /**
+     * 商品下单数量
+     */
+    private Integer number;
+
 
 }

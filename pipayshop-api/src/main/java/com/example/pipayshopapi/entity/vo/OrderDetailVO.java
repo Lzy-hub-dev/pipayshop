@@ -35,4 +35,6 @@ public class OrderDetailVO {
     private String buyerName;
 
     private BigDecimal transactionAmount;
+
+    private Integer number;
 }

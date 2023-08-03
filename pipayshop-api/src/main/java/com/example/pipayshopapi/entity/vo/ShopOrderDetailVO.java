@@ -24,4 +24,6 @@ public class ShopOrderDetailVO {
     private Date payTime;
 
     private String orderId;
+
+    private Integer number;
 }

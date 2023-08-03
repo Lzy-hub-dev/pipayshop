@@ -59,5 +59,5 @@ public class MyItemOrderInfoVO {
     /**
      * 0:待支付1:已支付2：已完成3：无效订单
      */
-    private Boolean orderStatus;
+    private Integer orderStatus;
 }
