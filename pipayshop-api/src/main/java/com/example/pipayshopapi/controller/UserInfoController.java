@@ -1,15 +1,22 @@
 package com.example.pipayshopapi.controller;
 
 
+import com.example.pipayshopapi.entity.enums.Language;
+import com.example.pipayshopapi.entity.vo.ItemInfoVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
+import com.example.pipayshopapi.exception.BusinessException;
+import com.example.pipayshopapi.service.ShopInfoService;
 import com.example.pipayshopapi.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import com.example.pipayshopapi.entity.vo.ItemMinInfoVo;
 
 import javax.annotation.Resource;
+import java.io.File;
 
 /**
  * <p>
@@ -26,7 +33,6 @@ public class UserInfoController {
 
     @Resource
     private UserInfoService userInfoService;
-
 
     @GetMapping("selectUserInfoByUid/{uid}")
     @ApiOperation("根据用户Id查找用户数据表的基本信息")
@@ -93,6 +99,18 @@ public class UserInfoController {
                 throw new Exception();
             }
             return ResponseVO.getSuccessResponseVo("上传成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("上传失败，请联系后台人员");
+        }
+    }
+
+    @GetMapping("getItemInfoByUid")
+    @ApiOperation("根据用户ID获取网店ID和商品数量")
+    public ResponseVO<ItemMinInfoVo> getItemInfoByUid(String userId){
+        try {
+            ItemMinInfoVo result = userInfoService.getItemInfoByUid(userId);
+            return ResponseVO.getSuccessResponseVo(result);
         }catch (Exception e){
             e.printStackTrace();
             throw new RuntimeException("上传失败，请联系后台人员");
