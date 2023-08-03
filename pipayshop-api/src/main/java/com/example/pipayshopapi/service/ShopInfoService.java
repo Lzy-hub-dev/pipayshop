@@ -74,4 +74,13 @@ public interface ShopInfoService extends IService<ShopInfo> {
      */
     boolean applyShop(ApplyShopDTO applyShopDTO , MultipartFile[] file);
 
+    /**
+     * 根据条件筛选后获取实体店列表
+     * @param limit
+     * @param pages
+     * @param categoryId
+     * @param state
+     * @return
+     */
+    List<IndexShopInfoVO> getSecShopInfoListByCondition(Integer limit, Integer pages, String categoryId, Integer state);
 }
