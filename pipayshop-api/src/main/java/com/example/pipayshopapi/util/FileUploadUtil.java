@@ -70,7 +70,7 @@ public class FileUploadUtil {
             e.printStackTrace();
         }
 
-        return PRE+path+File.separator+fileName;
+        return File.separator+PRE+path+File.separator+fileName;
     }
     /**
      *删除文件

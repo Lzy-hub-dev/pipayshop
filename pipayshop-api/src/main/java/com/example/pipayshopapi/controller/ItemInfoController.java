@@ -1,6 +1,7 @@
 package com.example.pipayshopapi.controller;
 
 
+import com.example.pipayshopapi.entity.ItemInfo;
 import com.example.pipayshopapi.entity.vo.ItemInfoVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -75,6 +76,17 @@ public class ItemInfoController {
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new BusinessException("获取网店信息失败，请联系后台人员");
+        }
+    }
+    @GetMapping("followList/{userId}")
+    @ApiOperation("根据用户id查询 用户关注的网店列表")
+    public ResponseVO followList(@PathVariable("userId") String userId) {
+        try {
+            List<ItemInfo> list = itemInfoService.getFollowList(userId);
+            return ResponseVO.getSuccessResponseVo(list);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new BusinessException("查询失败，请联系后台人" + "、员");
         }
     }
 }

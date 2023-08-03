@@ -48,7 +48,16 @@ public class ItemInfoServiceImpl extends ServiceImpl<ItemInfoMapper, ItemInfo> i
     public List<ItemInfoVO> getItemInfoByUid(String userId) {
         return itemInfoMapper.selectItemInfoByItemIdOrUserId(userId,null);
     }
-
+    /**
+     * 根据用户id查询 对应的 网店关注列表
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<ItemInfo> getFollowList(String userId) {
+        return itemInfoMapper.selectFollowItemByUserId(userId);
+    }
     /**
      * 根据用户id获取网店数量
      *

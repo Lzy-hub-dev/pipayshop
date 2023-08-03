@@ -21,5 +21,14 @@
             <if test="userId!=null and userId!=''">and i.uid=#{userId}</if>
         </where>
     </select>
-
+    <select id="selectFollowItemByUserId" resultType="com.example.pipayshopapi.entity.ItemInfo">
+        SELECT *
+        FROM item_follow_focus f
+                 INNER JOIN
+             item_info i
+             ON f.item_id = i.item_id
+        WHERE f.follow_id = #{userId}
+          and f.`status` = 0
+          and i.`status` = 0
+    </select>
 </mapper>

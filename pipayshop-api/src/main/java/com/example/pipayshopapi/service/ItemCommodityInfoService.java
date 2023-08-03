@@ -56,14 +56,9 @@ public interface ItemCommodityInfoService extends IService<ItemCommodityInfo> {
      * @param userId
      * @return
      */
-    List<ItemCommodityInfo> getCollectList(String userId);
+    List<ItemCommodityInfoVO> getCollectList(String userId);
 
-    /**
-     * 根据用户id查询 对应的 网店关注列表
-     * @param userId
-     * @return
-     */
-    List<ItemInfo> getFollowList(String userId);
+
     /**
      * 根据用户id查询用户浏览商品历史-网店
      * @param userId

@@ -147,20 +147,11 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
      * @return
      */
     @Override
-    public List<ItemCommodityInfo> getCollectList(String userId) {
+    public List<ItemCommodityInfoVO> getCollectList(String userId) {
         return commodityInfoMapper.selectCollectProductByUserId(userId);
     }
 
-    /**
-     * 根据用户id查询 对应的 网店关注列表
-     *
-     * @param userId
-     * @return
-     */
-    @Override
-    public List<ItemInfo> getFollowList(String userId) {
-        return commodityInfoMapper.selectFollowItemByUserId(userId);
-    }
+
 
     /**
      * 根据用户id查询用户浏览商品历史-网店
