@@ -140,36 +140,48 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     public CommodityDetailVO itemCommodityDetail(String commodityId) {
         ItemCommodityInfo itemCommodityInfo = commodityInfoMapper.selectOne(new QueryWrapper<ItemCommodityInfo>()
                 .eq("commodity_id", commodityId));
-        String colorListString = itemCommodityInfo.getColorList();
-        String sizeListString = itemCommodityInfo.getSizeList();
-        String acceptAddressListString = itemCommodityInfo.getAcceptAddressList();
-        String imagsListString = itemCommodityInfo.getImagsList();
-        String couponsListString = itemCommodityInfo.getCouponsList();
-        String tagListString = itemCommodityInfo.getTagList();
-
-
-        List<String> colorList = JSON.parseArray(itemCommodityInfo.getColorList(), String.class);
-        List<String> sizeList = JSON.parseArray(itemCommodityInfo.getSizeList(), String.class);
-        List<String> acceptAddressList = JSON.parseArray(itemCommodityInfo.getAcceptAddressList(), String.class);
-        List<String> imagsList = JSON.parseArray(itemCommodityInfo.getImagsList(), String.class);
-        List<String> couponsList = JSON.parseArray(itemCommodityInfo.getCouponsList(), String.class);
-        List<String> tagList = JSON.parseArray(itemCommodityInfo.getTagList(), String.class);
-        BrandInfo brandInfo = brandInfoMapper.selectOne(new QueryWrapper<BrandInfo>()
-                .eq("b_id", itemCommodityInfo.getBrandId())
-                .eq("del_flag", 0)
-                .select("brand"));
-        return new CommodityDetailVO(itemCommodityInfo.getCommodityId(), brandInfo.getBrand(), itemCommodityInfo.getItemCommodityName()
-                , itemCommodityInfo.getOriginPrice(), colorList, sizeList, itemCommodityInfo.getOriginAddress(), acceptAddressList
-        , itemCommodityInfo.getItemId(), itemCommodityInfo.getPrice(), itemCommodityInfo.getDetails(), imagsList,
+        CommodityDetailVO commodityDetailVO = new CommodityDetailVO(itemCommodityInfo.getCommodityId(), null, itemCommodityInfo.getItemCommodityName()
+                , itemCommodityInfo.getOriginPrice(), null, null, itemCommodityInfo.getOriginAddress(), null
+                , itemCommodityInfo.getItemId(), itemCommodityInfo.getPrice(), itemCommodityInfo.getDetails(), null,
                 itemCommodityInfo.getInventory(), itemCommodityInfo.getFreeShippingNum(), itemCommodityInfo.getCategoryId(),
-                couponsList, tagList, itemCommodityInfo.getDegreeLoss());
+                null, null, itemCommodityInfo.getDegreeLoss());
+        String colorListString = itemCommodityInfo.getColorList();
+        if (colorListString != null) {
+            commodityDetailVO.setColorList(JSON.parseArray(colorListString, String.class));
+        }
+        String sizeListString = itemCommodityInfo.getSizeList();
+        if (sizeListString != null) {
+            commodityDetailVO.setSizeList(JSON.parseArray(sizeListString, String.class));
+        }
+        String acceptAddressListString = itemCommodityInfo.getAcceptAddressList();
+        if (acceptAddressListString != null) {
+            commodityDetailVO.setAcceptAddressList(JSON.parseArray(acceptAddressListString, String.class));
+        }
+        String imagsListString = itemCommodityInfo.getImagsList();
+        if (imagsListString != null) {
+            commodityDetailVO.setImagsList(JSON.parseArray(imagsListString, String.class));
+        }
+        String couponsListString = itemCommodityInfo.getCouponsList();
+        if (couponsListString != null) {
+            commodityDetailVO.setCouponsList(JSON.parseArray(couponsListString, String.class));
+        }
+        String tagListString = itemCommodityInfo.getTagList();
+        if (tagListString != null) {
+            commodityDetailVO.setTagList(JSON.parseArray(tagListString, String.class));
+        }
+        String brandId = itemCommodityInfo.getBrandId();
+        if (brandId != null) {
+            BrandInfo brandInfo = brandInfoMapper.selectOne(new QueryWrapper<BrandInfo>()
+                    .eq("b_id", brandId)
+                    .eq("del_flag", 0)
+                    .select("brand"));
+            commodityDetailVO.setBrand(brandInfo.getBrand());
+        }
+        return commodityDetailVO;
     }
 
     /**
      * 根据用户id查询 对应的 网店收藏列表
-     *
-     * @param userId
-     * @return
      */
     @Override
     public List<ItemCommodityInfoVO> getCollectList(String userId) {
@@ -180,22 +192,12 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
 
     /**
      * 根据用户id查询用户浏览商品历史-网店
-     *
-     * @param userId
-     * @return
      */
     @Override
     public List<ItemCommodityInfoVO> historyList(String userId) {
         return commodityInfoMapper.selectHistoryProductByUserId(userId);
     }
 
-
-
-    /**
-     * @param commodity
-     * @param status    1:上架;2:下架
-     * @return
-     */
     @Override
     public boolean changeCommodityStatus(String commodity, String status) {
         LambdaUpdateWrapper<ItemCommodityInfo> wr = new LambdaUpdateWrapper<ItemCommodityInfo>()
