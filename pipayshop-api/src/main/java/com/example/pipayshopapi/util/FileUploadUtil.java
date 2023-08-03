@@ -6,10 +6,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
- 
- 
+
+
 /**
- * @author: 
+ * @author:
  * @ClassName FileUploadUtil
  * @Description 文件上传工具类
  */
@@ -28,6 +28,10 @@ public class FileUploadUtil {
     public static String SHOP_COMMODITY_IMG="shop_commodity_img";
     //实体店背景广告图存储位置
     public static String SHOP_IMG="shop_img";
+    //酒店头像图片储存位置image_list
+    public static String ROOM_TOP_IMG="room_top_img";
+    //酒店轮播图储存位置
+    public static String ROOM_IMAGE_LIST="room_image_list";
 
 
 
@@ -40,7 +44,7 @@ public class FileUploadUtil {
         if (multipartFile.isEmpty()) {
             throw new BusinessException("文件不能为空") ;
         }
- 
+
         String fileName = multipartFile.getOriginalFilename();
 
         if ("".equals(fileName)) {
