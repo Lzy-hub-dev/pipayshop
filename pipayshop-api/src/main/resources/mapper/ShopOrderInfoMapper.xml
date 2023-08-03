@@ -57,7 +57,7 @@
         <result property="transactionAmount" column="transaction_amount" />
         <result property="sellerImg" column="user_image" />
         <result property="sellerName" column="shop_name" />
-        <result property="commodityImg" column="avatar_image" />
+        <result property="commodityImg" column="avatar_imag" />
         <result property="details" column="commodity_detail"/>
     </resultMap>
 
