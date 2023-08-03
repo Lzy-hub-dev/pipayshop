@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     @Autowired
     private ShopTagsMapper tagMapper;
 
+
     /**
      * 根据条件筛选后获取实体店列表
      */
@@ -52,6 +54,20 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
 
         // stata==1,按评分从低到高；stata==2,按评分从高到低
         List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(categoryId, (pages - 1) * limit, limit,state);
+        List<ShopTags> list1 = new ArrayList<>();
+        for (IndexShopInfoVO shopInfoVO : indexShopInfoVO) {
+            List<String> list = JSON.parseArray(shopInfoVO.getTagList(), String.class);
+            System.out.println("bb"+list);
+            if (list==null||list.isEmpty()){
+                continue;
+            }
+            for (String s : list) {
+                ShopTags tag_ids = tagMapper.selectOne(new QueryWrapper<ShopTags>().eq("tag_id", s));
+                System.out.println("aa"+tag_ids);
+                list1.add(tag_ids);
+            }
+            shopInfoVO.setShopTagsList(list1);
+        }
         return indexShopInfoVO;
     }
 
@@ -242,19 +258,32 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
      * @return
      */
     @Override
-    public List<IndexShopInfoVO> getSecShopInfoListByCondition(Integer limit, Integer pages, String categoryId, Integer state) {
+    public PageDataVO getSecShopInfoListByCondition(Integer limit, Integer pages, String categoryId, Integer state) {
+        Integer n = shopInfoMapper.getAllIndexShopInfoVO(categoryId, state);
         // stata==1,按评分从低到高；stata==2,按评分从高到低
-        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(categoryId, (pages - 1) * limit, limit,state);
-        return indexShopInfoVO;
-
+        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(categoryId, (pages - 1) * limit, limit, state);
+        List<ShopTags> list1 = new ArrayList<>();
+        for (IndexShopInfoVO shopInfoVO : indexShopInfoVO) {
+            List<String> list = JSON.parseArray(shopInfoVO.getTagList(), String.class);
+            System.out.println("bb" + list);
+            if (list == null || list.isEmpty()) {
+                continue;
+            }
+            for (String s : list) {
+                ShopTags tag_ids = tagMapper.selectOne(new QueryWrapper<ShopTags>().eq("tag_id", s));
+                System.out.println("aa" + tag_ids);
+                list1.add(tag_ids);
+            }
+            shopInfoVO.setShopTagsList(list1);
+        }
+        return new PageDataVO(n,indexShopInfoVO);
     }
 
-    /**
-     * 根据用户id查询用户关注的实体店列表
-     */
-    @Override
-    public List<ShopInfo> getFollowList(String userId) {
-        return shopInfoMapper.selectFollowProductByUserId(userId);
-    }
-
+        /**
+         * 根据用户id查询用户关注的实体店列表
+         */
+        @Override
+        public List<ShopInfo> getFollowList (String userId){
+            return shopInfoMapper.selectFollowProductByUserId(userId);
+        }
 }

@@ -87,5 +87,5 @@ public interface ShopInfoService extends IService<ShopInfo> {
      * @param state
      * @return
      */
-    List<IndexShopInfoVO> getSecShopInfoListByCondition(Integer limit, Integer pages, String categoryId, Integer state);
+    PageDataVO getSecShopInfoListByCondition(Integer limit, Integer pages, String categoryId, Integer state);
 }
