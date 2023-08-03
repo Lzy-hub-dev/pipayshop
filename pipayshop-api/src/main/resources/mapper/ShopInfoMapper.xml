@@ -38,8 +38,8 @@
         from shop_info
             <where>
                 <if test="categoryId != null and categoryId != '-1' ">category_id=#{categoryId} </if>
-                <if test="state==1">ORDER BY score ASC</if>
-                <if test="state==2">ORDER BY score DESC</if>
+                <if test="state != null and state==1">ORDER BY score ASC</if>
+                <if test="state != null and state==2">ORDER BY score DESC</if>
             </where>
         LIMIT ${page},${limit}
     </select>

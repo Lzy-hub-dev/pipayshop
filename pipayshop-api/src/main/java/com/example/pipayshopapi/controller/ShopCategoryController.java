@@ -1,7 +1,7 @@
 package com.example.pipayshopapi.controller;
 
+import com.example.pipayshopapi.entity.ShopCategory;
 import com.example.pipayshopapi.entity.vo.IndexShopInfoVO;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopCategoryService;
@@ -33,13 +33,11 @@ public class ShopCategoryController {
     private ShopCategoryService shopCategoryService;
     @Resource
     private ShopInfoService shopInfoService;
-    @GetMapping("getShopCategorySecList/{categoryPid}/{pageNum}/{pageSize}")
+    @GetMapping("getShopCategorySecList/{categoryPid}")
     @ApiOperation("查询二级分类列表")
-    public ResponseVO<PageDataVO> getShopCategorySecList(@PathVariable String categoryPid,
-                                             @PathVariable Integer pageNum,
-                                             @PathVariable Integer pageSize) {
+    public ResponseVO<List<ShopCategory>> getShopCategorySecList(@PathVariable String categoryPid) {
         try {
-            PageDataVO list = shopCategoryService.getShopCategorySecList(categoryPid,pageNum, pageSize);
+            List<ShopCategory> list = shopCategoryService.getShopCategorySecList(categoryPid);
             return ResponseVO.getSuccessResponseVo(list);
         } catch (Exception e) {
             return ResponseVO.getFalseResponseVo(null);

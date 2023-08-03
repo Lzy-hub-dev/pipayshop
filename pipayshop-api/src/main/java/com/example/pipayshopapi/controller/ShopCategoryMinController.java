@@ -2,7 +2,6 @@ package com.example.pipayshopapi.controller;
 
 import com.example.pipayshopapi.entity.ShopCategoryMin;
 import com.example.pipayshopapi.entity.vo.IndexShopInfoVO;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopCategoryMinService;
@@ -32,11 +31,11 @@ public class ShopCategoryMinController {
 
     private static final Logger log = LoggerFactory.getLogger(ShopCategoryMinController.class);
 
-    @GetMapping("getShopCategoryMinList")
+    @GetMapping("getShopCategoryMinList/{categoryPid}")
     @ApiOperation("实体店三级分类标签列表展示")
-    public ResponseVO<PageDataVO> getShopCategoryMinList(Integer pageNum, Integer pageSize) {
+    public ResponseVO<List<ShopCategoryMin>> getShopCategoryMinList(@PathVariable String categoryPid) {
         try {
-            PageDataVO list = shopCategoryMinService.getShopCategoryMinList(pageNum, pageSize);
+            List<ShopCategoryMin> list = shopCategoryMinService.getShopCategoryMinList(categoryPid);
             return ResponseVO.getSuccessResponseVo(list);
         } catch (Exception e) {
             log.error(e.getMessage());
