@@ -9,6 +9,7 @@ import com.example.pipayshopapi.entity.ItemCommodityHistory;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.ItemInfo;
 import com.example.pipayshopapi.entity.dto.ApplyItemCommodityDTO;
+import com.example.pipayshopapi.entity.dto.ExamineCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.mapper.ItemCommodityHistoryMapper;
@@ -190,7 +191,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
      */
     @Override
     public ItemInfoVO commodityList(String itemId) {
-        List<ItemCommodityInfoVO> voList = commodityInfoMapper.commodityList(itemId);
+        List<ItemCommodityVO> voList = commodityInfoMapper.commodityList(itemId);
         List<ItemInfoVO> itemInfoVO = itemInfoMapper.selectItemInfoByItemIdOrUserId(null,itemId);
         if (itemInfoVO != null) {
             ItemInfoVO vo = itemInfoVO.get(0);
@@ -203,13 +204,11 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     /**
      * 根据卖家id查询网店的商品审核列表
      *
-     * @param userId
-     * @param examineStatus 0:审核中;1:审核通过
      * @return
      */
     @Override
-    public List<ItemCommodityInfoVO> examineCommodityList(String userId, Integer examineStatus) {
-        return commodityInfoMapper.examineCommodityList(userId, examineStatus);
+    public List<ItemCommodityVO> examineCommodityList(ExamineCommodityDTO dto) {
+        return commodityInfoMapper.examineCommodityList(dto);
     }
 
 

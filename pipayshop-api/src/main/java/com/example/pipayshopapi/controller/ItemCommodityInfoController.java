@@ -4,6 +4,7 @@ package com.example.pipayshopapi.controller;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.ItemInfo;
 import com.example.pipayshopapi.entity.dto.ApplyItemCommodityDTO;
+import com.example.pipayshopapi.entity.dto.ExamineCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -150,14 +151,11 @@ public class ItemCommodityInfoController {
         }
     }
 
-    @GetMapping("examineCommodityList/{userId}")
+    @GetMapping("examineCommodityList")
     @ApiOperation("根据卖家id查询网店的商品审核列表")
-    public ResponseVO examineCommodityList(@PathVariable("userId") String userId,
-                                           @RequestParam
-                                           @ApiParam(value = "0:审核中;1:审核通过")
-                                           Integer examineStatus) {
+    public ResponseVO examineCommodityList(ExamineCommodityDTO dto) {
         try {
-            List<ItemCommodityInfoVO> list = commodityInfoService.examineCommodityList(userId, examineStatus);
+            List<ItemCommodityVO> list = commodityInfoService.examineCommodityList(dto);
             return ResponseVO.getSuccessResponseVo(list);
         } catch (Exception e) {
             log.error(e.getMessage());
