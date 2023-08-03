@@ -40,17 +40,7 @@ public class ShopCommodityLiveServiceImpl extends ServiceImpl<ShopCommodityLiveM
     @Override
     public PageDataVO selectShopCommodityLiveVO(Integer limit, Integer pages) {
         Integer integer = shopCommodityLiveMapper.selectAllShopCommodityLiveVO();
-        try {
-            if (pages==0){
-                throw new Exception();
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new BusinessException("分页不能为0");
-        }
-        Integer limits = (pages-1)*limit;
-
-        List<ShopCommodityLiveVO> shopCommodityLiveVOS = shopCommodityLiveMapper.selectShopCommodityLiveVO(limits, pages-1);
+        List<ShopCommodityLiveVO> shopCommodityLiveVOS = shopCommodityLiveMapper.selectShopCommodityLiveVO(limit, (pages-1)*limit);
         return new PageDataVO(integer,shopCommodityLiveVOS);
     }
 
