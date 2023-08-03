@@ -2,6 +2,7 @@ package com.example.pipayshopapi.mapper;
 
 import com.example.pipayshopapi.entity.ShopCommodityEvaluate;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.pipayshopapi.entity.vo.EvaluateVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityEvaluateVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -22,4 +23,6 @@ public interface ShopCommodityEvaluateMapper extends BaseMapper<ShopCommodityEva
     List<ShopCommodityEvaluateVO> commodityEvaluateList(@Param("commodityId") String commodityId,
                                                         @Param("pageNum") Integer pageNum,
                                                         @Param("pageSize") Integer pageSize);
+
+    List<EvaluateVO> getEvaluateList(@Param("commodityId") String commodityId);
 }
