@@ -2,6 +2,7 @@ package com.example.pipayshopapi.controller;
 
 
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
+import com.example.pipayshopapi.entity.ShopDetailInfoVO;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.vo.*;
@@ -62,10 +63,10 @@ public class ShopCommodityInfoController {
 
     @GetMapping("selectShopInfoByCommodityId/{commodityId}")
     @ApiOperation("根据商品的id查找实体店商品的详情信息")
-    public ResponseVO<ShopCommodityInfo> selectShopInfoByCommodityId(@PathVariable String commodityId) {
+    public ResponseVO<ShopDetailInfoVO> selectShopInfoByCommodityId(@PathVariable String commodityId) {
         try {
-            ShopCommodityInfo shopCommodityInfo = shopCommodityService.selectShopInfoByCommodityId(commodityId);
-            return ResponseVO.getSuccessResponseVo(shopCommodityInfo);
+            ShopDetailInfoVO shopDetailInfoVO = shopCommodityService.selectShopInfoByCommodityId(commodityId);
+            return ResponseVO.getSuccessResponseVo(shopDetailInfoVO);
         } catch (Exception e) {
             e.printStackTrace();
             throw new BusinessException("根据商品的id查找实体店商品的详情信息失败，请联系后台人员");
