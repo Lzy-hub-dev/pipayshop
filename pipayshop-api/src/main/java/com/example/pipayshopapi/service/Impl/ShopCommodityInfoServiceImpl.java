@@ -144,19 +144,10 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
      */
     @Override
     public PageDataVO selectShopInfoListByShopId(Integer limit, Integer pages, String shopId) {
-        Integer integer = shopCommodityInfoMapper.selectAllCommodityByShopId(shopId);
-        try {
-            if (pages==0){
-                throw new Exception();
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new BusinessException("分页不能为0");
-        }
-        Integer limits = limit*pages;
-        int page = pages- 1;
-        List<ShopCommodityInfo1VO> shopCommodityInfo1VOS = shopCommodityInfoMapper.selectCommodityByShopId(page, limits, shopId);
-        ArrayList<ShopTags> list1 = new ArrayList<>();
+        Integer count = shopCommodityInfoMapper.selectAllCommodityByShopId(shopId);
+        int page = (pages - 1) * limit;
+        List<ShopCommodityInfo1VO> shopCommodityInfo1VOS = shopCommodityInfoMapper.selectCommodityByShopId(page, limit, shopId);
+        List<ShopTags> list1 = new ArrayList<>();
         for (ShopCommodityInfo1VO shopCommodityInfo1VO : shopCommodityInfo1VOS) {
             List<String> list = JSON.parseArray(shopCommodityInfo1VO.getTagList(), String.class);
             if (list==null||list.isEmpty()){
@@ -168,7 +159,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
             }
             shopCommodityInfo1VO.setShopTagsList(list1);
         }
-        return new PageDataVO(integer,shopCommodityInfo1VOS);
+        return new PageDataVO(count,shopCommodityInfo1VOS);
     }
 
     /**

@@ -50,11 +50,10 @@ public class ShopCommodityInfoController {
 
     @GetMapping("selectShopInfoListByShopId/{pages}/{limit}/{shopId}")
     @ApiOperation("根据店铺id查找实体店商品的列表")
-    // Todo
-    public ResponseVO selectShopInfoListByShopId(@PathVariable Integer pages, @PathVariable Integer limit, @PathVariable String shopId) {
+    public ResponseVO<PageDataVO> selectShopInfoListByShopId(@PathVariable Integer pages, @PathVariable Integer limit, @PathVariable String shopId) {
         try {
             PageDataVO pageDataVO = shopCommodityService.selectShopInfoListByShopId(limit, pages, shopId);
-            return ResponseVO.getSuccessResponseVo(pageDataVO.getList());
+            return ResponseVO.getSuccessResponseVo(pageDataVO);
         } catch (Exception e) {
             e.printStackTrace();
             throw new BusinessException("根据店铺id查找实体店商品的详情信息列表失败，请联系后台人员");
