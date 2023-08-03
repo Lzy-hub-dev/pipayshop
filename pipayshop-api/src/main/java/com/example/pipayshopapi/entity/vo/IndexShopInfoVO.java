@@ -19,4 +19,6 @@ public class IndexShopInfoVO {
     private BigDecimal localhostLatitude;
     private BigDecimal localhostLongitude;
     private String userImage;
+
+    private String shopIntroduce;
 }
