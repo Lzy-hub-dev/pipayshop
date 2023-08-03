@@ -1,22 +1,15 @@
 package com.example.pipayshopapi.controller;
 
-
-import com.example.pipayshopapi.entity.enums.Language;
-import com.example.pipayshopapi.entity.vo.ItemInfoVO;
+import com.example.pipayshopapi.entity.vo.ItemMinInfoVo;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
-import com.example.pipayshopapi.exception.BusinessException;
-import com.example.pipayshopapi.service.ShopInfoService;
 import com.example.pipayshopapi.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import com.example.pipayshopapi.entity.vo.ItemMinInfoVo;
 
 import javax.annotation.Resource;
-import java.io.File;
 
 /**
  * <p>

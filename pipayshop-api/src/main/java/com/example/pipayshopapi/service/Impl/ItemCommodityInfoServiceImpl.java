@@ -2,16 +2,16 @@ package com.example.pipayshopapi.service.Impl;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.pipayshopapi.entity.ItemCommodityHistory;
+import com.example.pipayshopapi.entity.BrandInfo;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
-import com.example.pipayshopapi.entity.ItemInfo;
 import com.example.pipayshopapi.entity.dto.ApplyItemCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
-import com.example.pipayshopapi.mapper.ItemCommodityHistoryMapper;
+import com.example.pipayshopapi.mapper.BrandInfoMapper;
 import com.example.pipayshopapi.mapper.ItemCommodityInfoMapper;
 import com.example.pipayshopapi.mapper.ItemInfoMapper;
 import com.example.pipayshopapi.service.ItemCommodityInfoService;
@@ -41,7 +41,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     @Resource
     private ItemInfoMapper itemInfoMapper;
     @Resource
-    private ItemCommodityHistoryMapper itemCommodityHistoryMapper;
+    private BrandInfoMapper brandInfoMapper;
 
 
     /**
@@ -136,10 +136,32 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     }
 
     @Override
-    public CommodityDetailVO itemCommodityDetail(String commodityId,String userId) {
-        CommodityDetailVO commodityDetailVO = commodityInfoMapper.itemCommodityDetail(commodityId);
+    public CommodityDetailVO itemCommodityDetail(String commodityId) {
+        ItemCommodityInfo itemCommodityInfo = commodityInfoMapper.selectOne(new QueryWrapper<ItemCommodityInfo>()
+                .eq("commodity_id", commodityId));
+        String colorListString = itemCommodityInfo.getColorList();
+        String sizeListString = itemCommodityInfo.getSizeList();
+        String acceptAddressListString = itemCommodityInfo.getAcceptAddressList();
+        String imagsListString = itemCommodityInfo.getImagsList();
+        String couponsListString = itemCommodityInfo.getCouponsList();
+        String tagListString = itemCommodityInfo.getTagList();
 
-        return commodityDetailVO;
+
+        List<String> colorList = JSON.parseArray(itemCommodityInfo.getColorList(), String.class);
+        List<String> sizeList = JSON.parseArray(itemCommodityInfo.getSizeList(), String.class);
+        List<String> acceptAddressList = JSON.parseArray(itemCommodityInfo.getAcceptAddressList(), String.class);
+        List<String> imagsList = JSON.parseArray(itemCommodityInfo.getImagsList(), String.class);
+        List<String> couponsList = JSON.parseArray(itemCommodityInfo.getCouponsList(), String.class);
+        List<String> tagList = JSON.parseArray(itemCommodityInfo.getTagList(), String.class);
+        BrandInfo brandInfo = brandInfoMapper.selectOne(new QueryWrapper<BrandInfo>()
+                .eq("b_id", itemCommodityInfo.getBrandId())
+                .eq("del_flag", 0)
+                .select("brand"));
+        return new CommodityDetailVO(itemCommodityInfo.getCommodityId(), brandInfo.getBrand(), itemCommodityInfo.getItemCommodityName()
+                , itemCommodityInfo.getOriginPrice(), colorList, sizeList, itemCommodityInfo.getOriginAddress(), acceptAddressList
+        , itemCommodityInfo.getItemId(), itemCommodityInfo.getPrice(), itemCommodityInfo.getDetails(), imagsList,
+                itemCommodityInfo.getInventory(), itemCommodityInfo.getFreeShippingNum(), itemCommodityInfo.getCategoryId(),
+                couponsList, tagList, itemCommodityInfo.getDegreeLoss());
     }
 
     /**

@@ -4,26 +4,50 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+/**
+ * @author wzx
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommodityDetailVO {
+
     private String commodityId;
-    private String brandId;
+
+    private String brand;
+
     private String itemCommodityName;
-    private String originPrice;
-    private String colorList;
-    private String sizeList;
+
+    private BigDecimal originPrice;
+
+    private List<String> colorList;
+
+    private List<String> sizeList;
+
     private String originAddress;
-    private String acceptAddressList;
+
+    private List<String> acceptAddressList;
+
     private String itemId;
-    private String price;
+
+    private BigDecimal price;
+
     private String details;
-    private String imagsList;
+
+    private List<String> imagsList;
+
     private Integer inventory;
+
     private Integer freeShippingNum;
+
     private Integer categoryId;
-    private String couponsList;
-    private String tagList;
+
+    private List<String> couponsList;
+
+    private List<String> tagList;
+
     private Integer degreeLoss;
 }

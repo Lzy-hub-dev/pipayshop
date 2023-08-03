@@ -1,8 +1,6 @@
 package com.example.pipayshopapi.controller;
 
 
-import com.example.pipayshopapi.entity.ItemCommodityInfo;
-import com.example.pipayshopapi.entity.ItemInfo;
 import com.example.pipayshopapi.entity.dto.ApplyItemCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
@@ -106,13 +104,12 @@ public class ItemCommodityInfoController {
         }
     }
 
-    @GetMapping("itemCommodityDetail/{commodityId}/{userId}")
+    @GetMapping("itemCommodityDetail/{commodityId}")
     @ApiOperation("获取网店商品详情接口")
-    public ResponseVO<CommodityDetailVO> itemCommodityDetail(@PathVariable("commodityId") String commodityId,
-                                                             @PathVariable("userId")String userId) {
+    public ResponseVO<CommodityDetailVO> itemCommodityDetail(@PathVariable("commodityId") String commodityId) {
         try {
 
-            CommodityDetailVO commodityDetailVO = commodityInfoService.itemCommodityDetail(commodityId,userId);
+            CommodityDetailVO commodityDetailVO = commodityInfoService.itemCommodityDetail(commodityId);
             if (commodityDetailVO == null) {
                 throw new Exception();
             }

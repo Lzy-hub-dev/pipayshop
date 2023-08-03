@@ -3,7 +3,6 @@ package com.example.pipayshopapi.controller;
 
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
-import com.example.pipayshopapi.entity.vo.ShopUserFollowInfoVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopFollowFocusService;
 import com.example.pipayshopapi.service.UserInfoService;
@@ -11,7 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+
 import javax.annotation.Resource;
 
 /**

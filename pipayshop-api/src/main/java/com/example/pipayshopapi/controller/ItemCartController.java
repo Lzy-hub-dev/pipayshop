@@ -29,10 +29,10 @@ public class ItemCartController {
 
     @GetMapping("selectItemCartByIds/{currentPage}/{limit}/{userId}")
     @ApiOperation("根据用户id展示购物车列表")
-    public ResponseVO selectItemCartByIds(@PathVariable Integer currentPage, @PathVariable Integer limit,@PathVariable String userId){
+    public ResponseVO<PageDataVO> selectItemCartByIds(@PathVariable Integer currentPage, @PathVariable Integer limit,@PathVariable String userId){
         try {
             PageDataVO pageDataVO = itemCartService.selectItemCartByIds(limit, currentPage, userId);
-            return ResponseVO.getSuccessResponseVo(pageDataVO.getList());
+            return ResponseVO.getSuccessResponseVo(pageDataVO);
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("根据用户id查找购物车失败，请联系后台人员");
