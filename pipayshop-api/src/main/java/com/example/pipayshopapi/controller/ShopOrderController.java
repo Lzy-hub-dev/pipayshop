@@ -172,6 +172,23 @@ public class ShopOrderController {
 
 
 
-
+    /**
+     * 查看未支付/已支付/已完成订单列表接口(通过一个标识id来获取对应的状态的列表展示)
+     *  标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单
+     */
+    @GetMapping("getOrderListByShopId")
+    @ApiOperation("实体店的全部订单列表分页展示标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单")
+    public ResponseVO<List<OrderListVO>> getOrderListByShopId(GetOrderDataVO getOrderDataVO) {
+        try {
+            List<OrderListVO> list = shopOrderInfoService.getOrderListByShopId(getOrderDataVO);
+            if (list == null){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo(list);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new BusinessException("实体店的订单列表展示数据为0");
+        }
+    }
 
 }

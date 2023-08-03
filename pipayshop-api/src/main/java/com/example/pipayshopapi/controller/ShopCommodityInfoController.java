@@ -114,9 +114,9 @@ public class ShopCommodityInfoController {
 
     @GetMapping("collectList/{userId}")
     @ApiOperation("根据用户id查询用户收藏的实体类商品列表")
-    public ResponseVO<List<ShopCommodityInfo>> collectList(@PathVariable("userId") String userId) {
+    public ResponseVO<List<ShopCommodityInfoVO>> collectList(@PathVariable("userId") String userId) {
         try {
-            List<ShopCommodityInfo> list = shopCommodityService.getCollectList(userId);
+            List<ShopCommodityInfoVO> list = shopCommodityService.getCollectList(userId);
             return ResponseVO.getSuccessResponseVo(list);
         } catch (Exception e) {
             e.printStackTrace();
@@ -124,17 +124,7 @@ public class ShopCommodityInfoController {
         }
     }
 
-    @GetMapping("followList/{userId}")
-    @ApiOperation("根据用户id查询用户关注的实体店店列表")
-    public ResponseVO<List<ShopInfo>> followList(@PathVariable("userId") String userId) {
-        try {
-            List<ShopInfo> list = shopCommodityService.getFollowList(userId);
-            return ResponseVO.getSuccessResponseVo(list);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new BusinessException("查询失败，请联系后台人" + "、员");
-        }
-    }
+
 
     @GetMapping("history/{userId}")
     @ApiOperation("根据用户id查询用户浏览商品历史-实体店")

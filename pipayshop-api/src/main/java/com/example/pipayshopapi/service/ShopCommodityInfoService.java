@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
-import com.example.pipayshopapi.entity.vo.CommodityStatusPageVO;
-import com.example.pipayshopapi.entity.vo.OrderPageVO;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
-import com.example.pipayshopapi.entity.vo.ShopCommodityVO;
+import com.example.pipayshopapi.entity.vo.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -34,13 +31,8 @@ public interface ShopCommodityInfoService extends IService<ShopCommodityInfo> {
      * @param userId
      * @return
      */
-    List<ShopCommodityInfo> getCollectList(String userId);
-    /**
-     * 根据用户id查询用户关注的网店列表
-     * @param userId
-     * @return
-     */
-    List<ShopInfo> getFollowList(String userId);
+    List<ShopCommodityInfoVO> getCollectList(String userId);
+
 
     /**
      * 根据店铺id查找实体店商品的详情信息列表

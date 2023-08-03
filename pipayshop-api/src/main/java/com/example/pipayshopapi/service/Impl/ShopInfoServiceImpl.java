@@ -254,4 +254,12 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
 
     }
 
+    /**
+     * 根据用户id查询用户关注的实体店列表
+     */
+    @Override
+    public List<ShopInfo> getFollowList(String userId) {
+        return shopInfoMapper.selectFollowProductByUserId(userId);
+    }
+
 }

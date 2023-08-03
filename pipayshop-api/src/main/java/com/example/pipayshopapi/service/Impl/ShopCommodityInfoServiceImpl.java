@@ -78,17 +78,11 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
      * 根据用户id查询 用户收藏的商品列表
      */
     @Override
-    public List<ShopCommodityInfo> getCollectList(String userId) {
+    public List<ShopCommodityInfoVO> getCollectList(String userId) {
         return shopCommodityInfoMapper.selectCollectProductByUserId(userId);
     }
 
-    /**
-     * 根据用户id查询用户关注的网店列表
-     */
-    @Override
-    public List<ShopInfo> getFollowList(String userId) {
-        return shopCommodityInfoMapper.selectFollowProductByUserId(userId);
-    }
+
 
     /**
      * 根据用户id查询用户浏览商品历史-实体店

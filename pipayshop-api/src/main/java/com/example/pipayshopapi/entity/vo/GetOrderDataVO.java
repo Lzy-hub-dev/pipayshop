@@ -22,6 +22,10 @@ public class GetOrderDataVO {
      * 用户id
      */
     private String userId;
+    /**
+     * 用户id
+     */
+    private String shopId;
 
     /**
      * 每页条数

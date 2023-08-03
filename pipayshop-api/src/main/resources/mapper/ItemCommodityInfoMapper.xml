@@ -6,16 +6,16 @@
 
         SELECT i.commodity_id, i.item_commodity_name, i.origin_price, i.price, i.details, i.avatar_imag
         FROM item_commodity_info as i
-                 JOIN item_commodity_category as c on i.category_id=c.category_id
-        where c.category_id = #{secondCategoryId}
-        limit ${startIndex}, ${number}
+                 JOIN item_commodity_category as c on i.category_id = c.category_id
+        where c.category_id = #{secondCategoryId} limit ${startIndex}
+            , ${number}
 
     </select>
 
     <select id="listCount" resultType="java.lang.Integer">
         SELECT COUNT(*)
         FROM item_commodity_info as i
-                 JOIN item_commodity_category as c on i.category_id=c.category_id
+                 JOIN item_commodity_category as c on i.category_id = c.category_id
         where c.category_id = #{secondCategoryId}
     </select>
     <select id="itemCommodityChoose" resultType="com.example.pipayshopapi.entity.vo.CommodityVO">
@@ -57,19 +57,19 @@
                  c.item_id = i.item_id
     </select>
     <select id="selectCollectProductByUserId" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityInfoVO">
-        select avatar_imag as commodity_pic ,
-               i.item_commodity_name ,
-               i. price,
+        select avatar_imag     as commodity_pic,
+               i.item_commodity_name,
+               i.price,
                i.commodity_id,
-               info.item_name ,
-               info.user_image  as sellerPic
+               info.item_name,
+               info.user_image as sellerPic
         FROM item_collection ic
                  INNER JOIN
              item_commodity_info i
              ON
                  ic.commodity_id = i.commodity_id
-        inner join item_info info
-        on info.item_id=i.item_id
+                 inner join item_info info
+                            on info.item_id = i.item_id
 
         WHERE ic.user_id = #{userId}
           AND i.`status` = 1
@@ -77,54 +77,49 @@
     </select>
 
     <select id="selectHistoryProductByUserId" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityInfoVO">
-        SELECT
-            avatar_imag as commodity_pic ,
-            i.item_commodity_name ,
-            i. price,
-            h.create_time  as accessTime,
-            i.commodity_id
-        FROM
-            item_commodity_history h
-                INNER JOIN
-            item_commodity_info i
-            ON
-                h.commodity_id=i.commodity_id
-        WHERE
-            h.user_id=1 AND
-            i.`status`=1
+        SELECT avatar_imag     as commodity_pic,
+               i.item_commodity_name,
+               i.price,
+               h.create_time   as accessTime,
+               i.commodity_id,
+               info.item_name,
+               info.user_image as sellerPic
+        FROM item_commodity_history h
+                 INNER JOIN
+             item_commodity_info i
+             ON
+                 h.commodity_id = i.commodity_id
+                 inner join item_info info
+                            on info.item_id = i.item_id
+        WHERE h.user_id = #{userId}
+          AND i.`status` = 1
     </select>
     <select id="examineCommodityList" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityInfoVO">
-        SELECT
-            c.commodity_id,
-            i.item_name,
-            i.user_image AS seller_pic,
-            c.`status`,
-            c.avatar_imag AS commodity_pic,
-            c.item_commodity_name,
-            c.price
-        FROM
-            item_info i
-                INNER JOIN user_info u ON i.uid = u.uid
-                INNER JOIN item_commodity_info c ON i.item_id = c.item_id
-        WHERE
-            u.uid = #{userId}
-          AND c.`status` =#{examineStatus}
+        SELECT c.commodity_id,
+               i.item_name,
+               i.user_image  AS seller_pic,
+               c.`status`,
+               c.avatar_imag AS commodity_pic,
+               c.item_commodity_name,
+               c.price
+        FROM item_info i
+                 INNER JOIN user_info u ON i.uid = u.uid
+                 INNER JOIN item_commodity_info c ON i.item_id = c.item_id
+        WHERE u.uid = #{userId}
+          AND c.`status` = #{examineStatus}
     </select>
     <select id="commodityList" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityInfoVO">
-        SELECT
-            c.commodity_id,
-            i.item_name,
-            i.user_image AS seller_pic,
-            c.`status`,
-            c.avatar_imag AS commodity_pic,
-            c.item_commodity_name,
-            c.price
-        FROM
-            item_info i
-                INNER JOIN user_info u ON i.uid = u.uid
-                INNER JOIN item_commodity_info c ON i.item_id = c.item_id
-        WHERE
-            i.item_id = #{itemId}
+        SELECT c.commodity_id,
+               i.item_name,
+               i.user_image  AS seller_pic,
+               c.`status`,
+               c.avatar_imag AS commodity_pic,
+               c.item_commodity_name,
+               c.price
+        FROM item_info i
+                 INNER JOIN user_info u ON i.uid = u.uid
+                 INNER JOIN item_commodity_info c ON i.item_id = c.item_id
+        WHERE i.item_id = #{itemId}
           AND c.`status` !=0
     </select>
 </mapper>
