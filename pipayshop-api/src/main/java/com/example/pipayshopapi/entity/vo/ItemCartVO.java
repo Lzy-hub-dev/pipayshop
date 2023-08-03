@@ -27,7 +27,7 @@ public class ItemCartVO {
     private String commodityId;
 
 
-
+    private String itemId;
     /**
      * 商品现价
      */

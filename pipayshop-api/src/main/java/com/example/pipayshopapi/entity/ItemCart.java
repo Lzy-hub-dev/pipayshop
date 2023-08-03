@@ -56,4 +56,9 @@ public class ItemCart implements Serializable {
      * 删除标识
      */
     private Integer delFlag;
+
+    /**
+     * 总数
+     */
+    private Integer sumCount;
 }

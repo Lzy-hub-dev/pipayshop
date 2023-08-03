@@ -21,5 +21,4 @@ public class IndexShopInfoVO {
     private BigDecimal localhostLongitude;
     private String userImage;
 
-    private String shopIntroduce;
 }
