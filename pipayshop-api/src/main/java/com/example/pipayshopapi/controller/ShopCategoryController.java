@@ -44,11 +44,11 @@ public class ShopCategoryController {
         }
 
     }
-    @GetMapping("getSecShopInfoListByCondition/{limit}/{pages}/{categoryId}/{state}")
+    @GetMapping("getSecShopInfoListByCondition/{limit}/{pages}/{categoryId}")
     @ApiOperation("根据一级分类-获取所有实体店列表")
-    public ResponseVO<PageDataVO> getSecShopInfoListByCondition(@PathVariable Integer limit, @PathVariable Integer pages, @PathVariable String categoryId, @PathVariable Integer state){
+    public ResponseVO<PageDataVO> getSecShopInfoListByCondition(@PathVariable Integer limit, @PathVariable Integer pages, @PathVariable String categoryId){
         try {
-            PageDataVO secShopInfoListByCondition = shopInfoService.getSecShopInfoListByCondition(limit, pages, categoryId, state);
+            PageDataVO secShopInfoListByCondition = shopInfoService.getSecShopInfoListByCondition(limit, pages, categoryId);
 
             return ResponseVO.getSuccessResponseVo(secShopInfoListByCondition);
         }catch (Exception e){
