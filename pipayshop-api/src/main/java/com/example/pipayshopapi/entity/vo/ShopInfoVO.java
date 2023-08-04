@@ -64,5 +64,8 @@ public class ShopInfoVO {
      * 实体店的头像
      */
     private String userImage;
-
+    /**
+     * 是否是vip店铺
+     */
+    private Integer membership;
 }

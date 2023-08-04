@@ -84,4 +84,10 @@ public interface ShopInfoService extends IService<ShopInfo> {
      * @return
      */
     PageDataVO getSecShopInfoListByCondition(Integer limit, Integer pages, String categoryId);
+
+    boolean isVipShop(String shopId);
+
+    List<String> getShopIdListByUid(String uid);
+
+    Boolean upVipByShopIdList(String shopIds);
 }

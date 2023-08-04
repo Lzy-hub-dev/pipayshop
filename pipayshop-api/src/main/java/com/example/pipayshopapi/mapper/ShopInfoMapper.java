@@ -52,4 +52,5 @@ public interface ShopInfoMapper extends BaseMapper<ShopInfo> {
     Integer getAllIndexShopInfoVO(@Param("categoryId") String categoryId);
 
 
+    List<String> getShopIdListByUid(@Param("uid") String uid);
 }

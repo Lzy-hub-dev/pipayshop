@@ -279,4 +279,34 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     }
 
 
+
+    @Override
+    public boolean isVipShop(String shopId) {
+        int count = shopInfoMapper.selectCount(new QueryWrapper<ShopInfo>()
+                .eq("shop_id", shopId)
+                .eq("status", 0)
+                .eq("membership", 1)).intValue();
+        return count == 1;
+    }
+
+    @Override
+    public List<String> getShopIdListByUid(String uid) {
+        return shopInfoMapper.getShopIdListByUid(uid);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean upVipByShopIdList(String shopIds) {
+        String[] shopIdArray = shopIds.split(",");
+        long count = Arrays.stream(shopIdArray)
+                .parallel()
+                .peek(shopId -> {
+                    shopInfoMapper.update(null, new UpdateWrapper<ShopInfo>()
+                            .eq("shop_id", shopId)
+                            .eq("status", 0)
+                            .set("membership", 1));
+                })
+                .count();
+        return true;
+    }
 }

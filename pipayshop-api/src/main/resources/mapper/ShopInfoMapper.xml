@@ -77,4 +77,14 @@
     <select id="getShopInfoVOCount" resultType="java.lang.Integer">
 
     </select>
+
+
+    <select id="getShopIdListByUid" resultType="java.lang.String">
+        select
+            shop_id
+        from
+            shop_info
+        where
+            uid = #{uid} and status = 0
+    </select>
 </mapper>

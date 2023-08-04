@@ -139,5 +139,4 @@ public class ShopCommodityLiveInfo implements Serializable {
      */
     private Integer status;
 
-
 }

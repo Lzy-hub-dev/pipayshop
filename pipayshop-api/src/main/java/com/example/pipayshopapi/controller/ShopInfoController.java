@@ -134,5 +134,52 @@ public class ShopInfoController {
     }
 
 
+    /**
+     * 根据店铺id查询该店铺是否为vip店铺
+     */
+    @GetMapping("isVipShop/{shopId}")
+    @ApiOperation("根据店铺id查询该店铺是否为vip店铺")
+    public ResponseVO<Boolean> isVipShop(@PathVariable("shopId") String shopId) {
+        try {
+            boolean flag = infoService.isVipShop(shopId);
+            return ResponseVO.getSuccessResponseVo(flag);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException("根据店铺id查询该店铺是否为vip店铺失败，请联系后台人员");
+        }
+    }
+
+    /**
+     *  根据用户id查找名下的所有实体店铺的shopId列表
+     */
+    @GetMapping("getShopIdListByUid/{uid}")
+    @ApiOperation("根据用户id查找名下的所有实体店铺的shopId列表")
+    public ResponseVO<List<String>> getShopIdListByUid(@PathVariable("uid") String uid) {
+        try {
+            List<String> list = infoService.getShopIdListByUid(uid);
+            return ResponseVO.getSuccessResponseVo(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException("根据用户id查找名下的所有实体店铺的shopId列表失败，请联系后台人员");
+        }
+    }
+
+    /**
+     * 将多家实体店一起升级为vip店铺
+     */
+    @PostMapping("upVipByShopIdList")
+    @ApiOperation("将多家实体店一起升级为vip店铺")
+    public ResponseVO<String> upVipByShopIdList(String shopIds) {
+        try {
+            Boolean update = infoService.upVipByShopIdList(shopIds);
+            if (!update){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("将多家实体店一起升级为vip店铺");
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseVO.getFalseResponseVo("将多家实体店一起升级为vip店铺失败，请联系后台管理员");
+        }
+    }
 
 }

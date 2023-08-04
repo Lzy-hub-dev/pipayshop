@@ -8,4 +8,12 @@
         where
         shop_id=#{shopId}
     </select>
+
+    <select id="selectByRoomId" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoVO">
+        select room_id,room_type_name,land,restricted,price,rest_room,bed,adult,children
+        from shop_commodity_live_info
+        where room_id = #{roomId}
+    </select>
+
+
 </mapper>

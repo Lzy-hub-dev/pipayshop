@@ -76,4 +76,9 @@ public class ShopHotelRecord implements Serializable {
      */
     private Integer delFlag;
 
+    /**
+     * 订单id(外键)
+     */
+    private String orderId;
+
 }
