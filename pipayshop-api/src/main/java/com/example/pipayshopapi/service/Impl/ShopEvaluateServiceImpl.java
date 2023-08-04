@@ -35,7 +35,7 @@ public class ShopEvaluateServiceImpl extends ServiceImpl<ShopEvaluateMapper, Sho
     public PageDataVO getShopEvaluateListByItemId(Integer page, Integer limit, String itemId) {
         Page<ShopEvaluate> pages = new Page<>(page,limit);
         shopEvaluateMapper.selectPage(pages,new QueryWrapper<ShopEvaluate>()
-                                            .eq("item_id",itemId));
+                                            .eq("shop_id",itemId));
         return new PageDataVO((int) pages.getTotal(),pages.getRecords());
     }
 
