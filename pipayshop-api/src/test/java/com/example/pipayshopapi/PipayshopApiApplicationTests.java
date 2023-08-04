@@ -1,5 +1,6 @@
 package com.example.pipayshopapi;
 
+import com.example.pipayshopapi.entity.vo.HotelFacilityVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoListVO;
 import com.example.pipayshopapi.mapper.*;
 import com.example.pipayshopapi.service.ItemOrderInfoService;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -37,10 +39,11 @@ class PipayshopApiApplicationTests {
     private ShopCommodityLiveInfoMapper shopCommodityLiveInfoMapper;
     @Resource
     private ShopCommodityLiveInfoService shopCommodityLiveInfoService;
+
     @Test
     void contextLoads() {
-//        shopCommodityLiveInfoService.selectShopCommodityLiveInfoList("1002",new SimpleDate(new Date()))
 
     }
+
 
 }
