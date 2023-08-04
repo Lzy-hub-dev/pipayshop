@@ -122,4 +122,5 @@
         WHERE i.item_id = #{itemId}
           AND c.`status` !=0
     </select>
+
 </mapper>

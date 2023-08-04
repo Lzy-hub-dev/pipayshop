@@ -41,5 +41,4 @@ public interface ItemCommodityInfoMapper extends BaseMapper<ItemCommodityInfo> {
 
     List<ItemCommodityInfoVO> commodityList(String userId);
 
-
 }
