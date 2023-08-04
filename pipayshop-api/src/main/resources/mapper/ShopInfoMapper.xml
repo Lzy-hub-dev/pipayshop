@@ -71,11 +71,16 @@
           and i.`status` = 0
     </select>
     <select id="getAllIndexShopInfoVO" resultType="java.lang.Integer">
-        select count(*)
+        select COUNT(*)
         from shop_info
-        <where>
-            <if test="categoryId != null and categoryId != '-1' ">category_id=#{categoryId} </if>
-        </where>
+        WHERE category_id
+                  IN
+              (SELECT
+                   sc.category_id
+               FROM
+                   shop_category sc
+               WHERE
+                   sc.category_pid=#{categoryId})
     </select>
 
     <select id="getShopInfoVOCount" resultType="java.lang.Integer">
