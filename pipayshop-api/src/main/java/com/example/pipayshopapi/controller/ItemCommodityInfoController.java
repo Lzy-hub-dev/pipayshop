@@ -8,6 +8,7 @@ import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ItemCommodityHistoryService;
 import com.example.pipayshopapi.service.ItemCommodityInfoService;
+import com.example.pipayshopapi.util.FileUploadUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -58,10 +59,10 @@ public class ItemCommodityInfoController {
 
     @PostMapping(" issueItemCommodity")
     @ApiOperation("发布网店商品")
-    public ResponseVO issueItemCommodity(@RequestParam("files") MultipartFile[] files, ApplyItemCommodityDTO applyItemCommodityDTO){
+    public ResponseVO issueItemCommodity(@RequestBody ApplyItemCommodityDTO applyItemCommodityDTO){
 
         try {
-            boolean result = commodityInfoService.issueItemCommodity(applyItemCommodityDTO,files);
+            boolean result = commodityInfoService.issueItemCommodity(applyItemCommodityDTO);
             if (!result){
                 throw new Exception();
             }
@@ -208,6 +209,42 @@ public class ItemCommodityInfoController {
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new BusinessException("删除，请联系后台人" + "、员");
+        }
+    }
+
+    @PostMapping("itemTopImags{multipartFile}")
+    @ApiOperation("网店头像图片上传")
+    public ResponseVO<String> itemTopImagsUp(@PathVariable MultipartFile multipartFile){
+        try {
+            String itemTopImags = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.ROOM_TOP_IMG);
+            return ResponseVO.getSuccessResponseVo(itemTopImags);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("网店头像图片上传失败，请联系后台人员");
+        }
+    }
+
+    @PostMapping("itemImagsListUp{multipartFile}")
+    @ApiOperation("商品图片的地址集合上传")
+    public ResponseVO<String> itemImagsListUp(@PathVariable MultipartFile multipartFile){
+        try {
+            String itemImagsList = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.ROOM_TOP_IMG);
+            return ResponseVO.getSuccessResponseVo(itemImagsList);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("商品图片的地址集合上传失败，请联系后台人员");
+        }
+    }
+
+    @PostMapping("itemDetailImagsUp{multipartFile}")
+    @ApiOperation("商品详情图片上传")
+    public ResponseVO<String> roomTopImageUp(@PathVariable MultipartFile multipartFile){
+        try {
+            String itemDetailImags = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.ROOM_TOP_IMG);
+            return ResponseVO.getSuccessResponseVo(itemDetailImags);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("商品详情图片上传失败，请联系后台人员");
         }
     }
 

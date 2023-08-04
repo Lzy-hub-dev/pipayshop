@@ -29,10 +29,9 @@ public interface ItemCommodityInfoService extends IService<ItemCommodityInfo> {
     /**
      * 发布网店商品
      * @param applyItemCommodityDTO
-     * @param file
      * @return
      */
-    boolean issueItemCommodity(ApplyItemCommodityDTO applyItemCommodityDTO, MultipartFile[] file);
+    boolean issueItemCommodity(ApplyItemCommodityDTO applyItemCommodityDTO);
 
 
     /**

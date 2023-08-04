@@ -109,6 +109,11 @@ public class ItemCommodityInfo implements Serializable {
     private String imagsList;
 
     /**
+     * 商品详情图片的地址集合
+     */
+    private String detailImags;
+
+    /**
      * 库存
      */
     private Integer inventory;
