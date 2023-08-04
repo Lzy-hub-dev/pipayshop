@@ -40,7 +40,7 @@ public class ItemCommodityInfoController {
 
 
     @GetMapping("commodityOfCateList")
-    @ApiOperation("商品某二级分类下的商品列表分页展示")
+    @ApiOperation("查找二级分类下对应的商品列表-分页展示")
     public ResponseVO<PageDataVO> commodityOfCateList(@ModelAttribute CommodityPageVO commodityPageVO) {
         try {
             PageDataVO pageDataVO = commodityInfoService.commodityOfCateList(commodityPageVO);

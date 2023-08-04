@@ -22,12 +22,7 @@ public interface ShopCategoryTopService extends IService<ShopCategoryTop> {
      */
     List<ShopCategoryTop> getShopCategoryTopList();
 
-    /**
-     * 根据分类id查询分类
-     * @param categoryTopId
-     * @return
-     */
-    ShopCategoryTop getShopCategoryTopById(String categoryTopId);
+
 
     /**
      * 根据分类id删除分类
