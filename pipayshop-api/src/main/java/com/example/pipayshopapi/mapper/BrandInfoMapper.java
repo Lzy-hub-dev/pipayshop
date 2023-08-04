@@ -20,11 +20,11 @@ import java.util.List;
 @Mapper
 public interface BrandInfoMapper extends BaseMapper<BrandInfo> {
     /**
-     * 查找二级分类的id查找品牌的集合
-     * @param cateId
+     * 获取品牌信息列表
+     * @param
      * @return
      */
-    List<BrandInfoVO> selectAllContentList(@Param("cate_id") String cateId);
+    List<BrandInfoVO> selectAllContentList();
 
 
     /**

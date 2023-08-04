@@ -81,16 +81,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean issueItemCommodity(ApplyItemCommodityDTO applyItemCommodityDTO, MultipartFile[] files) {
-
-        // 创建集合放图片url
-        List<String> iamgesList = new ArrayList<>();
-        for (MultipartFile file : files) {
-            // 通过工具类放入本地文件并返回文件路径存入集合中
-            iamgesList.add(FileUploadUtil.uploadFile(file, FileUploadUtil.ITEM_COMMODITY_IMG));
-        }
-        // 将list集合转为string
-        String jsonString = JSON.toJSONString(iamgesList);
+    public boolean issueItemCommodity(ApplyItemCommodityDTO applyItemCommodityDTO) {
         // 属性转移
         ItemCommodityInfo itemCommodityInfo = new ItemCommodityInfo();
         itemCommodityInfo.setCommodityId(StringUtil.generateShortId());
@@ -107,9 +98,11 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         itemCommodityInfo.setColorList(applyItemCommodityDTO.getColorList());
         itemCommodityInfo.setAcceptAddressList(applyItemCommodityDTO.getAcceptAddressList());
         itemCommodityInfo.setSizeList(applyItemCommodityDTO.getSizeList());
-        itemCommodityInfo.setImagsList(jsonString);
         itemCommodityInfo.setOriginName(applyItemCommodityDTO.getOriginName());
         itemCommodityInfo.setOriginPhone(applyItemCommodityDTO.getOriginPhone());
+        itemCommodityInfo.setAvatarImag(applyItemCommodityDTO.getAvatarImag());
+        itemCommodityInfo.setImagsList(applyItemCommodityDTO.getImagsList());
+        itemCommodityInfo.setDetailImagList(applyItemCommodityDTO.getDetailImagList());
         int result = commodityInfoMapper.insert(itemCommodityInfo);
         return result > 0;
     }
@@ -216,7 +209,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
             commodityDetailVO.setTagList(JSON.parseArray(tagListString, String.class));
         }
         String detailImagList = itemCommodityInfo.getDetailImagList();
-        if (detailImagList != null) {
+        if (detailImagList != null){
             commodityDetailVO.setDetailImagList(JSON.parseArray(detailImagList, String.class));
         }
         String brandId = itemCommodityInfo.getBrandId();
@@ -253,6 +246,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     }
 
 
+
     /**
      * 根据用户id查询用户浏览商品历史-网店
      */
@@ -273,7 +267,6 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
 
     /**
      * 根据网店id查询网店的商品列表
-     *
      * @param itemId
      * @return
      */
