@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.ShopTags;
@@ -26,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -285,4 +287,34 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         public List<ShopInfo> getFollowList (String userId){
             return shopInfoMapper.selectFollowProductByUserId(userId);
         }
+
+    @Override
+    public boolean isVipShop(String shopId) {
+        int count = shopInfoMapper.selectCount(new QueryWrapper<ShopInfo>()
+                .eq("shop_id", shopId)
+                .eq("status", 0)
+                .eq("membership", 1)).intValue();
+        return count == 1;
+    }
+
+    @Override
+    public List<String> getShopIdListByUid(String uid) {
+        return shopInfoMapper.getShopIdListByUid(uid);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean upVipByShopIdList(String shopIds) {
+        String[] shopIdArray = shopIds.split(",");
+        long count = Arrays.stream(shopIdArray)
+                .parallel()
+                .peek(shopId -> {
+                    shopInfoMapper.update(null, new UpdateWrapper<ShopInfo>()
+                            .eq("shop_id", shopId)
+                            .eq("status", 0)
+                            .set("membership", 1));
+                })
+                .count();
+        return true;
+    }
 }

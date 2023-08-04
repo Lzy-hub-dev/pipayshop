@@ -58,4 +58,5 @@ public interface ShopInfoMapper extends BaseMapper<ShopInfo> {
      */
     List<ShopInfo> selectFollowProductByUserId(String userId);
 
+    List<String> getShopIdListByUid(@Param("uid") String uid);
 }

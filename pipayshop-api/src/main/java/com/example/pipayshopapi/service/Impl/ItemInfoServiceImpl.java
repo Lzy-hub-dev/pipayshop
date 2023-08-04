@@ -3,12 +3,11 @@ package com.example.pipayshopapi.service.Impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ItemInfo;
 import com.example.pipayshopapi.entity.vo.ItemInfoVO;
-import com.example.pipayshopapi.entity.vo.UserInfoVO;
 import com.example.pipayshopapi.mapper.ItemInfoMapper;
 import com.example.pipayshopapi.service.ItemInfoService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -102,9 +101,6 @@ public class ItemInfoServiceImpl extends ServiceImpl<ItemInfoMapper, ItemInfo> i
 
     /**
      * 根据用户id-判断对应网店是否vip
-     *
-     * @param userId
-     * @return
      */
     @Override
     public boolean isVip(String userId) {
@@ -113,4 +109,6 @@ public class ItemInfoServiceImpl extends ServiceImpl<ItemInfoMapper, ItemInfo> i
                 .eq(ItemInfo::getStatus, 0)
                 .eq(ItemInfo::getMembership, true)) > 0;
     }
+
+
 }
