@@ -32,10 +32,10 @@ public class ShopEvaluateServiceImpl extends ServiceImpl<ShopEvaluateMapper, Sho
      * 根据实体店id获取实体店评价列表
      */
     @Override
-    public PageDataVO getShopEvaluateListByItemId(Integer page, Integer limit, String itemId) {
+    public PageDataVO getShopEvaluateListByItemId(Integer page, Integer limit, String shopId) {
         Page<ShopEvaluate> pages = new Page<>(page,limit);
         shopEvaluateMapper.selectPage(pages,new QueryWrapper<ShopEvaluate>()
-                                            .eq("shop_id",itemId));
+                                            .eq("shop_id",shopId));
         return new PageDataVO((int) pages.getTotal(),pages.getRecords());
     }
 
