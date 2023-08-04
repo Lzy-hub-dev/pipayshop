@@ -35,15 +35,19 @@
     </select>
     <select id="getCollectionList" resultType="java.util.List"></select>
 
-    <select id="selectHistoryProductByUserId" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityVO">
+    <select id="selectHistoryProductByUserId" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityListVO">
         SELECT i.avatar_imag, i.commodity_name , i.price,
                h.create_time as accessTime,
-               i.commodity_id
+               i.commodity_id,
+               s.shop_name,
+               s.user_image
         FROM shop_commodity_history h
                  INNER JOIN
              shop_commodity_info i
              ON
                  h.commodity_id = i.commodity_id
+        inner join shop_info s
+        on  s.shop_id=i.shop_id
         WHERE h.user_id = #{userId}
           AND i.`status` = 0
     </select>

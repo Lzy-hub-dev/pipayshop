@@ -6,6 +6,7 @@ import com.example.pipayshopapi.entity.ShopDetailInfoVO;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.vo.ShopCommodityInfo1VO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityInfoVO;
+import com.example.pipayshopapi.entity.vo.ShopCommodityListVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -35,7 +36,7 @@ public interface ShopCommodityInfoMapper extends BaseMapper<ShopCommodityInfo> {
     /**
      * 根据用户id查询用户商品浏览历史
      */
-    List<ShopCommodityVO> selectHistoryProductByUserId(String userId);
+    List<ShopCommodityListVO> selectHistoryProductByUserId(String userId);
 
     /**
      * 根据用户id查询，商品状态查询审核通过和未审核列表
