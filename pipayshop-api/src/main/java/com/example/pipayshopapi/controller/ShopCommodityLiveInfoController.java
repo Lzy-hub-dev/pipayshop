@@ -126,9 +126,7 @@ public class ShopCommodityLiveInfoController {
     public ResponseVO selectShopCommodityLiveInfoList(@RequestBody ShopCommodityLiveInfoListDTO shopCommodityLiveInfoListDTO){
         try {
             List<ShopCommodityLiveInfoListVO> shopCommodityLiveInfoListVOS = shopCommodityLiveInfoService.selectShopCommodityLiveInfoList(shopCommodityLiveInfoListDTO.getShopId(),shopCommodityLiveInfoListDTO.getStartTime(),shopCommodityLiveInfoListDTO.getEndTime());
-            if (shopCommodityLiveInfoListVOS != null){
-                throw new Exception();
-            }
+
             return ResponseVO.getSuccessResponseVo(shopCommodityLiveInfoListVOS);
         }catch (Exception e){
             e.printStackTrace();
