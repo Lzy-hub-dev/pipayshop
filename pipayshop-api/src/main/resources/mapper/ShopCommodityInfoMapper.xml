@@ -30,7 +30,7 @@
                  inner join shop_info info
                             on info.shop_id = i.shop_id
         WHERE sc.user_id = #{userId}
-          AND i.`status` = 1
+          AND i.`status` = 0
           AND sc.`status` = 0
     </select>
     <select id="getCollectionList" resultType="java.util.List"></select>
