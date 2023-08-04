@@ -7,6 +7,7 @@ import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoListVO;
 import com.example.pipayshopapi.mapper.ShopCommodityLiveInfoMapper;
 import com.example.pipayshopapi.service.ShopCommodityLiveInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.pipayshopapi.service.ShopHotelRecordService;
 import com.example.pipayshopapi.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,8 @@ public class ShopCommodityLiveInfoServiceImpl extends ServiceImpl<ShopCommodityL
     @Resource
     private ShopCommodityLiveInfoMapper shopCommodityLiveInfoMapper;
 
+    @Resource
+    private ShopHotelRecordService shopHotelRecordService;
     /**
      * 根据房型id查找房型的详细信息
      */
@@ -86,7 +89,8 @@ public class ShopCommodityLiveInfoServiceImpl extends ServiceImpl<ShopCommodityL
      */
     @Override
     public List<ShopCommodityLiveInfoListVO> selectShopCommodityLiveInfoList(String shopId, Date startTime, Date endTime) {
-
-        return null;
+        List<ShopCommodityLiveInfoListVO> shopCommodityLiveInfoListVOS = shopCommodityLiveInfoMapper.selectShopCommodityLiveInfoList(shopId);
+        shopCommodityLiveInfoListVOS.stream().parallel().forEach(info->info.setInventory(shopHotelRecordService.getInventory(info.getRoomId(),startTime,endTime)));
+        return shopCommodityLiveInfoListVOS;
     }
 }
