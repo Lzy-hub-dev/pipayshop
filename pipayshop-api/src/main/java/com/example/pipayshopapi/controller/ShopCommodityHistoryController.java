@@ -4,6 +4,7 @@ package com.example.pipayshopapi.controller;
 import com.example.pipayshopapi.entity.ItemCommodityHistory;
 import com.example.pipayshopapi.entity.ShopCommodityHistory;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
+import com.example.pipayshopapi.entity.vo.ShopCommodityListVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopCommodityHistoryService;
@@ -68,9 +69,9 @@ public class ShopCommodityHistoryController {
     }
     @GetMapping("history/{userId}")
     @ApiOperation("根据用户id查询用户浏览商品历史-实体店")
-    public ResponseVO<List<ShopCommodityVO>> historyList(@PathVariable("userId") String userId) {
+    public ResponseVO<List<ShopCommodityListVO>> historyList(@PathVariable("userId") String userId) {
         try {
-            List<ShopCommodityVO> list = shopCommodityService.historyList(userId);
+            List<ShopCommodityListVO> list = shopCommodityService.historyList(userId);
             return ResponseVO.getSuccessResponseVo(list);
         } catch (Exception e) {
             e.printStackTrace();

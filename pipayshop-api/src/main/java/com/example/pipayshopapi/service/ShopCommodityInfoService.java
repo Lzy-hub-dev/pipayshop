@@ -61,7 +61,7 @@ public interface ShopCommodityInfoService extends IService<ShopCommodityInfo> {
      * @param userId
      * @return
      */
-    List<ShopCommodityVO> historyList(String userId);
+    List<ShopCommodityListVO> historyList(String userId);
 
     /**
      * 根据用户id查询，商品状态查询审核通过和未审核列表

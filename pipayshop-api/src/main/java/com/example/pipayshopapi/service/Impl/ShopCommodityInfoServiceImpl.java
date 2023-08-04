@@ -91,7 +91,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
      * 根据用户id查询用户浏览商品历史-实体店
      */
     @Override
-    public List<ShopCommodityVO> historyList(String userId) {
+    public List<ShopCommodityListVO> historyList(String userId) {
         return shopCommodityInfoMapper.selectHistoryProductByUserId(userId);
     }
 
