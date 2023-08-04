@@ -87,4 +87,5 @@ public class ShopOrderInfo implements Serializable {
     private Integer number;
 
 
+
 }

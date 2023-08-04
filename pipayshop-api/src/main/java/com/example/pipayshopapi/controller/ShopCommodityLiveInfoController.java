@@ -3,6 +3,7 @@ package com.example.pipayshopapi.controller;
 
 import com.example.pipayshopapi.entity.ShopCommodityLiveInfo;
 import com.example.pipayshopapi.entity.dto.ShopCommodityLiveInfoListDTO;
+import com.example.pipayshopapi.entity.dto.ShopHotelRecordDTO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoListVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoVO;
@@ -134,4 +135,31 @@ public class ShopCommodityLiveInfoController {
         }
     }
 
+
+    @PostMapping("selectShopEvaluateCount/{shopId}")
+    @ApiOperation("获取实体店酒店评价数")
+    public ResponseVO selectShopEvaluateCount(@PathVariable String shopId){
+        try {
+            Integer count = shopCommodityLiveInfoService.selectShopEvaluateCount(shopId);
+            return ResponseVO.getSuccessResponseVo(count);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("获取实体店酒店评价数失败，请联系后台人员");
+        }
+    }
+
+    @PostMapping("applyShopCommodityLive")
+    @ApiOperation("提交入住酒店")
+    public ResponseVO applyShopCommodityLive(@RequestBody ShopHotelRecordDTO shopHotelRecordDTO){
+        try {
+            boolean update = shopCommodityLiveInfoService.applyShopCommodityLive(shopHotelRecordDTO);
+            if (!update){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("提交入住酒店成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("获取实体店酒店评价数失败，请联系后台人员");
+        }
+    }
 }

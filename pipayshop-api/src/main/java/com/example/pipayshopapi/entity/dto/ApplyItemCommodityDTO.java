@@ -30,5 +30,8 @@ public class ApplyItemCommodityDTO {
     private Integer degreeLoss;
     private String originPhone;
     private String originName;
+    private String avatarImag;
+    private String imagsList;
+    private String detailImagList;
 
 }

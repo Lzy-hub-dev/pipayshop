@@ -36,6 +36,12 @@ public class FileUploadUtil {
     //酒店轮播图储存位置
     public static String ROOM_IMAGE_LIST="room_image_list";
 
+    //网店头像图片储存位置
+    public static String  ITEM_TOP_IMAGS="item_top_imags";
+    //商品图片的地址集合储存位置
+    public static String ITEM_IMAGS_LIST="item_imags_list";
+    //商品详情图片的地址集合
+    public static String ITEM_DETAIL_IMAGS="item_detail_imags";
 
 
     /**

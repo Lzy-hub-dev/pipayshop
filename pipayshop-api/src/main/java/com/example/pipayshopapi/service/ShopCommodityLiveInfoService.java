@@ -2,6 +2,7 @@ package com.example.pipayshopapi.service;
 
 import com.example.pipayshopapi.entity.ShopCommodityLiveInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.pipayshopapi.entity.dto.ShopHotelRecordDTO;
 import com.example.pipayshopapi.entity.vo.HotelFacilityVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoListVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoVO;
@@ -41,17 +42,16 @@ public interface ShopCommodityLiveInfoService extends IService<ShopCommodityLive
 
     /**
      * 根据实体店id和入住时间和离店时间来搜索房型
-     * @param shopId
-     * @param startTime
-     * @param endTime
-     * @return
      */
     List<ShopCommodityLiveInfoListVO> selectShopCommodityLiveInfoList(String shopId, Date startTime,Date endTime);
 
     /**
      * 获取实体店酒店的评价数
-     * @param shopId
-     * @return
      */
-    Integer selectShopCommodityLiveEvaluate(String shopId);
+    Integer selectShopEvaluateCount(String shopId);
+
+    /**
+     * 提交入住酒店
+     */
+    boolean applyShopCommodityLive(ShopHotelRecordDTO shopHotelRecordDTO);
 }

@@ -14,6 +14,7 @@ import com.example.pipayshopapi.entity.dto.ApplyItemCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ExamineCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
+import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.*;
 import com.example.pipayshopapi.service.ItemCommodityInfoService;
 import com.example.pipayshopapi.util.FileUploadUtil;
@@ -23,8 +24,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * <p>
@@ -78,16 +81,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean issueItemCommodity(ApplyItemCommodityDTO applyItemCommodityDTO, MultipartFile[] files) {
-
-        // 创建集合放图片url
-        List<String> iamgesList = new ArrayList<>();
-        for (MultipartFile file : files) {
-            // 通过工具类放入本地文件并返回文件路径存入集合中
-            iamgesList.add(FileUploadUtil.uploadFile(file,FileUploadUtil.ITEM_COMMODITY_IMG));
-        }
-        // 将list集合转为string
-        String jsonString = JSON.toJSONString(iamgesList);
+    public boolean issueItemCommodity(ApplyItemCommodityDTO applyItemCommodityDTO) {
         // 属性转移
         ItemCommodityInfo itemCommodityInfo = new ItemCommodityInfo();
         itemCommodityInfo.setCommodityId(StringUtil.generateShortId());
@@ -104,9 +98,11 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         itemCommodityInfo.setColorList(applyItemCommodityDTO.getColorList());
         itemCommodityInfo.setAcceptAddressList(applyItemCommodityDTO.getAcceptAddressList());
         itemCommodityInfo.setSizeList(applyItemCommodityDTO.getSizeList());
-        itemCommodityInfo.setImagsList(jsonString);
         itemCommodityInfo.setOriginName(applyItemCommodityDTO.getOriginName());
         itemCommodityInfo.setOriginPhone(applyItemCommodityDTO.getOriginPhone());
+        itemCommodityInfo.setAvatarImag(applyItemCommodityDTO.getAvatarImag());
+        itemCommodityInfo.setImagsList(applyItemCommodityDTO.getImagsList());
+        itemCommodityInfo.setDetailImagList(applyItemCommodityDTO.getDetailImagList());
         int result = commodityInfoMapper.insert(itemCommodityInfo);
         return result > 0;
     }
@@ -115,17 +111,57 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
      * 网店首页下面的搜索商品接口
      */
     @Override
-    public PageDataVO itemSearchCommodity(ItemSearchConditionDTO itemSearchConditionDTO) {
+    public PageDataVO itemSearchCommodity(ItemSearchConditionDTO dto) {
+        if (dto == null) {
+            log.error("参数列表为空");
+            throw new BusinessException("服务器异常！");
+        }
+        LambdaQueryWrapper<ItemCommodityInfo> wrapper = new LambdaQueryWrapper<ItemCommodityInfo>()
+                .eq(dto.getBrandId() != null && !"".equals(dto.getBrandId()), ItemCommodityInfo::getBrandId, dto.getBrandId())
+                .eq(dto.getDegreeLoss() != null, ItemCommodityInfo::getDegreeLoss, dto.getDegreeLoss());
+
+
+        if (dto.getMaxPrice() != null && dto.getMinPrice() != null) {
+            // 过滤掉 最大价<最小价 的情况
+            if (dto.getMinPrice().compareTo(dto.getMaxPrice()) == 1) {
+                BigDecimal temp = dto.getMaxPrice();
+                dto.setMaxPrice(dto.getMinPrice());
+                dto.setMinPrice(temp);
+            }
+            wrapper.between(ItemCommodityInfo::getPrice, dto.getMinPrice(), dto.getMaxPrice());
+        } else if (dto.getMaxPrice() != null) {
+            // 最小价格为空
+            wrapper.le(ItemCommodityInfo::getPrice, dto.getMaxPrice());
+        } else if (dto.getMinPrice() != null) {
+            // 最大价格为空
+            wrapper.ge(ItemCommodityInfo::getPrice, dto.getMinPrice());
+        }
+        // 模糊查询-商品名称
+        if (dto.getCommodityName() != null) {
+            wrapper.like(ItemCommodityInfo::getItemCommodityName, dto.getCommodityName());
+        }
+        // 是否免运费
+        if (dto.getFreeShippingNum() != null) {
+            if (dto.getFreeShippingNum() == 0) {
+                wrapper.eq(ItemCommodityInfo::getFreeShippingNum, 0);
+            } else {
+                wrapper.ne(ItemCommodityInfo::getFreeShippingNum, 0);
+            }
+        }
+        // 价格排序
+        if (dto.getPriceOrder() != null) {
+            if (dto.getPriceOrder() == 0) {
+                wrapper.orderByAsc(ItemCommodityInfo::getPrice);
+            }else if (dto.getPriceOrder() == 1) {
+                wrapper.orderByDesc(ItemCommodityInfo::getPrice);
+            }
+        }
 
         // 设置分页参数
-        Page<ItemCommodityInfo> page = new Page<>(itemSearchConditionDTO.getPage(), itemSearchConditionDTO.getLimit());
+        Page<ItemCommodityInfo> page = new Page<>(dto.getPage(), dto.getLimit());
 
         // 查询分页数据封装到page中
-        commodityInfoMapper.selectPage(page, new LambdaQueryWrapper<ItemCommodityInfo>()
-                .eq(itemSearchConditionDTO.getBrandId() != null && !"".equals(itemSearchConditionDTO.getBrandId()), ItemCommodityInfo::getBrandId, itemSearchConditionDTO.getBrandId())
-                .eq(itemSearchConditionDTO.getDegreeLoss() != null, ItemCommodityInfo::getDegreeLoss, itemSearchConditionDTO.getDegreeLoss())
-                .between(itemSearchConditionDTO.getMaxPrice() != null && itemSearchConditionDTO.getMinPrice() != null, ItemCommodityInfo::getPrice, itemSearchConditionDTO.getMinPrice(), itemSearchConditionDTO.getMaxPrice())
-        );
+        commodityInfoMapper.selectPage(page, wrapper);
         // 封装数据
         return new PageDataVO((int) page.getTotal(), page.getRecords());
 
@@ -237,7 +273,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     @Override
     public ItemInfoVO commodityList(String itemId) {
         List<ItemCommodityVO> voList = commodityInfoMapper.commodityList(itemId);
-        List<ItemInfoVO> itemInfoVO = itemInfoMapper.selectItemInfoByItemIdOrUserId(null,itemId);
+        List<ItemInfoVO> itemInfoVO = itemInfoMapper.selectItemInfoByItemIdOrUserId(null, itemId);
         if (itemInfoVO != null) {
             ItemInfoVO vo = itemInfoVO.get(0);
             vo.setCommodityInfoList(voList);
