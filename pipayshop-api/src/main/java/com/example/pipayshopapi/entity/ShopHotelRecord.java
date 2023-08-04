@@ -38,7 +38,7 @@ public class ShopHotelRecord implements Serializable {
     /**
      * 房型id （外键）
      */
-    private Integer roomId;
+    private String roomId;
 
     /**
      * 入住人姓名
@@ -76,4 +76,8 @@ public class ShopHotelRecord implements Serializable {
      */
     private Integer delFlag;
 
+    /**
+     * 订单id
+     */
+    private String orderId;
 }
