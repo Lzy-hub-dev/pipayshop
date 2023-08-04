@@ -105,16 +105,13 @@
         FROM item_info i
         INNER JOIN user_info u ON i.uid = u.uid
         INNER JOIN item_commodity_info c ON i.item_id = c.item_id
-        <where>
-            ${ew.sqlSegment}
-        </where>
-
-    </select>
-    <!-- WHERE u.uid = #{userId}
+         WHERE u.uid = #{userId}
         <if test="examineStatus!=2">
             AND c.`status` = #{examineStatus}
         </if>
-        limit #{pageNumber},#{pageSize}-->
+        limit #{pageNumber},#{pageSize}
+    </select>
+
     <select id="commodityList" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityVO">
         SELECT c.commodity_id,
                i.item_name,

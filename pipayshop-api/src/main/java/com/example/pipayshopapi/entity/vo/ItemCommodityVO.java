@@ -47,9 +47,5 @@ public class ItemCommodityVO {
      * 商品状态0:审核 1:上架 2:下架3:绝对删除
      */
     private String status;
-    /**
-     * 网店所有者id
-     */
-    @JsonIgnore
-    private String userId;
+
 }
