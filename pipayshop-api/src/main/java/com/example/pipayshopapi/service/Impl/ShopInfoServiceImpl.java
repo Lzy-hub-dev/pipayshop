@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,9 +42,10 @@ import java.util.List;
 @Service
 public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> implements ShopInfoService {
 
-    @Autowired
+    @Resource
     private ShopInfoMapper shopInfoMapper;
-    @Autowired
+
+    @Resource
     private ShopTagsMapper tagMapper;
 
 
@@ -51,11 +53,11 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
      * 根据二级分类-获取所有实体店列表
      */
     @Override
-    public PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId) {
+    public PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId,Boolean score) {
 
         // 获取总条数
         Integer indexShopInfoVOCount = shopInfoMapper.getIndexShopInfoVOCount(categoryId);
-        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(categoryId, (pages - 1) * limit, limit);
+        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(categoryId, (pages - 1) * limit, limit,score);
         for (IndexShopInfoVO shopInfoVO : indexShopInfoVO) {
             List<String> list1 = new ArrayList<>();
             List<String> list = JSON.parseArray(shopInfoVO.getTagList(), String.class);
@@ -260,7 +262,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     public PageDataVO getSecShopInfoListByCondition(Integer limit, Integer pages, String categoryId) {
         Integer n = shopInfoMapper.getAllIndexShopInfoVO(categoryId);
         // stata==1,按评分从低到高；stata==2,按评分从高到低
-        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(categoryId, (pages - 1) * limit, limit);
+        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVOById(categoryId, (pages - 1) * limit, limit);
         for (IndexShopInfoVO shopInfoVO : indexShopInfoVO) {
             List<String> list1 = new ArrayList<>();
             List<String> list = JSON.parseArray(shopInfoVO.getTagList(), String.class);

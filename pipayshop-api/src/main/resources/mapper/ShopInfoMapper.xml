@@ -55,9 +55,19 @@
                     FROM
                     shop_category sc
                     WHERE
-                    sc.category_pid = #{categoryId}) </if>
-
+                    sc.category_pid = #{categoryId})
+                 </if>
             </where>
+        <choose>
+            <when test="score == null">
+            </when >
+            <when test="score">
+                order By score
+            </when >
+            <otherwise>
+                order By score desc
+            </otherwise>
+        </choose>
         LIMIT ${page},${limit}
     </select>
 
@@ -87,4 +97,21 @@
         where
             uid = #{uid} and status = 0
     </select>
+
+    <select id="getIndexShopInfoVOById" resultType="com.example.pipayshopapi.entity.vo.IndexShopInfoVO">
+        select shop_id,shop_name,score,localhost_latitude,localhost_longitude,user_image, shop_introduce,tag_list,address
+        from shop_info
+        <where>
+
+            <if test="categoryId != null and categoryId != '-1' ">shop_info.category_id IN(SELECT
+                sc.category_id
+                FROM
+                shop_category sc
+                WHERE
+                sc.category_pid = #{categoryId})
+            </if>
+        </where>
+        LIMIT ${page},${limit}
+    </select>
+
 </mapper>

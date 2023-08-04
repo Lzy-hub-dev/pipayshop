@@ -30,7 +30,7 @@ public interface ShopInfoService extends IService<ShopInfo> {
      * @param categoryId
      * @return
      */
-    PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId);
+    PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId,Boolean score);
 
     /**
      * 根据实体店id查询实体店信息
