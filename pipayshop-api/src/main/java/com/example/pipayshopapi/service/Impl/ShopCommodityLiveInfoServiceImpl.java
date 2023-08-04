@@ -90,7 +90,15 @@ public class ShopCommodityLiveInfoServiceImpl extends ServiceImpl<ShopCommodityL
     @Override
     public List<ShopCommodityLiveInfoListVO> selectShopCommodityLiveInfoList(String shopId, Date startTime, Date endTime) {
         List<ShopCommodityLiveInfoListVO> shopCommodityLiveInfoListVOS = shopCommodityLiveInfoMapper.selectShopCommodityLiveInfoList(shopId);
-        shopCommodityLiveInfoListVOS.stream().parallel().forEach(info->info.setInventory(shopHotelRecordService.getInventory(info.getRoomId(),startTime,endTime)));
+        for (ShopCommodityLiveInfoListVO shopCommodityLiveInfoListVO : shopCommodityLiveInfoListVOS) {
+            shopCommodityLiveInfoListVO.setInventory(shopHotelRecordService.getInventory(shopCommodityLiveInfoListVO.getRoomId(),startTime,endTime));
+        }
         return shopCommodityLiveInfoListVOS;
+    }
+
+    @Override
+    public Integer selectShopCommodityLiveEvaluate(String shopId) {
+
+        return null;
     }
 }

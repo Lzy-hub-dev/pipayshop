@@ -2,16 +2,14 @@ package com.example.pipayshopapi.controller;
 
 
 import com.example.pipayshopapi.entity.ItemCommodityCategory;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ItemCommodityCategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -44,6 +42,19 @@ public class ItemCommodityCategoryController {
         }catch (Exception e){
             log.error(e.getMessage());
             throw new BusinessException("二级分类列表展示失败，请联系后台人员");
+        }
+    }
+
+    @GetMapping("getSecShopInfoListByCondition/{limit}/{pages}/{categoryId}/{state}")
+    @ApiOperation("根据一级分类-获取所有网店商品列表")
+    public ResponseVO<PageDataVO> getSecShopInfoListByCondition(@PathVariable Integer limit, @PathVariable Integer pages, @PathVariable String categoryId){
+        try {
+            PageDataVO secShopInfoListByCondition = categoryService.getSecShopInfoListByCondition(limit, pages, categoryId);
+
+            return ResponseVO.getSuccessResponseVo(secShopInfoListByCondition);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("根据条件筛选后获取网店列表失败，请联系后台人员");
         }
     }
 

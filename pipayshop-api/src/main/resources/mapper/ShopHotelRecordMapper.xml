@@ -4,11 +4,11 @@
 
     <select id="getRentByTime" resultType="java.lang.Integer">
 
-        select count(*)
+        select count(room_id)
         from shop_hotel_record
         where room_id = #{roomId}
-        and (#{startTime} >= start_time or end_time > #{startTime})
-        and (#{endTime} > start_time  or end_time > #{endTime})
+        and end_time >= #{startTime}
+        and #{endTime} >= start_time
 
     </select>
 

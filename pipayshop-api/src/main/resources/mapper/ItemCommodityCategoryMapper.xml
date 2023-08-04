@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.pipayshopapi.mapper.ItemCommodityCategoryMapper">
+
+    <select id="getSecShopInfoListByTopCateId" resultType="com.example.pipayshopapi.entity.vo.itemCommoditiesVO">
+        SELECT
+            i.price,
+            i.item_commodity_name,
+            i.avatar_imag as commodityPic,
+            i.commodity_id,
+            i.origin_price,
+            i.details
+        FROM
+            item_commodity_info i
+        WHERE
+                i.category_id IN
+                (SELECT category_id FROM item_commodity_category  WHERE category_pid=#{categoryId})
+            LIMIT ${page},${limit}
+    </select>
+</mapper>

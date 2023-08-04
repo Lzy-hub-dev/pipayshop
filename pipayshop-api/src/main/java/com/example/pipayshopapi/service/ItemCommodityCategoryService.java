@@ -2,6 +2,7 @@ package com.example.pipayshopapi.service;
 
 import com.example.pipayshopapi.entity.ItemCommodityCategory;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 
 import java.util.List;
 
@@ -27,5 +28,12 @@ public interface ItemCommodityCategoryService extends IService<ItemCommodityCate
     List<ItemCommodityCategory> cateSecondList( );
 
 
-
+    /**
+     * 根据一级分类-获取所有网店商品列表
+     * @param limit
+     * @param pages
+     * @param categoryId
+     * @return
+     */
+    PageDataVO getSecShopInfoListByCondition(Integer limit, Integer pages, String categoryId);
 }
