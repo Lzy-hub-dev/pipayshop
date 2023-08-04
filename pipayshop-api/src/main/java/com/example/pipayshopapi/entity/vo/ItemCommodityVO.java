@@ -47,5 +47,8 @@ public class ItemCommodityVO {
      * 商品状态0:审核 1:上架 2:下架3:绝对删除
      */
     private String status;
-
+    /**
+     * 是否会员(0映射为false，1映射为true)
+     */
+    private Boolean membership;
 }

@@ -52,7 +52,10 @@ public class ItemInfo implements Serializable {
      * 坐标经度
      */
     private BigDecimal localhostLongitude;
-
+    /**
+     * 是否会员(0映射为false，1映射为true)
+     */
+    private Boolean membership;
     /**
      * 网店的标签id集合
      */

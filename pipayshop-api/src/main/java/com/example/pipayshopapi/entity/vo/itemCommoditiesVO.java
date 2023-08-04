@@ -34,7 +34,10 @@ public class itemCommoditiesVO {
      * 商品首图
      */
     private String commodityPic;
-
+    /**
+     * 是否会员(0映射为false，1映射为true)
+     */
+    private Boolean membership;
     /**
      * 商品id
      */

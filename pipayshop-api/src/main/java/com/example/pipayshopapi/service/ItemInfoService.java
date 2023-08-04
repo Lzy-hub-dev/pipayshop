@@ -49,4 +49,18 @@ public interface ItemInfoService extends IService<ItemInfo> {
      */
 
     String getItemAddressById(String itemId);
+
+    /**
+     * 根据用户id-网店-升级vip
+     * @param userId
+     * @return
+     */
+    boolean upVip(String userId);
+
+    /**
+     * 根据用户id-判断对应网店是否vip
+     * @param userId
+     * @return
+     */
+    boolean isVip(String userId);
 }
