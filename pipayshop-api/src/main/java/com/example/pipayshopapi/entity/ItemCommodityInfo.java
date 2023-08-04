@@ -158,5 +158,8 @@ public class ItemCommodityInfo implements Serializable {
      * 发货人电话
      */
     private String originName;
-
+    /**
+     *商品详情信息图集合
+     */
+    private String detailImagList;
 }

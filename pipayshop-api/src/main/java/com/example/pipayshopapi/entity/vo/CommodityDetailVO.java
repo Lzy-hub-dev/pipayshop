@@ -50,4 +50,13 @@ public class CommodityDetailVO {
     private List<String> tagList;
 
     private Integer degreeLoss;
+
+    private List<String> detailImagList;
+
+    /**
+     * 评论总数
+     */
+    private Integer evaluateCount;
+
+    private ItemVO itemVO;
 }

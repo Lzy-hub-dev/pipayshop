@@ -7,14 +7,14 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.BrandInfo;
+import com.example.pipayshopapi.entity.ItemCommodityEvaluate;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
+import com.example.pipayshopapi.entity.ItemFollowFocus;
 import com.example.pipayshopapi.entity.dto.ApplyItemCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ExamineCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
-import com.example.pipayshopapi.mapper.BrandInfoMapper;
-import com.example.pipayshopapi.mapper.ItemCommodityInfoMapper;
-import com.example.pipayshopapi.mapper.ItemInfoMapper;
+import com.example.pipayshopapi.mapper.*;
 import com.example.pipayshopapi.service.ItemCommodityInfoService;
 import com.example.pipayshopapi.util.FileUploadUtil;
 import com.example.pipayshopapi.util.StringUtil;
@@ -43,6 +43,12 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     private ItemInfoMapper itemInfoMapper;
     @Resource
     private BrandInfoMapper brandInfoMapper;
+
+    @Resource
+    private ItemFollowFocusMapper itemFollowFocusMapper;
+
+    @Resource
+    private ItemCommodityEvaluateMapper itemCommodityEvaluateMapper;
 
 
     /**
@@ -107,9 +113,6 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
 
     /**
      * 网店首页下面的搜索商品接口
-     *
-     * @param itemSearchConditionDTO
-     * @return
      */
     @Override
     public PageDataVO itemSearchCommodity(ItemSearchConditionDTO itemSearchConditionDTO) {
@@ -140,11 +143,12 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     public CommodityDetailVO itemCommodityDetail(String commodityId) {
         ItemCommodityInfo itemCommodityInfo = commodityInfoMapper.selectOne(new QueryWrapper<ItemCommodityInfo>()
                 .eq("commodity_id", commodityId));
+        String itemId = itemCommodityInfo.getItemId();
         CommodityDetailVO commodityDetailVO = new CommodityDetailVO(itemCommodityInfo.getCommodityId(), null, itemCommodityInfo.getItemCommodityName()
                 , itemCommodityInfo.getOriginPrice(), null, null, itemCommodityInfo.getOriginAddress(), null
-                , itemCommodityInfo.getItemId(), itemCommodityInfo.getPrice(), itemCommodityInfo.getDetails(), null,
+                , itemId, itemCommodityInfo.getPrice(), itemCommodityInfo.getDetails(), null,
                 itemCommodityInfo.getInventory(), itemCommodityInfo.getFreeShippingNum(), itemCommodityInfo.getCategoryId(),
-                null, null, itemCommodityInfo.getDegreeLoss());
+                null, null, itemCommodityInfo.getDegreeLoss(), null, null, null);
         String colorListString = itemCommodityInfo.getColorList();
         if (colorListString != null) {
             commodityDetailVO.setColorList(JSON.parseArray(colorListString, String.class));
@@ -169,6 +173,10 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         if (tagListString != null) {
             commodityDetailVO.setTagList(JSON.parseArray(tagListString, String.class));
         }
+        String detailImagList = itemCommodityInfo.getDetailImagList();
+        if (detailImagList != null){
+            commodityDetailVO.setDetailImagList(JSON.parseArray(detailImagList, String.class));
+        }
         String brandId = itemCommodityInfo.getBrandId();
         if (brandId != null) {
             BrandInfo brandInfo = brandInfoMapper.selectOne(new QueryWrapper<BrandInfo>()
@@ -177,6 +185,20 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
                     .select("brand"));
             commodityDetailVO.setBrand(brandInfo.getBrand());
         }
+        // 封装该商品的评论总数
+        int evaluateCount = itemCommodityEvaluateMapper.selectCount(new QueryWrapper<ItemCommodityEvaluate>()
+                .eq("commodity_id", commodityId)
+                .eq("status", 0)).intValue();
+        commodityDetailVO.setEvaluateCount(evaluateCount);
+        // 封装该商品的所在店铺数据
+        ItemVO itemVO = itemInfoMapper.selectBasicData(itemId);
+        int fanSum = itemFollowFocusMapper.selectCount(new QueryWrapper<ItemFollowFocus>().eq("item_id", itemId)
+                .eq("status", 0)).intValue();
+        int commoditySum = commodityInfoMapper.selectCount(new QueryWrapper<ItemCommodityInfo>().eq("item_id", itemId)
+                .eq("status", 1)).intValue();
+        itemVO.setFanSum(fanSum);
+        itemVO.setItemCommoditySum(commoditySum);
+        commodityDetailVO.setItemVO(itemVO);
         return commodityDetailVO;
     }
 
