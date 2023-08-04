@@ -33,11 +33,11 @@ public class ShopInfoController {
     private static final Logger log = LoggerFactory.getLogger(ShopTagsController.class);
 
 
-    @GetMapping("getShopInfoListByCondition/{limit}/{pages}/{categoryId}/{state}")
+    @GetMapping("getShopInfoListByCondition/{limit}/{pages}/{categoryId}")
     @ApiOperation("根据条件筛选后获取实体店首页列表")
-    public ResponseVO<PageDataVO> getShopInfoListByCondition(@PathVariable Integer limit,@PathVariable Integer pages,@PathVariable String categoryId,@PathVariable Integer state){
+    public ResponseVO<PageDataVO> getShopInfoListByCondition(@PathVariable Integer limit,@PathVariable Integer pages,@PathVariable String categoryId){
         try {
-            PageDataVO shopInfoListByCondition = infoService.getShopInfoListByCondition(limit, pages, categoryId, state);
+            PageDataVO shopInfoListByCondition = infoService.getShopInfoListByCondition(limit, pages, categoryId);
             if (shopInfoListByCondition==null){
                 throw new Exception();
             }

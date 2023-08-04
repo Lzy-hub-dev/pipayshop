@@ -76,6 +76,33 @@ public class ShopFollowFocusController {
         }
     }
 
+    /**
+     * 校验是否已经关注该店铺
+     */
+    @GetMapping("isFollowShop/{shopId}/{userId}")
+    @ApiOperation("校验是否已经关注该店铺")
+    public ResponseVO<Boolean> isFollowShop(@PathVariable String shopId, @PathVariable String userId){
+        try{
+            boolean result = followFocusService.isFollowShop(shopId,userId);
+            return ResponseVO.getSuccessResponseVo(result);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("校验是否已经关注该店铺失败，请联系后台人员");
+        }
+    }
 
-
+    /**
+     * 根据shopId查找店铺的粉丝数量
+     */
+    @PostMapping("SelectFollowShopSum/{shopId}")
+    @ApiOperation("根据shopId查找店铺的粉丝数量")
+    public ResponseVO<Integer> SelectFollowShopSum(@PathVariable String shopId){
+        try{
+            Integer result = followFocusService.SelectFollowShopSum(shopId);
+            return ResponseVO.getSuccessResponseVo(result);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("根据shopId查找店铺的粉丝数量失败，请联系后台人员");
+        }
+    }
 }

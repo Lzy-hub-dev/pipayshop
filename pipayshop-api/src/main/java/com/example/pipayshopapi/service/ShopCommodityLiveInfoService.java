@@ -46,4 +46,10 @@ public interface ShopCommodityLiveInfoService extends IService<ShopCommodityLive
      */
     List<ShopCommodityLiveInfoListVO> selectShopCommodityLiveInfoList(String shopId, Date startTime,Date endTime);
 
+    /**
+     * 获取实体店酒店的评价数
+     * @param shopId
+     * @return
+     */
+    Integer selectShopCommodityLiveEvaluate(String shopId);
 }

@@ -47,9 +47,9 @@ public interface ShopInfoMapper extends BaseMapper<ShopInfo> {
     /**
      * 首页获取商家信息列表
      */
-    List<IndexShopInfoVO> getIndexShopInfoVO(@Param("categoryId") String categoryId,@Param("page") Integer page,@Param("limit") Integer limit,@Param("state")Integer state );
+    List<IndexShopInfoVO> getIndexShopInfoVO(@Param("categoryId") String categoryId,@Param("page") Integer page,@Param("limit") Integer limit);
 
-    Integer getAllIndexShopInfoVO(@Param("categoryId") String categoryId,@Param("state")Integer state);
+    Integer getAllIndexShopInfoVO(@Param("categoryId") String categoryId);
     /**
      * 根据用户id-查询-关注的实体店-列表
      *
