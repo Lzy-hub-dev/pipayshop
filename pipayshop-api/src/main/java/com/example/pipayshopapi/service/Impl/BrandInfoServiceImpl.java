@@ -33,8 +33,8 @@ public class BrandInfoServiceImpl extends ServiceImpl<BrandInfoMapper, BrandInfo
      * @return
      */
     @Override
-    public List<BrandInfoVO> selectAllBrandList(String cateId) {
-        List<BrandInfoVO> brandInfoVOS = brandInfoMapper.selectAllContentList(cateId);
+    public List<BrandInfoVO> selectAllBrandList() {
+        List<BrandInfoVO> brandInfoVOS = brandInfoMapper.selectAllContentList();
         return brandInfoVOS;
     }
 

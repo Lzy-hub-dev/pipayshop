@@ -33,18 +33,18 @@ public class BrandInfoController {
     @Resource
     private BrandInfoService brandInfoService;
 
-    @GetMapping("selectAllBrandList/{cateId}")
-    @ApiOperation("查找二级分类的id查找品牌的集合")
-    public ResponseVO<List> selectAllBrandList(@PathVariable String cateId){
+    @GetMapping("selectAllBrandList}")
+    @ApiOperation("查找品牌信息的集合")
+    public ResponseVO<List> selectAllBrandList(){
         try {
-            List<BrandInfoVO> brandInfoVOS = brandInfoService.selectAllBrandList(cateId);
+            List<BrandInfoVO> brandInfoVOS = brandInfoService.selectAllBrandList();
             if (brandInfoVOS==null){
                 throw new Exception();
             }
             return ResponseVO.getSuccessResponseVo(brandInfoVOS);
         }catch (Exception e){
             e.printStackTrace();
-            throw new BusinessException("查找二级分类的id查找品牌的集合失败，请联系后台人员");
+            throw new BusinessException("查找品牌信息的集合失败，请联系后台人员");
         }
     }
 
