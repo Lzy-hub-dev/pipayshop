@@ -45,7 +45,7 @@ public class ShopCategoryController {
 
     }
     @GetMapping("getSecShopInfoListByCondition/{limit}/{pages}/{categoryId}/{state}")
-    @ApiOperation("根据条件筛选后获取实体店列表")
+    @ApiOperation("根据一级分类-获取所有实体店列表")
     public ResponseVO<PageDataVO> getSecShopInfoListByCondition(@PathVariable Integer limit, @PathVariable Integer pages, @PathVariable String categoryId, @PathVariable Integer state){
         try {
             PageDataVO secShopInfoListByCondition = shopInfoService.getSecShopInfoListByCondition(limit, pages, categoryId, state);

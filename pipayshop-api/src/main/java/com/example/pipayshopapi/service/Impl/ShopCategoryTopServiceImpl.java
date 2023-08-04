@@ -40,19 +40,7 @@ public class ShopCategoryTopServiceImpl extends ServiceImpl<ShopCategoryTopMappe
         return shopCategoryTopMapper.selectList(wrapper);
     }
 
-    /**
-     * 根据分类id查询分类
-     *
-     * @param categoryTopId
-     * @return
-     */
-    @Override
-    public ShopCategoryTop getShopCategoryTopById(String categoryTopId) {
-        ShopCategoryTop categoryTop = shopCategoryTopMapper.selectOne(new LambdaQueryWrapper<ShopCategoryTop>()
-                .eq(ShopCategoryTop::getCategoryId, categoryTopId)
-                .eq(ShopCategoryTop::getDelFlag, 0));
-        return categoryTop;
-    }
+
 
     /*private static List<ShopCategoryVO> getCategoryVO(List<ShopCategoryTop> categoryTop) {
         List<ShopCategoryVO> list = new ArrayList<>();

@@ -2,7 +2,9 @@ package com.example.pipayshopapi.controller;
 
 
 import com.example.pipayshopapi.entity.ShopCommodityLiveInfo;
+import com.example.pipayshopapi.entity.dto.ShopCommodityLiveInfoListDTO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
+import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoListVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.ShopCommodityLiveInfoMapper;
 import com.example.pipayshopapi.service.ShopCommodityLiveInfoService;
@@ -15,6 +17,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -110,6 +114,22 @@ public class ShopCommodityLiveInfoController {
                 throw new Exception();
             }
             return ResponseVO.getSuccessResponseVo("根据房型id删除房型的详细信息成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("根据房型id删除房型的详细信息失败，请联系后台人员");
+        }
+    }
+
+
+    @PostMapping("selectShopCommodityLiveInfoList")
+    @ApiOperation("根据实体店id和入住时间和离店时间来搜索房型")
+    public ResponseVO selectShopCommodityLiveInfoList(@RequestBody ShopCommodityLiveInfoListDTO shopCommodityLiveInfoListDTO){
+        try {
+            List<ShopCommodityLiveInfoListVO> shopCommodityLiveInfoListVOS = shopCommodityLiveInfoService.selectShopCommodityLiveInfoList(shopCommodityLiveInfoListDTO.getShopId(),shopCommodityLiveInfoListDTO.getStartTime(),shopCommodityLiveInfoListDTO.getEndTime());
+            if (shopCommodityLiveInfoListVOS != null){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo(shopCommodityLiveInfoListVOS);
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("根据房型id删除房型的详细信息失败，请联系后台人员");

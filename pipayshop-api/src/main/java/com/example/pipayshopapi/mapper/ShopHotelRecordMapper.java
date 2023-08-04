@@ -3,6 +3,9 @@ package com.example.pipayshopapi.mapper;
 import com.example.pipayshopapi.entity.ShopHotelRecord;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
 
 /**
  * <p>
@@ -15,4 +18,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ShopHotelRecordMapper extends BaseMapper<ShopHotelRecord> {
 
+    Integer getRentByTime(@Param("roomId") Integer roomId,@Param("startTime") Date startTime,@Param("endTime") Date endTime);
 }
