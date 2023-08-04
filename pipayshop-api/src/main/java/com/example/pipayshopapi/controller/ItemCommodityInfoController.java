@@ -55,6 +55,7 @@ public class ItemCommodityInfoController {
         }
     }
 
+
     @PostMapping(" issueItemCommodity")
     @ApiOperation("发布网店商品")
     public ResponseVO issueItemCommodity(@RequestParam("files") MultipartFile[] files, ApplyItemCommodityDTO applyItemCommodityDTO){
