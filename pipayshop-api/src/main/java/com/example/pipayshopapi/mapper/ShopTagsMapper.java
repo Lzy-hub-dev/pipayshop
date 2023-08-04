@@ -3,6 +3,7 @@ package com.example.pipayshopapi.mapper;
 import com.example.pipayshopapi.entity.ShopTags;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -15,4 +16,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ShopTagsMapper extends BaseMapper<ShopTags> {
 
+    String selectOneContent(@Param("tagId") String tagId);
 }
