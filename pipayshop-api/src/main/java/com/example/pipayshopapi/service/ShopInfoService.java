@@ -23,7 +23,7 @@ public interface ShopInfoService extends IService<ShopInfo> {
 
 
     /**
-     * 根据一级分类-获取所有实体店列表
+     * 根据二级分类-获取所有实体店列表
      *
      * @param limit
      * @param pages

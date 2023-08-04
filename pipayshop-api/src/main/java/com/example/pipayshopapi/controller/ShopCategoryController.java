@@ -53,7 +53,7 @@ public class ShopCategoryController {
             return ResponseVO.getSuccessResponseVo(secShopInfoListByCondition);
         }catch (Exception e){
             e.printStackTrace();
-            throw new BusinessException("根据条件筛选后获取实体店列表失败，请联系后台人员");
+            throw new BusinessException("根据一级分类-获取所有实体店列表失败，请联系后台人员");
         }
     }
 }

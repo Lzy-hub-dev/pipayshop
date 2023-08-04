@@ -34,7 +34,7 @@ public class ShopInfoController {
 
 
     @GetMapping("getShopInfoListByCondition/{limit}/{pages}/{categoryId}")
-    @ApiOperation("根据条件筛选后获取实体店首页列表")
+    @ApiOperation("根据二级分类-获取所有实体店列表")
     public ResponseVO<PageDataVO> getShopInfoListByCondition(@PathVariable Integer limit,@PathVariable Integer pages,@PathVariable String categoryId){
         try {
             PageDataVO shopInfoListByCondition = infoService.getShopInfoListByCondition(limit, pages, categoryId);
@@ -44,7 +44,7 @@ public class ShopInfoController {
             return ResponseVO.getSuccessResponseVo(shopInfoListByCondition);
         }catch (Exception e){
             e.printStackTrace();
-            throw new BusinessException("根据条件筛选后获取实体店列表失败，请联系后台人员");
+            throw new BusinessException("根据二级分类-获取所有实体店列表失败，请联系后台人员");
         }
     }
 

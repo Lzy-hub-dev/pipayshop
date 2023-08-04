@@ -48,7 +48,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
 
 
     /**
-     * 根据条件筛选后获取实体店列表
+     * 根据二级分类-获取所有实体店列表
      */
     @Override
     public PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId) {
@@ -56,17 +56,15 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         // 获取总条数
         Integer indexShopInfoVOCount = shopInfoMapper.getIndexShopInfoVOCount(categoryId);
         List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(categoryId, (pages - 1) * limit, limit);
-        List<ShopTags> list1 = new ArrayList<>();
         for (IndexShopInfoVO shopInfoVO : indexShopInfoVO) {
+            List<String> list1 = new ArrayList<>();
             List<String> list = JSON.parseArray(shopInfoVO.getTagList(), String.class);
-            System.out.println("bb"+list);
-            if (list==null||list.isEmpty()){
+            if (list==null || list.isEmpty()){
                 continue;
             }
-            for (String s : list) {
-                ShopTags tag_ids = tagMapper.selectOne(new QueryWrapper<ShopTags>().eq("tag_id", s));
-                System.out.println("aa"+tag_ids);
-                list1.add(tag_ids);
+            for (String tagId : list) {
+                String tagContent = tagMapper.selectOneContent(tagId);
+                list1.add(tagContent);
             }
             shopInfoVO.setShopTagsList(list1);
         }
@@ -251,7 +249,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         return shopInfoMapper.insert(shopInfo) > 0;
     }
     /**
-     * 根据条件筛选后获取实体店列表
+     * 根据一级分类-获取所有实体店列表
      *
      * @param limit
      * @param pages
@@ -263,18 +261,18 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         Integer n = shopInfoMapper.getAllIndexShopInfoVO(categoryId);
         // stata==1,按评分从低到高；stata==2,按评分从高到低
         List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(categoryId, (pages - 1) * limit, limit);
-        List<ShopTags> list1 = new ArrayList<>();
         for (IndexShopInfoVO shopInfoVO : indexShopInfoVO) {
+            List<String> list1 = new ArrayList<>();
             List<String> list = JSON.parseArray(shopInfoVO.getTagList(), String.class);
             System.out.println("bb" + list);
             if (list == null || list.isEmpty()) {
                 continue;
             }
             for (String s : list) {
-                ShopTags tag_ids = tagMapper.selectOne(new QueryWrapper<ShopTags>().eq("tag_id", s));
-                System.out.println("aa" + tag_ids);
-                list1.add(tag_ids);
+                String tag_id = tagMapper.selectOneContent(s);
+                list1.add(tag_id);
             }
+            System.out.println(list1);
             shopInfoVO.setShopTagsList(list1);
         }
         return new PageDataVO(n,indexShopInfoVO);
