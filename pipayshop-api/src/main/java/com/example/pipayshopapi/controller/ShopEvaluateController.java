@@ -11,8 +11,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -30,7 +28,7 @@ public class ShopEvaluateController {
     @Resource
     private ShopEvaluateService shopEvaluateService;
 
-    @GetMapping("getShopEvaluateListByItemId/{page}/{limit}/{itemId}")
+    @GetMapping("getShopEvaluateListByItemId/{page}/{limit}/{shopId}")
     @ApiOperation("根据实体店id获取实体店评价列表")
     public ResponseVO<PageDataVO> getShopEvaluateListByItemId(@PathVariable Integer page,@PathVariable Integer limit,@PathVariable String shopId){
         try {
