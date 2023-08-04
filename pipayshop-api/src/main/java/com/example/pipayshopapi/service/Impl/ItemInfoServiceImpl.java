@@ -2,12 +2,12 @@ package com.example.pipayshopapi.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ItemInfo;
 import com.example.pipayshopapi.entity.vo.ItemInfoVO;
-import com.example.pipayshopapi.entity.vo.UserInfoVO;
 import com.example.pipayshopapi.mapper.ItemInfoMapper;
 import com.example.pipayshopapi.service.ItemInfoService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -84,4 +84,31 @@ public class ItemInfoServiceImpl extends ServiceImpl<ItemInfoMapper, ItemInfo> i
 
         return itemInfo.getAddress();
     }
+
+    /**
+     * 根据用户id-网店-升级vip
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public boolean upVip(String userId) {
+        return itemInfoMapper.update(null, new LambdaUpdateWrapper<ItemInfo>()
+                .eq(ItemInfo::getUid, userId)
+                .eq(ItemInfo::getStatus, 0)
+                .set(ItemInfo::getMembership, true)) > 0;
+    }
+
+    /**
+     * 根据用户id-判断对应网店是否vip
+     */
+    @Override
+    public boolean isVip(String userId) {
+        return itemInfoMapper.selectCount(new LambdaQueryWrapper<ItemInfo>()
+                .eq(ItemInfo::getUid, userId)
+                .eq(ItemInfo::getStatus, 0)
+                .eq(ItemInfo::getMembership, true)) > 0;
+    }
+
+
 }

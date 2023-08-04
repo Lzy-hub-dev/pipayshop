@@ -23,7 +23,7 @@ public interface ShopInfoService extends IService<ShopInfo> {
 
 
     /**
-     * 根据一级分类-获取所有实体店列表
+     * 根据二级分类-获取所有实体店列表
      *
      * @param limit
      * @param pages
@@ -31,12 +31,7 @@ public interface ShopInfoService extends IService<ShopInfo> {
      * @return
      */
     PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId);
-    /**
-     * 根据用户id查询用户关注的实体店列表
-     * @param userId
-     * @return
-     */
-    List<ShopInfo> getFollowList(String userId);
+
     /**
      * 根据实体店id查询实体店信息
      */
@@ -89,4 +84,10 @@ public interface ShopInfoService extends IService<ShopInfo> {
      * @return
      */
     PageDataVO getSecShopInfoListByCondition(Integer limit, Integer pages, String categoryId);
+
+    boolean isVipShop(String shopId);
+
+    List<String> getShopIdListByUid(String uid);
+
+    Boolean upVipByShopIdList(String shopIds);
 }

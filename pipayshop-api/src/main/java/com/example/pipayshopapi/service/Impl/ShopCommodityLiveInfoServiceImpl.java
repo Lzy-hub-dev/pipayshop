@@ -1,12 +1,12 @@
 package com.example.pipayshopapi.service.Impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.pipayshopapi.entity.ShopCommodityLiveInfo;
-import com.example.pipayshopapi.entity.ShopHotelRecord;
-import com.example.pipayshopapi.entity.ShopOrderInfo;
-import com.example.pipayshopapi.entity.dto.ShopHotelRecordDTO;
+import com.example.pipayshopapi.entity.vo.HotelFacilityVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoListVO;
+import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoVO;
 import com.example.pipayshopapi.mapper.ShopCommodityLiveInfoMapper;
 import com.example.pipayshopapi.mapper.ShopEvaluateMapper;
 import com.example.pipayshopapi.mapper.ShopHotelRecordMapper;
@@ -15,10 +15,14 @@ import com.example.pipayshopapi.service.ShopCommodityLiveInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.service.ShopHotelRecordService;
 import com.example.pipayshopapi.util.StringUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -40,25 +44,37 @@ public class ShopCommodityLiveInfoServiceImpl extends ServiceImpl<ShopCommodityL
     private ShopHotelRecordService shopHotelRecordService;
 
     @Resource
-    private ShopEvaluateMapper shopEvaluateMapper;
-
-    @Resource
-    private ShopHotelRecordMapper shopHotelRecordMapper;
-
-    @Resource
-    private ShopOrderInfoMapper shopOrderInfoMapper;
-
+    private ObjectMapper objectMapper;
 
     /**
      * 根据房型id查找房型的详细信息
      */
-    // TODO
     @Override
-    public ShopCommodityLiveInfo selectShopLiveByRoomId(String roomId) {
-        return shopCommodityLiveInfoMapper.selectOne(new QueryWrapper<ShopCommodityLiveInfo>()
-                .eq("room_id", roomId)
-                .eq("del_flag", 0)
-                .eq("status", 1));
+    public ShopCommodityLiveInfoVO selectShopLiveByRoomId(String roomId)  {
+        ShopCommodityLiveInfoVO shopCommodityLiveInfoVO = shopCommodityLiveInfoMapper.selectByRoomId(roomId);
+        String basic = shopCommodityLiveInfoMapper.getBasic(roomId);
+        String bath = shopCommodityLiveInfoMapper.getBath(roomId);
+        String appliance = shopCommodityLiveInfoMapper.getAppliance(roomId);
+        List<HotelFacilityVO> basicList = null;
+        List<HotelFacilityVO> bathList = null;
+        List<HotelFacilityVO> applianceList = null;
+        try {
+            if(basic != null){
+                basicList = objectMapper.readValue(basic, new TypeReference<List<HotelFacilityVO>>() {});
+                shopCommodityLiveInfoVO.setBasics(basicList);
+            }
+            if(basicList != null){
+                bathList = objectMapper.readValue(bath, new TypeReference<List<HotelFacilityVO>>() {});
+                shopCommodityLiveInfoVO.setBath(bathList);
+            }
+            if(appliance != null){
+                applianceList = objectMapper.readValue(appliance, new TypeReference<List<HotelFacilityVO>>() {});
+                shopCommodityLiveInfoVO.setAppliance(applianceList);
+            }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return shopCommodityLiveInfoVO;
     }
 
 
@@ -99,6 +115,10 @@ public class ShopCommodityLiveInfoServiceImpl extends ServiceImpl<ShopCommodityL
 
     /**
      * 根据实体店id和入住时间和离店时间来搜索房型
+     * @param shopId
+     * @param startTime
+     * @param endTime
+     * @return
      */
     @Override
     public List<ShopCommodityLiveInfoListVO> selectShopCommodityLiveInfoList(String shopId, Date startTime, Date endTime) {
@@ -148,4 +168,5 @@ public class ShopCommodityLiveInfoServiceImpl extends ServiceImpl<ShopCommodityL
         insert += shopHotelRecordMapper.insert(shopHotelRecord);
         return insert > 1;
     }
+
 }

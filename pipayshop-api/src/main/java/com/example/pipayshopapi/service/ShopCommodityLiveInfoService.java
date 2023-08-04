@@ -2,8 +2,9 @@ package com.example.pipayshopapi.service;
 
 import com.example.pipayshopapi.entity.ShopCommodityLiveInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.pipayshopapi.entity.dto.ShopHotelRecordDTO;
+import com.example.pipayshopapi.entity.vo.HotelFacilityVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoListVO;
+import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoVO;
 
 import java.util.Date;
 import java.util.List;
@@ -21,7 +22,7 @@ public interface ShopCommodityLiveInfoService extends IService<ShopCommodityLive
     /**
      * 根据房型id查找房型的详细信息
      */
-     ShopCommodityLiveInfo selectShopLiveByRoomId(String roomId);
+    ShopCommodityLiveInfoVO selectShopLiveByRoomId(String roomId);
 
     /**
      * 增加房型的详细信息

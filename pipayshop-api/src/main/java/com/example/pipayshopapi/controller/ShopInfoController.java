@@ -34,7 +34,7 @@ public class ShopInfoController {
 
 
     @GetMapping("getShopInfoListByCondition/{limit}/{pages}/{categoryId}")
-    @ApiOperation("根据条件筛选后获取实体店首页列表")
+    @ApiOperation("根据二级分类-获取所有实体店列表")
     public ResponseVO<PageDataVO> getShopInfoListByCondition(@PathVariable Integer limit,@PathVariable Integer pages,@PathVariable String categoryId){
         try {
             PageDataVO shopInfoListByCondition = infoService.getShopInfoListByCondition(limit, pages, categoryId);
@@ -44,7 +44,7 @@ public class ShopInfoController {
             return ResponseVO.getSuccessResponseVo(shopInfoListByCondition);
         }catch (Exception e){
             e.printStackTrace();
-            throw new BusinessException("根据条件筛选后获取实体店列表失败，请联系后台人员");
+            throw new BusinessException("根据二级分类-获取所有实体店列表失败，请联系后台人员");
         }
     }
 
@@ -132,17 +132,54 @@ public class ShopInfoController {
             return ResponseVO.getFalseResponseVo("提交申请失败，请联系后台管理员");
         }
     }
-    @GetMapping("followList/{userId}")
-    @ApiOperation("根据用户id-查询-用户关注的实体店-列表")
-    public ResponseVO<List<ShopInfo>> followList(@PathVariable("userId") String userId) {
+
+
+    /**
+     * 根据店铺id查询该店铺是否为vip店铺
+     */
+    @GetMapping("isVipShop/{shopId}")
+    @ApiOperation("根据店铺id查询该店铺是否为vip店铺")
+    public ResponseVO<Boolean> isVipShop(@PathVariable("shopId") String shopId) {
         try {
-            List<ShopInfo> list = infoService.getFollowList(userId);
-            return ResponseVO.getSuccessResponseVo(list);
+            boolean flag = infoService.isVipShop(shopId);
+            return ResponseVO.getSuccessResponseVo(flag);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new BusinessException("查询失败，请联系后台人" + "、员");
+            throw new BusinessException("根据店铺id查询该店铺是否为vip店铺失败，请联系后台人员");
         }
     }
 
+    /**
+     *  根据用户id查找名下的所有实体店铺的shopId列表
+     */
+    @GetMapping("getShopIdListByUid/{uid}")
+    @ApiOperation("根据用户id查找名下的所有实体店铺的shopId列表")
+    public ResponseVO<List<String>> getShopIdListByUid(@PathVariable("uid") String uid) {
+        try {
+            List<String> list = infoService.getShopIdListByUid(uid);
+            return ResponseVO.getSuccessResponseVo(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException("根据用户id查找名下的所有实体店铺的shopId列表失败，请联系后台人员");
+        }
+    }
+
+    /**
+     * 将多家实体店一起升级为vip店铺
+     */
+    @PostMapping("upVipByShopIdList")
+    @ApiOperation("将多家实体店一起升级为vip店铺")
+    public ResponseVO<String> upVipByShopIdList(String shopIds) {
+        try {
+            Boolean update = infoService.upVipByShopIdList(shopIds);
+            if (!update){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("将多家实体店一起升级为vip店铺");
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseVO.getFalseResponseVo("将多家实体店一起升级为vip店铺失败，请联系后台管理员");
+        }
+    }
 
 }

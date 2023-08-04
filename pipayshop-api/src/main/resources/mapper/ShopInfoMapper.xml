@@ -46,7 +46,7 @@
 
 
     <select id="getIndexShopInfoVO" resultType="com.example.pipayshopapi.entity.vo.IndexShopInfoVO">
-        select shop_id,shop_name,score,localhost_latitude,localhost_longitude,user_image, shop_introduce,tag_list
+        select shop_id,shop_name,score,localhost_latitude,localhost_longitude,user_image, shop_introduce,tag_list,address
         from shop_info
             <where>
 
@@ -60,16 +60,7 @@
             </where>
         LIMIT ${page},${limit}
     </select>
-    <select id="selectFollowProductByUserId" resultType="com.example.pipayshopapi.entity.ShopInfo">
-        SELECT *
-        FROM shop_follow_focus f
-                 INNER JOIN
-             shop_info i
-             ON f.shop_id = i.shop_id
-        WHERE f.follow_id = #{userId}
-          and f.`status` = 0
-          and i.`status` = 0
-    </select>
+
     <select id="getAllIndexShopInfoVO" resultType="java.lang.Integer">
         select COUNT(*)
         from shop_info
@@ -85,5 +76,15 @@
 
     <select id="getShopInfoVOCount" resultType="java.lang.Integer">
 
+    </select>
+
+
+    <select id="getShopIdListByUid" resultType="java.lang.String">
+        select
+            shop_id
+        from
+            shop_info
+        where
+            uid = #{uid} and status = 0
     </select>
 </mapper>

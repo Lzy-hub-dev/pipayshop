@@ -20,5 +20,9 @@ public class ItemInfoVO {
     private Integer itemSum;
     private Integer fanSum;
     private String itemImagList;
+    /**
+     * 是否会员(0映射为false，1映射为true)
+     */
+    private Boolean membership;
     private List<ItemCommodityVO> commodityInfoList;
 }

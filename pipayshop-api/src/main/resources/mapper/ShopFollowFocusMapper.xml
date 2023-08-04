@@ -19,5 +19,23 @@
         ORDER BY s.create_time DESC
         LIMIT ${pageNum},${pageSize}
     </select>
+    <select id="selectFollowProductByUserId" resultType="com.example.pipayshopapi.entity.vo.ShopInfoVO1">
+        SELECT
+            i.shop_id,
+            i.shop_name,
+            i.score,
+            i.user_image,
+           (
+                SELECT COUNT(*) FROM shop_follow_focus
+                where `status`=0 and shop_id=i.shop_id
+            ) as follows
+        FROM shop_follow_focus f
+                 INNER JOIN
+             shop_info i
+             ON f.shop_id = i.shop_id
+        WHERE f.follow_id = #{userId}
+          and f.`status` = 0
+          and i.`status` = 0
+    </select>
 
 </mapper>

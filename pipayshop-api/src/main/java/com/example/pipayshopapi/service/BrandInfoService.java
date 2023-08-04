@@ -22,7 +22,7 @@ public interface BrandInfoService extends IService<BrandInfo> {
      * @param cateId
      * @return
      */
-    List<BrandInfoVO> selectAllBrandList(String cateId);
+    List<BrandInfoVO> selectAllBrandList();
 
 
     /**

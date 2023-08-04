@@ -3,6 +3,10 @@ package com.example.pipayshopapi.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -15,6 +19,9 @@ import java.time.LocalDateTime;
  * @since 2023-07-26
  */
 @TableName("brand_info")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class BrandInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -26,11 +33,6 @@ public class BrandInfo implements Serializable {
      * 品牌id
      */
     private String bId;
-
-    /**
-     * 二级分类的id(外键)
-     */
-    private Integer cateId;
 
     /**
      * 品牌
@@ -46,59 +48,4 @@ public class BrandInfo implements Serializable {
      * 创建时间
      */
     private LocalDateTime createTime;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-    public String getbId() {
-        return bId;
-    }
-
-    public void setbId(String bId) {
-        this.bId = bId;
-    }
-    public Integer getCateId() {
-        return cateId;
-    }
-
-    public void setCateId(Integer cateId) {
-        this.cateId = cateId;
-    }
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
-    public Boolean getDelFlag() {
-        return delFlag;
-    }
-
-    public void setDelFlag(Boolean delFlag) {
-        this.delFlag = delFlag;
-    }
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
-
-    @Override
-    public String toString() {
-        return "BrandInfo{" +
-            "id=" + id +
-            ", bId=" + bId +
-            ", cateId=" + cateId +
-            ", brand=" + brand +
-            ", delFlag=" + delFlag +
-            ", createTime=" + createTime +
-        "}";
-    }
 }

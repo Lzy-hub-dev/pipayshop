@@ -6,6 +6,7 @@ import com.example.pipayshopapi.entity.dto.ShopCommodityLiveInfoListDTO;
 import com.example.pipayshopapi.entity.dto.ShopHotelRecordDTO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoListVO;
+import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.ShopCommodityLiveInfoMapper;
 import com.example.pipayshopapi.service.ShopCommodityLiveInfoService;
@@ -39,10 +40,10 @@ public class ShopCommodityLiveInfoController {
 
     @GetMapping("selectShopLiveByRoomId/{roomId}")
     @ApiOperation("根据房型id查找房型的详细信息")
-    public ResponseVO<ShopCommodityLiveInfo> selectShopLiveByRoomId(@PathVariable String roomId){
+    public ResponseVO<ShopCommodityLiveInfoVO> selectShopLiveByRoomId(@PathVariable String roomId){
         try {
-            ShopCommodityLiveInfo shopCommodityLiveInfo = shopCommodityLiveInfoService.selectShopLiveByRoomId(roomId);
-            return ResponseVO.getSuccessResponseVo(shopCommodityLiveInfo);
+            ShopCommodityLiveInfoVO shopCommodityLiveInfoVO = shopCommodityLiveInfoService.selectShopLiveByRoomId(roomId);
+            return ResponseVO.getSuccessResponseVo(shopCommodityLiveInfoVO);
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("根据房型id查找房型的详细信息失败，请联系后台人员");
@@ -127,7 +128,6 @@ public class ShopCommodityLiveInfoController {
     public ResponseVO selectShopCommodityLiveInfoList(@RequestBody ShopCommodityLiveInfoListDTO shopCommodityLiveInfoListDTO){
         try {
             List<ShopCommodityLiveInfoListVO> shopCommodityLiveInfoListVOS = shopCommodityLiveInfoService.selectShopCommodityLiveInfoList(shopCommodityLiveInfoListDTO.getShopId(),shopCommodityLiveInfoListDTO.getStartTime(),shopCommodityLiveInfoListDTO.getEndTime());
-
             return ResponseVO.getSuccessResponseVo(shopCommodityLiveInfoListVOS);
         }catch (Exception e){
             e.printStackTrace();

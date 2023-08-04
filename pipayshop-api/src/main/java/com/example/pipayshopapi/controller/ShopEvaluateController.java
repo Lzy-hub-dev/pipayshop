@@ -32,9 +32,9 @@ public class ShopEvaluateController {
 
     @GetMapping("getShopEvaluateListByItemId/{page}/{limit}/{itemId}")
     @ApiOperation("根据实体店id获取实体店评价列表")
-    public ResponseVO<PageDataVO> getShopEvaluateListByItemId(@PathVariable Integer page,@PathVariable Integer limit,@PathVariable String itemId){
+    public ResponseVO<PageDataVO> getShopEvaluateListByItemId(@PathVariable Integer page,@PathVariable Integer limit,@PathVariable String shopId){
         try {
-            PageDataVO pageList = shopEvaluateService.getShopEvaluateListByItemId(page, limit, itemId);
+            PageDataVO pageList = shopEvaluateService.getShopEvaluateListByItemId(page, limit, shopId);
             return ResponseVO.getSuccessResponseVo(pageList);
         }catch (Exception e){
             e.printStackTrace();

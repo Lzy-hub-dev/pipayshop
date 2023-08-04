@@ -4,18 +4,20 @@ package com.example.pipayshopapi.controller;
 import com.example.pipayshopapi.entity.ItemCommodityHistory;
 import com.example.pipayshopapi.entity.ShopCommodityHistory;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
+import com.example.pipayshopapi.entity.vo.ShopCommodityListVO;
+import com.example.pipayshopapi.entity.vo.ShopCommodityVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopCommodityHistoryService;
+import com.example.pipayshopapi.service.ShopCommodityInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -32,6 +34,9 @@ import javax.annotation.Resource;
 public class ShopCommodityHistoryController {
     @Resource
     private ShopCommodityHistoryService shopCommodityHistoryService;
+
+    @Resource
+    private ShopCommodityInfoService shopCommodityService;
     @PostMapping("deleteHistory")
     @ApiOperation("删除用户浏览商品的历史记录-实体店")
     public ResponseVO deleteHistory(String userId,
@@ -60,6 +65,17 @@ public class ShopCommodityHistoryController {
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("新增用户浏览商品的历史记录失败，请联系后台人员");
+        }
+    }
+    @GetMapping("history/{userId}")
+    @ApiOperation("根据用户id查询用户浏览商品历史-实体店")
+    public ResponseVO<List<ShopCommodityListVO>> historyList(@PathVariable("userId") String userId) {
+        try {
+            List<ShopCommodityListVO> list = shopCommodityService.historyList(userId);
+            return ResponseVO.getSuccessResponseVo(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException("查询失败，请联系后台人员");
         }
     }
 }
