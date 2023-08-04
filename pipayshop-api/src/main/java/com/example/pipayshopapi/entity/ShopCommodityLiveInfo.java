@@ -149,4 +149,9 @@ public class ShopCommodityLiveInfo implements Serializable {
      */
     private Integer floor;
 
+    /**
+     * 是否允许加客 0:可以 1：不可以
+     */
+    private Integer isAdd;
+
 }

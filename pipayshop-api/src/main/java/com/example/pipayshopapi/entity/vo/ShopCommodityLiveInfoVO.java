@@ -92,4 +92,9 @@ public class ShopCommodityLiveInfoVO {
      */
     private Integer room;
 
+    /**
+     * 是否允许加客 0:可以 1：不可以
+     */
+    private Integer isAdd;
+
 }
