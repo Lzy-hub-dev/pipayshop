@@ -139,4 +139,14 @@ public class ShopCommodityLiveInfo implements Serializable {
      */
     private Integer status;
 
+    /**
+     * 床型
+     */
+    private String bedType;
+
+    /**
+     * 楼层
+     */
+    private Integer floor;
+
 }
