@@ -2,6 +2,9 @@ package com.example.pipayshopapi.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.pipayshopapi.entity.ItemCommodityCategory;
+import com.example.pipayshopapi.entity.vo.ItemCommodityVO;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.entity.vo.itemCommoditiesVO;
 import com.example.pipayshopapi.mapper.ItemCommodityCategoryMapper;
 import com.example.pipayshopapi.service.ItemCommodityCategoryService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -41,5 +44,19 @@ public class ItemCommodityCategoryServiceImpl extends ServiceImpl<ItemCommodityC
     @Override
     public List<ItemCommodityCategory> cateSecondList() {
         return null;
+    }
+
+    /**
+     * 根据一级分类-获取所有网店商品列表
+     *
+     * @param limit
+     * @param pages
+     * @param categoryId
+     * @return
+     */
+    @Override
+    public PageDataVO getSecShopInfoListByCondition(Integer limit, Integer pages, String categoryId) {
+        List<itemCommoditiesVO> list  = categoryMapper.getSecShopInfoListByTopCateId(limit, pages, categoryId);
+        return new PageDataVO(list.size(), list);
     }
 }

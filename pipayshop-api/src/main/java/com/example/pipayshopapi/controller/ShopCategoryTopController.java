@@ -42,17 +42,7 @@ public class ShopCategoryTopController {
         }
     }
 
-    @GetMapping("getShopCategoryTopById/{categoryTopId}")
-    @ApiOperation("根据分类id查询分类")
-    public ResponseVO getShopCategoryTopById(@PathVariable String categoryTopId) {
-        try {
-            ShopCategoryTop categoryTop = categoryTopService.getShopCategoryTopById(categoryTopId);
-            return categoryTop==null?ResponseVO.getFalseResponseVo(null):ResponseVO.getSuccessResponseVo(categoryTop);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseVO.getFalseResponseVo(null);
-        }
-    }
+
     @PostMapping("deleteShopCategoryTopById/{categoryTopId}")
     @ApiOperation("根据分类id删除分类")
     public ResponseVO deleteShopCategoryTopById(@PathVariable String categoryTopId) {
