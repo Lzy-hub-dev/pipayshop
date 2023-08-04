@@ -77,4 +77,19 @@ public class ShopCommodityLiveInfoVO {
      */
     private Integer children;
 
+    /**
+     * 床型
+     */
+    private String bedType;
+
+    /**
+     * 楼层
+     */
+    private Integer floor;
+
+    /**
+     * 房间数
+     */
+    private Integer room;
+
 }
