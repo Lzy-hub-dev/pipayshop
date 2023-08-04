@@ -3,11 +3,8 @@ package com.example.pipayshopapi.service.Impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.pipayshopapi.entity.ShopCommodityEvaluate;
 import com.example.pipayshopapi.entity.ShopFollowFocus;
-import com.example.pipayshopapi.entity.UserInfo;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
-import com.example.pipayshopapi.entity.vo.ShopCommodityEvaluateVO;
 import com.example.pipayshopapi.entity.vo.ShopUserFollowInfoVO;
 import com.example.pipayshopapi.mapper.ShopFollowFocusMapper;
 import com.example.pipayshopapi.mapper.UserInfoMapper;
@@ -17,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -80,4 +76,15 @@ public class ShopFollowFocusServiceImpl extends ServiceImpl<ShopFollowFocusMappe
         return new PageDataVO(count.intValue(), result);
     }
 
+    @Override
+    public boolean isFollowShop(String shopId, String userId) {
+        int i = shopFollowFocusMapper.selectCount(new QueryWrapper<ShopFollowFocus>().eq("shop_id", shopId)
+                .eq("follow_id", userId).eq("status", 0)).intValue();
+        return i == 1;
+    }
+
+    @Override
+    public Integer SelectFollowShopSum(String shopId) {
+        return shopFollowFocusMapper.selectCount(new QueryWrapper<ShopFollowFocus>().eq("shop_id", shopId).eq("status", 0)).intValue();
+    }
 }
