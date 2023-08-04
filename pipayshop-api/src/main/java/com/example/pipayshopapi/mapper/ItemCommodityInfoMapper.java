@@ -1,9 +1,6 @@
 package com.example.pipayshopapi.mapper;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.ItemInfo;
 import com.example.pipayshopapi.entity.dto.ExamineCommodityDTO;
@@ -33,7 +30,6 @@ public interface ItemCommodityInfoMapper extends BaseMapper<ItemCommodityInfo> {
 
     List<CommodityVO> itemCommodityChoose(String itemId, String brandId);
 
-    CommodityDetailVO itemCommodityDetail(String commodityId);
 
     List<ItemCommodityInfoVO> selectCollectProductByUserId(String userId);
 

@@ -3,7 +3,7 @@
 <mapper namespace="com.example.pipayshopapi.mapper.UserInfoMapper">
 
     <select id="selectUserInfoByUid" resultType="com.example.pipayshopapi.entity.vo.UserInfoVO">
-        SELECT uid,user_name,personal_profile,user_image, language,email,age FROM user_info where uid=#{uid};
+        SELECT uid,user_name,personal_profile,user_image, language,email,age, country FROM user_info where uid=#{uid};
     </select>
 
     <select id="getUserFollowInfoById" resultType="com.example.pipayshopapi.entity.UserInfo">

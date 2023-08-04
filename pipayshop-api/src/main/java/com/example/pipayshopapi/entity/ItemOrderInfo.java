@@ -82,7 +82,6 @@ public class ItemOrderInfo implements Serializable {
      * 外键关联用户的地址电话等信息方案
      */
     private String buyerDataId;
-
     /**
      * 商品下单数量
      */

@@ -42,5 +42,13 @@
 	    WHERE uid = #{uid}
     )
     </select>
+    <select id="selectBasicData" resultType="com.example.pipayshopapi.entity.vo.ItemVO">
+        select
+            item_name, score, user_image
+        from
+            item_info
+        where
+            item_id = #{itemId} and status = 0
+    </select>
 
 </mapper>

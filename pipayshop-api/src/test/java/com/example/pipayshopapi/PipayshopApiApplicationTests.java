@@ -1,11 +1,13 @@
 package com.example.pipayshopapi;
 
+import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoListVO;
 import com.example.pipayshopapi.mapper.*;
 import com.example.pipayshopapi.service.ItemOrderInfoService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @SpringBootTest
 class PipayshopApiApplicationTests {
@@ -27,9 +29,15 @@ class PipayshopApiApplicationTests {
 
     @Resource
     private ShopOrderInfoMapper shopOrderInfoMapper;
+
+    @Resource
+    private ShopCommodityLiveInfoMapper shopCommodityLiveInfoMapper;
     @Test
     void contextLoads() {
-
+        List<ShopCommodityLiveInfoListVO> shopCommodityLiveInfoListVOS = shopCommodityLiveInfoMapper.selectShopCommodityLiveInfoList("1002");
+        for (ShopCommodityLiveInfoListVO shopCommodityLiveInfoListVO : shopCommodityLiveInfoListVOS) {
+            System.out.println(shopCommodityLiveInfoListVO);
+        }
 
     }
 

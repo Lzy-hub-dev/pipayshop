@@ -23,9 +23,9 @@ public class UserInfoVO {
      */
     private String personalProfile;
     /**
-     * 语言标识（枚举类)
+     * 语言标识
      */
-    private Integer language;
+    private String language;
     /**
      * 邮箱
      */
@@ -44,4 +44,11 @@ public class UserInfoVO {
      * 用户头像
      */
     private String userImage;
+
+    /**
+     * 國家
+     */
+    private String country;
+
+
 }
