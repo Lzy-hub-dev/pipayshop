@@ -33,4 +33,6 @@ public interface ItemFollowFocusService extends IService<ItemFollowFocus> {
     List<FansVO> itemFans(String itemId,Integer pageNum,Integer pageSize);
 
     Integer itemFansSum(String itemId);
+
+    Boolean isItemFollow(String followId, String itemId);
 }

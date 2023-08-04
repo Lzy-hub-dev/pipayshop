@@ -26,28 +26,6 @@
             and brand_id=#{brandId}
         </if>
     </select>
-    <select id="itemCommodityDetail" resultType="com.example.pipayshopapi.entity.vo.CommodityDetailVO">
-        select commodity_id,
-               brand_id,
-               item_commodity_name,
-               origin_price,
-               color_list,
-               size_list,
-               origin_address,
-               accept_address_list,
-               item_id,
-               price,
-               details,
-               imags_list,
-               inventory,
-               free_shipping_num,
-               category_id,
-               coupons_list,
-               tag_list,
-               degree_loss
-        FROM item_commodity_info
-        where commodity_id = #{commodityId}
-    </select>
     <select id="selectProductByItemId">
         select *
         FROM item_commodity_info c
@@ -94,21 +72,25 @@
         WHERE h.user_id = #{userId}
           AND i.`status` = 1
     </select>
-    <select id="examineCommodityList" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityInfoVO">
+    <select id="examineCommodityList" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityVO">
         SELECT c.commodity_id,
-               i.item_name,
-               i.user_image  AS seller_pic,
-               c.`status`,
-               c.avatar_imag AS commodity_pic,
-               c.item_commodity_name,
-               c.price
+        i.item_name,
+        i.user_image AS seller_pic,
+        c.`status`,
+        c.avatar_imag AS commodity_pic,
+        c.item_commodity_name,
+        c.price
         FROM item_info i
-                 INNER JOIN user_info u ON i.uid = u.uid
-                 INNER JOIN item_commodity_info c ON i.item_id = c.item_id
-        WHERE u.uid = #{userId}
-          AND c.`status` = #{examineStatus}
+        INNER JOIN user_info u ON i.uid = u.uid
+        INNER JOIN item_commodity_info c ON i.item_id = c.item_id
+         WHERE u.uid = #{userId}
+        <if test="examineStatus!=2">
+            AND c.`status` = #{examineStatus}
+        </if>
+        limit #{pageNumber},#{pageSize}
     </select>
-    <select id="commodityList" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityInfoVO">
+
+    <select id="commodityList" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityVO">
         SELECT c.commodity_id,
                i.item_name,
                i.user_image  AS seller_pic,

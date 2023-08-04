@@ -3,6 +3,7 @@ package com.example.pipayshopapi.service.Impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.pipayshopapi.entity.ShopCommodityLiveInfo;
+import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoListVO;
 import com.example.pipayshopapi.mapper.ShopCommodityLiveInfoMapper;
 import com.example.pipayshopapi.service.ShopCommodityLiveInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -72,5 +75,18 @@ public class ShopCommodityLiveInfoServiceImpl extends ServiceImpl<ShopCommodityL
                 .eq("room_id", roomId)
                 .set("del_flag", 1));
         return result>0;
+    }
+
+    /**
+     * 根据实体店id和入住时间和离店时间来搜索房型
+     * @param shopId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    @Override
+    public List<ShopCommodityLiveInfoListVO> selectShopCommodityLiveInfoList(String shopId, Date startTime, Date endTime) {
+
+        return null;
     }
 }

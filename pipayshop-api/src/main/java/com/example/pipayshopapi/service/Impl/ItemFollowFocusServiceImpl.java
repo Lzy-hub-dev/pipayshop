@@ -72,4 +72,13 @@ public class ItemFollowFocusServiceImpl extends ServiceImpl<ItemFollowFocusMappe
                 .eq("item_id", itemId)
                 .eq("status", 0)).intValue();
     }
+
+    @Override
+    public Boolean isItemFollow(String followId, String itemId) {
+        ItemFollowFocus itemFollowFocus = itemFollowFocusMapper.selectOne(new QueryWrapper<ItemFollowFocus>()
+                .eq("item_id", itemId)
+                .eq("follow_id", followId)
+                .eq("status", 0));
+        return itemFollowFocus != null;
+    }
 }

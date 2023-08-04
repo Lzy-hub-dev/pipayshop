@@ -30,7 +30,7 @@ public class ItemFollowFocusController {
     @Resource
     private ItemFollowFocusService followFocusService;
 
-    @GetMapping("userFollowItem/{followId}/{itemId}")
+    @PostMapping("userFollowItem/{followId}/{itemId}")
     @ApiOperation("关注网店")
     public ResponseVO<String> userFollowItem(@PathVariable String followId,@PathVariable String itemId) {
         try {
@@ -44,6 +44,22 @@ public class ItemFollowFocusController {
             throw new BusinessException("关注网店失败，请联系后台人" + "、员");
         }
     }
+
+    /**
+     * 查询是否已经关注该网点
+     */
+    @GetMapping("isItemFollow/{followId}/{itemId}")
+    @ApiOperation("查询是否已经关注该网点")
+    private ResponseVO<Boolean> isItemFollow(@PathVariable String followId,@PathVariable String itemId){
+        try {
+            Boolean result = followFocusService.isItemFollow(followId, itemId);
+            return ResponseVO.getSuccessResponseVo(result);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("查询是否已经关注该网点失败，请联系后台人员");
+        }
+    }
+
 
     @PostMapping("userUnfollow/{followId}/{itemId}")
     @ApiOperation("用户取消关注")

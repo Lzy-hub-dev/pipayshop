@@ -2,18 +2,19 @@ package com.example.pipayshopapi.service.Impl;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.pipayshopapi.entity.ItemCommodityHistory;
+import com.example.pipayshopapi.entity.BrandInfo;
+import com.example.pipayshopapi.entity.ItemCommodityEvaluate;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
-import com.example.pipayshopapi.entity.ItemInfo;
+import com.example.pipayshopapi.entity.ItemFollowFocus;
 import com.example.pipayshopapi.entity.dto.ApplyItemCommodityDTO;
+import com.example.pipayshopapi.entity.dto.ExamineCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
-import com.example.pipayshopapi.mapper.ItemCommodityHistoryMapper;
-import com.example.pipayshopapi.mapper.ItemCommodityInfoMapper;
-import com.example.pipayshopapi.mapper.ItemInfoMapper;
+import com.example.pipayshopapi.mapper.*;
 import com.example.pipayshopapi.service.ItemCommodityInfoService;
 import com.example.pipayshopapi.util.FileUploadUtil;
 import com.example.pipayshopapi.util.StringUtil;
@@ -41,7 +42,13 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     @Resource
     private ItemInfoMapper itemInfoMapper;
     @Resource
-    private ItemCommodityHistoryMapper itemCommodityHistoryMapper;
+    private BrandInfoMapper brandInfoMapper;
+
+    @Resource
+    private ItemFollowFocusMapper itemFollowFocusMapper;
+
+    @Resource
+    private ItemCommodityEvaluateMapper itemCommodityEvaluateMapper;
 
 
     /**
@@ -106,9 +113,6 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
 
     /**
      * 网店首页下面的搜索商品接口
-     *
-     * @param itemSearchConditionDTO
-     * @return
      */
     @Override
     public PageDataVO itemSearchCommodity(ItemSearchConditionDTO itemSearchConditionDTO) {
@@ -136,17 +140,70 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     }
 
     @Override
-    public CommodityDetailVO itemCommodityDetail(String commodityId,String userId) {
-        CommodityDetailVO commodityDetailVO = commodityInfoMapper.itemCommodityDetail(commodityId);
-
+    public CommodityDetailVO itemCommodityDetail(String commodityId) {
+        ItemCommodityInfo itemCommodityInfo = commodityInfoMapper.selectOne(new QueryWrapper<ItemCommodityInfo>()
+                .eq("commodity_id", commodityId));
+        String itemId = itemCommodityInfo.getItemId();
+        CommodityDetailVO commodityDetailVO = new CommodityDetailVO(itemCommodityInfo.getCommodityId(), null, itemCommodityInfo.getItemCommodityName()
+                , itemCommodityInfo.getOriginPrice(), null, null, itemCommodityInfo.getOriginAddress(), null
+                , itemId, itemCommodityInfo.getPrice(), itemCommodityInfo.getDetails(), null,
+                itemCommodityInfo.getInventory(), itemCommodityInfo.getFreeShippingNum(), itemCommodityInfo.getCategoryId(),
+                null, null, itemCommodityInfo.getDegreeLoss(), null, null, null);
+        String colorListString = itemCommodityInfo.getColorList();
+        if (colorListString != null) {
+            commodityDetailVO.setColorList(JSON.parseArray(colorListString, String.class));
+        }
+        String sizeListString = itemCommodityInfo.getSizeList();
+        if (sizeListString != null) {
+            commodityDetailVO.setSizeList(JSON.parseArray(sizeListString, String.class));
+        }
+        String acceptAddressListString = itemCommodityInfo.getAcceptAddressList();
+        if (acceptAddressListString != null) {
+            commodityDetailVO.setAcceptAddressList(JSON.parseArray(acceptAddressListString, String.class));
+        }
+        String imagsListString = itemCommodityInfo.getImagsList();
+        if (imagsListString != null) {
+            commodityDetailVO.setImagsList(JSON.parseArray(imagsListString, String.class));
+        }
+        String couponsListString = itemCommodityInfo.getCouponsList();
+        if (couponsListString != null) {
+            commodityDetailVO.setCouponsList(JSON.parseArray(couponsListString, String.class));
+        }
+        String tagListString = itemCommodityInfo.getTagList();
+        if (tagListString != null) {
+            commodityDetailVO.setTagList(JSON.parseArray(tagListString, String.class));
+        }
+        String detailImagList = itemCommodityInfo.getDetailImagList();
+        if (detailImagList != null){
+            commodityDetailVO.setDetailImagList(JSON.parseArray(detailImagList, String.class));
+        }
+        String brandId = itemCommodityInfo.getBrandId();
+        if (brandId != null) {
+            BrandInfo brandInfo = brandInfoMapper.selectOne(new QueryWrapper<BrandInfo>()
+                    .eq("b_id", brandId)
+                    .eq("del_flag", 0)
+                    .select("brand"));
+            commodityDetailVO.setBrand(brandInfo.getBrand());
+        }
+        // 封装该商品的评论总数
+        int evaluateCount = itemCommodityEvaluateMapper.selectCount(new QueryWrapper<ItemCommodityEvaluate>()
+                .eq("commodity_id", commodityId)
+                .eq("status", 0)).intValue();
+        commodityDetailVO.setEvaluateCount(evaluateCount);
+        // 封装该商品的所在店铺数据
+        ItemVO itemVO = itemInfoMapper.selectBasicData(itemId);
+        int fanSum = itemFollowFocusMapper.selectCount(new QueryWrapper<ItemFollowFocus>().eq("item_id", itemId)
+                .eq("status", 0)).intValue();
+        int commoditySum = commodityInfoMapper.selectCount(new QueryWrapper<ItemCommodityInfo>().eq("item_id", itemId)
+                .eq("status", 1)).intValue();
+        itemVO.setFanSum(fanSum);
+        itemVO.setItemCommoditySum(commoditySum);
+        commodityDetailVO.setItemVO(itemVO);
         return commodityDetailVO;
     }
 
     /**
      * 根据用户id查询 对应的 网店收藏列表
-     *
-     * @param userId
-     * @return
      */
     @Override
     public List<ItemCommodityInfoVO> getCollectList(String userId) {
@@ -157,22 +214,12 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
 
     /**
      * 根据用户id查询用户浏览商品历史-网店
-     *
-     * @param userId
-     * @return
      */
     @Override
     public List<ItemCommodityInfoVO> historyList(String userId) {
         return commodityInfoMapper.selectHistoryProductByUserId(userId);
     }
 
-
-
-    /**
-     * @param commodity
-     * @param status    1:上架;2:下架
-     * @return
-     */
     @Override
     public boolean changeCommodityStatus(String commodity, String status) {
         LambdaUpdateWrapper<ItemCommodityInfo> wr = new LambdaUpdateWrapper<ItemCommodityInfo>()
@@ -190,7 +237,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
      */
     @Override
     public ItemInfoVO commodityList(String itemId) {
-        List<ItemCommodityInfoVO> voList = commodityInfoMapper.commodityList(itemId);
+        List<ItemCommodityVO> voList = commodityInfoMapper.commodityList(itemId);
         List<ItemInfoVO> itemInfoVO = itemInfoMapper.selectItemInfoByItemIdOrUserId(null,itemId);
         if (itemInfoVO != null) {
             ItemInfoVO vo = itemInfoVO.get(0);
@@ -203,13 +250,11 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     /**
      * 根据卖家id查询网店的商品审核列表
      *
-     * @param userId
-     * @param examineStatus 0:审核中;1:审核通过
      * @return
      */
     @Override
-    public List<ItemCommodityInfoVO> examineCommodityList(String userId, Integer examineStatus) {
-        return commodityInfoMapper.examineCommodityList(userId, examineStatus);
+    public List<ItemCommodityVO> examineCommodityList(ExamineCommodityDTO dto) {
+        return commodityInfoMapper.examineCommodityList(dto);
     }
 
 

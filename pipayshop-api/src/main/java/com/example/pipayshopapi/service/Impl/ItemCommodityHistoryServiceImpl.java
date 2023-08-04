@@ -1,6 +1,7 @@
 package com.example.pipayshopapi.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.example.pipayshopapi.entity.ItemCommodityHistory;
 import com.example.pipayshopapi.entity.ShopCommodityHistory;
