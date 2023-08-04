@@ -35,7 +35,7 @@ public class ShopEvaluate implements Serializable {
     /**
      * 实体店id
      */
-    private String itemId;
+    private String shopId;
 
     /**
      * 评价id
