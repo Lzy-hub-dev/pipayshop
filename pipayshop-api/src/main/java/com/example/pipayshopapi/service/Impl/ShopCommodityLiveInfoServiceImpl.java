@@ -4,6 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.pipayshopapi.entity.ShopCommodityLiveInfo;
+import com.example.pipayshopapi.entity.ShopHotelRecord;
+import com.example.pipayshopapi.entity.ShopOrderInfo;
+import com.example.pipayshopapi.entity.dto.ShopHotelRecordDTO;
 import com.example.pipayshopapi.entity.vo.HotelFacilityVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoListVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoVO;
@@ -45,6 +48,15 @@ public class ShopCommodityLiveInfoServiceImpl extends ServiceImpl<ShopCommodityL
 
     @Resource
     private ObjectMapper objectMapper;
+
+    @Resource
+    private ShopEvaluateMapper shopEvaluateMapper;
+
+    @Resource
+    private ShopOrderInfoMapper shopOrderInfoMapper;
+
+    @Resource
+    private ShopHotelRecordMapper shopHotelRecordMapper;
 
     /**
      * 根据房型id查找房型的详细信息

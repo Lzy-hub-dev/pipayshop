@@ -2,6 +2,7 @@ package com.example.pipayshopapi.service;
 
 import com.example.pipayshopapi.entity.ShopCommodityLiveInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.pipayshopapi.entity.dto.ShopHotelRecordDTO;
 import com.example.pipayshopapi.entity.vo.HotelFacilityVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoListVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoVO;
