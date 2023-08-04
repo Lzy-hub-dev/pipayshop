@@ -3,7 +3,10 @@ package com.example.pipayshopapi.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
-import com.example.pipayshopapi.entity.vo.*;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.entity.vo.ShopInfoVO;
+import com.example.pipayshopapi.entity.vo.ShopInfoVO1;
+import com.example.pipayshopapi.entity.vo.UidPageVO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -20,15 +23,14 @@ public interface ShopInfoService extends IService<ShopInfo> {
 
 
     /**
-     * 根据条件筛选后获取实体店列表
+     * 根据一级分类-获取所有实体店列表
      *
      * @param limit
      * @param pages
      * @param categoryId
-     * @param state
      * @return
      */
-    PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId, Integer state);
+    PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId);
     /**
      * 根据用户id查询用户关注的实体店列表
      * @param userId
@@ -80,12 +82,11 @@ public interface ShopInfoService extends IService<ShopInfo> {
     boolean applyShop(ApplyShopDTO applyShopDTO , MultipartFile[] file);
 
     /**
-     * 根据条件筛选后获取实体店列表
+     * 根据一级分类-获取所有实体店列表
      * @param limit
      * @param pages
      * @param categoryId
-     * @param state
      * @return
      */
-    PageDataVO getSecShopInfoListByCondition(Integer limit, Integer pages, String categoryId, Integer state);
+    PageDataVO getSecShopInfoListByCondition(Integer limit, Integer pages, String categoryId);
 }

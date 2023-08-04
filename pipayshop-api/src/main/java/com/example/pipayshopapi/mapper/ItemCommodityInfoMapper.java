@@ -28,7 +28,7 @@ public interface ItemCommodityInfoMapper extends BaseMapper<ItemCommodityInfo> {
 
     Integer  listCount(@Param("secondCategoryId") Integer secondCategoryId);
 
-    List<CommodityVO> itemCommodityChoose(String itemId, String brandId);
+    List<CommodityVO> itemCommodityChoose(@Param("itemId") String itemId,@Param("brandId") String brandId);
 
 
     List<ItemCommodityInfoVO> selectCollectProductByUserId(String userId);

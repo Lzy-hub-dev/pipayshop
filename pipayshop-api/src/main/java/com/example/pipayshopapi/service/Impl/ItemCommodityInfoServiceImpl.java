@@ -122,7 +122,6 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
 
         // 查询分页数据封装到page中
         commodityInfoMapper.selectPage(page, new LambdaQueryWrapper<ItemCommodityInfo>()
-                // 可选的条件查询，可要可不要
                 .eq(itemSearchConditionDTO.getBrandId() != null && !"".equals(itemSearchConditionDTO.getBrandId()), ItemCommodityInfo::getBrandId, itemSearchConditionDTO.getBrandId())
                 .eq(itemSearchConditionDTO.getDegreeLoss() != null, ItemCommodityInfo::getDegreeLoss, itemSearchConditionDTO.getDegreeLoss())
                 .between(itemSearchConditionDTO.getMaxPrice() != null && itemSearchConditionDTO.getMinPrice() != null, ItemCommodityInfo::getPrice, itemSearchConditionDTO.getMinPrice(), itemSearchConditionDTO.getMaxPrice())

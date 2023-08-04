@@ -49,12 +49,11 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
      * 根据条件筛选后获取实体店列表
      */
     @Override
-    public PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId, Integer state) {
+    public PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId) {
 
         // 获取总条数
         Integer indexShopInfoVOCount = shopInfoMapper.getIndexShopInfoVOCount(categoryId);
-        // stata==1,按评分从低到高；stata==2,按评分从高到低
-        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(categoryId, (pages - 1) * limit, limit,state);
+        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(categoryId, (pages - 1) * limit, limit);
         List<ShopTags> list1 = new ArrayList<>();
         for (IndexShopInfoVO shopInfoVO : indexShopInfoVO) {
             List<String> list = JSON.parseArray(shopInfoVO.getTagList(), String.class);
@@ -255,14 +254,13 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
      * @param limit
      * @param pages
      * @param categoryId
-     * @param state
      * @return
      */
     @Override
-    public PageDataVO getSecShopInfoListByCondition(Integer limit, Integer pages, String categoryId, Integer state) {
-        Integer n = shopInfoMapper.getAllIndexShopInfoVO(categoryId, state);
+    public PageDataVO getSecShopInfoListByCondition(Integer limit, Integer pages, String categoryId) {
+        Integer n = shopInfoMapper.getAllIndexShopInfoVO(categoryId);
         // stata==1,按评分从低到高；stata==2,按评分从高到低
-        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(categoryId, (pages - 1) * limit, limit, state);
+        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(categoryId, (pages - 1) * limit, limit);
         List<ShopTags> list1 = new ArrayList<>();
         for (IndexShopInfoVO shopInfoVO : indexShopInfoVO) {
             List<String> list = JSON.parseArray(shopInfoVO.getTagList(), String.class);

@@ -45,7 +45,7 @@ public class ItemCommodityCategoryController {
         }
     }
 
-    @GetMapping("getSecShopInfoListByCondition/{limit}/{pages}/{categoryId}/{state}")
+    @GetMapping("getSecShopInfoListByCondition/{limit}/{pages}/{categoryId}")
     @ApiOperation("根据一级分类-获取所有网店商品列表")
     public ResponseVO<PageDataVO> getSecShopInfoListByCondition(@PathVariable Integer limit, @PathVariable Integer pages, @PathVariable String categoryId){
         try {

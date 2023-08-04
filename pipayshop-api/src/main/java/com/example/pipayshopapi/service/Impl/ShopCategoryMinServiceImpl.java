@@ -37,11 +37,11 @@ public class ShopCategoryMinServiceImpl extends ServiceImpl<ShopCategoryMinMappe
      * 根据三级ID来查二级ID
      */
     @Override
-    public PageDataVO getShopInfoMinListByCondition(Integer limit, Integer pages, String categoryId, Integer state) {
+    public PageDataVO getShopInfoMinListByCondition(Integer limit, Integer pages, String categoryId) {
         // 获取总条数
         Integer indexShopInfoVOCount = shopInfoMapper.getIndexShopInfoVOCount(categoryId);
         // stata==1,按评分从低到高；stata==2,按评分从高到低
-        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(categoryId, (pages - 1) * limit, limit,state);
+        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(categoryId, (pages - 1) * limit, limit);
         return new PageDataVO(indexShopInfoVOCount,indexShopInfoVO);
     }
 
