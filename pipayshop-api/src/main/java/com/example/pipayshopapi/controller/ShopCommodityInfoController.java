@@ -126,17 +126,7 @@ public class ShopCommodityInfoController {
 
 
 
-    @GetMapping("history/{userId}")
-    @ApiOperation("根据用户id查询用户浏览商品历史-实体店")
-    public ResponseVO<List<ShopCommodityVO>> historyList(@PathVariable("userId") String userId) {
-        try {
-            List<ShopCommodityVO> list = shopCommodityService.historyList(userId);
-            return ResponseVO.getSuccessResponseVo(list);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new BusinessException("查询失败，请联系后台人" + "、员");
-        }
-    }
+
 
 
 }
