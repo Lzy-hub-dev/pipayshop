@@ -24,7 +24,7 @@ public class itemCommoditiesVO {
     /**
      * 商品原价
      */
-    private BigDecimal origin_price;
+    private BigDecimal originPrice;
     /**
      * 商品名字
      */
