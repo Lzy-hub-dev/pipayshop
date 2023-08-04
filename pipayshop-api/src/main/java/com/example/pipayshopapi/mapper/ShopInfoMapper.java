@@ -50,12 +50,6 @@ public interface ShopInfoMapper extends BaseMapper<ShopInfo> {
     List<IndexShopInfoVO> getIndexShopInfoVO(@Param("categoryId") String categoryId,@Param("page") Integer page,@Param("limit") Integer limit);
 
     Integer getAllIndexShopInfoVO(@Param("categoryId") String categoryId);
-    /**
-     * 根据用户id-查询-关注的实体店-列表
-     *
-     * @param userId
-     * @return
-     */
-    List<ShopInfo> selectFollowProductByUserId(String userId);
+
 
 }

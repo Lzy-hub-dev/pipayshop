@@ -2,7 +2,10 @@ package com.example.pipayshopapi.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ShopFollowFocus;
+import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -32,4 +35,11 @@ public interface ShopFollowFocusService extends IService<ShopFollowFocus> {
     boolean isFollowShop(String shopId, String userId);
 
     Integer SelectFollowShopSum(String shopId);
+
+    /**
+     * 根据用户id查询用户关注的实体店列表
+     * @param userId
+     * @return
+     */
+    List<ShopInfo> getFollowList(String userId);
 }

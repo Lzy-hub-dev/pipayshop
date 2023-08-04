@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopFollowFocus;
+import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ShopUserFollowInfoVO;
 import com.example.pipayshopapi.mapper.ShopFollowFocusMapper;
@@ -86,5 +87,12 @@ public class ShopFollowFocusServiceImpl extends ServiceImpl<ShopFollowFocusMappe
     @Override
     public Integer SelectFollowShopSum(String shopId) {
         return shopFollowFocusMapper.selectCount(new QueryWrapper<ShopFollowFocus>().eq("shop_id", shopId).eq("status", 0)).intValue();
+    }
+    /**
+     * 根据用户id查询用户关注的实体店列表
+     */
+    @Override
+    public List<ShopInfo> getFollowList (String userId){
+        return shopFollowFocusMapper.selectFollowProductByUserId(userId);
     }
 }

@@ -90,7 +90,7 @@ public class ItemInfoController {
             return ResponseVO.getSuccessResponseVo(list);
         } catch (Exception e) {
             log.error(e.getMessage());
-            throw new BusinessException("查询失败，请联系后台人" + "、员");
+            throw new BusinessException("查询失败，请联系后台人员");
         }
     }
 

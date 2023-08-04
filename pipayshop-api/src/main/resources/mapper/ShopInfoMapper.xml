@@ -60,16 +60,7 @@
             </where>
         LIMIT ${page},${limit}
     </select>
-    <select id="selectFollowProductByUserId" resultType="com.example.pipayshopapi.entity.ShopInfo">
-        SELECT *
-        FROM shop_follow_focus f
-                 INNER JOIN
-             shop_info i
-             ON f.shop_id = i.shop_id
-        WHERE f.follow_id = #{userId}
-          and f.`status` = 0
-          and i.`status` = 0
-    </select>
+
     <select id="getAllIndexShopInfoVO" resultType="java.lang.Integer">
         select COUNT(*)
         from shop_info

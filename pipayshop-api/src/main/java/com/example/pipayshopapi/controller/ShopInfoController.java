@@ -132,17 +132,7 @@ public class ShopInfoController {
             return ResponseVO.getFalseResponseVo("提交申请失败，请联系后台管理员");
         }
     }
-    @GetMapping("followList/{userId}")
-    @ApiOperation("根据用户id-查询-用户关注的实体店-列表")
-    public ResponseVO<List<ShopInfo>> followList(@PathVariable("userId") String userId) {
-        try {
-            List<ShopInfo> list = infoService.getFollowList(userId);
-            return ResponseVO.getSuccessResponseVo(list);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new BusinessException("查询失败，请联系后台人" + "、员");
-        }
-    }
+
 
 
 }

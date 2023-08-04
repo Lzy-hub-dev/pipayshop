@@ -1,6 +1,7 @@
 package com.example.pipayshopapi.controller;
 
 
+import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -12,6 +13,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -103,6 +105,17 @@ public class ShopFollowFocusController {
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("根据shopId查找店铺的粉丝数量失败，请联系后台人员");
+        }
+    }
+    @GetMapping("followList/{userId}")
+    @ApiOperation("根据用户id-查询-关注-实体店列表")
+    public ResponseVO<List<ShopInfo>> followList(@PathVariable("userId") String userId) {
+        try {
+            List<ShopInfo> list = followFocusService.getFollowList(userId);
+            return ResponseVO.getSuccessResponseVo(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException("查询失败，请联系后台人" + "、员");
         }
     }
 }
