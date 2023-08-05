@@ -17,7 +17,7 @@
     </select>
 
     <select id="getItemCommodityEvaluate" resultType="com.example.pipayshopapi.entity.vo.EvaluateVO">
-        select user_image,user_name,uid
+        select u.user_image,u.user_name,u.uid,e.evaluate,e.evaluate_id,e.create_time
         from user_info u join item_commodity_evaluate e on u.uid = e.user_id
         where u.uid in (
             select user_id
