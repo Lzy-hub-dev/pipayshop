@@ -229,7 +229,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         int fanSum = itemFollowFocusMapper.selectCount(new QueryWrapper<ItemFollowFocus>().eq("item_id", itemId)
                 .eq("status", 0)).intValue();
         int commoditySum = commodityInfoMapper.selectCount(new QueryWrapper<ItemCommodityInfo>().eq("item_id", itemId)
-                .eq("status", 1)).intValue();
+                .eq("status", 0)).intValue();
         itemVO.setFanSum(fanSum);
         itemVO.setItemCommoditySum(commoditySum);
         commodityDetailVO.setItemVO(itemVO);

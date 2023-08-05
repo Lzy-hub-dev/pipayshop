@@ -54,7 +54,7 @@
                             on info.item_id = i.item_id
 
         WHERE ic.user_id = #{userId}
-          AND i.`status` = 1
+          AND i.`status` = 0
           AND ic.`status` = 0
     </select>
 
@@ -75,7 +75,7 @@
                  inner join item_info info
                             on info.item_id = i.item_id
         WHERE h.user_id = #{userId}
-          AND i.`status` = 1
+          AND i.`status` = 0
     </select>
 
 
