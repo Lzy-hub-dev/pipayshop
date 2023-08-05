@@ -29,15 +29,12 @@ public class BuyerDataServiceImpl extends ServiceImpl<BuyerDataMapper, BuyerData
 
     /**
      * 根据用户Id查找用户的所有收货地址
-     * @param userId
-     * @return
      * */
     @Override
     public List<BuyerData> selectAllAddress(String userId) {
-        List<BuyerData> buyerData = buyerDataMapper.selectList(new QueryWrapper<BuyerData>()
-                                                                    .eq("user_id", userId)
-                                                                    .eq("del_flag", 0));
-        return buyerData;
+        return buyerDataMapper.selectList(new QueryWrapper<BuyerData>()
+                .eq("user_id", userId)
+                .eq("del_flag", 0));
     }
 
     /**

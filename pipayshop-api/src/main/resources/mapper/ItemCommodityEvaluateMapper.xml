@@ -4,7 +4,7 @@
 
 
     <select id="getItemCommodityEvaluates" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityEvaluateVO">
-        select   e.item_id,  e.commodity_id, e.evaluate ,e.create_time,e.evaluate_id
+        select   e.evaluate ,e.create_time,e.evaluate_id
         , e.user_id,u.user_name,u.user_image
         from item_commodity_evaluate e
         left join user_info u on u.uid=e.user_id
@@ -13,7 +13,7 @@
 
     </select>
     <select id="getItemCommodityEvaluatesSum" resultType="java.lang.Integer">
-        select count(*)  from item_commodity_evaluate  where commodity_id=#{commodityId}
+        select count(*)  from item_commodity_evaluate  where commodity_id=#{commodityId} and status = 0
     </select>
 
     <select id="getItemCommodityEvaluate" resultType="com.example.pipayshopapi.entity.vo.EvaluateVO">

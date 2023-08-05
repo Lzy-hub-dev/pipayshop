@@ -41,7 +41,6 @@ public class ItemCollectionServiceImpl extends ServiceImpl<ItemCollectionMapper,
                 .eq("user_id", userId)
                 .eq("commodity_id", commodityId)
                 .set("status", 0));
-
     }
 
     @Override

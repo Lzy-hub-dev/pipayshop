@@ -24,14 +24,14 @@ public interface ItemOrderInfoMapper extends BaseMapper<ItemOrderInfo> {
      * @param userId
      * @return
      */
-    List<ItemOrderInfoVO> selectItemOrders(String userId);
+    List<ItemOrderInfoVO> selectItemOrders(@Param("userId")String userId);
 
     /**
      * 通过用户id去查找网店订单详情（关联网店+订单+商品）
      * @param userId
      * @return
      */
-    List<ItemOrderInfoVO> selectOrderByUerId(String userId);
+    List<ItemOrderInfoVO> selectOrderByUerId(@Param("userId")String userId);
 
     /**
      * 根据卖家id查询网店关联的订单

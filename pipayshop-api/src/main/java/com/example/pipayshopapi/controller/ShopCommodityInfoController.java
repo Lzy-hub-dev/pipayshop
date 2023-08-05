@@ -4,7 +4,6 @@ package com.example.pipayshopapi.controller;
 import com.example.pipayshopapi.entity.ShopDetailInfoVO;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.vo.CommodityStatusPageVO;
-import com.example.pipayshopapi.entity.vo.OrderPageVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -50,7 +49,7 @@ public class ShopCommodityInfoController {
     }
 
     @GetMapping("selectShopInfoListByShopId/{pages}/{limit}/{shopId}")
-    @ApiOperation("根据店铺id查找实体店商品的列表")
+    @ApiOperation("根据店铺id查找实体店商品的列表(商品帶标签)")
     public ResponseVO<PageDataVO> selectShopInfoListByShopId(@PathVariable Integer pages, @PathVariable Integer limit, @PathVariable String shopId) {
         try {
             PageDataVO pageDataVO = shopCommodityService.selectShopInfoListByShopId(limit, pages, shopId);
@@ -62,7 +61,7 @@ public class ShopCommodityInfoController {
     }
 
     @GetMapping("selectShopInfoByCommodityId/{commodityId}")
-    @ApiOperation("根据商品的id查找实体店商品的详情信息")
+    @ApiOperation("根据商品的id查找实体店商品的  详情信息")
     public ResponseVO<ShopDetailInfoVO> selectShopInfoByCommodityId(@PathVariable String commodityId) {
         try {
             ShopDetailInfoVO shopDetailInfoVO = shopCommodityService.selectShopInfoByCommodityId(commodityId);

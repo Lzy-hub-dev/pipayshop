@@ -210,7 +210,6 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
         ShopDetailInfoVO shopDetailInfoVO = shopCommodityInfoMapper.selectShopInfoByCommodityId(commodityId);
         //根据商品ID 查十条商品评论列表
         List<EvaluateVO> list = shopCommodityEvaluateMapper.getEvaluateList(shopDetailInfoVO.getCommodityId());
-        System.out.println(list);
         shopDetailInfoVO.setEvaluateVOList(list);
         return shopDetailInfoVO;
     }
