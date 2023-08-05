@@ -18,12 +18,16 @@ import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.*;
 import com.example.pipayshopapi.service.ItemCommodityInfoService;
 import com.example.pipayshopapi.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -153,14 +157,28 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
             }
         }
         // 发布时间升序排列
-        if (dto.getCreateTime()) {
+        if (dto.getCreateTime()!=null) {
             wrapper.orderByDesc(ItemCommodityInfo::getCreateTime);
         }
+
         // 设置分页参数
         Page<ItemCommodityInfo> page = new Page<>(dto.getPage(), dto.getLimit());
         wrapper.eq(ItemCommodityInfo::getStatus, 0);
         // 查询分页数据封装到page中
         commodityInfoMapper.selectPage(page, wrapper);
+
+        //将每个商品的membership属性赋值
+        List<ItemCommodityInfo> records = page.getRecords();
+        if (records == null || records.size() == 0) {
+            return null;
+        }
+        List<String> commodityIdList = records.stream().map(commodity -> commodity.getCommodityId()).collect(Collectors.toList());
+        List<ItemCommodityVO> resultList = commodityInfoMapper.selectMembershipBycommodityIdList(commodityIdList);
+        records.stream().forEach(i1 -> resultList.stream().forEach(i2 -> {
+            if (StringUtils.equals(i1.getCommodityId(), i2.getCommodityId())) {
+                i1.setMembership(i2.getMembership());
+            }
+        }));
         // 封装数据
         return new PageDataVO((int) page.getTotal(), page.getRecords());
 

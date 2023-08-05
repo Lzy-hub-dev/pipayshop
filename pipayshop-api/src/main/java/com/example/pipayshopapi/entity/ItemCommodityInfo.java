@@ -1,6 +1,7 @@
 package com.example.pipayshopapi.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
@@ -161,7 +162,12 @@ public class ItemCommodityInfo implements Serializable {
      */
     private String originName;
     /**
-     *商品详情信息图集合
+     * 商品详情信息图集合
      */
     private String detailImagList;
+    /**
+     * 是否属于会员商品 false:否;true:是
+     */
+    @TableField(exist = false)
+    private boolean membership;
 }

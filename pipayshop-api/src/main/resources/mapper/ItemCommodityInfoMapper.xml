@@ -137,5 +137,19 @@
         </choose>
         limit #{page},#{limit}
     </select>
+    <select id="selectMembershipBycommodityIdList"
+            resultType="com.example.pipayshopapi.entity.vo.ItemCommodityVO">
+        SELECT
+            c.commodity_id,info.membership
+        FROM
+            item_info info
+                INNER JOIN
+            item_commodity_info c
+            ON
+                info.item_id=c.item_id
+        WHERE
+            c.commodity_id IN
+            <foreach  item="item" collection="list" index="index"  open="(" separator="," close=")">#{item}</foreach>
+    </select>
 
 </mapper>
