@@ -40,6 +40,7 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
 
     @Override
     public PageDataVO getOrderList(GetOrderDataVO getOrderDataVO) {
+        getOrderDataVO.setCurrentPage(getOrderDataVO.getCurrentPage()-1);
         List<OrderListVO> orderList = itemOrderInfoMapper.getOrderList(getOrderDataVO);
         getOrderDataVO.setPageSize(null);
         List<OrderListVO> count = itemOrderInfoMapper.getOrderList(getOrderDataVO);
