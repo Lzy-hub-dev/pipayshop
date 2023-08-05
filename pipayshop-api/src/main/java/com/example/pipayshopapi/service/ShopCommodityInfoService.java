@@ -63,12 +63,9 @@ public interface ShopCommodityInfoService extends IService<ShopCommodityInfo> {
     PageDataVO historyList(Integer page,Integer limit,String userId);
 
     /**
-     * 根据用户id查询，商品状态查询审核通过和未审核列表
-     *
-     * @param pageVO
-     * @return
+     * 根据实体店id查询商品列表
      */
-    PageDataVO selectCommodityByUidAndStatus(OrderPageVO pageVO);
+    PageDataVO selectCommodityByUidAndStatus(Integer page,Integer limit,String shopId);
 
     /**
      * 根据商品id，更改商品的状态
