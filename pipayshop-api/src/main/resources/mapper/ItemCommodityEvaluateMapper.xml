@@ -8,7 +8,7 @@
         , e.user_id,u.user_name,u.user_image
         from item_commodity_evaluate e
         left join user_info u on u.uid=e.user_id
-        where commodity_id=#{commodityId}
+        where commodity_id=#{commodityId} and e.status = 0 and u.status = 0
         LIMIT #{page}, #{limit}
 
     </select>
@@ -22,7 +22,7 @@
         where u.uid in (
             select user_id
             from item_commodity_evaluate
-            where item_id = #{itemId}
+            where item_id = #{itemId} and status = 0
         )
         LIMIT #{page}, #{limit}
     </select>

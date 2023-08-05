@@ -41,7 +41,6 @@ public class ItemCommodityEvaluateServiceImpl extends ServiceImpl<ItemCommodityE
 
     /**
      * 新增网店商品的评价
-     * @return
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -62,6 +61,6 @@ public class ItemCommodityEvaluateServiceImpl extends ServiceImpl<ItemCommodityE
                                                                     .eq("evaluate_id", evaluateId)
                                                                     .eq("user_id", userId)
                                                                     .set("status", 1));
-        return result>0;
+        return result > 0;
     }
 }
