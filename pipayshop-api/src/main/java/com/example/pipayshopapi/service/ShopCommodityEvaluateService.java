@@ -30,5 +30,5 @@ public interface ShopCommodityEvaluateService extends IService<ShopCommodityEval
      * 实体店-商品-删除评论
      * @return
      */
-    Boolean deleteEvaluate(String evaluateId);
+    Boolean deleteEvaluate(String evaluateId, String userId);
 }

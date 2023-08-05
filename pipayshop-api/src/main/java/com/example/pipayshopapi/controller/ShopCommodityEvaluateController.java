@@ -57,11 +57,11 @@ public class ShopCommodityEvaluateController {
         }
     }
 
-    @PostMapping("deleteEvaluate/{evaluateId}")
+    @PostMapping("deleteEvaluate/{evaluateId}/{userId}")
     @ApiOperation("实体店-商品-删除评论")
-    public ResponseVO<String> deleteEvaluate(@PathVariable String evaluateId) {
+    public ResponseVO<String> deleteEvaluate(@PathVariable String evaluateId, @PathVariable String userId) {
         try {
-            Boolean result = evaluationService.deleteEvaluate(evaluateId);
+            Boolean result = evaluationService.deleteEvaluate(evaluateId, userId);
             if (!result) {
                 return ResponseVO.getFalseResponseVo("删除评论失败");
             }

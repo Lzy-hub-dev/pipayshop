@@ -20,7 +20,6 @@ import java.util.List;
 public interface ShopEvaluateMapper extends BaseMapper<ShopEvaluate> {
     /**
      * 获取实体店评价数
-
      */
     Integer selectShopEvaluateCount(@Param("shopId")String shopId);
 

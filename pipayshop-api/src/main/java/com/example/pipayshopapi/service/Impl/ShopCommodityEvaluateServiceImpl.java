@@ -53,9 +53,10 @@ public class ShopCommodityEvaluateServiceImpl extends ServiceImpl<ShopCommodityE
      * 实体店-商品-删除评论
      */
     @Override
-    public Boolean deleteEvaluate(String evaluateId) {
+    public Boolean deleteEvaluate(String evaluateId, String userId) {
         return shopCommodityEvaluateMapper.update(null, new LambdaUpdateWrapper<ShopCommodityEvaluate>()
                 .eq(ShopCommodityEvaluate::getEvaluateId, evaluateId)
+                .eq(ShopCommodityEvaluate::getUserId, userId)
                 .set(ShopCommodityEvaluate::getStatus, true)
         ) > 0;
     }
