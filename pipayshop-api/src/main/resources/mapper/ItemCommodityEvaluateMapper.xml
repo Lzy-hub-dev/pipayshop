@@ -26,4 +26,14 @@
         )
         LIMIT #{page}, #{limit}
     </select>
+
+    <select id="getInfoSize" resultType="java.lang.Integer">
+        select count(*)
+        from user_info u join item_commodity_evaluate e on u.uid = e.user_id
+        where u.uid in (
+            select user_id
+            from item_commodity_evaluate
+            where item_id = #{itemId}
+        )
+    </select>
 </mapper>

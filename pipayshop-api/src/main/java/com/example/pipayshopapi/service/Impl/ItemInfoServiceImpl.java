@@ -45,8 +45,10 @@ public class ItemInfoServiceImpl extends ServiceImpl<ItemInfoMapper, ItemInfo> i
      * @return
      */
     @Override
-    public List<ItemCommodityMinVO> getItemInfo(String itemId, Integer page, Integer limit, Boolean price) {
-        return itemCommodityInfoMapper.getInfoByItemId(itemId,(page-1)*limit,limit,price);
+    public PageDataVO getItemInfo(String itemId, Integer page, Integer limit, Boolean price) {
+        List<ItemCommodityMinVO> itemCommodityMinVO = itemCommodityInfoMapper.getInfoByItemId(itemId, (page - 1) * limit, limit, price);
+        Integer size = itemCommodityInfoMapper.getInfoSize(itemId);
+        return new PageDataVO(size,itemCommodityMinVO);
     }
 
     /**
@@ -125,8 +127,10 @@ public class ItemInfoServiceImpl extends ServiceImpl<ItemInfoMapper, ItemInfo> i
 
 
     @Override
-    public List<EvaluateVO> getItemEvaluate(String itemId, Integer page, Integer limit) {
-        return itemCommodityEvaluateMapper.getItemCommodityEvaluate(itemId,(page-1)*limit,limit);
+    public PageDataVO getItemEvaluate(String itemId, Integer page, Integer limit) {
+        List<EvaluateVO> itemCommodityEvaluate = itemCommodityEvaluateMapper.getItemCommodityEvaluate(itemId, (page - 1) * limit, limit);
+        Integer size = itemCommodityEvaluateMapper.getInfoSize(itemId);
+        return new PageDataVO(size,itemCommodityEvaluate);
     }
 
 
