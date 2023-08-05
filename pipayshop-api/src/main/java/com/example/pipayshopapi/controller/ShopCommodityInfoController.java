@@ -50,7 +50,7 @@ public class ShopCommodityInfoController {
     }
 
     @GetMapping("selectShopInfoListByShopId/{pages}/{limit}/{shopId}")
-    @ApiOperation("根据店铺id查找实体店商品的列表")
+    @ApiOperation("根据店铺id查找实体店商品的列表(商品帶标签)")
     public ResponseVO<PageDataVO> selectShopInfoListByShopId(@PathVariable Integer pages, @PathVariable Integer limit, @PathVariable String shopId) {
         try {
             PageDataVO pageDataVO = shopCommodityService.selectShopInfoListByShopId(limit, pages, shopId);

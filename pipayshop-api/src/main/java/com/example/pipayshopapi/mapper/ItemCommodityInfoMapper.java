@@ -43,5 +43,5 @@ public interface ItemCommodityInfoMapper extends BaseMapper<ItemCommodityInfo> {
     List<ItemCommodityMinVO> getInfoByItemId(String itemId, Integer page, Integer limit, Boolean price);
 
 
-    List<itemCommoditiesVO> selectMembershipBycommodityIdList(@Param("list") List<String> commodityIdList);
+    List<itemCommoditiesVO> selectMembershipByCommodityIdList(@Param("list") List<String> commodityIdList);
 }

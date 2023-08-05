@@ -136,9 +136,10 @@
         </choose>
         limit #{page},#{limit}
     </select>
-    <select id="selectMembershipBycommodityIdList"
+    <select id="selectMembershipByCommodityIdList"
             resultType="com.example.pipayshopapi.entity.vo.itemCommoditiesVO">
         SELECT
+            DISTINCT
         c.commodity_id,
         info.membership,
         c.price,
