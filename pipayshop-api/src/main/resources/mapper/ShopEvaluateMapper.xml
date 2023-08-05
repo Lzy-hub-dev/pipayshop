@@ -32,7 +32,14 @@
         select
             count(*)
         from
-            shop_evaluate
+            shop_evaluate e
+                left join user_info u
+                          on u.uid = e.user_id
         where
-            shop_id = #{shopId} and status = 0    </select>
+            shop_id = #{shopId}
+          and e.status = 0
+          and u.status = 0</select>
+
+
+
 </mapper>
