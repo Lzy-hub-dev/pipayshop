@@ -31,13 +31,14 @@ public class ItemInfoController {
 
     @GetMapping("getItemInfo/{itemId}/{page}/{limit}/{price}")
     @ApiOperation("根据网店id获取网店商品信息")
-    public ResponseVO<List<ItemCommodityMinVO>> getItemInfo(@PathVariable String itemId,@PathVariable Integer page,@PathVariable Integer limit,@PathVariable Boolean price) {
+    public ResponseVO<PageDataVO> getItemInfo(@PathVariable String itemId,@PathVariable Integer page,@PathVariable Integer limit,@PathVariable Boolean price) {
         try {
-            List<ItemCommodityMinVO> itemCommodityVOS = itemInfoService.getItemInfo(itemId,page,limit,price);
-            if (itemCommodityVOS == null) {
+            PageDataVO pageDataVO = itemInfoService.getItemInfo(itemId,page,limit,price);
+
+            if (pageDataVO == null) {
                 throw new Exception();
             }
-            return ResponseVO.getSuccessResponseVo(itemCommodityVOS);
+            return ResponseVO.getSuccessResponseVo(pageDataVO);
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new BusinessException("获取网店信息失败，请联系后台人员");
@@ -46,13 +47,13 @@ public class ItemInfoController {
 
     @GetMapping("getItemEvaluate/{itemId}/{page}/{limit}")
     @ApiOperation("根据网店id获取网店评价信息")
-    public ResponseVO<List<EvaluateVO>> getItemEvaluate(@PathVariable String itemId,@PathVariable Integer page,@PathVariable Integer limit) {
+    public ResponseVO<PageDataVO> getItemEvaluate(@PathVariable String itemId,@PathVariable Integer page,@PathVariable Integer limit) {
         try {
-            List<EvaluateVO> EvaluateVOs = itemInfoService.getItemEvaluate(itemId,page,limit);
-            if (EvaluateVOs == null) {
+            PageDataVO pageDataVO = itemInfoService.getItemEvaluate(itemId,page,limit);
+            if (pageDataVO == null) {
                 throw new Exception();
             }
-            return ResponseVO.getSuccessResponseVo(EvaluateVOs);
+            return ResponseVO.getSuccessResponseVo(pageDataVO);
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new BusinessException("获取网店信息失败，请联系后台人员");

@@ -62,7 +62,7 @@ public interface ItemCommodityInfoService extends IService<ItemCommodityInfo> {
      * @param userId
      * @return
      */
-    List<ItemCommodityInfoVO> historyList(String userId);
+    PageDataVO historyList(Integer page,Integer limit,String userId);
 
     /**
      * 根据卖家id查询网店的商品审核列表
@@ -80,6 +80,21 @@ public interface ItemCommodityInfoService extends IService<ItemCommodityInfo> {
      * @return
      */
     boolean changeCommodityStatus(String commodity, String status);
+
+    /**
+     * 根据商品id，上架变为下架
+     *
+     * @param commodity
+     * @return
+     */
+    boolean changeCommodityUp(String commodity);
+    /**
+     * 根据商品id，下架变为审核中
+     *
+     * @param commodity
+     * @return
+     */
+    boolean changeCommodityCheck(String commodity);
 
 
 }

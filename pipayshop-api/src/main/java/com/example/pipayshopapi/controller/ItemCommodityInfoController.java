@@ -138,12 +138,12 @@ public class ItemCommodityInfoController {
 
 
 
-    @GetMapping("history/{userId}")
+    @GetMapping("history/{page}/{limit}/{userId}")
     @ApiOperation("根据用户id查询用户浏览商品历史")
-    public ResponseVO historyList(@PathVariable("userId") String userId) {
+    public ResponseVO<PageDataVO> historyList(@PathVariable Integer page,@PathVariable Integer limit,@PathVariable("userId") String userId) {
         try {
-            List<ItemCommodityInfoVO> list = commodityInfoService.historyList(userId);
-            return ResponseVO.getSuccessResponseVo(list);
+            PageDataVO pageDataVO = commodityInfoService.historyList(page, limit, userId);
+            return ResponseVO.getSuccessResponseVo(pageDataVO);
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new BusinessException("查询失败，请联系后台人" + "、员");
@@ -194,6 +194,37 @@ public class ItemCommodityInfoController {
             throw new BusinessException("查询失败，请联系后台人员");
         }
     }
+
+    @PostMapping("changeCommodityUp/{commodityId}")
+    @ApiOperation("根据商品id，上架变为下架")
+    public ResponseVO changeCommodityUp(@PathVariable String commodityId){
+        try {
+            boolean result = commodityInfoService.changeCommodityUp(commodityId);
+            if (!result){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("根据商品id，上架变为下架成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("根据商品id，上架变为下架失败，请联系后台人员");
+        }
+    }
+
+    @PostMapping("changeCommodityStatus/{commodityId}")
+    @ApiOperation("根据商品id，下架变为审核中")
+    public ResponseVO changeCommodityCheck(@PathVariable String commodityId){
+        try {
+            boolean result = commodityInfoService.changeCommodityCheck(commodityId);
+            if (!result){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("根据商品id，下架变为审核中成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("根据商品id，下架变为审核中失败，请联系后台人员");
+        }
+    }
+
 
     @PostMapping("deleteHistory")
     @ApiOperation("删除用户浏览网店商品的历史记录")

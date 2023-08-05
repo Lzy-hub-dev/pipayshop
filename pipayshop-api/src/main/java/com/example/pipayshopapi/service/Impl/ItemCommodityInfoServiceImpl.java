@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.BrandInfo;
@@ -262,8 +263,10 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
      * 根据用户id查询用户浏览商品历史-网店
      */
     @Override
-    public List<ItemCommodityInfoVO> historyList(String userId) {
-        return commodityInfoMapper.selectHistoryProductByUserId(userId);
+    public PageDataVO historyList(Integer page,Integer limit,String userId) {
+        Integer integer = commodityInfoMapper.selectAllHistoryProductByUserId(userId);
+        List<ItemCommodityInfoVO> itemCommodityInfoVOS = commodityInfoMapper.selectHistoryProductByUserId((page - 1) * limit, limit, userId);
+        return new PageDataVO(integer,itemCommodityInfoVOS);
     }
 
     @Override
@@ -274,6 +277,34 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
             wr.set(ItemCommodityInfo::getStatus, status);
         }
         return commodityInfoMapper.update(null, wr) > 0;
+    }
+
+    /**
+     * 根据商品id，上架变为下架
+     *
+     * @param commodity
+     * @return
+     */
+    @Override
+    public boolean changeCommodityUp(String commodity) {
+        int result = commodityInfoMapper.update(null, new UpdateWrapper<ItemCommodityInfo>()
+                .eq("commodity_id", commodity)
+                .set("status", 2));
+        return result > 0;
+    }
+
+    /**
+     * 根据商品id，下架变为审核中
+     *
+     * @param commodity
+     * @return
+     */
+    @Override
+    public boolean changeCommodityCheck(String commodity) {
+        int result = commodityInfoMapper.update(null, new UpdateWrapper<ItemCommodityInfo>()
+                .eq("commodity_id", commodity)
+                .set("status", 0));
+        return result > 0;
     }
 
     /**

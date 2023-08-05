@@ -75,6 +75,7 @@
                  inner join item_info info
                             on info.item_id = i.item_id
         WHERE h.user_id = #{userId}
+            LIMIT #{page},#{limit}
     </select>
 
 
@@ -170,6 +171,23 @@
         WHERE ic.user_id = #{userId}
           AND i.`status` = 0
           AND ic.`status` = 0
+    </select>
+    <select id="selectAllHistoryProductByUserId" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM item_commodity_history h
+                 INNER JOIN
+             item_commodity_info i
+             ON
+                 h.commodity_id = i.commodity_id
+                 inner join item_info info
+                            on info.item_id = i.item_id
+        WHERE h.user_id = #{userId}
+    </select>
+
+    <select id="getInfoSize" resultType="java.lang.Integer">
+        select count(*)
+        from item_commodity_info
+        where item_id = #{itemId} and status = 0
     </select>
 
 </mapper>
