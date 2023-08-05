@@ -88,8 +88,4 @@ public class ShopCollectionController {
             throw new BusinessException("查询失败，请联系后台人" + "、员");
         }
     }
-
-
-
-
 }
