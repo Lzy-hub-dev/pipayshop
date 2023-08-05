@@ -74,7 +74,7 @@ public class ShopCommodityInfoController {
     }
 
     @GetMapping("selectCommodityByShopIdAndStatus/{page}/{limit}/{shopId}")
-    @ApiOperation("根据店铺id查询商品列表")
+    @ApiOperation("根据店铺id查询商品列表(审核相关)")
     public ResponseVO<PageDataVO> selectCommodityByUidAndStatus(@PathVariable("page") Integer page,
                                                                 @PathVariable("limit")Integer limit,
                                                                 @PathVariable("shopId")String shopId) {
