@@ -121,7 +121,7 @@
     </select>
 
     <select id="getInfoByItemId" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityMinVO">
-        select item_id,price,item_commodity_name,avatar_imag AS commodity_pic,create_time,details
+        select commodity_id,price,item_commodity_name,avatar_imag AS commodity_pic,create_time,details
         from item_commodity_info
         where item_id = #{itemId} and status = 0
         <choose>
