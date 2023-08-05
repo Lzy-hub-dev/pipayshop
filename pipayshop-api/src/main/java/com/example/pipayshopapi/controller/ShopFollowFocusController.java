@@ -6,7 +6,6 @@ import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopFollowFocusService;
-import com.example.pipayshopapi.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -30,8 +29,6 @@ public class ShopFollowFocusController {
     @Resource
     private ShopFollowFocusService followFocusService;
 
-    @Resource
-    private UserInfoService userInfoService;
 
     @GetMapping("userFollowItem/{followId}/{shopId}")
     @ApiOperation("关注实体店")

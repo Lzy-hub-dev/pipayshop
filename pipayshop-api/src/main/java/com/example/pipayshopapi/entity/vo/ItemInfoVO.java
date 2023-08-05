@@ -16,7 +16,7 @@ public class ItemInfoVO {
     private String itemId;
     private String userImage;
     private String itemName;
-    private double score;
+    private Double score;
     private Integer itemSum;
     private Integer fanSum;
     private String itemImagList;

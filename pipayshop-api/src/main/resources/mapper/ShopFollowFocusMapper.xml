@@ -19,6 +19,7 @@
         ORDER BY s.create_time DESC
         LIMIT ${pageNum},${pageSize}
     </select>
+
     <select id="selectFollowProductByUserId" resultType="com.example.pipayshopapi.entity.vo.ShopInfoVO1">
         SELECT
             i.shop_id,
