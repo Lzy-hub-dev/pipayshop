@@ -3,12 +3,6 @@
 <mapper namespace="com.example.pipayshopapi.mapper.ItemInfoMapper">
 
 
-    <select id="getItemInfo" resultType="com.example.pipayshopapi.entity.vo.ItemInfoVOII">
-        select i.item_id,i.item_name,i.score,i.item_imag_list,i.membership,
-        (select count(*) from item_follow_focus f where i.item_id=f.item_id) as fanSum
-        from item_info i
-        where i.item_id = #{itemId}
-    </select>
 
     <select id="selectItemInfoByItemIdOrUserId" resultType="com.example.pipayshopapi.entity.vo.ItemInfoVO">
         select i.item_id,i.item_name,i.score,i.item_imag_list,i.user_image,i.membership,
@@ -50,12 +44,6 @@
             item_info
         where
             item_id = #{itemId} and status = 0
-    </select>
-    <select id="itemEvaluateVO" resultType="com.example.pipayshopapi.entity.vo.ItemEvaluateVO">
-        select i.item_id,i.item_name,i.score,i.item_imag_list,i.membership,
-        (select count(*) from item_follow_focus f where i.item_id=f.item_id) as fanSum
-        from item_info i
-        where i.item_id = #{itemId}
     </select>
 
 </mapper>

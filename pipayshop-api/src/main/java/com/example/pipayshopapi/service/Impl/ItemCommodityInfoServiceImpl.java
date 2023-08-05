@@ -258,8 +258,10 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
      * 根据用户id查询 对应的 网店收藏列表
      */
     @Override
-    public List<ItemCommodityInfoVO> getCollectList(String userId) {
-        return commodityInfoMapper.selectCollectProductByUserId(userId);
+    public PageDataVO getCollectList(Integer page,Integer limit,String userId) {
+        Integer integer = commodityInfoMapper.selectAllCollectProductByUserId(userId);
+        List<ItemCommodityInfoVO> itemCommodityInfoVOS = commodityInfoMapper.selectCollectProductByUserId((page - 1) * limit, limit, userId);
+        return new PageDataVO(integer,itemCommodityInfoVOS);
     }
 
 

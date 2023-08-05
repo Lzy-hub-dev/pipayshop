@@ -35,7 +35,8 @@ public interface ShopCommodityInfoMapper extends BaseMapper<ShopCommodityInfo> {
     /**
      * 根据用户id查询用户商品浏览历史
      */
-    List<ShopCommodityListVO> selectHistoryProductByUserId(String userId);
+    List<ShopCommodityListVO> selectHistoryProductByUserId(@Param("page") Integer page, @Param("limit") Integer limit,@Param("userId") String userId);
+    Integer selectAllHistoryProductByUserId(@Param("userId") String userId);
 
     /**
      * 根据用户id查询，商品状态查询审核通过和未审核列表

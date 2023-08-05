@@ -1,11 +1,9 @@
 package com.example.pipayshopapi.controller;
 
 
-import com.example.pipayshopapi.entity.ItemCommodityHistory;
 import com.example.pipayshopapi.entity.ShopCommodityHistory;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
-import com.example.pipayshopapi.entity.vo.ShopCommodityListVO;
-import com.example.pipayshopapi.entity.vo.ShopCommodityVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopCommodityHistoryService;
 import com.example.pipayshopapi.service.ShopCommodityInfoService;
@@ -14,10 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.stereotype.Controller;
-
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * <p>
@@ -67,12 +62,12 @@ public class ShopCommodityHistoryController {
             throw new BusinessException("新增用户浏览商品的历史记录失败，请联系后台人员");
         }
     }
-    @GetMapping("history/{userId}")
+    @GetMapping("history/{page}/{limit}/{userId}")
     @ApiOperation("根据用户id查询用户浏览商品历史-实体店")
-    public ResponseVO<List<ShopCommodityListVO>> historyList(@PathVariable("userId") String userId) {
+    public ResponseVO<PageDataVO> historyList(@PathVariable Integer page,@PathVariable Integer limit,@PathVariable("userId") String userId) {
         try {
-            List<ShopCommodityListVO> list = shopCommodityService.historyList(userId);
-            return ResponseVO.getSuccessResponseVo(list);
+            PageDataVO pageDataVO = shopCommodityService.historyList(page, limit, userId);
+            return ResponseVO.getSuccessResponseVo(pageDataVO);
         } catch (Exception e) {
             e.printStackTrace();
             throw new BusinessException("查询失败，请联系后台人员");

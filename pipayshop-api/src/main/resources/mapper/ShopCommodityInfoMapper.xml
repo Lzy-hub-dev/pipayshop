@@ -51,6 +51,7 @@
         on  s.shop_id=i.shop_id
         WHERE h.user_id = #{userId}
           AND i.`status` = 0
+            LIMIT #{page},#{limit}
     </select>
     <select id="selectCommodityByUidAndStatus"
             resultType="com.example.pipayshopapi.entity.vo.ShopCommodityInfoVO">
@@ -106,6 +107,18 @@
         WHERE sc.user_id = #{userId}
           AND i.`status` = 0
           AND sc.`status` = 0
+    </select>
+    <select id="selectAllHistoryProductByUserId" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM shop_commodity_history h
+                 INNER JOIN
+             shop_commodity_info i
+             ON
+                 h.commodity_id = i.commodity_id
+                 inner join shop_info s
+                            on  s.shop_id=i.shop_id
+        WHERE h.user_id = #{userId}
+          AND i.`status` = 0
     </select>
 
 </mapper>

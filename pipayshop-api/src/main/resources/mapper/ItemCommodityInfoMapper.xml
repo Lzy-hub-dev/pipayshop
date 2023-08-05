@@ -151,5 +151,19 @@
             c.commodity_id IN
             <foreach  item="item" collection="list" index="index"  open="(" separator="," close=")">#{item}</foreach>
     </select>
+    <select id="selectAllCollectProductByUserId" resultType="java.lang.Integer">
+        select count(*)
+        FROM item_collection ic
+                 INNER JOIN
+             item_commodity_info i
+             ON
+                 ic.commodity_id = i.commodity_id
+                 inner join item_info info
+                            on info.item_id = i.item_id
+
+        WHERE ic.user_id = #{userId}
+          AND i.`status` = 0
+          AND ic.`status` = 0
+    </select>
 
 </mapper>
