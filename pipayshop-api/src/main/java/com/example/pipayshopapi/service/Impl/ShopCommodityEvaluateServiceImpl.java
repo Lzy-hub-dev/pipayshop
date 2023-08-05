@@ -33,7 +33,9 @@ public class ShopCommodityEvaluateServiceImpl extends ServiceImpl<ShopCommodityE
     @Override
     public PageDataVO commodityEvaluateList(String commodityId, Integer pageNum, Integer pageSize) {
         List<ShopCommodityEvaluateVO> result = shopCommodityEvaluateMapper.commodityEvaluateList(commodityId, pageNum - 1, pageSize);
-        Long count = shopCommodityEvaluateMapper.selectCount(new QueryWrapper<ShopCommodityEvaluate>().eq("commodity_id", commodityId));
+        Long count = shopCommodityEvaluateMapper.selectCount(new QueryWrapper<ShopCommodityEvaluate>()
+                .eq("commodity_id", commodityId)
+                .eq("status", 0));
         return new PageDataVO(count.intValue(), result);
     }
 
