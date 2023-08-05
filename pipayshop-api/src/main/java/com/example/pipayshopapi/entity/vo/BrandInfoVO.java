@@ -24,5 +24,5 @@ public class BrandInfoVO {
     /**
      * 品牌
      */
-    private String brand;
+    private String title;
 }

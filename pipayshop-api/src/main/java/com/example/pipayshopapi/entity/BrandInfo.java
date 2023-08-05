@@ -37,7 +37,7 @@ public class BrandInfo implements Serializable {
     /**
      * 品牌
      */
-    private String brand;
+    private String title;
 
     /**
      * 0:启用 1：逻辑删除 2：删除

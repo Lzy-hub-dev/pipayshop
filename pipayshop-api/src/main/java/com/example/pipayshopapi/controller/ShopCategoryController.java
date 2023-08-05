@@ -24,7 +24,7 @@ import java.util.List;
  * @author nws
  * @since 2023-07-25
  */
-@Api(value = "实体店二级分类", tags = "实体店二级分类")
+@Api(value = "二级分类", tags = "二级分类")
 @RestController
 @RequestMapping("/pipayshopapi/shop-category")
 public class ShopCategoryController {
@@ -45,7 +45,7 @@ public class ShopCategoryController {
 
     }
     @GetMapping("getSecShopInfoListByCondition/{limit}/{pages}/{categoryId}")
-    @ApiOperation("根据一级分类-获取所有实体店列表")
+    @ApiOperation("根据一级分类-获取所有列表")
     public ResponseVO<PageDataVO> getSecShopInfoListByCondition(@PathVariable Integer limit, @PathVariable Integer pages, @PathVariable String categoryId){
         try {
             PageDataVO secShopInfoListByCondition = shopInfoService.getSecShopInfoListByCondition(limit, pages, categoryId);
