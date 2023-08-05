@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopDetailInfoVO;
-import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.ShopTags;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.vo.*;
@@ -126,6 +125,34 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
     }
 
     /**
+     * 根据商品id，上架变为下架
+     *
+     * @param commodityId
+     * @return
+     */
+    @Override
+    public boolean updateCommodityUp(String commodityId) {
+        int result = shopCommodityInfoMapper.update(null, new UpdateWrapper<ShopCommodityInfo>()
+                .eq("commodity_id", commodityId)
+                .set("status", 2));
+        return result > 0;
+    }
+
+    /**
+     * 根据商品id，下架变为审核中
+     *
+     * @param commodityId
+     * @return
+     */
+    @Override
+    public boolean updateCommodityCheck(String commodityId) {
+        int result = shopCommodityInfoMapper.update(null, new UpdateWrapper<ShopCommodityInfo>()
+                .eq("commodity_id", commodityId)
+                .set("status", 0));
+        return result > 0;
+    }
+
+    /**
      * 根据店铺id查找实体店商品的详情信息列表
      */
     @Override
@@ -181,5 +208,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
         shopDetailInfoVO.setEvaluateVOList(list);
         return shopDetailInfoVO;
     }
+
+
 
 }

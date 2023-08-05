@@ -57,7 +57,7 @@ public class ItemCommodityInfoController {
     }
 
 
-    @PostMapping(" issueItemCommodity")
+    @PostMapping("issueItemCommodity")
     @ApiOperation("发布网店商品")
     public ResponseVO issueItemCommodity(@RequestBody ApplyItemCommodityDTO applyItemCommodityDTO){
 
