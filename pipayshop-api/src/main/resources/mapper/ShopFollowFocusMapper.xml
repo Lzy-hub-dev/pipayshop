@@ -37,6 +37,18 @@
         WHERE f.follow_id = #{userId}
           and f.`status` = 0
           and i.`status` = 0
+            LIMIT #{page},#{limit}
+    </select>
+    <select id="selectAllFollowProductByUserId" resultType="java.lang.Integer">
+        SELECT
+            count(*)
+        FROM shop_follow_focus f
+                 INNER JOIN
+             shop_info i
+             ON f.shop_id = i.shop_id
+        WHERE f.follow_id = #{userId}
+          and f.`status` = 0
+          and i.`status` = 0
     </select>
 
 </mapper>

@@ -1,8 +1,8 @@
 package com.example.pipayshopapi.mapper;
 
-import com.example.pipayshopapi.entity.ShopFollowFocus;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.pipayshopapi.entity.ShopInfo;
+import com.example.pipayshopapi.entity.ShopFollowFocus;
+import com.example.pipayshopapi.entity.vo.ShopInfoVO1;
 import com.example.pipayshopapi.entity.vo.ShopUserFollowInfoVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -27,9 +27,12 @@ public interface ShopFollowFocusMapper extends BaseMapper<ShopFollowFocus> {
 
     /**
      * 根据用户id-查询-关注的实体店-列表
-     *
+     * @param page
+     * @param limit
      * @param userId
-     * @return
+     * @return list<shopInfo>
      */
-    List<ShopInfo> selectFollowProductByUserId(String userId);
+    List<ShopInfoVO1> selectFollowProductByUserId(@Param("page") Integer page, @Param("limit") Integer limit, @Param("userId") String userId);
+
+    Integer selectAllFollowProductByUserId (@Param("userId") String userId);
 }

@@ -8,6 +8,7 @@ import com.example.pipayshopapi.entity.ItemInfo;
 import com.example.pipayshopapi.entity.vo.EvaluateVO;
 import com.example.pipayshopapi.entity.vo.ItemCommodityVO;
 import com.example.pipayshopapi.entity.vo.ItemInfoVO;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.mapper.ItemCommodityEvaluateMapper;
 import com.example.pipayshopapi.mapper.ItemCommodityInfoMapper;
 import com.example.pipayshopapi.mapper.ItemInfoMapper;
@@ -64,8 +65,10 @@ public class ItemInfoServiceImpl extends ServiceImpl<ItemInfoMapper, ItemInfo> i
      * @return
      */
     @Override
-    public List<ItemInfo> getFollowList(String userId, Integer page,Integer limit) {
-        return itemInfoMapper.selectFollowItemByUserId(userId,(page-1)*limit,limit);
+    public PageDataVO getFollowList(String userId, Integer page, Integer limit) {
+        Integer integer = itemInfoMapper.selectAllFollowItemByUserId(userId);
+        List<ItemInfo> itemInfos = itemInfoMapper.selectFollowItemByUserId(userId, (page - 1) * limit, limit);
+        return new PageDataVO(integer,itemInfos);
     }
     /**
      * 根据用户id获取网店数量
