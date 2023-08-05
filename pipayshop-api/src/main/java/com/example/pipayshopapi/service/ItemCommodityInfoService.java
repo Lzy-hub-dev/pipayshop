@@ -81,5 +81,20 @@ public interface ItemCommodityInfoService extends IService<ItemCommodityInfo> {
      */
     boolean changeCommodityStatus(String commodity, String status);
 
+    /**
+     * 根据商品id，上架变为下架
+     *
+     * @param commodity
+     * @return
+     */
+    boolean changeCommodityUp(String commodity);
+    /**
+     * 根据商品id，下架变为审核中
+     *
+     * @param commodity
+     * @return
+     */
+    boolean changeCommodityCheck(String commodity);
+
 
 }

@@ -97,14 +97,18 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
     }
 
     /**
-     * 根据用户id查询，商品状态查询审核通过和未审核列表
+     * 根据实体店id查询商品列表
+     *
+     * @param shopId
      */
     @Override
-    public PageDataVO selectCommodityByUidAndStatus(OrderPageVO pageVO) {
-        Integer integer = shopCommodityInfoMapper.selectAllCommodity(pageVO.getUid(), pageVO.getStatus());
-        List<ShopCommodityInfoVO> shopCommodityInfo = shopCommodityInfoMapper.selectCommodityByUidAndStatus((pageVO.getPage()*pageVO.getLimit()), pageVO.getLimit(), pageVO.getUid(), pageVO.getStatus());
-        return new PageDataVO(integer,shopCommodityInfo);
+    public PageDataVO selectCommodityByUidAndStatus(Integer page,Integer limit,String shopId) {
+        Integer integer = shopCommodityInfoMapper.selectCommdityListByShopId(shopId);
+        List<ApplicationRecordVO> applicationRecordVO = shopCommodityInfoMapper.selectCommdityListByShopIdPage(page-1, limit, shopId);
+        return new PageDataVO(integer,applicationRecordVO);
     }
+
+
 
     /**
      * 根据商品id，更改商品的上下架状态

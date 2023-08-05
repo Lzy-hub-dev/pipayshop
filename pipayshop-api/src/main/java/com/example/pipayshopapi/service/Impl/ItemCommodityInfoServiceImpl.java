@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.BrandInfo;
@@ -18,13 +19,11 @@ import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.*;
 import com.example.pipayshopapi.service.ItemCommodityInfoService;
 import com.example.pipayshopapi.util.StringUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -282,6 +281,34 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
             wr.set(ItemCommodityInfo::getStatus, status);
         }
         return commodityInfoMapper.update(null, wr) > 0;
+    }
+
+    /**
+     * 根据商品id，上架变为下架
+     *
+     * @param commodity
+     * @return
+     */
+    @Override
+    public boolean changeCommodityUp(String commodity) {
+        int result = commodityInfoMapper.update(null, new UpdateWrapper<ItemCommodityInfo>()
+                .eq("commodity_id", commodity)
+                .set("status", 2));
+        return result > 0;
+    }
+
+    /**
+     * 根据商品id，下架变为审核中
+     *
+     * @param commodity
+     * @return
+     */
+    @Override
+    public boolean changeCommodityCheck(String commodity) {
+        int result = commodityInfoMapper.update(null, new UpdateWrapper<ItemCommodityInfo>()
+                .eq("commodity_id", commodity)
+                .set("status", 0));
+        return result > 0;
     }
 
     /**
