@@ -56,6 +56,7 @@
         WHERE ic.user_id = #{userId}
           AND i.`status` = 0
           AND ic.`status` = 0
+          LIMIT #{page},#{limit}
     </select>
 
     <select id="selectHistoryProductByUserId" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityInfoVO">
@@ -136,6 +137,20 @@
             </otherwise>
         </choose>
         limit #{page},#{limit}
+    </select>
+    <select id="selectAllCollectProductByUserId" resultType="java.lang.Integer">
+        select count(*)
+        FROM item_collection ic
+                 INNER JOIN
+             item_commodity_info i
+             ON
+                 ic.commodity_id = i.commodity_id
+                 inner join item_info info
+                            on info.item_id = i.item_id
+
+        WHERE ic.user_id = #{userId}
+          AND i.`status` = 0
+          AND ic.`status` = 0
     </select>
 
 </mapper>
