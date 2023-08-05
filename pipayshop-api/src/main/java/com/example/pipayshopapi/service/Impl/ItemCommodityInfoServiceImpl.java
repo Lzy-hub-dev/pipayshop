@@ -269,8 +269,10 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
      * 根据用户id查询用户浏览商品历史-网店
      */
     @Override
-    public List<ItemCommodityInfoVO> historyList(String userId) {
-        return commodityInfoMapper.selectHistoryProductByUserId(userId);
+    public PageDataVO historyList(Integer page,Integer limit,String userId) {
+        Integer integer = commodityInfoMapper.selectAllHistoryProductByUserId(userId);
+        List<ItemCommodityInfoVO> itemCommodityInfoVOS = commodityInfoMapper.selectHistoryProductByUserId((page - 1) * limit, limit, userId);
+        return new PageDataVO(integer,itemCommodityInfoVOS);
     }
 
     @Override
