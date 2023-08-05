@@ -31,9 +31,9 @@ public class ItemInfoController {
 
     @GetMapping("getItemInfo/{itemId}/{page}/{limit}/{price}")
     @ApiOperation("根据网店id获取网店商品信息")
-    public ResponseVO<List<ItemCommodityVO>> getItemInfo(@PathVariable String itemId,@PathVariable Integer page,@PathVariable Integer limit,@PathVariable Boolean price) {
+    public ResponseVO<List<ItemCommodityMinVO>> getItemInfo(@PathVariable String itemId,@PathVariable Integer page,@PathVariable Integer limit,@PathVariable Boolean price) {
         try {
-            List<ItemCommodityVO> itemCommodityVOS = itemInfoService.getItemInfo(itemId,page,limit,price);
+            List<ItemCommodityMinVO> itemCommodityVOS = itemInfoService.getItemInfo(itemId,page,limit,price);
             if (itemCommodityVOS == null) {
                 throw new Exception();
             }

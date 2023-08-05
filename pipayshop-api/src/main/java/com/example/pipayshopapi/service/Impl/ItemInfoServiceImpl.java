@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ItemInfo;
 import com.example.pipayshopapi.entity.vo.EvaluateVO;
+import com.example.pipayshopapi.entity.vo.ItemCommodityMinVO;
 import com.example.pipayshopapi.entity.vo.ItemCommodityVO;
 import com.example.pipayshopapi.entity.vo.ItemInfoVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
@@ -44,7 +45,7 @@ public class ItemInfoServiceImpl extends ServiceImpl<ItemInfoMapper, ItemInfo> i
      * @return
      */
     @Override
-    public List<ItemCommodityVO> getItemInfo(String itemId, Integer page, Integer limit, Boolean price) {
+    public List<ItemCommodityMinVO> getItemInfo(String itemId, Integer page, Integer limit, Boolean price) {
         return itemCommodityInfoMapper.getInfoByItemId(itemId,(page-1)*limit,limit,price);
     }
 

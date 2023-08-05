@@ -20,7 +20,7 @@ public interface ItemInfoService extends IService<ItemInfo> {
      * @param itemId
      * @return
      * */
-    List<ItemCommodityVO> getItemInfo(String itemId, Integer page, Integer limit, Boolean price);
+    List<ItemCommodityMinVO> getItemInfo(String itemId, Integer page, Integer limit, Boolean price);
 
     /**
      * 根据用户id获取网店信息
