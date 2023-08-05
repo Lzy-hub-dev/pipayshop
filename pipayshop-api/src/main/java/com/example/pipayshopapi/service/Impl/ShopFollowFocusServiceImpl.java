@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopFollowFocus;
-import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.entity.vo.ShopInfoVO1;
 import com.example.pipayshopapi.entity.vo.ShopUserFollowInfoVO;
 import com.example.pipayshopapi.mapper.ShopFollowFocusMapper;
 import com.example.pipayshopapi.service.ShopFollowFocusService;
@@ -97,7 +97,9 @@ public class ShopFollowFocusServiceImpl extends ServiceImpl<ShopFollowFocusMappe
      * 根据用户id查询用户关注的实体店列表
      */
     @Override
-    public List<ShopInfo> getFollowList (String userId){
-        return shopFollowFocusMapper.selectFollowProductByUserId(userId);
+    public PageDataVO getFollowList (Integer page,Integer limit,String userId){
+        Integer integer = shopFollowFocusMapper.selectAllFollowProductByUserId(userId);
+        List<ShopInfoVO1> shopInfos = shopFollowFocusMapper.selectFollowProductByUserId((page - 1) * limit, limit, userId);
+        return new PageDataVO(integer,shopInfos);
     }
 }

@@ -22,6 +22,7 @@ public interface ItemInfoMapper extends BaseMapper<ItemInfo> {
     List<ItemInfoVO> selectItemInfoByItemIdOrUserId(@Param("userId") String userId, @Param("itemId")String itemId);
 
     List<ItemInfo> selectFollowItemByUserId(String userId, Integer page,Integer limit);
+    Integer selectAllFollowItemByUserId(@Param("userId") String userId);
 
     ItemMinInfoVo getItemInfoByUid(@Param("uid")String userId);
 
