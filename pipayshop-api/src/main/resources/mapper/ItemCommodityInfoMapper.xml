@@ -121,6 +121,7 @@
     </select>
 
     <select id="getInfoByItemId" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityMinVO">
+
         select commodity_id,price,item_commodity_name,avatar_imag,create_time,details
         from item_commodity_info
         where item_id = #{itemId} and status = 0
@@ -135,7 +136,9 @@
             </otherwise>
         </choose>
         limit #{page},#{limit}
+
     </select>
+
     <select id="selectMembershipBycommodityIdList"
             resultType="com.example.pipayshopapi.entity.vo.itemCommoditiesVO">
         SELECT
@@ -169,6 +172,12 @@
         WHERE ic.user_id = #{userId}
           AND i.`status` = 0
           AND ic.`status` = 0
+    </select>
+
+    <select id="getInfoSize" resultType="java.lang.Integer">
+        select count(*)
+        from item_commodity_info
+        where item_id = #{itemId} and status = 0
     </select>
 
 </mapper>
