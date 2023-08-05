@@ -30,6 +30,7 @@
         and l.adult>=#{adult} and l.children>=#{children}
         LIMIT #{pages},#{limit}
     </select>
+
     <select id="selectAllShopLiveVOByCondition" resultType="java.lang.Integer">
         SELECT COUNT(*)
         from shop_commodity_live as l

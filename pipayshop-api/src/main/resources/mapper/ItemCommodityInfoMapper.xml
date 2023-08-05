@@ -121,4 +121,22 @@
           AND c.`status` !=0
     </select>
 
+    <!--TODO 缺排序-->
+    <select id="getInfoByItemId" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityVO">
+        select price,item_commodity_name,avatar_imag AS commodity_pic,status
+        from item_commodity_info
+        where item_id = #{itemId}
+        <choose>
+            <when test="price">
+                order By price
+            </when >
+            <when test="!price">
+                order By price desc
+            </when >
+            <otherwise>
+            </otherwise>
+        </choose>
+        limit #{page},#{limit}
+    </select>
+
 </mapper>
