@@ -171,13 +171,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
             return null;
         }
         List<String> commodityIdList = records.stream().map(commodity -> commodity.getCommodityId()).collect(Collectors.toList());
-        List<itemCommoditiesVO> resultList = commodityInfoMapper.selectMembershipBycommodityIdList(commodityIdList);
-        /*ArrayList<Object> container = new ArrayList<>();
-        records.stream().forEach(i1 -> resultList.stream().forEach(i2 -> {
-            if (StringUtils.equals(i1.getCommodityId(), i2.getCommodityId())) {
-                container.add(i2);
-            }
-        }));*/
+        List<itemCommoditiesVO> resultList = commodityInfoMapper.selectMembershipByCommodityIdList(commodityIdList);
         // 封装数据
         return new PageDataVO((int) page.getTotal(), resultList);
 
