@@ -40,6 +40,11 @@ public class ShopEvaluateVO {
     private String evaluate;
 
     /**
+     * 评价id
+     */
+    private String evaluateId;
+
+    /**
      * 评价时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
