@@ -2,6 +2,7 @@ package com.example.pipayshopapi.controller;
 
 
 import com.example.pipayshopapi.entity.ItemInfo;
+import com.example.pipayshopapi.entity.vo.ItemEvaluateVO;
 import com.example.pipayshopapi.entity.vo.ItemInfoVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -31,15 +32,30 @@ public class ItemInfoController {
     @Resource
     private ItemInfoService itemInfoService;
 
-    @GetMapping("getItemInfo/{commodityId}")
-    @ApiOperation("获取网店信息")
-    public ResponseVO getItemInfo(@PathVariable String commodityId) {
+    @GetMapping("getItemInfo/{itemId}/{page}/{limit}/{price}")
+    @ApiOperation("根据网店id获取网店信息")
+    public ResponseVO getItemInfo(@PathVariable String itemId,@PathVariable Integer page,@PathVariable Integer limit,@PathVariable Boolean price) {
         try {
-            ItemInfoVO itemInfo = itemInfoService.getItemInfo(commodityId);
+            ItemInfoVO itemInfo = itemInfoService.getItemInfo(itemId,page,limit,price);
             if (itemInfo == null) {
                 throw new Exception();
             }
             return ResponseVO.getSuccessResponseVo(itemInfo);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new BusinessException("获取网店信息失败，请联系后台人员");
+        }
+    }
+
+    @GetMapping("getItemEvaluate/{itemId}/{page}/{limit}")
+    @ApiOperation("根据网店id获取网店评价信息")
+    public ResponseVO getItemEvaluate(@PathVariable String itemId,@PathVariable Integer page,@PathVariable Integer limit) {
+        try {
+            ItemEvaluateVO itemEvaluate = itemInfoService.getItemEvaluate(itemId,page,limit);
+            if (itemEvaluate == null) {
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo(itemEvaluate);
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new BusinessException("获取网店信息失败，请联系后台人员");

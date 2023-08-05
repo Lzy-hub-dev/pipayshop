@@ -51,4 +51,9 @@ public class ItemCommodityVO {
      * 是否会员(0映射为false，1映射为true)
      */
     private Boolean membership;
+
+    /**
+     * 銷量
+     */
+    private Integer sales;
 }

@@ -3,14 +3,13 @@
 <mapper namespace="com.example.pipayshopapi.mapper.ItemInfoMapper">
 
 
-    <select id="getItemInfo" resultType="com.example.pipayshopapi.entity.vo.ItemInfoVO">
-        select c1.item_id,i.item_name,i.score,i.item_imag_list,
-        (select count(*) from item_commodity_info c2 where i.item_id=c2.item_id  ) as itemSum,
+    <select id="getItemInfo" resultType="com.example.pipayshopapi.entity.vo.ItemInfoVOII">
+        select i.item_id,i.item_name,i.score,i.item_imag_list,i.membership,
         (select count(*) from item_follow_focus f where i.item_id=f.item_id) as fanSum
-        from item_commodity_info c1
-        join item_info i on c1.item_id=i.item_id
-        where c1.commodity_id=#{commodityId}
+        from item_info i
+        where i.item_id = #{itemId}
     </select>
+
     <select id="selectItemInfoByItemIdOrUserId" resultType="com.example.pipayshopapi.entity.vo.ItemInfoVO">
         select i.item_id,i.item_name,i.score,i.item_imag_list,i.user_image,i.membership,
                (select count(*) from item_commodity_info c2 where i.item_id=c2.item_id  ) as itemSum,
@@ -21,6 +20,7 @@
             <if test="userId!=null and userId!=''">and i.uid=#{userId}</if>
         </where>
     </select>
+
     <select id="selectFollowItemByUserId" resultType="com.example.pipayshopapi.entity.ItemInfo">
         SELECT *
         FROM item_follow_focus f
@@ -49,6 +49,12 @@
             item_info
         where
             item_id = #{itemId} and status = 0
+    </select>
+    <select id="itemEvaluateVO" resultType="com.example.pipayshopapi.entity.vo.ItemEvaluateVO">
+        select i.item_id,i.item_name,i.score,i.item_imag_list,i.membership,
+        (select count(*) from item_follow_focus f where i.item_id=f.item_id) as fanSum
+        from item_info i
+        where i.item_id = #{itemId}
     </select>
 
 </mapper>

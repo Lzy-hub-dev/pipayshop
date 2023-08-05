@@ -1,11 +1,16 @@
 package com.example.pipayshopapi.service.Impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ItemInfo;
+import com.example.pipayshopapi.entity.vo.ItemEvaluateVO;
 import com.example.pipayshopapi.entity.vo.ItemInfoVO;
+import com.example.pipayshopapi.entity.vo.ItemInfoVOII;
+import com.example.pipayshopapi.mapper.ItemCommodityEvaluateMapper;
+import com.example.pipayshopapi.mapper.ItemCommodityInfoMapper;
 import com.example.pipayshopapi.mapper.ItemInfoMapper;
 import com.example.pipayshopapi.service.ItemInfoService;
 import org.springframework.stereotype.Service;
@@ -27,14 +32,28 @@ public class ItemInfoServiceImpl extends ServiceImpl<ItemInfoMapper, ItemInfo> i
     @Resource
     private ItemInfoMapper itemInfoMapper;
 
+    @Resource
+    private ItemCommodityInfoMapper itemCommodityInfoMapper;
+
+    @Resource
+    private ItemCommodityEvaluateMapper itemCommodityEvaluateMapper;
+
     /**
      * 获取网店商品详情的网店信息接口
-     * @param commodityId
+     * @param itemId
      * @return
      */
     @Override
-    public ItemInfoVO getItemInfo(String commodityId) {
-        ItemInfoVO itemInfo = itemInfoMapper.getItemInfo(commodityId);
+    public ItemInfoVOII getItemInfo(String itemId,Integer page,Integer limit,Boolean price) {
+        //获取 网店itemId,name,score,imageList,fanSum信息
+        ItemInfoVOII itemInfo = itemInfoMapper.getItemInfo(itemId);
+        //反序列化
+        String json = itemInfo.getItemImagList();
+        List<String> imageList = JSON.parseArray(json, String.class);
+        itemInfo.setImageList(imageList);
+        itemInfo.setItemImagList(null);
+        //获取 网店旗下商品信息
+        itemInfo.setCommodityInfoList(itemCommodityInfoMapper.getInfoByItemId(itemId,(page-1)*limit,limit,price));
         return itemInfo;
     }
 
@@ -108,6 +127,14 @@ public class ItemInfoServiceImpl extends ServiceImpl<ItemInfoMapper, ItemInfo> i
                 .eq(ItemInfo::getUid, userId)
                 .eq(ItemInfo::getStatus, 0)
                 .eq(ItemInfo::getMembership, true)) > 0;
+    }
+
+
+    @Override
+    public ItemEvaluateVO getItemEvaluate(String itemId,Integer page,Integer limit) {
+        ItemEvaluateVO itemEvaluateVO = itemInfoMapper.itemEvaluateVO(itemId);
+        itemEvaluateVO.setEvaluateVOList(itemCommodityEvaluateMapper.getItemCommodityEvaluate(itemId,(page-1)*limit,limit));
+        return itemEvaluateVO;
     }
 
 
