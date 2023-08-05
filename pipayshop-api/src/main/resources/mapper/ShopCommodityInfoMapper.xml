@@ -32,6 +32,7 @@
         WHERE sc.user_id = #{userId}
           AND i.`status` = 0
           AND sc.`status` = 0
+          LIMIT #{page},#{limit}
     </select>
     <select id="getCollectionList" resultType="java.util.List"></select>
 
@@ -92,6 +93,19 @@
         select commodity_id,commodity_name,commodity_img_list,commodity_detail,price,monthly_sales,shop_id,validity_time,residue,reservation_information
         from shop_commodity_info
         where  commodity_id = #{commodityId}
+    </select>
+    <select id="selectAllCollectProductByUserId" resultType="java.lang.Integer">
+        select count(*)
+        FROM shop_collection sc
+                 INNER JOIN
+             shop_commodity_info i
+             ON
+                 sc.commodity_id = i.commodity_id
+                 inner join shop_info info
+                            on info.shop_id = i.shop_id
+        WHERE sc.user_id = #{userId}
+          AND i.`status` = 0
+          AND sc.`status` = 0
     </select>
 
 </mapper>
