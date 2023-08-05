@@ -57,5 +57,9 @@ public class ItemSearchConditionDTO {
      */
     @ApiModelProperty("价格升降序(0:升序,1:否降序)")
     private Integer priceOrder;
+    /**
+     * 发布时间
+     */
+    private Boolean createTime;
 
 }

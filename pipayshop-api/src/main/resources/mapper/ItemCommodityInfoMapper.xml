@@ -77,6 +77,8 @@
         WHERE h.user_id = #{userId}
           AND i.`status` = 0
     </select>
+
+
     <select id="examineCommodityList" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityVO">
         SELECT c.commodity_id,
         i.item_name,
@@ -90,11 +92,17 @@
         INNER JOIN user_info u ON i.uid = u.uid
         INNER JOIN item_commodity_info c ON i.item_id = c.item_id
          WHERE u.uid = #{userId}
-        <if test="examineStatus!=2">
-            AND c.`status` = #{examineStatus}
-        </if>
+           <choose>
+               <when test="examineStatus == 2">
+                   AND c.`status` = #{examineStatus}
+               </when>
+               <otherwise>
+                   AND c.`status` != 2
+               </otherwise>
+           </choose>
         limit #{pageNumber},#{pageSize}
     </select>
+
 
     <select id="commodityList" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityVO">
         SELECT c.commodity_id,

@@ -147,7 +147,7 @@ public class ShopCommodityLiveInfo implements Serializable {
     /**
      * 楼层
      */
-    private Integer floor;
+    private String floor;
 
     /**
      * 是否允许加客 0:可以 1：不可以

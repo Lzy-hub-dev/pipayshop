@@ -44,7 +44,7 @@ public class ShopCategoryMinController {
     }
 
     @GetMapping("getShopInfoMinListByCondition/{limit}/{pages}/{categoryId}")
-    @ApiOperation("实体店三级分类标签列表对应的店铺列表条件分页展示")
+    @ApiOperation("三级分类标签列表对应的店铺列表条件分页展示")
     public ResponseVO<PageDataVO> getShopInfoMinListByCondition(@PathVariable Integer limit, @PathVariable Integer pages, @PathVariable String categoryId){
         try {
             PageDataVO shopInfoMinListByCondition = shopCategoryMinService.getShopInfoMinListByCondition(limit, pages, categoryId);

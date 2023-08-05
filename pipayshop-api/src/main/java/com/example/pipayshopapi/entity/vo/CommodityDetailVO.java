@@ -17,7 +17,7 @@ public class CommodityDetailVO {
 
     private String commodityId;
 
-    private String brand;
+    private String title;
 
     private String itemCommodityName;
 

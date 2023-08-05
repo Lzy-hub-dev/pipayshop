@@ -18,7 +18,7 @@ public class ExamineCommodityDTO extends PageDTO{
 
     private String userId;
     /**
-     * 0:审核中;1:审核通过;2全部
+     * 0:上架 1:下架 2：审核中
      */
     private Integer examineStatus;
 }

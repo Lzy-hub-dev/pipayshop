@@ -85,7 +85,7 @@ public class ShopCommodityLiveInfoVO {
     /**
      * 楼层
      */
-    private Integer floor;
+    private String floor;
 
     /**
      * 房间数

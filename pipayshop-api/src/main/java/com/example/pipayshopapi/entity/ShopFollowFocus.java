@@ -52,6 +52,6 @@ public class ShopFollowFocus implements Serializable {
     /**
      * 关注状态(0关注 1取消)
      */
-    private Boolean status;
+    private Integer status;
 
 }
