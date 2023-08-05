@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.pipayshopapi.entity.vo.EvaluateVO;
 import com.example.pipayshopapi.entity.vo.ItemCommodityEvaluateVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -19,11 +20,15 @@ import java.util.List;
 @Mapper
 public interface ItemCommodityEvaluateMapper extends BaseMapper<ItemCommodityEvaluate> {
 
-    List<ItemCommodityEvaluateVO> getItemCommodityEvaluates(String commodityId,Integer page,Integer limit);
+    List<ItemCommodityEvaluateVO> getItemCommodityEvaluates(@Param("commodityId")String commodityId,
+                                                            @Param("page")Integer page,
+                                                            @Param("limit")Integer limit);
 
-    Integer getItemCommodityEvaluatesSum(String commodityId);
+    Integer getItemCommodityEvaluatesSum(@Param("commodityId")String commodityId);
 
-    List<EvaluateVO> getItemCommodityEvaluate(String itemId, Integer page, Integer limit);
+    List<EvaluateVO> getItemCommodityEvaluate(@Param("itemId")String itemId,
+                                              @Param("page")Integer page,
+                                              @Param("limit")Integer limit);
 
-    Integer getInfoSize(String itemId);
+    Integer getInfoSize(@Param("limit")String itemId);
 }

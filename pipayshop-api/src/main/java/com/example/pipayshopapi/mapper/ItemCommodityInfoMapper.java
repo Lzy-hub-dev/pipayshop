@@ -4,6 +4,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.dto.ExamineCommodityDTO;
 import com.example.pipayshopapi.entity.vo.*;
+import com.example.pipayshopapi.entity.vo.CommodityVO;
+import com.example.pipayshopapi.entity.vo.ItemCommodityInfoVO;
+import com.example.pipayshopapi.entity.vo.ItemCommodityVO;
+import com.example.pipayshopapi.entity.vo.itemCommoditiesVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -33,11 +37,14 @@ public interface ItemCommodityInfoMapper extends BaseMapper<ItemCommodityInfo> {
     List<ItemCommodityInfoVO> selectHistoryProductByUserId(@Param("page") Integer page, @Param("limit") Integer limit,@Param("userId") String userId);
     Integer selectAllHistoryProductByUserId(@Param("userId") String userId);
 
-    List<ItemCommodityVO> examineCommodityList(ExamineCommodityDTO dto);
+    List<ItemCommodityVO> examineCommodityList(@Param("dto")ExamineCommodityDTO dto);
 
-    List<ItemCommodityVO> commodityList(String userId);
+    List<ItemCommodityVO> commodityList(@Param("userId")String userId);
 
-    List<ItemCommodityMinVO> getInfoByItemId(@Param("itemId") String itemId, @Param("page") Integer page, @Param("limit") Integer limit, @Param("price") Boolean price);
+    List<ItemCommodityMinVO> getInfoByItemId(@Param("itemId")String itemId,
+                                             @Param("page")Integer page,
+                                             @Param("limit")Integer limit,
+                                             @Param("price")Boolean price);
 
 
     List<itemCommoditiesVO> selectMembershipByCommodityIdList(@Param("list") List<String> commodityIdList);
