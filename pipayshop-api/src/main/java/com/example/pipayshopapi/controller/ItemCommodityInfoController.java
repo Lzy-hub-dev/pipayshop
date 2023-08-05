@@ -124,12 +124,12 @@ public class ItemCommodityInfoController {
         }
     }
 
-    @GetMapping("collectList/{userId}")
+    @GetMapping("collectList/{page}/{limit}/{userId}")
     @ApiOperation("根据用户id查询 用户收藏的商品列表")
-    public ResponseVO collectList(@PathVariable("userId") String userId) {
+    public ResponseVO<PageDataVO> collectList(@PathVariable Integer page,@PathVariable Integer limit,@PathVariable("userId") String userId) {
         try {
-            List<ItemCommodityInfoVO> list = commodityInfoService.getCollectList(userId);
-            return ResponseVO.getSuccessResponseVo(list);
+            PageDataVO collectList = commodityInfoService.getCollectList(page, limit, userId);
+            return ResponseVO.getSuccessResponseVo(collectList);
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new BusinessException("查询失败，请联系后台人" + "、员");

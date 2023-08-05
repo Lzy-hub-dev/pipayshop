@@ -54,7 +54,7 @@ public interface ItemCommodityInfoService extends IService<ItemCommodityInfo> {
      * @param userId
      * @return
      */
-    List<ItemCommodityInfoVO> getCollectList(String userId);
+    PageDataVO getCollectList(Integer page,Integer limit,String userId);
 
 
     /**
