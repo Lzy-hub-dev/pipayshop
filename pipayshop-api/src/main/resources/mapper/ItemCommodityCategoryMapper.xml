@@ -6,7 +6,7 @@
         SELECT
             i.price,
             i.item_commodity_name,
-            i.avatar_imag as commodityPic,
+            i.avatar_imag ,
             i.commodity_id,
             i.origin_price,
             i.details

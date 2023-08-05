@@ -107,16 +107,11 @@
         <where>
 
             <if test="categoryId != null and categoryId != '-1' ">shop_info.category_id IN(SELECT
-                sm.category_id
-                FROM
-                shop_category_min sm
-                WHERE
-                sm.category_pid in (SELECT
                 s.category_id
                 FROM
                 shop_category s
                 WHERE
-                s.category_pid = #{categoryId}))
+                s.category_pid = #{categoryId})
             </if>
         </where>
         LIMIT ${page},${limit}
