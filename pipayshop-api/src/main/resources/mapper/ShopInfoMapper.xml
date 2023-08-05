@@ -97,16 +97,21 @@
     </select>
 
     <select id="getIndexShopInfoVOById" resultType="com.example.pipayshopapi.entity.vo.IndexShopInfoVO">
-        select shop_id,shop_name,score,localhost_latitude,localhost_longitude,user_image, shop_introduce,tag_list,address
+        select shop_id,shop_name,score,localhost_latitude,localhost_longitude,user_image, shop_introduce,tag_list,address,membership
         from shop_info
         <where>
 
             <if test="categoryId != null and categoryId != '-1' ">shop_info.category_id IN(SELECT
-                sc.category_id
+                sm.category_id
                 FROM
-                shop_category sc
+                shop_category_min sm
                 WHERE
-                sc.category_pid = #{categoryId})
+                sm.category_pid in (SELECT
+                s.category_id
+                FROM
+                shop_category s
+                WHERE
+                s.category_pid = #{categoryId}))
             </if>
         </where>
         LIMIT ${page},${limit}
