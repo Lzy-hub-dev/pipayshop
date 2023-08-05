@@ -14,22 +14,23 @@ import java.io.InputStream;
  * @Description 文件上传工具类
  */
 public class FileUploadUtil {
-    private static String PRE="images\\";
-    private static String UPLOAD_PRE = "pipayshop-api\\src\\main\\resources\\static\\";
+    private static final String SEPARATOR = "/";
+    private static final String PRE="images/";
+    private static  final String UPLOAD_PRE = "pipayshop-api/src/main/resources/static/";
     //用户头像存储位置
-    public static String AVATAR="avatar";
+    public static final String AVATAR="avatar";
     //首页轮播图存储位置
-    public static String BG_IMG="bg_img";
+    public static final String BG_IMG="bg_img";
     //网店商品图存储位置
-    public static String ITEM_COMMODITY_IMG="item_commodity_img";
+    public static final String ITEM_COMMODITY_IMG="item_commodity_img";
     //网店背景广告图存储位置
-    public static String ITEM_IMG="item_img";
+    public static final String ITEM_IMG="item_img";
     //实体店商品图存储位置
-    public static String SHOP_COMMODITY_IMG="shop_commodity_img";
+    public static final String SHOP_COMMODITY_IMG="shop_commodity_img";
     //实体店背景广告图存储位置
-    public static String SHOP_IMG="shop_img";
+    public static final String SHOP_IMG="shop_img";
     //酒店头像图片储存位置
-    public static String ROOM_TOP_IMG="room_top_img";
+    public static final String ROOM_TOP_IMG="room_top_img";
 
     //实体店分类图片储存位置
     public static String CATEGORY_IMG="shop_category_img";
@@ -69,7 +70,7 @@ public class FileUploadUtil {
             readPath.mkdirs();
         }
         //将文件复制到指定路径
-        File destFile = new File(readPath.getAbsolutePath()+File.separator + fileName);
+        File destFile = new File(readPath.getAbsolutePath()+SEPARATOR + fileName);
 //        System.out.println("保存路径: " + readPath);
 
         try {
@@ -79,7 +80,7 @@ public class FileUploadUtil {
             e.printStackTrace();
         }
 
-        return File.separator+PRE+path+File.separator+fileName;
+        return SEPARATOR+PRE+path+SEPARATOR+fileName;
     }
     /**
      *删除文件
