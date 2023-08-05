@@ -24,4 +24,6 @@ public interface ItemCommodityEvaluateMapper extends BaseMapper<ItemCommodityEva
     Integer getItemCommodityEvaluatesSum(String commodityId);
 
     List<EvaluateVO> getItemCommodityEvaluate(String itemId, Integer page, Integer limit);
+
+    Integer getInfoSize(String itemId);
 }
