@@ -1,8 +1,8 @@
 package com.example.pipayshopapi.controller;
 
 
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
-import com.example.pipayshopapi.entity.vo.ShopCommodityInfoVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopCollectionService;
 import com.example.pipayshopapi.service.ShopCommodityInfoService;
@@ -11,7 +11,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 
 /**
@@ -78,12 +77,12 @@ public class ShopCollectionController {
     }
 
 
-    @GetMapping("collectList/{userId}")
+    @GetMapping("collectList/{page}/{limit}/{userId}")
     @ApiOperation("根据用户id查询用户收藏的实体类商品列表")
-    public ResponseVO<List<ShopCommodityInfoVO>> collectList(@PathVariable("userId") String userId) {
+    public ResponseVO<PageDataVO> collectList(@PathVariable Integer page,@PathVariable Integer limit,@PathVariable("userId") String userId) {
         try {
-            List<ShopCommodityInfoVO> list = shopCommodityService.getCollectList(userId);
-            return ResponseVO.getSuccessResponseVo(list);
+            PageDataVO collectList = shopCommodityService.getCollectList(page, limit, userId);
+            return ResponseVO.getSuccessResponseVo(collectList);
         } catch (Exception e) {
             e.printStackTrace();
             throw new BusinessException("查询失败，请联系后台人" + "、员");
