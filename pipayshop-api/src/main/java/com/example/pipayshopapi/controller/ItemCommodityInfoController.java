@@ -195,6 +195,37 @@ public class ItemCommodityInfoController {
         }
     }
 
+    @PostMapping("changeCommodityUp/{commodityId}")
+    @ApiOperation("根据商品id，上架变为下架")
+    public ResponseVO changeCommodityUp(@PathVariable String commodityId){
+        try {
+            boolean result = commodityInfoService.changeCommodityUp(commodityId);
+            if (!result){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("根据商品id，上架变为下架成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("根据商品id，上架变为下架失败，请联系后台人员");
+        }
+    }
+
+    @PostMapping("changeCommodityStatus/{commodityId}")
+    @ApiOperation("根据商品id，下架变为审核中")
+    public ResponseVO changeCommodityCheck(@PathVariable String commodityId){
+        try {
+            boolean result = commodityInfoService.changeCommodityCheck(commodityId);
+            if (!result){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("根据商品id，下架变为审核中成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("根据商品id，下架变为审核中失败，请联系后台人员");
+        }
+    }
+
+
     @PostMapping("deleteHistory")
     @ApiOperation("删除用户浏览网店商品的历史记录")
     public ResponseVO deleteHistory( String userId,

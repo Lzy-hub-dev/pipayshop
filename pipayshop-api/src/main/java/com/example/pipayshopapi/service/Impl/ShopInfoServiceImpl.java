@@ -20,7 +20,6 @@ import com.example.pipayshopapi.util.StringUtil;
 import com.javadocmd.simplelatlng.LatLng;
 import com.javadocmd.simplelatlng.LatLngTool;
 import com.javadocmd.simplelatlng.util.LengthUnit;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -266,7 +265,6 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         for (IndexShopInfoVO shopInfoVO : indexShopInfoVO) {
             List<String> list1 = new ArrayList<>();
             List<String> list = JSON.parseArray(shopInfoVO.getTagList(), String.class);
-            System.out.println("bb" + list);
             if (list == null || list.isEmpty()) {
                 continue;
             }
