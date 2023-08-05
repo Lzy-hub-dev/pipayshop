@@ -4,6 +4,7 @@ package com.example.pipayshopapi.controller;
 import com.example.pipayshopapi.entity.ItemInfo;
 import com.example.pipayshopapi.entity.vo.ItemEvaluateVO;
 import com.example.pipayshopapi.entity.vo.ItemInfoVO;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ItemInfoService;
@@ -100,9 +101,9 @@ public class ItemInfoController {
 
     @GetMapping("followList/{userId}")
     @ApiOperation("根据用户id查询 用户关注的网店列表")
-    public ResponseVO followList(@PathVariable("userId") String userId) {
+    public ResponseVO followList(@PathVariable("userId") String userId, Integer page,Integer limit) {
         try {
-            List<ItemInfo> list = itemInfoService.getFollowList(userId);
+            List<ItemInfo> list = itemInfoService.getFollowList(userId,page,limit);
             return ResponseVO.getSuccessResponseVo(list);
         } catch (Exception e) {
             log.error(e.getMessage());

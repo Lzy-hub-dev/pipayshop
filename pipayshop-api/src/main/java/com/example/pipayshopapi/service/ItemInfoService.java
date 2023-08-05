@@ -4,6 +4,7 @@ import com.example.pipayshopapi.entity.ItemInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.vo.ItemEvaluateVO;
 import com.example.pipayshopapi.entity.vo.ItemInfoVO;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public interface ItemInfoService extends IService<ItemInfo> {
      * @param userId
      * @return
      */
-    List<ItemInfo> getFollowList(String userId);
+    List<ItemInfo> getFollowList(String userId, Integer page,Integer limit);
     /**
      * 根据用户id获取网店数量
      * @param userId
