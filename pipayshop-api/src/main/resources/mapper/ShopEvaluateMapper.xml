@@ -7,4 +7,32 @@
         from shop_evaluate
         where shop_id=#{shopId}
     </select>
+
+
+    <select id="selectPageByShopId" resultType="com.example.pipayshopapi.entity.vo.ShopEvaluateVO">
+        select
+            e.evaluate
+             , e.create_time
+             , e.evaluate_id
+             , e.user_id
+             , u.user_name
+             , u.user_image
+        from
+            shop_evaluate e
+         left join user_info u
+        on u.uid = e.user_id
+        where
+            shop_id = #{shopId}
+          and e.status = 0
+          and u.status = 0
+            limit #{page},#{limit}
+    </select>
+
+    <select id="selectPageByShopIdCount" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            shop_evaluate
+        where
+            shop_id = #{shopId} and status = 0    </select>
 </mapper>

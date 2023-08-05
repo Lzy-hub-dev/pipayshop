@@ -1,18 +1,18 @@
 package com.example.pipayshopapi.service.Impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopEvaluate;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.entity.vo.ShopEvaluateVO;
 import com.example.pipayshopapi.mapper.ShopEvaluateMapper;
 import com.example.pipayshopapi.service.ShopEvaluateService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -33,10 +33,9 @@ public class ShopEvaluateServiceImpl extends ServiceImpl<ShopEvaluateMapper, Sho
      */
     @Override
     public PageDataVO getShopEvaluateListByItemId(Integer page, Integer limit, String shopId) {
-        Page<ShopEvaluate> pages = new Page<>(page,limit);
-        shopEvaluateMapper.selectPage(pages,new QueryWrapper<ShopEvaluate>()
-                                            .eq("shop_id",shopId));
-        return new PageDataVO((int) pages.getTotal(),pages.getRecords());
+        List<ShopEvaluateVO> list = shopEvaluateMapper.selectPageByShopId((page - 1) * limit, limit, shopId);
+        int count = shopEvaluateMapper.selectPageByShopIdCount(shopId);
+        return new PageDataVO(count, list);
     }
 
 
