@@ -18,7 +18,6 @@ import java.util.List;
  */
 @Mapper
 public interface ItemInfoMapper extends BaseMapper<ItemInfo> {
-    ItemInfoVOII getItemInfo(@Param("itemId") String itemId);
 
     List<ItemInfoVO> selectItemInfoByItemIdOrUserId(@Param("userId") String userId, @Param("itemId")String itemId);
 
@@ -27,6 +26,4 @@ public interface ItemInfoMapper extends BaseMapper<ItemInfo> {
     ItemMinInfoVo getItemInfoByUid(@Param("uid")String userId);
 
     ItemVO selectBasicData(@Param("itemId") String itemId);
-
-    ItemEvaluateVO itemEvaluateVO(@Param("itemId") String itemId);
 }

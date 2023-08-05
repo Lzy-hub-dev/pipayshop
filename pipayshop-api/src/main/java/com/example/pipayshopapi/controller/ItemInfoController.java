@@ -2,10 +2,7 @@ package com.example.pipayshopapi.controller;
 
 
 import com.example.pipayshopapi.entity.ItemInfo;
-import com.example.pipayshopapi.entity.vo.ItemEvaluateVO;
-import com.example.pipayshopapi.entity.vo.ItemInfoVO;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
-import com.example.pipayshopapi.entity.vo.ResponseVO;
+import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ItemInfoService;
 import io.swagger.annotations.Api;
@@ -34,14 +31,14 @@ public class ItemInfoController {
     private ItemInfoService itemInfoService;
 
     @GetMapping("getItemInfo/{itemId}/{page}/{limit}/{price}")
-    @ApiOperation("根据网店id获取网店信息")
-    public ResponseVO getItemInfo(@PathVariable String itemId,@PathVariable Integer page,@PathVariable Integer limit,@PathVariable Boolean price) {
+    @ApiOperation("根据网店id获取网店商品信息")
+    public ResponseVO<List<ItemCommodityVO>> getItemInfo(@PathVariable String itemId,@PathVariable Integer page,@PathVariable Integer limit,@PathVariable Boolean price) {
         try {
-            ItemInfoVO itemInfo = itemInfoService.getItemInfo(itemId,page,limit,price);
-            if (itemInfo == null) {
+            List<ItemCommodityVO> itemCommodityVOS = itemInfoService.getItemInfo(itemId,page,limit,price);
+            if (itemCommodityVOS == null) {
                 throw new Exception();
             }
-            return ResponseVO.getSuccessResponseVo(itemInfo);
+            return ResponseVO.getSuccessResponseVo(itemCommodityVOS);
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new BusinessException("获取网店信息失败，请联系后台人员");
@@ -50,13 +47,13 @@ public class ItemInfoController {
 
     @GetMapping("getItemEvaluate/{itemId}/{page}/{limit}")
     @ApiOperation("根据网店id获取网店评价信息")
-    public ResponseVO getItemEvaluate(@PathVariable String itemId,@PathVariable Integer page,@PathVariable Integer limit) {
+    public ResponseVO<List<EvaluateVO>> getItemEvaluate(@PathVariable String itemId,@PathVariable Integer page,@PathVariable Integer limit) {
         try {
-            ItemEvaluateVO itemEvaluate = itemInfoService.getItemEvaluate(itemId,page,limit);
-            if (itemEvaluate == null) {
+            List<EvaluateVO> EvaluateVOs = itemInfoService.getItemEvaluate(itemId,page,limit);
+            if (EvaluateVOs == null) {
                 throw new Exception();
             }
-            return ResponseVO.getSuccessResponseVo(itemEvaluate);
+            return ResponseVO.getSuccessResponseVo(EvaluateVOs);
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new BusinessException("获取网店信息失败，请联系后台人员");
