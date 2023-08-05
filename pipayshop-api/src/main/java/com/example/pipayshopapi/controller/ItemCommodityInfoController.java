@@ -158,7 +158,7 @@ public class ItemCommodityInfoController {
             return ResponseVO.getSuccessResponseVo(list);
         } catch (Exception e) {
             log.error(e.getMessage());
-            throw new BusinessException("查询失败，请联系后台人" + "、员");
+            throw new BusinessException("查询失败，请联系后台人员");
         }
     }
 
@@ -173,7 +173,7 @@ public class ItemCommodityInfoController {
             return ResponseVO.getSuccessResponseVo(vo);
         } catch (Exception e) {
             log.error(e.getMessage());
-            throw new BusinessException("查询失败，请联系后台人" + "、员");
+            throw new BusinessException("查询失败，请联系后台人员");
         }
     }
 
@@ -191,7 +191,7 @@ public class ItemCommodityInfoController {
             return ResponseVO.getSuccessResponseVo(null);
         } catch (Exception e) {
             log.error(e.getMessage());
-            throw new BusinessException("查询失败，请联系后台人" + "、员");
+            throw new BusinessException("查询失败，请联系后台人员");
         }
     }
 
@@ -208,7 +208,7 @@ public class ItemCommodityInfoController {
             return ResponseVO.getSuccessResponseVo(null);
         } catch (Exception e) {
             log.error(e.getMessage());
-            throw new BusinessException("删除，请联系后台人" + "、员");
+            throw new BusinessException("删除，请联系后台人员");
         }
     }
 

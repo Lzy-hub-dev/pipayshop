@@ -59,8 +59,6 @@
                  </if>
             </where>
         <choose>
-            <when test="score == null">
-            </when >
             <when test="score">
                 order By score
             </when >

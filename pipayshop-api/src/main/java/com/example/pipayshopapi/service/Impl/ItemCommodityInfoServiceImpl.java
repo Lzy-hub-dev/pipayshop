@@ -17,17 +17,13 @@ import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.*;
 import com.example.pipayshopapi.service.ItemCommodityInfoService;
-import com.example.pipayshopapi.util.FileUploadUtil;
 import com.example.pipayshopapi.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * <p>
@@ -108,7 +104,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     }
 
     /**
-     * 网店首页下面的搜索商品接口
+     * 下面的搜索商品接口
      */
     @Override
     public PageDataVO itemSearchCommodity(ItemSearchConditionDTO dto) {
@@ -156,10 +152,13 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
                 wrapper.orderByDesc(ItemCommodityInfo::getPrice);
             }
         }
-
+        // 发布时间升序排列
+        if (dto.getCreateTime()) {
+            wrapper.orderByDesc(ItemCommodityInfo::getCreateTime);
+        }
         // 设置分页参数
         Page<ItemCommodityInfo> page = new Page<>(dto.getPage(), dto.getLimit());
-
+        wrapper.eq(ItemCommodityInfo::getStatus, 0);
         // 查询分页数据封装到page中
         commodityInfoMapper.selectPage(page, wrapper);
         // 封装数据
@@ -217,8 +216,8 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
             BrandInfo brandInfo = brandInfoMapper.selectOne(new QueryWrapper<BrandInfo>()
                     .eq("b_id", brandId)
                     .eq("del_flag", 0)
-                    .select("brand"));
-            commodityDetailVO.setBrand(brandInfo.getBrand());
+                    .select("title"));
+            commodityDetailVO.setTitle(brandInfo.getTitle());
         }
         // 封装该商品的评论总数
         int evaluateCount = itemCommodityEvaluateMapper.selectCount(new QueryWrapper<ItemCommodityEvaluate>()

@@ -8,9 +8,7 @@ import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ShopUserFollowInfoVO;
 import com.example.pipayshopapi.mapper.ShopFollowFocusMapper;
-import com.example.pipayshopapi.mapper.UserInfoMapper;
 import com.example.pipayshopapi.service.ShopFollowFocusService;
-import com.example.pipayshopapi.service.UserInfoService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -32,22 +30,29 @@ public class ShopFollowFocusServiceImpl extends ServiceImpl<ShopFollowFocusMappe
     @Resource
     private ShopFollowFocusMapper shopFollowFocusMapper;
 
-    @Resource
-    private UserInfoService userInfoService;
-
-    @Resource
-    private UserInfoMapper userInfoMapper;
-
     /**
      * 关注实体店
      */
     @Override
     public Boolean userFollowItem(String followId, String shopId) {
-        ShopFollowFocus shopFollow = new ShopFollowFocus();
-        shopFollow.setFollowId(followId);
-        shopFollow.setShopId(shopId);
-        int insert = shopFollowFocusMapper.insert(shopFollow);
-        return insert > 0;
+        // 查询有没有曾经关注过，有就直接就是吧status字段改为0
+        ShopFollowFocus shopFollowFocus = shopFollowFocusMapper.selectOne(new QueryWrapper<ShopFollowFocus>()
+                .eq("shop_id", shopId)
+                .eq("follow_id", followId)
+                .eq("status", 1));
+        if (shopFollowFocus == null){
+            ShopFollowFocus shopFollow = new ShopFollowFocus();
+            shopFollow.setFollowId(followId);
+            shopFollow.setShopId(shopId);
+            int insert = shopFollowFocusMapper.insert(shopFollow);
+            return insert > 0;
+        }
+        int update = shopFollowFocusMapper.update(null, new UpdateWrapper<ShopFollowFocus>()
+                .eq("shop_id", shopId)
+                .eq("follow_id", followId)
+                .set("status", 0)
+                .set("update_time", new Date()));
+        return update > 0;
     }
 
     /**
