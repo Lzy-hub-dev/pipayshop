@@ -33,7 +33,11 @@ public class itemCommoditiesVO {
     /**
      * 商品首图
      */
-    private String commodityPic;
+    // private String commodityPic;
+    /**
+     * 商品的展示图路径
+     */
+    private String avatarImag;
     /**
      * 是否会员(0映射为false，1映射为true)
      */
