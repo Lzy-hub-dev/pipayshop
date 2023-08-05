@@ -45,5 +45,15 @@
         where
             item_id = #{itemId} and status = 0
     </select>
+    <select id="selectAllFollowItemByUserId" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM item_follow_focus f
+                 INNER JOIN
+             item_info i
+             ON f.item_id = i.item_id
+        WHERE f.follow_id = #{userId}
+          and f.`status` = 0
+          and i.`status` = 0
+    </select>
 
 </mapper>

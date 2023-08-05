@@ -33,7 +33,7 @@ public interface ItemInfoService extends IService<ItemInfo> {
      * @param userId
      * @return
      */
-    List<ItemInfo> getFollowList(String userId, Integer page,Integer limit);
+    PageDataVO getFollowList(String userId, Integer page,Integer limit);
     /**
      * 根据用户id获取网店数量
      * @param userId
