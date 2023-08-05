@@ -30,6 +30,7 @@
         WHERE f.follow_id = #{userId}
           and f.`status` = 0
           and i.`status` = 0
+        limit #{page},#{limit}
     </select>
 
     <select id="getItemInfoByUid" resultType="com.example.pipayshopapi.entity.vo.ItemMinInfoVo">
