@@ -138,12 +138,12 @@ public class ItemCommodityInfoController {
 
 
 
-    @GetMapping("history/{userId}")
+    @GetMapping("history/{page}/{limit}/{userId}")
     @ApiOperation("根据用户id查询用户浏览商品历史")
-    public ResponseVO historyList(@PathVariable("userId") String userId) {
+    public ResponseVO<PageDataVO> historyList(@PathVariable Integer page,@PathVariable Integer limit,@PathVariable("userId") String userId) {
         try {
-            List<ItemCommodityInfoVO> list = commodityInfoService.historyList(userId);
-            return ResponseVO.getSuccessResponseVo(list);
+            PageDataVO pageDataVO = commodityInfoService.historyList(page, limit, userId);
+            return ResponseVO.getSuccessResponseVo(pageDataVO);
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new BusinessException("查询失败，请联系后台人" + "、员");

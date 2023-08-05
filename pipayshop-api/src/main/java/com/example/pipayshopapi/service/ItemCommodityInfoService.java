@@ -62,7 +62,7 @@ public interface ItemCommodityInfoService extends IService<ItemCommodityInfo> {
      * @param userId
      * @return
      */
-    List<ItemCommodityInfoVO> historyList(String userId);
+    PageDataVO historyList(Integer page,Integer limit,String userId);
 
     /**
      * 根据卖家id查询网店的商品审核列表
