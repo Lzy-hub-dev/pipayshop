@@ -81,6 +81,7 @@
         AND o.shop_id = u.shop_id
         ORDER BY
         o.update_time ASC;
+        LIMIT #{page},#{limit}
     </select>
     <select id="getOrderListByShopId" resultMap="orderListResultMap">
         select
