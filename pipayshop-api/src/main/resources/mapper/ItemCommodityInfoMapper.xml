@@ -144,7 +144,7 @@
         c.price,
         c.origin_price,
         c.item_commodity_name,
-        c.avatar_imag as commodityPic,
+        c.avatar_imag,
         c.details
         FROM
         item_info info
