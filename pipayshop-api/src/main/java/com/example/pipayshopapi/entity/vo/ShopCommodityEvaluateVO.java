@@ -16,20 +16,6 @@ import java.util.Date;
 @AllArgsConstructor
 public class ShopCommodityEvaluateVO {
     /**
-     * 网店id
-     */
-    private String itemId;
-
-    /**
-     * 商品id
-     */
-    private String commodityId;
-    /**
-     * 商品名称
-     */
-    private String commodityName;
-
-    /**
      * 评价
      */
     private String evaluate;
@@ -60,5 +46,4 @@ public class ShopCommodityEvaluateVO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
-
 }

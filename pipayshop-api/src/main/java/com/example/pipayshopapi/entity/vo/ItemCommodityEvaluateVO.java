@@ -5,23 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
+/**
+ * @author wzx
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemCommodityEvaluateVO {
-
-    /**
-     * 网店id
-     */
-    private String itemId;
-
-    /**
-     * 商品id
-     */
-    private String commodityId;
 
     /**
      * 评价

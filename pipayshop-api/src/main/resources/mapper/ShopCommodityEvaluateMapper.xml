@@ -4,20 +4,16 @@
 
 
     <select id="commodityEvaluateList" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityEvaluateVO">
-        select e.item_id
-        , e.commodity_id
-        , e.evaluate
+        select
+        e.evaluate
         , e.create_time
         , e.evaluate_id
         , e.user_id
         , u.user_name
         , u.user_image
-        , s.commodity_name
         from shop_commodity_evaluate e
             left join user_info u
         on u.uid = e.user_id
-        left join shop_commodity_info s
-        on s.commodity_id=e.commodity_id
         where e.commodity_id = #{commodityId}
         and e.status = 0
         and u.status = 0

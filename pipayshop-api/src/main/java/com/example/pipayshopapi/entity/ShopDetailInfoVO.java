@@ -64,6 +64,7 @@ public class ShopDetailInfoVO {
     private String reservationInformation;
     /**
      * 顾客评价列表10条
+     * TODO
      */
     private List<EvaluateVO> evaluateVOList;
 }

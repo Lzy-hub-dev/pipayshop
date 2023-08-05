@@ -9,9 +9,9 @@ import com.example.pipayshopapi.entity.vo.ShopCommodityEvaluateVO;
 import com.example.pipayshopapi.mapper.ShopCommodityEvaluateMapper;
 import com.example.pipayshopapi.service.ShopCommodityEvaluateService;
 import com.example.pipayshopapi.util.StringUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -25,7 +25,7 @@ import java.util.List;
 @Service
 public class ShopCommodityEvaluateServiceImpl extends ServiceImpl<ShopCommodityEvaluateMapper, ShopCommodityEvaluate> implements ShopCommodityEvaluateService {
 
-    @Autowired
+    @Resource
     private ShopCommodityEvaluateMapper shopCommodityEvaluateMapper;
     /**
      * 实体店-商品-评论列表
