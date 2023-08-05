@@ -34,8 +34,6 @@ public interface ItemCommodityInfoMapper extends BaseMapper<ItemCommodityInfo> {
     List<ItemCommodityInfoVO> selectCollectProductByUserId(@Param("page") Integer page, @Param("limit") Integer limit,@Param("userId") String userId);
     Integer selectAllCollectProductByUserId(@Param("userId") String userId);
 
-
-
     List<ItemCommodityInfoVO> selectHistoryProductByUserId(String userId);
 
     List<ItemCommodityVO> examineCommodityList(ExamineCommodityDTO dto);
