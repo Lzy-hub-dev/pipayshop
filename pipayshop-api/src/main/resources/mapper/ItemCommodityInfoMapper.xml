@@ -4,9 +4,9 @@
 
     <select id="commodityOfCateList" resultType="com.example.pipayshopapi.entity.vo.CommodityVO">
 
-        SELECT i.commodity_id, i.item_commodity_name, i.origin_price, i.price, i.details, i.avatar_imag,it.membership
+        SELECT i.commodity_id, i.item_commodity_name, i.origin_price, i.price, i.details, i.avatar_imag, it.membership
         FROM item_commodity_info as i
-            join item_info it on it.item_id=i.item_id
+                 join item_info it on it.item_id = i.item_id
                  JOIN item_commodity_category as c on i.category_id = c.category_id
         where c.category_id = #{secondCategoryId} limit ${startIndex}
             , ${number}
@@ -23,7 +23,7 @@
         select i.commodity_id,i.item_commodity_name,i.origin_price,i.price,i.details,i.imags_list,it.membership
         FROM item_commodity_info i
         join item_info it
-        on  it.item_id=i.item_id
+        on it.item_id=i.item_id
         where i.item_id=#{itemId}
         <if test="brandId">
             and i.brand_id=#{brandId}
@@ -90,15 +90,15 @@
         FROM item_info i
         INNER JOIN user_info u ON i.uid = u.uid
         INNER JOIN item_commodity_info c ON i.item_id = c.item_id
-         WHERE u.uid = #{userId}
-           <choose>
-               <when test="examineStatus == 2">
-                   AND c.`status` = #{examineStatus}
-               </when>
-               <otherwise>
-                   AND c.`status` != 2
-               </otherwise>
-           </choose>
+        WHERE u.uid = #{userId}
+        <choose>
+            <when test="examineStatus == 2">
+                AND c.`status` = #{examineStatus}
+            </when>
+            <otherwise>
+                AND c.`status` != 2
+            </otherwise>
+        </choose>
         limit #{pageNumber},#{pageSize}
     </select>
 
@@ -128,28 +128,34 @@
         <choose>
             <when test="price">
                 order By price
-            </when >
+            </when>
             <when test="!price">
                 order By price desc
-            </when >
+            </when>
             <otherwise>
             </otherwise>
         </choose>
         limit #{page},#{limit}
     </select>
     <select id="selectMembershipBycommodityIdList"
-            resultType="com.example.pipayshopapi.entity.vo.ItemCommodityVO">
+            resultType="com.example.pipayshopapi.entity.vo.itemCommoditiesVO">
         SELECT
-            c.commodity_id,info.membership
+        c.commodity_id,
+        info.membership,
+        c.price,
+        c.origin_price,
+        c.item_commodity_name,
+        c.avatar_imag as commodityPic,
+        c.details
         FROM
-            item_info info
-                INNER JOIN
-            item_commodity_info c
-            ON
-                info.item_id=c.item_id
+        item_info info
+        INNER JOIN
+        item_commodity_info c
+        ON
+        info.item_id=c.item_id
         WHERE
-            c.commodity_id IN
-            <foreach  item="item" collection="list" index="index"  open="(" separator="," close=")">#{item}</foreach>
+        c.commodity_id IN
+        <foreach item="item" collection="list" index="index" open="(" separator="," close=")">#{item}</foreach>
     </select>
     <select id="selectAllCollectProductByUserId" resultType="java.lang.Integer">
         select count(*)

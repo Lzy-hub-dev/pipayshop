@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -173,14 +174,15 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
             return null;
         }
         List<String> commodityIdList = records.stream().map(commodity -> commodity.getCommodityId()).collect(Collectors.toList());
-        List<ItemCommodityVO> resultList = commodityInfoMapper.selectMembershipBycommodityIdList(commodityIdList);
+        List<itemCommoditiesVO> resultList = commodityInfoMapper.selectMembershipBycommodityIdList(commodityIdList);
+        /*ArrayList<Object> container = new ArrayList<>();
         records.stream().forEach(i1 -> resultList.stream().forEach(i2 -> {
             if (StringUtils.equals(i1.getCommodityId(), i2.getCommodityId())) {
-                i1.setMembership(i2.getMembership());
+                container.add(i2);
             }
-        }));
+        }));*/
         // 封装数据
-        return new PageDataVO((int) page.getTotal(), page.getRecords());
+        return new PageDataVO((int) page.getTotal(), resultList);
 
     }
 
