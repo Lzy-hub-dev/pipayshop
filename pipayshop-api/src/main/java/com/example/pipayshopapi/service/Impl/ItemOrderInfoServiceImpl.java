@@ -39,8 +39,17 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
     ItemCommodityInfoMapper itemCommodityInfoMapper;
 
     @Override
-    public List<OrderListVO> getOrderList(GetOrderDataVO getOrderDataVO) {
-        return itemOrderInfoMapper.getOrderList(getOrderDataVO);
+    public PageDataVO getOrderList(GetOrderDataVO getOrderDataVO) {
+        List<OrderListVO> orderList = itemOrderInfoMapper.getOrderList(getOrderDataVO);
+        getOrderDataVO.setPageSize(null);
+        List<OrderListVO> count = itemOrderInfoMapper.getOrderList(getOrderDataVO);
+        if (count == null) {
+            return new PageDataVO();
+        }
+        if (orderList == null || orderList.size() == 0) {
+            return new PageDataVO();
+        }
+        return new PageDataVO(count.size(), orderList);
     }
 
     @Override
