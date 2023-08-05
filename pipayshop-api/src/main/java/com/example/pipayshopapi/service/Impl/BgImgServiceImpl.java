@@ -55,8 +55,6 @@ public class BgImgServiceImpl extends ServiceImpl<BgImgMapper, BgImg> implements
 
     /**
      * 查询首页轮播背景图列表
-     *
-     * @return
      */
     @Override
     public List<BgImgVO> selectBgImgList(int category) {
@@ -65,9 +63,6 @@ public class BgImgServiceImpl extends ServiceImpl<BgImgMapper, BgImg> implements
 
     /**
      * 逻辑删除店的首页背景图片
-     *
-     * @param bgId
-     * @return
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
