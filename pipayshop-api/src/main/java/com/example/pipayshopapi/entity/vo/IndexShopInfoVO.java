@@ -25,4 +25,8 @@ public class IndexShopInfoVO {
     private String address;
     private String tagList;
     private List<String> shopTagsList;
+    /**
+     * 是否会员(0映射为false，1映射为true)
+     */
+    private Boolean membership;
 }
