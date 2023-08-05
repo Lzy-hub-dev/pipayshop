@@ -120,5 +120,25 @@
         WHERE h.user_id = #{userId}
           AND i.`status` = 0
     </select>
+    <select id="selectCommdityListByShopId" resultType="java.lang.Integer">
+        select count(1)
+        FROM
+            shop_commodity_info i
+        WHERE
+            i.shop_id=#{shopId}
+    </select>
+    <select id="selectCommdityListByShopIdPage" resultType="com.example.pipayshopapi.entity.vo.ApplicationRecordVO">
+        select
+               i.commodity_id,
+               i.commodity_name,
+               i.avatar_imag,
+               i.status,
+               i.price
+        FROM
+            shop_commodity_info i
+        WHERE
+            i.shop_id=#{shopId}
+            LIMIT #{page},#{limit}
+    </select>
 
 </mapper>

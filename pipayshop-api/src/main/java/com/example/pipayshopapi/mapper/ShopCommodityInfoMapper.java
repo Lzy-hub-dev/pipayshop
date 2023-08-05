@@ -3,6 +3,7 @@ package com.example.pipayshopapi.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopDetailInfoVO;
+import com.example.pipayshopapi.entity.vo.ApplicationRecordVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityInfo1VO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityInfoVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityListVO;
@@ -45,7 +46,7 @@ public interface ShopCommodityInfoMapper extends BaseMapper<ShopCommodityInfo> {
      * @return
      */
     List<ShopCommodityInfoVO> selectCommodityByUidAndStatus (@Param("page") Integer page, @Param("limit") Integer limit,
-                                                             @Param("uid") String uid, @Param("status") Integer status);
+                                                      @Param("uid") String uid, @Param("status") Integer status);
 
     /**
      * 根据用户id查询，商品状态查询审核通过和未审核列表的总数
@@ -72,4 +73,8 @@ public interface ShopCommodityInfoMapper extends BaseMapper<ShopCommodityInfo> {
     Integer selectAllCommodityByShopId(@Param("shopId")String shopId);
 
     ShopDetailInfoVO selectShopInfoByCommodityId(@Param("commodityId")String commodityId);
+
+    Integer selectCommdityListByShopId(@Param("shopId")String shopId);
+
+    List<ApplicationRecordVO> selectCommdityListByShopIdPage(@Param("page") Integer page, @Param("limit")Integer limit, @Param("shopId")String shopId);
 }

@@ -73,11 +73,13 @@ public class ShopCommodityInfoController {
         }
     }
 
-    @GetMapping("selectCommodityByUidAndStatus")
-    @ApiOperation("根据用户id查询，商品状态查询审核通过和未审核列表")
-    public ResponseVO<PageDataVO> selectCommodityByUidAndStatus(OrderPageVO pageVO) {
+    @GetMapping("selectCommodityByShopIdAndStatus/{page}/{limit}/{shopId}")
+    @ApiOperation("根据店铺id查询商品列表")
+    public ResponseVO<PageDataVO> selectCommodityByUidAndStatus(@PathVariable("page") Integer page,
+                                                                @PathVariable("limit")Integer limit,
+                                                                @PathVariable("shopId")String shopId) {
         try {
-            PageDataVO pageDataVO = shopCommodityService.selectCommodityByUidAndStatus(pageVO);
+            PageDataVO pageDataVO = shopCommodityService.selectCommodityByUidAndStatus(page, limit, shopId);
             return ResponseVO.getSuccessResponseVo(pageDataVO);
         } catch (Exception e) {
             e.printStackTrace();
