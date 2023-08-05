@@ -3,6 +3,7 @@ package com.example.pipayshopapi.mapper;
 import com.example.pipayshopapi.entity.ShopEvaluate;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -19,5 +20,5 @@ public interface ShopEvaluateMapper extends BaseMapper<ShopEvaluate> {
      * @param shopId
      * @return
      */
-    Integer selectShopEvaluateCount(String shopId);
+    Integer selectShopEvaluateCount(@Param("shopId")String shopId);
 }
