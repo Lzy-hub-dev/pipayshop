@@ -139,8 +139,12 @@
             AND o.commodity_id = i.commodity_id
             AND o.item_id = u.item_id
         ORDER BY
-            o.update_time ASC;
+            o.update_time ASC
+        <if test="getOrderDataVO.pageSize!=null  and getOrderDataVO.currentPage!=null">
+            LIMIT #{getOrderDataVO.currentPage},#{getOrderDataVO.pageSize}
+        </if>
     </select>
+
     <select id="getMyOrderByUid" resultType="com.example.pipayshopapi.entity.vo.MyItemOrderInfoVO">
         SELECT ioi.order_id,ioi.transaction_amount,ioi.uid,ioi.order_status,  ii.item_id,ii.item_name,ii.user_image,  ici.commodity_id,ici.item_commodity_name,ici.details,avatar_imag
         from item_order_info as ioi

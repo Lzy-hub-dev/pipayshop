@@ -19,7 +19,7 @@ import java.util.List;
 public interface ItemOrderInfoService extends IService<ItemOrderInfo> {
 
 
-    List<OrderListVO> getOrderList(GetOrderDataVO getOrderDataVO);
+    PageDataVO getOrderList(GetOrderDataVO getOrderDataVO);
 
     int delOrderByOrderId(String orderId);
 

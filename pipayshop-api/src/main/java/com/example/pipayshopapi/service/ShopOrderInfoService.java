@@ -3,10 +3,7 @@ package com.example.pipayshopapi.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.example.pipayshopapi.entity.ShopOrderInfo;
-import com.example.pipayshopapi.entity.vo.GetOrderDataVO;
-import com.example.pipayshopapi.entity.vo.OrderListVO;
-import com.example.pipayshopapi.entity.vo.PayOrderVO;
-import com.example.pipayshopapi.entity.vo.ShopOrderDetailVO;
+import com.example.pipayshopapi.entity.vo.*;
 
 import java.util.List;
 
@@ -20,7 +17,7 @@ import java.util.List;
  */
 public interface ShopOrderInfoService extends IService<ShopOrderInfo> {
 
-    List<OrderListVO> getOrderList(GetOrderDataVO getOrderDataVO);
+    PageDataVO getOrderList(GetOrderDataVO getOrderDataVO);
 
     int delOrderByOrderId(String orderId);
 
