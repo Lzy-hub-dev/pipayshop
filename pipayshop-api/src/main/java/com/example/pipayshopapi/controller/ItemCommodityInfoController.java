@@ -57,7 +57,7 @@ public class ItemCommodityInfoController {
     }
 
 
-    @PostMapping(" issueItemCommodity")
+    @PostMapping("issueItemCommodity")
     @ApiOperation("发布网店商品")
     public ResponseVO issueItemCommodity(@RequestBody ApplyItemCommodityDTO applyItemCommodityDTO){
 
@@ -212,9 +212,9 @@ public class ItemCommodityInfoController {
         }
     }
 
-    @PostMapping("itemTopImags{multipartFile}")
+    @PostMapping("itemTopImags")
     @ApiOperation("网店头像图片上传")
-    public ResponseVO<String> itemTopImagsUp(@PathVariable MultipartFile multipartFile){
+    public ResponseVO<String> itemTopImagsUp(MultipartFile multipartFile){
         try {
             String itemTopImags = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.ROOM_TOP_IMG);
             return ResponseVO.getSuccessResponseVo(itemTopImags);
@@ -224,9 +224,9 @@ public class ItemCommodityInfoController {
         }
     }
 
-    @PostMapping("itemImagsListUp{multipartFile}")
+    @PostMapping("itemImagsListUp")
     @ApiOperation("商品图片的地址集合上传")
-    public ResponseVO<String> itemImagsListUp(@PathVariable MultipartFile multipartFile){
+    public ResponseVO<String> itemImagsListUp(MultipartFile multipartFile){
         try {
             String itemImagsList = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.ROOM_TOP_IMG);
             return ResponseVO.getSuccessResponseVo(itemImagsList);
@@ -236,9 +236,9 @@ public class ItemCommodityInfoController {
         }
     }
 
-    @PostMapping("itemDetailImagsUp{multipartFile}")
+    @PostMapping("itemDetailImagsUp")
     @ApiOperation("商品详情图片上传")
-    public ResponseVO<String> roomTopImageUp(@PathVariable MultipartFile multipartFile){
+    public ResponseVO<String> roomTopImageUp(MultipartFile multipartFile){
         try {
             String itemDetailImags = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.ROOM_TOP_IMG);
             return ResponseVO.getSuccessResponseVo(itemDetailImags);

@@ -13,15 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemInfoVO {
-
-    /**
-     * 网店id
-     */
     private String itemId;
-
-    /**
-     * 用户头像
-     */
     private String userImage;
 
     /**
@@ -53,9 +45,5 @@ public class ItemInfoVO {
      * 是否会员(0映射为false，1映射为true)
      */
     private Boolean membership;
-
-    /**
-     * 网店旗下所属商品信息
-     */
     private List<ItemCommodityVO> commodityInfoList;
 }

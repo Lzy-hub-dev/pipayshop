@@ -3,7 +3,6 @@ package com.example.pipayshopapi.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopDetailInfoVO;
-import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,7 +31,7 @@ public interface ShopCommodityInfoService extends IService<ShopCommodityInfo> {
      * @param userId
      * @return
      */
-    List<ShopCommodityInfoVO> getCollectList(String userId);
+    PageDataVO getCollectList(Integer page,Integer limit,String userId);
 
 
     /**
@@ -78,4 +77,21 @@ public interface ShopCommodityInfoService extends IService<ShopCommodityInfo> {
      * @return
      */
     boolean updateCommodityStatus(String commodityId,Integer status);
+
+    /**
+     * 根据商品id，上架变为下架
+     *
+     * @param commodityId
+     * @return
+     */
+    boolean updateCommodityUp(String commodityId);
+
+
+    /**
+     * 根据商品id，下架变为审核中
+     *
+     * @param commodityId
+     * @return
+     */
+    boolean updateCommodityCheck(String commodityId);
 }

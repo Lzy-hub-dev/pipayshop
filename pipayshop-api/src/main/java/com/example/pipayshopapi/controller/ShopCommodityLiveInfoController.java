@@ -8,18 +8,14 @@ import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoListVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoVO;
 import com.example.pipayshopapi.exception.BusinessException;
-import com.example.pipayshopapi.mapper.ShopCommodityLiveInfoMapper;
 import com.example.pipayshopapi.service.ShopCommodityLiveInfoService;
 import com.example.pipayshopapi.util.FileUploadUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
-
-import org.springframework.stereotype.Controller;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -51,9 +47,9 @@ public class ShopCommodityLiveInfoController {
     }
 
 
-    @PostMapping("roomTopImageUp{multipartFile}")
+    @PostMapping("roomTopImageUp")
     @ApiOperation("酒店头像图片上传")
-    public ResponseVO<String> roomTopImageUp(@PathVariable MultipartFile multipartFile){
+    public ResponseVO<String> roomTopImageUp(MultipartFile multipartFile){
         try {
             String room_top_img = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.ROOM_TOP_IMG);
             return ResponseVO.getSuccessResponseVo(room_top_img);
@@ -63,9 +59,9 @@ public class ShopCommodityLiveInfoController {
         }
     }
 
-    @PostMapping("roomImageUp/{multipartFile}")
+    @PostMapping("roomImageUp")
     @ApiOperation("酒店轮播图上传")
-    public ResponseVO<String> roomImageUp(@PathVariable MultipartFile multipartFile){
+    public ResponseVO<String> roomImageUp(MultipartFile multipartFile){
         try {
             String uploadFile = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.ROOM_IMAGE_LIST);
             return ResponseVO.getSuccessResponseVo(uploadFile);

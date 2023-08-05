@@ -1,22 +1,20 @@
 package com.example.pipayshopapi.controller;
 
 
-import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopDetailInfoVO;
-import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
-import com.example.pipayshopapi.entity.vo.*;
+import com.example.pipayshopapi.entity.vo.CommodityStatusPageVO;
+import com.example.pipayshopapi.entity.vo.OrderPageVO;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopCommodityInfoService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * <p>
@@ -110,6 +108,34 @@ public class ShopCommodityInfoController {
             return ResponseVO.getSuccessResponseVo("根据商品id，更改商品的上下架状态成功");
         } catch (Exception e) {
             throw new BusinessException("根据商品id，更改商品的上下架状态失败，请联系后台人员");
+        }
+    }
+
+    @PostMapping("updateCommodityUp/{commodityId}")
+    @ApiOperation("根据商品id，上架变为下架")
+    public ResponseVO<String> updateCommodityUp(@PathVariable String commodityId) {
+        try {
+            boolean result = shopCommodityService.updateCommodityUp(commodityId);
+            if (!result) {
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("根据商品id，上架变为下架成功");
+        } catch (Exception e) {
+            throw new BusinessException("根据商品id，上架变为下架失败，请联系后台人员");
+        }
+    }
+
+    @PostMapping("updateCommodityCheck/{commodityId}")
+    @ApiOperation("根据商品id，下架变为审核中")
+    public ResponseVO<String> updateCommodityCheck(@PathVariable String commodityId) {
+        try {
+            boolean result = shopCommodityService.updateCommodityCheck(commodityId);
+            if (!result) {
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("根据商品id，下架变为审核中成功");
+        } catch (Exception e) {
+            throw new BusinessException("根据商品id，下架变为审核中失败，请联系后台人员");
         }
     }
 

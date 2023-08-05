@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopDetailInfoVO;
-import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.ShopTags;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.vo.*;
@@ -69,8 +68,6 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
         shopCommodityInfo.setPrice(applyShopCommodityDTO.getPrice());
         shopCommodityInfo.setShopId(applyShopCommodityDTO.getShopId());
         shopCommodityInfo.setResidue(applyShopCommodityDTO.getResidue());
-        shopCommodityInfo.setCategoryTopId(applyShopCommodityDTO.getCategoryTopId());
-        shopCommodityInfo.setCategoryId(applyShopCommodityDTO.getCategoryId());
         shopCommodityInfo.setReservationInformation(applyShopCommodityDTO.getReservationInformation());
 //        shopCommodityInfo.setTagList(applyShopCommodityDTO.getTagList());
         shopCommodityInfo.setMyEvaluate(applyShopCommodityDTO.getMyEvaluate());
@@ -81,8 +78,10 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
      * 根据用户id查询 用户收藏的商品列表
      */
     @Override
-    public List<ShopCommodityInfoVO> getCollectList(String userId) {
-        return shopCommodityInfoMapper.selectCollectProductByUserId(userId);
+    public PageDataVO getCollectList(Integer page,Integer limit,String userId) {
+        Integer integer = shopCommodityInfoMapper.selectAllCollectProductByUserId(userId);
+        List<ShopCommodityInfoVO> shopCommodityInfoVOS = shopCommodityInfoMapper.selectCollectProductByUserId((page - 1) * limit, limit, userId);
+        return new PageDataVO(integer,shopCommodityInfoVOS);
     }
 
 
@@ -123,6 +122,34 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
                 .eq("commodity_id", commodityId)
                 .set("status", status));
         return result>0;
+    }
+
+    /**
+     * 根据商品id，上架变为下架
+     *
+     * @param commodityId
+     * @return
+     */
+    @Override
+    public boolean updateCommodityUp(String commodityId) {
+        int result = shopCommodityInfoMapper.update(null, new UpdateWrapper<ShopCommodityInfo>()
+                .eq("commodity_id", commodityId)
+                .set("status", 2));
+        return result > 0;
+    }
+
+    /**
+     * 根据商品id，下架变为审核中
+     *
+     * @param commodityId
+     * @return
+     */
+    @Override
+    public boolean updateCommodityCheck(String commodityId) {
+        int result = shopCommodityInfoMapper.update(null, new UpdateWrapper<ShopCommodityInfo>()
+                .eq("commodity_id", commodityId)
+                .set("status", 0));
+        return result > 0;
     }
 
     /**
@@ -181,5 +208,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
         shopDetailInfoVO.setEvaluateVOList(list);
         return shopDetailInfoVO;
     }
+
+
 
 }

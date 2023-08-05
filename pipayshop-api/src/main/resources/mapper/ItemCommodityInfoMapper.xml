@@ -75,7 +75,6 @@
                  inner join item_info info
                             on info.item_id = i.item_id
         WHERE h.user_id = #{userId}
-          AND i.`status` = 0
     </select>
 
 
