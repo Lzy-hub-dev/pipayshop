@@ -36,13 +36,11 @@ public class ShopOrderController {
      */
     @GetMapping("getOrderList")
     @ApiOperation("用户的全部订单列表分页展示标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单")
-    public ResponseVO<List<OrderListVO>> getOrderList(GetOrderDataVO getOrderDataVO) {
+    public ResponseVO<PageDataVO> getOrderList(GetOrderDataVO getOrderDataVO) {
         try {
-            List<OrderListVO> list = shopOrderInfoService.getOrderList(getOrderDataVO);
-            if (list == null){
-                throw new Exception();
-            }
-            return ResponseVO.getSuccessResponseVo(list);
+            PageDataVO orderList = shopOrderInfoService.getOrderList(getOrderDataVO);
+
+            return ResponseVO.getSuccessResponseVo(orderList);
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new BusinessException("用户的订单列表展示数据为0");

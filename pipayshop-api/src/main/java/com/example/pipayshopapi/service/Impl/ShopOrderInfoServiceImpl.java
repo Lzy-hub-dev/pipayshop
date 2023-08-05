@@ -6,10 +6,7 @@ import com.example.pipayshopapi.entity.AccountInfo;
 import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopOrderInfo;
-import com.example.pipayshopapi.entity.vo.GetOrderDataVO;
-import com.example.pipayshopapi.entity.vo.OrderListVO;
-import com.example.pipayshopapi.entity.vo.PayOrderVO;
-import com.example.pipayshopapi.entity.vo.ShopOrderDetailVO;
+import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.AccountInfoMapper;
 import com.example.pipayshopapi.mapper.ShopCommodityInfoMapper;
@@ -40,8 +37,10 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
     ShopCommodityInfoMapper shopCommodityInfoMapper;
 
     @Override
-    public List<OrderListVO> getOrderList(GetOrderDataVO getOrderDataVO) {
-        return shopOrderInfoMapper.getOrderList(getOrderDataVO);
+    public PageDataVO getOrderList(GetOrderDataVO getOrderDataVO) {
+        Integer allOrderList = shopOrderInfoMapper.getAllOrderList(getOrderDataVO);
+        List<OrderListVO> orderList = shopOrderInfoMapper.getOrderList(getOrderDataVO);
+        return new PageDataVO(allOrderList-1,orderList);
     }
 
     @Override
