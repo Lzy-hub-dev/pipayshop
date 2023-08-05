@@ -309,8 +309,6 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
 
     /**
      * 根据网店id查询网店的商品列表
-     * @param itemId
-     * @return
      */
     @Override
     public ItemInfoVO commodityList(String itemId) {
