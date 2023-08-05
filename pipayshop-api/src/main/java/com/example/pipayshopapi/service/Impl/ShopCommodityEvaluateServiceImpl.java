@@ -49,8 +49,6 @@ public class ShopCommodityEvaluateServiceImpl extends ServiceImpl<ShopCommodityE
 
     /**
      * 实体店-商品-删除评论
-     *
-     * @return
      */
     @Override
     public Boolean deleteEvaluate(String evaluateId) {

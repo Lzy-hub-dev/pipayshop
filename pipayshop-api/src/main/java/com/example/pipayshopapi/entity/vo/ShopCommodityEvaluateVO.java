@@ -10,10 +10,6 @@ import java.util.Date;
 
 /**
  * @author: jiangjiafeng
- * @ClassName ShopCommodityEvaluateVO
- * @Description TODO
- * @date 2023/8/2 10:29
- * @Version 1.0
  */
 @Data
 @NoArgsConstructor
