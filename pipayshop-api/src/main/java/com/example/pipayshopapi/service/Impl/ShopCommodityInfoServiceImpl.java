@@ -69,8 +69,6 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
         shopCommodityInfo.setPrice(applyShopCommodityDTO.getPrice());
         shopCommodityInfo.setShopId(applyShopCommodityDTO.getShopId());
         shopCommodityInfo.setResidue(applyShopCommodityDTO.getResidue());
-        shopCommodityInfo.setCategoryTopId(applyShopCommodityDTO.getCategoryTopId());
-        shopCommodityInfo.setCategoryId(applyShopCommodityDTO.getCategoryId());
         shopCommodityInfo.setReservationInformation(applyShopCommodityDTO.getReservationInformation());
 //        shopCommodityInfo.setTagList(applyShopCommodityDTO.getTagList());
         shopCommodityInfo.setMyEvaluate(applyShopCommodityDTO.getMyEvaluate());
