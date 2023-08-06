@@ -4,8 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.UserInfo;
-import com.example.pipayshopapi.entity.enums.Country;
-import com.example.pipayshopapi.entity.enums.Language;
 import com.example.pipayshopapi.entity.vo.ItemMinInfoVo;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -113,4 +111,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         return result > 0;
     }
 
+    @Override
+    public String getItemIdByUserId(String userId) {
+        return userInfoMapper.getItemIdByUserId(userId);
+    }
 }

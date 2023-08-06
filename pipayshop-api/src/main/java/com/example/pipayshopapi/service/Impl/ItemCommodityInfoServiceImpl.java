@@ -12,7 +12,6 @@ import com.example.pipayshopapi.entity.ItemCommodityEvaluate;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.ItemFollowFocus;
 import com.example.pipayshopapi.entity.dto.ApplyItemCommodityDTO;
-import com.example.pipayshopapi.entity.dto.ExamineCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -326,12 +325,10 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
 
     /**
      * 根据卖家id查询网店的商品审核列表
-     *
-     * @return
      */
     @Override
-    public List<ItemCommodityVO> examineCommodityList(ExamineCommodityDTO dto) {
-        return commodityInfoMapper.examineCommodityList(dto);
+    public List<AuditItemVO> examineCommodityList(String itemId) {
+        return commodityInfoMapper.examineCommodityList(itemId);
     }
 
 

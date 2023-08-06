@@ -98,14 +98,10 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
 
     /**
      * 根据实体店id查询商品列表
-     *
-     * @param shopId
      */
     @Override
-    public PageDataVO selectCommodityByUidAndStatus(Integer page,Integer limit,String shopId) {
-        Integer integer = shopCommodityInfoMapper.selectCommdityListByShopId(shopId);
-        List<ApplicationRecordVO> applicationRecordVO = shopCommodityInfoMapper.selectCommdityListByShopIdPage(page-1, limit, shopId);
-        return new PageDataVO(integer,applicationRecordVO);
+    public List<ApplicationRecordVO> selectCommodityByUidAndStatus(String shopId) {
+        return shopCommodityInfoMapper.selectCommdityListByShopIdPage(shopId);
     }
 
 
