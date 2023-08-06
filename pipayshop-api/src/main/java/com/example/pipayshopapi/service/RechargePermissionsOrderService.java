@@ -2,6 +2,7 @@ package com.example.pipayshopapi.service;
 
 import com.example.pipayshopapi.entity.RechargePermissionsOrder;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.pipayshopapi.entity.vo.RechargePermissionsOrderVO;
 
 /**
  * <p>
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface RechargePermissionsOrderService extends IService<RechargePermissionsOrder> {
 
+    Boolean updateUploadBalanceInfo(RechargePermissionsOrderVO rechargePermissionsOrderVO);
 }
