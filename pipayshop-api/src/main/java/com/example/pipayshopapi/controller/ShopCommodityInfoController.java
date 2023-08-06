@@ -3,6 +3,7 @@ package com.example.pipayshopapi.controller;
 
 import com.example.pipayshopapi.entity.ShopDetailInfoVO;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
+import com.example.pipayshopapi.entity.vo.ApplicationRecordVO;
 import com.example.pipayshopapi.entity.vo.CommodityStatusPageVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -72,14 +74,12 @@ public class ShopCommodityInfoController {
         }
     }
 
-    @GetMapping("selectCommodityByShopIdAndStatus/{page}/{limit}/{shopId}")
+    @GetMapping("selectCommodityByShopIdAndStatus/{shopId}")
     @ApiOperation("根据店铺id查询商品列表(审核相关)")
-    public ResponseVO<PageDataVO> selectCommodityByUidAndStatus(@PathVariable("page") Integer page,
-                                                                @PathVariable("limit")Integer limit,
-                                                                @PathVariable("shopId")String shopId) {
+    public ResponseVO<List<ApplicationRecordVO>> selectCommodityByUidAndStatus(@PathVariable("shopId")String shopId) {
         try {
-            PageDataVO pageDataVO = shopCommodityService.selectCommodityByUidAndStatus(page, limit, shopId);
-            return ResponseVO.getSuccessResponseVo(pageDataVO);
+            List<ApplicationRecordVO> list = shopCommodityService.selectCommodityByUidAndStatus(shopId);
+            return ResponseVO.getSuccessResponseVo(list);
         } catch (Exception e) {
             e.printStackTrace();
             throw new BusinessException("根据用户id查询，商品状态查询审核通过和未审核列表失败，请联系后台人员");

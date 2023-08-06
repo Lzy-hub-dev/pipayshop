@@ -76,5 +76,5 @@ public interface ShopCommodityInfoMapper extends BaseMapper<ShopCommodityInfo> {
 
     Integer selectCommdityListByShopId(@Param("shopId")String shopId);
 
-    List<ApplicationRecordVO> selectCommdityListByShopIdPage(@Param("page") Integer page, @Param("limit")Integer limit, @Param("shopId")String shopId);
+    List<ApplicationRecordVO> selectCommdityListByShopIdPage(@Param("shopId")String shopId);
 }
