@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author wzx
@@ -23,9 +24,11 @@ public class CommodityDetailVO {
 
     private BigDecimal originPrice;
 
-    private List<String> colorList;
+    private Map<String, List<String>> typeMap;
 
-    private List<String> sizeList;
+//    private List<String> colorList;
+
+//    private List<String> sizeList;
 
     private String originAddress;
 

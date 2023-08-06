@@ -23,7 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -188,18 +190,19 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         ItemCommodityInfo itemCommodityInfo = commodityInfoMapper.selectOne(new QueryWrapper<ItemCommodityInfo>()
                 .eq("commodity_id", commodityId));
         String itemId = itemCommodityInfo.getItemId();
+        Map<String, List<String>> typeMap = new HashMap<>();
         CommodityDetailVO commodityDetailVO = new CommodityDetailVO(itemCommodityInfo.getCommodityId(), null, itemCommodityInfo.getItemCommodityName()
-                , itemCommodityInfo.getOriginPrice(), null, null, itemCommodityInfo.getOriginAddress(), null
+                , itemCommodityInfo.getOriginPrice(), null, itemCommodityInfo.getOriginAddress(), null
                 , itemId, itemCommodityInfo.getPrice(), itemCommodityInfo.getDetails(), null,
                 itemCommodityInfo.getInventory(), itemCommodityInfo.getFreeShippingNum(), itemCommodityInfo.getCategoryId(),
                 null, null, itemCommodityInfo.getDegreeLoss(), null, null, null);
         String colorListString = itemCommodityInfo.getColorList();
         if (colorListString != null) {
-            commodityDetailVO.setColorList(JSON.parseArray(colorListString, String.class));
+            typeMap.put("colorList", JSON.parseArray(colorListString, String.class));
         }
         String sizeListString = itemCommodityInfo.getSizeList();
         if (sizeListString != null) {
-            commodityDetailVO.setSizeList(JSON.parseArray(sizeListString, String.class));
+            typeMap.put("sizeList", JSON.parseArray(sizeListString, String.class));
         }
         String acceptAddressListString = itemCommodityInfo.getAcceptAddressList();
         if (acceptAddressListString != null) {
@@ -220,6 +223,9 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         String detailImagList = itemCommodityInfo.getDetailImagList();
         if (detailImagList != null){
             commodityDetailVO.setDetailImagList(JSON.parseArray(detailImagList, String.class));
+        }
+        if (typeMap.size() != 0) {
+            commodityDetailVO.setTypeMap(typeMap);
         }
         String brandId = itemCommodityInfo.getBrandId();
         if (brandId != null) {
