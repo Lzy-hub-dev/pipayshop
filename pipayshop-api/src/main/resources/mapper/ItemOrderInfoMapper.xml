@@ -122,7 +122,7 @@
 
     <select id="getOrderList" resultMap="orderListResultMap">
         select
-            o.order_id, o.order_status, o.commodity_id, o.transaction_amount,o.number,
+            o.order_id, o.order_status, o.commodity_id, o.transaction_amount,o.number,o.commodity_specification,
             u.user_image, u.item_name, i.avatar_imag, i.details
         from
             item_order_info o
