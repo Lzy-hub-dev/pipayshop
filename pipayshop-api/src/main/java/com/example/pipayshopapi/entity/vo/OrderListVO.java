@@ -53,6 +53,9 @@ public class OrderListVO {
      * 商品图的url地址
      */
     private String commodityImg;
-
+    /**
+     *商品的规格
+     */
+    private String commoditySpecification;
 
 }

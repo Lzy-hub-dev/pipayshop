@@ -3,6 +3,7 @@ package com.example.pipayshopapi.controller;
 import com.example.pipayshopapi.entity.vo.ItemMinInfoVo;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
+import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -122,6 +123,19 @@ public class UserInfoController {
         }catch (Exception e){
             e.printStackTrace();
             throw new RuntimeException("根据用户id查询它的网店id失败，请联系后台人员");
+        }
+    }
+
+    @GetMapping("releaseShopIsNotById/{uid}")
+    @ApiOperation("根据用户Id判断用户是否能发布实体店")
+    public ResponseVO releaseShopIsNotById(@PathVariable String uid){
+        try {
+            Integer integer = userInfoService.releaseShopIsNotById(uid);
+            return ResponseVO.getSuccessResponseVo(integer);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("失败");
+
         }
     }
 }

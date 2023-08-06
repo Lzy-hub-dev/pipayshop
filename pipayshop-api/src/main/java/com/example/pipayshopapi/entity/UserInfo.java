@@ -97,5 +97,10 @@ public class UserInfo implements Serializable {
      */
     private Integer gender;
 
+    /**
+     * 可绑定的实体店数量
+     */
+    private Integer shopNumber;
+
 
 }

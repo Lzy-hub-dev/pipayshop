@@ -309,4 +309,14 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
                 .count();
         return true;
     }
+
+    /**
+     * 校验实体店是否可以上传的商品
+     */
+    @Override
+    public Integer updateShopCommodity(String shopId) {
+        Integer integer = shopInfoMapper.updateAllNumber(shopId);
+        Integer integer1 = shopInfoMapper.updateNumber(shopId);
+        return integer-integer1;
+    }
 }
