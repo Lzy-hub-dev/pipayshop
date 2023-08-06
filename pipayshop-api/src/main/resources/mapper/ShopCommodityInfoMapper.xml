@@ -138,7 +138,6 @@
             shop_commodity_info i
         WHERE
             i.shop_id=#{shopId}
-            LIMIT #{page},#{limit}
     </select>
 
 </mapper>

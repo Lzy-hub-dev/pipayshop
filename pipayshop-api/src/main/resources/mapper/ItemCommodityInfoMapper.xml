@@ -79,28 +79,14 @@
     </select>
 
 
-    <select id="examineCommodityList" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityVO">
-        SELECT c.commodity_id,
-        i.item_name,
-        i.user_image AS seller_pic,
-        c.`status`,
-        c.avatar_imag AS commodity_pic,
-        c.item_commodity_name,
-        c.price,
-        i.membership
-        FROM item_info i
-        INNER JOIN user_info u ON i.uid = u.uid
-        INNER JOIN item_commodity_info c ON i.item_id = c.item_id
-        WHERE u.uid = #{userId}
-        <choose>
-            <when test="examineStatus == 2">
-                AND c.`status` = #{examineStatus}
-            </when>
-            <otherwise>
-                AND c.`status` != 2
-            </otherwise>
-        </choose>
-        limit #{pageNumber},#{pageSize}
+    <select id="examineCommodityList" resultType="com.example.pipayshopapi.entity.vo.AuditItemVO">
+        SELECT commodity_id,
+        `status`,
+        avatar_imag,
+        item_commodity_name,
+        price
+        FROM item_commodity_info
+        WHERE item_id = #{itemId}
     </select>
 
 
@@ -188,6 +174,14 @@
         select count(*)
         from item_commodity_info
         where item_id = #{itemId} and status = 0
+    </select>
+
+    <select id="getItemIdByOrderId" resultType="java.lang.String">
+        SELECT user_image FROM item_info WHERE item_id = (
+	SELECT item_id
+	FROM item_order_info
+	WHERE order_id = #{orderId}
+)
     </select>
 
 </mapper>

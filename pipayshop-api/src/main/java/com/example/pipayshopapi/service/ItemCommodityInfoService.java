@@ -3,7 +3,6 @@ package com.example.pipayshopapi.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.dto.ApplyItemCommodityDTO;
-import com.example.pipayshopapi.entity.dto.ExamineCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
 
@@ -67,7 +66,7 @@ public interface ItemCommodityInfoService extends IService<ItemCommodityInfo> {
     /**
      * 根据卖家id查询网店的商品审核列表
      */
-    List<ItemCommodityVO> examineCommodityList(ExamineCommodityDTO dto);
+    List<AuditItemVO> examineCommodityList(String itemId);
     /**
      * 根据网店id查询网店的商品列表
      */

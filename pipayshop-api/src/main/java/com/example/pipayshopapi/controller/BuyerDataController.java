@@ -27,6 +27,18 @@ public class BuyerDataController {
     @Resource
     private BuyerDataService buyerDataService;
 
+    @PostMapping("updateDefaultAddress/{buyerDataId}")
+    @ApiOperation("根据收货数据id修改默认地址")
+    public ResponseVO updateDefaultAddress(@PathVariable String buyerDataId){
+        try {
+            boolean result = buyerDataService.updateDefaultAddress(buyerDataId);
+            return ResponseVO.getSuccessResponseVo(result);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("根据收货数据id修改默认地址失败");
+        }
+    }
+
     @GetMapping("selectAllAddress/{userId}")
     @ApiOperation("根据用户Id查找用户的所有收货地址")
     public ResponseVO<List<BuyerData>> selectAllAddress(@PathVariable String userId){

@@ -101,5 +101,10 @@ public class ItemInfo implements Serializable {
      */
     private String userImage;
 
+    /**
+     * 商品上架剩余数
+     */
+    private Integer uploadBalance;
+
 
 }

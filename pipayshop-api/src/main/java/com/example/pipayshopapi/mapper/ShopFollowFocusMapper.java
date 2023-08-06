@@ -35,4 +35,6 @@ public interface ShopFollowFocusMapper extends BaseMapper<ShopFollowFocus> {
     List<ShopInfoVO1> selectFollowProductByUserId(@Param("page") Integer page, @Param("limit") Integer limit, @Param("userId") String userId);
 
     Integer selectAllFollowProductByUserId (@Param("userId") String userId);
+
+    Long getCount(String shopId);
 }

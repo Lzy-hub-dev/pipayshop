@@ -5,6 +5,7 @@ import com.example.pipayshopapi.entity.ItemInfo;
 import com.example.pipayshopapi.entity.vo.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -27,4 +28,7 @@ public interface ItemInfoMapper extends BaseMapper<ItemInfo> {
     ItemMinInfoVo getItemInfoByUid(@Param("uid")String userId);
 
     ItemVO selectBasicData(@Param("itemId") String itemId);
+
+    @Select("select upload_balance from item_info where item_id = #{itemId}")
+    Integer getUploadBalance(@Param("itemId")String itemId);
 }

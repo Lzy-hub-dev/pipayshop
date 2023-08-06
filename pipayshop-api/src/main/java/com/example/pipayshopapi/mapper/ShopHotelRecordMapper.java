@@ -18,5 +18,12 @@ import java.util.Date;
 @Mapper
 public interface ShopHotelRecordMapper extends BaseMapper<ShopHotelRecord> {
 
+    /**
+     * 获取房型剩余数量
+     * @param roomId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
     Integer getRentByTime(@Param("roomId") Integer roomId,@Param("startTime") Date startTime,@Param("endTime") Date endTime);
 }

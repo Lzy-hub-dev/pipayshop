@@ -21,4 +21,6 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
          * 查找基本信息
          */
         UserInfoVO selectUserInfoByUid(@Param("uid") String uid);
+
+    String getItemIdByUserId(@Param("userId")String userId);
 }
