@@ -75,4 +75,17 @@ public class BuyerDataServiceImpl extends ServiceImpl<BuyerDataMapper, BuyerData
         return result > 0;
     }
 
+    @Override
+    public boolean updateDefaultAddress(String buyerDataId) {
+        String userId = buyerDataMapper.getUserId(buyerDataId);
+        //先把全部值为0
+        buyerDataMapper.update(null,new UpdateWrapper<BuyerData>()
+                .eq("user_id",userId)
+                .set("is_default","0"));
+
+        return buyerDataMapper.update(null,new UpdateWrapper<BuyerData>()
+                .eq("buyer_data_id",buyerDataId)
+                .set("is_default","1")) > 0;
+    }
+
 }

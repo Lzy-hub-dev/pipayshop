@@ -45,4 +45,5 @@ public interface BuyerDataService extends IService<BuyerData> {
      * */
     boolean deleteBuyerDataById(String buyerId);
 
+    boolean updateDefaultAddress(String buyerDataId);
 }
