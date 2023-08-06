@@ -35,13 +35,13 @@ public class ItemInfoController {
 
     @GetMapping("getUploadBalance/{itemId}")
     @ApiOperation("根据网店id获取商品上架剩余数")
-    public ResponseVO getUploadBalance(String itemId){
+    public ResponseVO<Integer> getUploadBalance(String itemId){
         try {
             Integer uploadBalance = itemInfoMapper.getUploadBalance(itemId);
             if (uploadBalance == null) {
                 throw new Exception();
             }
-            return ResponseVO.getSuccessResponseVo(uploadBalance > 0);
+            return ResponseVO.getSuccessResponseVo(uploadBalance);
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new BusinessException("获取商品上架剩余数失败，请联系后台人员");
