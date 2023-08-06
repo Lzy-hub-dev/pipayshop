@@ -3,6 +3,7 @@ package com.example.pipayshopapi.controller;
 
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
+import com.example.pipayshopapi.mapper.ItemInfoMapper;
 import com.example.pipayshopapi.service.ItemInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,6 +29,24 @@ public class ItemInfoController {
 
     @Resource
     private ItemInfoService itemInfoService;
+
+    @Resource
+    private ItemInfoMapper itemInfoMapper;
+
+    @GetMapping("getUploadBalance/{itemId}")
+    @ApiOperation("根据网店id获取商品上架剩余数")
+    public ResponseVO<Integer> getUploadBalance(String itemId){
+        try {
+            Integer uploadBalance = itemInfoMapper.getUploadBalance(itemId);
+            if (uploadBalance == null) {
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo(uploadBalance);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new BusinessException("获取商品上架剩余数失败，请联系后台人员");
+        }
+    }
 
     @GetMapping("getItemInfo/{itemId}/{page}/{limit}/{price}")
     @ApiOperation("根据网店id获取网店商品信息")
