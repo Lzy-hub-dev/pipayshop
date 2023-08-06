@@ -78,7 +78,7 @@ public class ShopFollowFocusServiceImpl extends ServiceImpl<ShopFollowFocusMappe
     @Override
     public PageDataVO getFollowList(String shopId, Integer pageNum, Integer pageSize) {
         List<ShopUserFollowInfoVO> result = shopFollowFocusMapper.shopFollowFocusList(shopId, pageNum - 1, pageSize);
-        Long count = shopFollowFocusMapper.selectCount(new QueryWrapper<ShopFollowFocus>().eq("shop_id", shopId));
+        Long count = shopFollowFocusMapper.getCount(shopId);
         return new PageDataVO(count.intValue(), result);
     }
 
