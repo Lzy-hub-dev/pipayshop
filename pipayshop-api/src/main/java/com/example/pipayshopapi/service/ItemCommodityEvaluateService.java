@@ -2,6 +2,7 @@ package com.example.pipayshopapi.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ItemCommodityEvaluate;
+import com.example.pipayshopapi.entity.vo.ItemCommodityEvaluateAddVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 
 /**
@@ -24,7 +25,7 @@ public interface ItemCommodityEvaluateService extends IService<ItemCommodityEval
      * 新增网店商品的评价
      * @return
      */
-    boolean addItemEvaluates(ItemCommodityEvaluate itemCommodityEvaluate);
+    boolean addItemEvaluates(ItemCommodityEvaluateAddVO itemCommodityEvaluateAddVO);
 
     /**
      * 根据评价Id删除网店商品的评价

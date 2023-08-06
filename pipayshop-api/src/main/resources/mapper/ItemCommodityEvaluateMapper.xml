@@ -2,6 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.pipayshopapi.mapper.ItemCommodityEvaluateMapper">
 
+    <insert id="insertItemCommodityEvaluateAddVO">
+        insert into item_commodity_evaluate (evaluate_id,user_id,item_id,commodity_id,evaluate)
+        values (#{evaluateId},#{userId},#{itemId},#{commodityId},#{evaluate})
+    </insert>
+
 
     <select id="getItemCommodityEvaluates" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityEvaluateVO">
         select   e.evaluate ,e.create_time,e.evaluate_id

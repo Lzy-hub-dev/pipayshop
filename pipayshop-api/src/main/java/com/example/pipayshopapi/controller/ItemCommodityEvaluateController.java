@@ -1,6 +1,8 @@
 package com.example.pipayshopapi.controller;
 
 import com.example.pipayshopapi.entity.ItemCommodityEvaluate;
+import com.example.pipayshopapi.entity.vo.ItemCommodityEvaluateAddVO;
+import com.example.pipayshopapi.entity.vo.ItemCommodityEvaluateVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -45,9 +47,9 @@ public class ItemCommodityEvaluateController {
 
     @PostMapping("addItemEvaluates")
     @ApiOperation("新增网店商品的评价")
-    public ResponseVO<String> addItemEvaluates(ItemCommodityEvaluate itemCommodityEvaluate){
+    public ResponseVO<String> addItemEvaluates(ItemCommodityEvaluateAddVO itemCommodityEvaluateAddVO){
         try {
-            boolean result = itemCommodityEvaluateService.addItemEvaluates(itemCommodityEvaluate);
+            boolean result = itemCommodityEvaluateService.addItemEvaluates(itemCommodityEvaluateAddVO);
             if (!result){
                 throw new Exception();
             }
