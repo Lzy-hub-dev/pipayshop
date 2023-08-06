@@ -42,17 +42,16 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
 
     @Override
     public PageDataVO getOrderList(GetOrderDataVO getOrderDataVO) {
-        getOrderDataVO.setCurrentPage((getOrderDataVO.getCurrentPage()-1)*getOrderDataVO.getPageSize());
-        List<OrderListVO> orderList = itemOrderInfoMapper.getOrderList(getOrderDataVO);
-        getOrderDataVO.setPageSize(null);
-        List<OrderListVO> count = itemOrderInfoMapper.getOrderList(getOrderDataVO);
-        if (count == null) {
-            return new PageDataVO();
-        }
-        if (orderList == null || orderList.size() == 0) {
-            return new PageDataVO();
-        }
-        return new PageDataVO(count.size(), orderList);
+        int pageSize = getOrderDataVO.getPageSize();
+        int currentPage = getOrderDataVO.getCurrentPage();
+        // 获取分页数据
+        String userId = getOrderDataVO.getUserId();
+        int orderStatus = getOrderDataVO.getOrderStatus();
+        List<OrderListVO> orderList = itemOrderInfoMapper.getOrderList(orderStatus, userId
+        ,(currentPage - 1) * pageSize, pageSize);
+        // 获取总条数
+        int count = itemOrderInfoMapper.getOrderListCount(userId, orderStatus);
+        return new PageDataVO(count, orderList);
     }
 
     @Override
@@ -113,11 +112,15 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
     public String generateUnpaidOrder(ItemOrderInfo itemOrderInfo) {
         // 生成orderId
         String orderId = StringUtil.generateShortId();
-        itemOrderInfo.setOrderId(orderId);
-        int insert = itemOrderInfoMapper.insert(itemOrderInfo);
-        if (insert < 1){
-            String message = "生成未支付订单失败";
-            throw new BusinessException(message);
+        try {
+            itemOrderInfo.setOrderId(orderId);
+            int insert = itemOrderInfoMapper.insert(itemOrderInfo);
+            if (insert < 1){
+                String message = "生成未支付订单失败";
+                throw new BusinessException(message);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
         return orderId;
     }

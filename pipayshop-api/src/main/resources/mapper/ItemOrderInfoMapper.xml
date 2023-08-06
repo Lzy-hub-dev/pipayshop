@@ -131,19 +131,19 @@
         JOIN
             item_commodity_info i
         where
-            o.uid = #{getOrderDataVO.userId}
-            <if test="getOrderDataVO.orderStatus != -1">
-                and o.order_status = #{getOrderDataVO.orderStatus}
+            o.uid = #{userId}
+            <if test="orderStatus != -1">
+                and o.order_status = #{orderStatus}
             </if>
             AND o.del_flag = 0
             AND o.commodity_id = i.commodity_id
             AND o.item_id = u.item_id
         ORDER BY
-            o.update_time ASC
-        <if test="getOrderDataVO.pageSize!=null  and getOrderDataVO.currentPage!=null">
-            LIMIT #{getOrderDataVO.currentPage},#{getOrderDataVO.pageSize}
-        </if>
+            o.update_time DESC
+            LIMIT ${currentPage},${pageSize}
     </select>
+
+
 
     <select id="getMyOrderByUid" resultType="com.example.pipayshopapi.entity.vo.MyItemOrderInfoVO">
         SELECT ioi.order_id,ioi.transaction_amount,ioi.uid,ioi.order_status,  ii.item_id,ii.item_name,ii.user_image,  ici.commodity_id,ici.item_commodity_name,ici.details,avatar_imag,ioi.commodity_specification
@@ -177,6 +177,18 @@
 	    FROM item_order_info
 	    WHERE order_id = #{orderId}
     )
+    </select>
+
+    <select id="getOrderListCount" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            item_order_info
+        where
+            uid = #{userId}
+        <if test="orderStatus!=-1">
+            and order_status = #{orderStatus}
+        </if>
     </select>
 
 
