@@ -33,7 +33,7 @@
         where u.uid in (
             select user_id
             from item_commodity_evaluate
-            where item_id = #{itemId}
+            where item_id = #{itemId} and status = 0
         )
     </select>
 </mapper>
