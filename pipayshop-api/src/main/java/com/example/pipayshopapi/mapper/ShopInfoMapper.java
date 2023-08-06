@@ -57,11 +57,6 @@ public interface ShopInfoMapper extends BaseMapper<ShopInfo> {
     List<IndexShopInfoVO> getIndexShopInfoVOById(@Param("categoryId") String categoryId,@Param("page") Integer page,@Param("limit") Integer limit);
 
     /**
-     * 实体店已上传的商品数量
-     */
-    Integer updateNumber(@Param("shopId") String shopId);
-
-    /**
      * 实体店可以上传的总数
      */
     Integer updateAllNumber(@Param("shopId") String shopId);

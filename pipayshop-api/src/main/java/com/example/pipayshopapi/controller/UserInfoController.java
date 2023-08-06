@@ -126,12 +126,12 @@ public class UserInfoController {
         }
     }
 
-    @GetMapping("releaseShopIsNotById/{uid}")
-    @ApiOperation("根据用户Id判断用户是否能发布实体店")
-    public ResponseVO releaseShopIsNotById(@PathVariable String uid){
+    @GetMapping("shopBalance/{uid}")
+    @ApiOperation("根据用户Id判断用户能绑定实体店的数量余额")
+    public ResponseVO<Integer> shopBalance(@PathVariable String uid){
         try {
-            Integer integer = userInfoService.releaseShopIsNotById(uid);
-            return ResponseVO.getSuccessResponseVo(integer);
+            Integer count = userInfoService.releaseShopIsNotById(uid);
+            return ResponseVO.getSuccessResponseVo(count);
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("失败");

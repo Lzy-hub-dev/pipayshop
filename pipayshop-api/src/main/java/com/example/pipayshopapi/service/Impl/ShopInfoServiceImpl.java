@@ -311,12 +311,10 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     }
 
     /**
-     * 校验实体店是否可以上传的商品
+     * 查询指定实体店还可以上传的商品数量
      */
     @Override
     public Integer updateShopCommodity(String shopId) {
-        Integer integer = shopInfoMapper.updateAllNumber(shopId);
-        Integer integer1 = shopInfoMapper.updateNumber(shopId);
-        return integer-integer1;
+        return shopInfoMapper.updateAllNumber(shopId);
     }
 }
