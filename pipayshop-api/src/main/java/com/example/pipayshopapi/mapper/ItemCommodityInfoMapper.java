@@ -39,7 +39,7 @@ public interface ItemCommodityInfoMapper extends BaseMapper<ItemCommodityInfo> {
 
     List<ItemCommodityVO> examineCommodityList(@Param("dto")ExamineCommodityDTO dto);
 
-    List<ItemCommodityVO> commodityList(@Param("userId")String userId);
+    List<ItemCommodityVO> commodityList(@Param("itemId")String itemId);
 
     List<ItemCommodityMinVO> getInfoByItemId(@Param("itemId")String itemId,
                                              @Param("page")Integer page,
