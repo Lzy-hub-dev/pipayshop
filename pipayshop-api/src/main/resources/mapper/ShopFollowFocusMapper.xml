@@ -50,5 +50,17 @@
           and f.`status` = 0
           and i.`status` = 0
     </select>
+    <select id="getCount" resultType="java.lang.Long">
+        SELECT count(*)
+        FROM shop_follow_focus s
+            LEFT JOIN user_info u
+        ON u.uid = s.follow_id
+        WHERE u.uid in
+            (
+            SELECT follow_id
+			FROM shop_follow_focus
+			WHERE shop_id = #{shopId}
+		    )
+    </select>
 
 </mapper>

@@ -311,7 +311,9 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
      */
     @Override
     public ItemInfoVO commodityList(String itemId) {
+        //获取商品列表
         List<ItemCommodityVO> voList = commodityInfoMapper.commodityList(itemId);
+        //获取网店基本信息
         List<ItemInfoVO> itemInfoVO = itemInfoMapper.selectItemInfoByItemIdOrUserId(null, itemId);
         if (itemInfoVO != null) {
             ItemInfoVO vo = itemInfoVO.get(0);
