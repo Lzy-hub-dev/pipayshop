@@ -1,20 +1,10 @@
 package com.example.pipayshopapi.service.Impl;
 
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.pipayshopapi.entity.AccountInfo;
 import com.example.pipayshopapi.entity.RechargePermissionsOrder;
-import com.example.pipayshopapi.entity.ShopInfo;
-import com.example.pipayshopapi.entity.vo.RechargeVO;
-import com.example.pipayshopapi.mapper.AccountInfoMapper;
 import com.example.pipayshopapi.mapper.RechargePermissionsOrderMapper;
-import com.example.pipayshopapi.mapper.ShopInfoMapper;
 import com.example.pipayshopapi.service.RechargePermissionsOrderService;
-import com.example.pipayshopapi.util.StringUtil;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
 
 /**
  * <p>
@@ -61,6 +51,40 @@ public class RechargePermissionsOrderServiceImpl extends ServiceImpl<RechargePer
 
         int insert = rechargePermissionsOrderMapper.insert(rechargePermissionsOrder);
         if (insert < 0){
+            throw new RuntimeException();
+        }
+        return true;
+    }
+    @Resource
+    private RechargePermissionsOrderMapper rechargePermissionsOrderMapper;
+
+    @Override
+    @Transactional
+    public Boolean updateUploadBalanceInfo(RechargePermissionsOrderVO rechargePermissionsOrderVO) {
+        String orderId = StringUtil.generateShortId();
+        RechargePermissionsOrder order = new RechargePermissionsOrder();
+        order.setOrderId(orderId);
+        order.setCreateTime(new Date());
+        order.setUid(rechargePermissionsOrderVO.getUid());
+        order.setPermissionsCount(rechargePermissionsOrderVO.getPermissionsCount());
+        order.setTransactionAmount(rechargePermissionsOrderVO.getTransactionAmount());
+        Integer result = rechargePermissionsOrderMapper.insert(order);
+        if(result < 1){
+            throw new RuntimeException();
+        }
+        result = accountInfoMapper.update(null,new UpdateWrapper<AccountInfo>()
+                .eq("uid",rechargePermissionsOrderVO.getUid())
+                .eq("del_flag",0)
+                .setSql("point_balance = point_balance -" + rechargePermissionsOrderVO.getTransactionAmount())
+                .set("update_time",new Date())
+        );
+        if(result < 1){
+            throw new RuntimeException();
+        }
+        result = itemInfoMapper.update(null,new UpdateWrapper<ItemInfo>()
+                .eq("uid",rechargePermissionsOrderVO.getUid())
+                .setSql("upload_balance = upload_balance +" + rechargePermissionsOrderVO.getPermissionsCount()));
+        if(result < 1){
             throw new RuntimeException();
         }
         return true;

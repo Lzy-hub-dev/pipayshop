@@ -38,11 +38,6 @@ public class RechargePermissionsOrder implements Serializable {
     private String orderId;
 
     /**
-     * 交易内容的描述
-     */
-    private String detail;
-
-    /**
      * 交易的用户id
      */
     private String uid;

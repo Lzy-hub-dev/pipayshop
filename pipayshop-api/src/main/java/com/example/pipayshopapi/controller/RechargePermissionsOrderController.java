@@ -1,18 +1,9 @@
 package com.example.pipayshopapi.controller;
 
 
-import com.example.pipayshopapi.entity.vo.RechargeVO;
-import com.example.pipayshopapi.entity.vo.ResponseVO;
-import com.example.pipayshopapi.exception.BusinessException;
-import com.example.pipayshopapi.service.RechargePermissionsOrderService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.Resource;
 
 /**
  * <p>
@@ -47,4 +38,22 @@ public class RechargePermissionsOrderController {
             throw new BusinessException("下单提高一个用户可绑定的实体店余额数失败，请联系后台人员");
         }
     }
+    @Resource
+    private RechargePermissionsOrderService rechargePermissionsOrderService;
+
+    @PostMapping("updateUploadBalanceInfo")
+    @ApiOperation("更新网店可添加商品余额信息")
+    public ResponseVO updateUploadBalanceInfo(@RequestBody RechargePermissionsOrderVO rechargePermissionsOrderVO){
+        try {
+            Boolean result = rechargePermissionsOrderService.updateUploadBalanceInfo(rechargePermissionsOrderVO);
+            if(result == false){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("更新成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("更新网店可添加商品余额信息失败，请联系后台人员");
+        }
+    }
+
 }
