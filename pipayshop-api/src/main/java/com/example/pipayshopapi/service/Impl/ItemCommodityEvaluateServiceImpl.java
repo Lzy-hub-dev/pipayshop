@@ -3,6 +3,7 @@ package com.example.pipayshopapi.service.Impl;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ItemCommodityEvaluate;
+import com.example.pipayshopapi.entity.vo.ItemCommodityEvaluateAddVO;
 import com.example.pipayshopapi.entity.vo.ItemCommodityEvaluateVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.mapper.ItemCommodityEvaluateMapper;
@@ -44,9 +45,14 @@ public class ItemCommodityEvaluateServiceImpl extends ServiceImpl<ItemCommodityE
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean addItemEvaluates(ItemCommodityEvaluate itemCommodityEvaluate) {
-        itemCommodityEvaluate.setEvaluateId(StringUtil.generateShortId());
-        int result = itemCommodityEvaluateMapper.insert(itemCommodityEvaluate);
+    public boolean addItemEvaluates(ItemCommodityEvaluateAddVO itemCommodityEvaluateAddVO) {
+        String evaluateId = StringUtil.generateShortId();
+        int result = itemCommodityEvaluateMapper.insertItemCommodityEvaluateAddVO(
+                evaluateId,
+                itemCommodityEvaluateAddVO.getUserId(),
+                itemCommodityEvaluateAddVO.getItemId(),
+                itemCommodityEvaluateAddVO.getCommodityId(),
+                itemCommodityEvaluateAddVO.getEvaluate());
         return result>0;
     }
 
