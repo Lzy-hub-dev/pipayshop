@@ -17,23 +17,31 @@
     </select>
 
     <select id="getItemCommodityEvaluate" resultType="com.example.pipayshopapi.entity.vo.EvaluateVO">
-        select u.user_image,u.user_name,u.uid,e.evaluate,e.evaluate_id,e.create_time
-        from user_info u join item_commodity_evaluate e on u.uid = e.user_id
-        where u.uid in (
-            select user_id
-            from item_commodity_evaluate
-            where item_id = #{itemId} and status = 0
+        SELECT u.user_image,u.user_name,u.uid,e.evaluate,e.evaluate_id,e.create_time
+        FROM user_info u JOIN item_commodity_evaluate e ON u.uid = e.user_id
+        WHERE uid IN (
+	        SELECT user_id
+	        FROM item_commodity_evaluate
+	        WHERE evaluate_id IN (
+		        SELECT evaluate_id
+		        FROM item_commodity_evaluate
+                WHERE item_id = #{itemId}
+	        )
         )
         LIMIT #{page}, #{limit}
     </select>
 
     <select id="getInfoSize" resultType="java.lang.Integer">
         select count(*)
-        from user_info u join item_commodity_evaluate e on u.uid = e.user_id
-        where u.uid in (
-            select user_id
-            from item_commodity_evaluate
-            where item_id = #{itemId} and status = 0
+        FROM user_info u JOIN item_commodity_evaluate e ON u.uid = e.user_id
+        WHERE uid IN (
+	        SELECT user_id
+	        FROM item_commodity_evaluate
+	        WHERE evaluate_id IN (
+		        SELECT evaluate_id
+		        FROM item_commodity_evaluate
+                WHERE item_id = #{itemId}
+	        )
         )
     </select>
 
