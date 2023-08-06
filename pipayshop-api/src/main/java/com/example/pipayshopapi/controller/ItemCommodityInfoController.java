@@ -2,7 +2,6 @@ package com.example.pipayshopapi.controller;
 
 
 import com.example.pipayshopapi.entity.dto.ApplyItemCommodityDTO;
-import com.example.pipayshopapi.entity.dto.ExamineCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -150,17 +149,19 @@ public class ItemCommodityInfoController {
         }
     }
 
-    @GetMapping("examineCommodityList")
-    @ApiOperation("根据卖家id查询网店的商品审核列表")
-    public ResponseVO examineCommodityList(ExamineCommodityDTO dto) {
+    @GetMapping("examineCommodityList/{itemId}")
+    @ApiOperation("根据网店id查询网店的商品审核列表")
+    public ResponseVO<List<AuditItemVO>> examineCommodityList(@PathVariable String itemId) {
         try {
-            List<ItemCommodityVO> list = commodityInfoService.examineCommodityList(dto);
+            List<AuditItemVO> list = commodityInfoService.examineCommodityList(itemId);
             return ResponseVO.getSuccessResponseVo(list);
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new BusinessException("查询失败，请联系后台人员");
         }
     }
+
+
 
     @GetMapping("commodityList/{itemId}")
     @ApiOperation("根据网店id查询网店的商品列表")

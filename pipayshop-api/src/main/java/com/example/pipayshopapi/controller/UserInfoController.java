@@ -109,4 +109,19 @@ public class UserInfoController {
             throw new RuntimeException("上传失败，请联系后台人员");
         }
     }
+
+    /**
+     * 根据用户id查询它的网店id
+     */
+    @GetMapping("getItemIdByUserId/{userId}")
+    @ApiOperation("根据用户id查询它的网店id")
+    public ResponseVO<String> getItemIdByUserId(@PathVariable  String userId){
+        try {
+            String itemId = userInfoService.getItemIdByUserId(userId);
+            return ResponseVO.getSuccessResponseVo(itemId);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("根据用户id查询它的网店id失败，请联系后台人员");
+        }
+    }
 }

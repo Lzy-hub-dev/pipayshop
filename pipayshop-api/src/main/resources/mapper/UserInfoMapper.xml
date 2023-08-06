@@ -9,4 +9,18 @@
     <select id="getUserFollowInfoById" resultType="com.example.pipayshopapi.entity.UserInfo">
         select user_name,user_image from user_info where uid=#{uid}
     </select>
+
+
+    <select id="getItemIdByUserId" resultType="java.lang.String">
+        select
+            i.item_id
+        from
+            item_info i
+        join
+            user_info u
+        where
+            u.uid = i.uid and u.uid = #{userId}
+    </select>
+
+
 </mapper>
