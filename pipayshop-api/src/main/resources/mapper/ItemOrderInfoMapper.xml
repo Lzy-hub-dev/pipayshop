@@ -100,7 +100,7 @@
 
     <select id="getOrderDetail" resultMap="paiedOrderDetailMap">
         SELECT
-            o.order_id ,o.create_time,o.update_time, u.address, u.phone, u.user_name, o.transaction_amount,o.number
+            o.order_id ,o.create_time,o.update_time, u.address, u.phone, u.user_name, o.transaction_amount,o.number,o.commodity_specification
         FROM
             item_order_info o
         JOIN
@@ -146,7 +146,7 @@
     </select>
 
     <select id="getMyOrderByUid" resultType="com.example.pipayshopapi.entity.vo.MyItemOrderInfoVO">
-        SELECT ioi.order_id,ioi.transaction_amount,ioi.uid,ioi.order_status,  ii.item_id,ii.item_name,ii.user_image,  ici.commodity_id,ici.item_commodity_name,ici.details,avatar_imag
+        SELECT ioi.order_id,ioi.transaction_amount,ioi.uid,ioi.order_status,  ii.item_id,ii.item_name,ii.user_image,  ici.commodity_id,ici.item_commodity_name,ici.details,avatar_imag,ioi.commodity_specification
         from item_order_info as ioi
                  JOIN item_commodity_info as ici	on ici.commodity_id=ioi.commodity_id
                  JOIN item_info as ii	on ii.item_id=ici.item_id
