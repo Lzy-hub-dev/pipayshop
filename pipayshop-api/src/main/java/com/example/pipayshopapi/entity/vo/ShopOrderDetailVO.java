@@ -26,4 +26,6 @@ public class ShopOrderDetailVO {
     private String orderId;
 
     private Integer number;
+
+
 }

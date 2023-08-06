@@ -57,4 +57,6 @@ public interface ItemOrderInfoMapper extends BaseMapper<ItemOrderInfo> {
             ,@Param("status") Integer status);
 
     Integer getAllMyOrderByUid(@Param("Uid") String uid,@Param("status") Integer status);
+
+    OrderDetailVO getOrderMinDeatail(@Param("orderId") String orderId);
 }

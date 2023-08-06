@@ -36,4 +36,5 @@
             where item_id = #{itemId}
         )
     </select>
+
 </mapper>

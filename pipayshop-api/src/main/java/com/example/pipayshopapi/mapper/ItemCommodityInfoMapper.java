@@ -51,4 +51,6 @@ public interface ItemCommodityInfoMapper extends BaseMapper<ItemCommodityInfo> {
 
 
     Integer getInfoSize(String itemId);
+
+    String getItemIdByOrderId(@Param("orderId") String orderId);
 }

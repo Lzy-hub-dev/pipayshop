@@ -190,4 +190,12 @@
         where item_id = #{itemId} and status = 0
     </select>
 
+    <select id="getItemIdByOrderId" resultType="java.lang.String">
+        SELECT user_image FROM item_info WHERE item_id = (
+	SELECT item_id
+	FROM item_order_info
+	WHERE order_id = #{orderId}
+)
+    </select>
+
 </mapper>
