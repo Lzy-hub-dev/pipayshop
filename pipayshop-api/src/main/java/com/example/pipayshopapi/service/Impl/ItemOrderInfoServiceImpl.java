@@ -1,6 +1,8 @@
 package com.example.pipayshopapi.service.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.AccountInfo;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.ItemOrderInfo;
@@ -10,10 +12,10 @@ import com.example.pipayshopapi.mapper.AccountInfoMapper;
 import com.example.pipayshopapi.mapper.ItemCommodityInfoMapper;
 import com.example.pipayshopapi.mapper.ItemOrderInfoMapper;
 import com.example.pipayshopapi.service.ItemOrderInfoService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
@@ -123,6 +125,11 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean payOrder(PayOrderVO payOrderVO) {
+        // 校验订单id是否已经存在，保证接口的幂等性，避免重复下单
+        Long count = itemOrderInfoMapper.selectCount(new QueryWrapper<ItemOrderInfo>()
+                .eq("order_id", payOrderVO.getOrderId())
+                .eq("order_status", 1));
+        if (count != 0){throw new BusinessException("该订单已经支付，请勿重复下单！");}
         // 用户余额更新
         int uid = accountInfoMapper.update(null, new UpdateWrapper<AccountInfo>()
                 .eq("uid", payOrderVO.getUid())

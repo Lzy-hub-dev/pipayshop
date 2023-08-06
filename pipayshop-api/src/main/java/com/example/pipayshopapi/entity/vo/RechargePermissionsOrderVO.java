@@ -7,10 +7,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
 /**
- * fileName: RechargePermissionsOrderVO
- * author: 四面神
- * createTime:2023/8/6 19:11
- * 描述:
+ * @author wzx
  */
 @Data
 @AllArgsConstructor
@@ -31,4 +28,8 @@ public class RechargePermissionsOrderVO {
      * 交易金额
      */
     private BigDecimal transactionAmount;
+    /**
+     * 充值类别0:网店相关1:实体店相关
+     */
+    private Integer chargeType;
 }

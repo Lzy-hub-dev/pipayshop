@@ -1,7 +1,8 @@
 package com.example.pipayshopapi.service;
 
-import com.example.pipayshopapi.entity.RechargePermissionsOrder;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.pipayshopapi.entity.RechargePermissionsOrder;
+import com.example.pipayshopapi.entity.vo.RechargePermissionsOrderVO;
 
 /**
  * <p>
@@ -12,11 +13,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2023-08-06
  */
 public interface RechargePermissionsOrderService extends IService<RechargePermissionsOrder> {
-    boolean addShopSum(RechargeVO rechargeVO);
+    boolean addShopSum(String orderId);
 
     /**
      *
      */
 
-    Boolean updateUploadBalanceInfo(RechargePermissionsOrderVO rechargePermissionsOrderVO);
+    boolean updateUploadBalanceInfo(String orderId);
+
+    String getUploadBalanceNoPayOrder(RechargePermissionsOrderVO rechargePermissionsOrderVO);
 }

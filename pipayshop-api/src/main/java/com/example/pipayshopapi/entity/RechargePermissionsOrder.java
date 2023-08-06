@@ -64,8 +64,12 @@ public class RechargePermissionsOrder implements Serializable {
      */
     private Integer delFlag;
 
-
-
-    public RechargePermissionsOrder(String orderId, String uid, Integer permissionsCount, Integer transactionAmount) {
-    }
+    /**
+     *0：未支付1：已支付
+     */
+    private Integer status;
+    /**
+     * 充值类别0:网店相关1:实体店相关
+     */
+    private Integer chargeType;
 }
