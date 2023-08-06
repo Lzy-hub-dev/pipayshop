@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import java.util.List;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -53,4 +53,8 @@ public class OrderDetailVO {
      */
     private String userImage;
 
+    /**
+     *商品的规格
+     */
+    private String commoditySpecification;
 }

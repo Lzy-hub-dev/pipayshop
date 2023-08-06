@@ -1,6 +1,5 @@
 package com.example.pipayshopapi.entity.vo;
 
-import com.example.pipayshopapi.entity.ItemOrderInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -60,4 +59,9 @@ public class MyItemOrderInfoVO {
      * 0:待支付1:已支付2：已完成3：无效订单
      */
     private Integer orderStatus;
+
+    /**
+     *商品的规格
+     */
+    private String commoditySpecification;
 }
