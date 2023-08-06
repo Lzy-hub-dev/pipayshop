@@ -70,4 +70,7 @@ public class RechargePermissionsOrder implements Serializable {
     private Integer delFlag;
 
 
+
+    public RechargePermissionsOrder(String orderId, String uid, Integer permissionsCount, Integer transactionAmount) {
+    }
 }
