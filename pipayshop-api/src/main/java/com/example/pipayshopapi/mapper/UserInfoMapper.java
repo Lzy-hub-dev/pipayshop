@@ -22,5 +22,16 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
          */
         UserInfoVO selectUserInfoByUid(@Param("uid") String uid);
 
+        /**
+         * 查找实体店的数量
+         */
+        Integer selectShopNumberInteger(@Param("uid") String uid);
+
+        /**
+         * 查找可以使用的实体店的数量
+         */
+        Integer selectShopNumber(@Param("uid") String uid);
+
+
     String getItemIdByUserId(@Param("userId")String userId);
 }

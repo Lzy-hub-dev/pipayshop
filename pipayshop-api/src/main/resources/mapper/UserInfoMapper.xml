@@ -9,6 +9,12 @@
     <select id="getUserFollowInfoById" resultType="com.example.pipayshopapi.entity.UserInfo">
         select user_name,user_image from user_info where uid=#{uid}
     </select>
+    <select id="selectShopNumberInteger" resultType="java.lang.Integer">
+        select COUNT(*) FROM shop_info where uid=#{uid}
+    </select>
+    <select id="selectShopNumber" resultType="java.lang.Integer">
+        SELECT shop_number from user_info where uid=#{uid};
+    </select>
 
 
     <select id="getItemIdByUserId" resultType="java.lang.String">

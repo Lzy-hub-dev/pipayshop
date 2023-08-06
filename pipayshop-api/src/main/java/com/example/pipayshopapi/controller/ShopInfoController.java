@@ -182,4 +182,16 @@ public class ShopInfoController {
         }
     }
 
+    @GetMapping("updateShopCommodity/{shopId}")
+    @ApiOperation("校验实体店是否可以上传的商品")
+    public ResponseVO<Integer> updateShopCommodity(String shopId){
+        try {
+            Integer integer = infoService.updateShopCommodity(shopId);
+            return ResponseVO.getSuccessResponseVo(integer);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("失败");
+        }
+    }
+
 }
