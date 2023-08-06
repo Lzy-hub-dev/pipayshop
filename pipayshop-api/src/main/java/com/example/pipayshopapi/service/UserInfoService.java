@@ -45,4 +45,9 @@ public interface UserInfoService extends IService<UserInfo> {
     ItemMinInfoVo getItemInfoByUid(String userId);
 
     String getItemIdByUserId(String userId);
+
+    /**
+     * 根据用户Id判断用户是否能发布实体店
+     * */
+    Integer releaseShopIsNotById(String uid);
 }

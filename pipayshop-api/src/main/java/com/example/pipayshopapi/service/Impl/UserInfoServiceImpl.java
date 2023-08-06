@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.UserInfo;
+import com.example.pipayshopapi.entity.enums.Country;
+import com.example.pipayshopapi.entity.enums.Language;
 import com.example.pipayshopapi.entity.vo.ItemMinInfoVo;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -95,6 +97,16 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     public ItemMinInfoVo getItemInfoByUid(String userId) {
         return itemInfoMapper.getItemInfoByUid(userId);
+    }
+
+    /**
+     * 根据用户Id判断用户是否能发布实体店
+     * */
+    @Override
+    public Integer releaseShopIsNotById(String uid) {
+        Integer integer = userInfoMapper.selectShopNumber(uid);
+        Integer integer1 = userInfoMapper.selectShopNumberInteger(uid);
+        return integer - integer1;
     }
 
 

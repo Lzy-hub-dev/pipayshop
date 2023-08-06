@@ -90,4 +90,9 @@ public interface ShopInfoService extends IService<ShopInfo> {
     List<String> getShopIdListByUid(String uid);
 
     Boolean upVipByShopIdList(String shopIds);
+
+    /**
+     * 校验实体店是否可以上传的商品
+     */
+    Integer updateShopCommodity(String shopId);
 }

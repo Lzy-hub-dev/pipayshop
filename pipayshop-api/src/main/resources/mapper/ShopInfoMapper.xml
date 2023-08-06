@@ -112,4 +112,11 @@
         LIMIT ${page},${limit}
     </select>
 
+    <select id="updateNumber" resultType="java.lang.Integer">
+        SELECT	COUNT(*) FROM shop_commodity_info  where shop_id=#{shopId};
+    </select>
+    <select id="updateAllNumber" resultType="java.lang.Integer">
+        select upload_shop_commodity from shop_info where shop_id=#{shopId};
+    </select>
+
 </mapper>
