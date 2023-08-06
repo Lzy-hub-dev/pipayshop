@@ -12,5 +12,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2023-08-06
  */
 public interface RechargePermissionsOrderService extends IService<RechargePermissionsOrder> {
+    boolean addShopSum(RechargeVO rechargeVO);
 
+    /**
+     *
+     */
+
+    Boolean updateUploadBalanceInfo(RechargePermissionsOrderVO rechargePermissionsOrderVO);
 }

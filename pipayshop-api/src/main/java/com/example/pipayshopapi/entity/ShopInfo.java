@@ -112,5 +112,5 @@ public class ShopInfo implements Serializable {
     /**
      * 商品上架数量
      */
-    private Integer uploadShopCommodity;
+    private Integer uploadCommodityBalance;
 }
