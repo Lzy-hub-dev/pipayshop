@@ -233,7 +233,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     @Transactional(rollbackFor = Exception.class)
     public boolean applyShop(ApplyShopDTO applyShopDTO, MultipartFile[] file) {
         if (!userIdList.add(applyShopDTO.getUid())) {
-            throw new BusinessException("请无重复提交!");
+            throw new BusinessException("请勿重复提交!");
         }
         try {
             // 创建一个集合存储商品图片

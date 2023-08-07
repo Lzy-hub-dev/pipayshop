@@ -29,7 +29,7 @@ public interface ItemCommodityInfoService extends IService<ItemCommodityInfo> {
      * @param applyItemCommodityDTO
      * @return
      */
-    boolean issueItemCommodity(ItemCommodityInfo applyItemCommodityDTO);
+    boolean issueItemCommodity(ApplyItemCommodityDTO applyItemCommodityDTO);
 
 
     /**
