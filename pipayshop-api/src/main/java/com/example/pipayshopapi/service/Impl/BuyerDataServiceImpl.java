@@ -47,8 +47,7 @@ public class BuyerDataServiceImpl extends ServiceImpl<BuyerDataMapper, BuyerData
                                                                 .eq("buyer_data_id", buyerData.getBuyerDataId())
                                                                 .set("user_name", buyerData.getUserName())
                                                                 .set("address", buyerData.getAddress())
-                                                                .set("phone", buyerData.getPhone())
-                                                                .set(buyerData.getIsDefault() != null,"is_default",buyerData.getIsDefault()));
+                                                                .set("phone", buyerData.getPhone()));
         return result > 0;
     }
 

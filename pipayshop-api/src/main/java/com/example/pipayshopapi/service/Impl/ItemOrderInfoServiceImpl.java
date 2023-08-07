@@ -72,7 +72,6 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
         OrderDetailVO orderDetailVO = itemOrderInfoMapper.getOrderDetail(orderId);
         String userImage = itemCommodityInfoMapper.getItemIdByOrderId(orderId);
         OrderDetailVO orderDetailVOI = itemOrderInfoMapper.getOrderMinDeatail(orderId);
-
         orderDetailVO.setUserImage(userImage);
         orderDetailVO.setDetails(orderDetailVOI.getDetails());
         orderDetailVO.setAvatarImag(orderDetailVOI.getAvatarImag());

@@ -100,7 +100,7 @@ public class UserInfo implements Serializable {
     /**
      * 可绑定的实体店数量
      */
-    private Integer shopNumber;
+    private Integer shopBalance;
 
 
 }
