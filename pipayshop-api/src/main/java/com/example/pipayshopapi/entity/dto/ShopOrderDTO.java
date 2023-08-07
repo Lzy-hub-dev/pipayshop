@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * @author: jiangjiafeng
  * @ClassName ShopOrderDTO
- * @Description 
+ * @Description
  * @date 2023/8/7 16:16
  * @Version 1.0
  */

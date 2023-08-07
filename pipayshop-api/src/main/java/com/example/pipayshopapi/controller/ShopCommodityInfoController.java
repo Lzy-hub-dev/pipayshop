@@ -38,7 +38,6 @@ public class ShopCommodityInfoController {
     @PostMapping(" issueShopCommodity")
     @ApiOperation("发布实体店商品")
     public ResponseVO<String> issueShopCommodity(ShopCommodityInfo applyShopCommodityDTO, @RequestParam("files") MultipartFile[] files) {
-
         try {
             boolean insert = shopCommodityService.issueShopCommodity(applyShopCommodityDTO, files);
             if (!insert) {

@@ -2,6 +2,7 @@ package com.example.pipayshopapi.controller;
 
 
 import com.example.pipayshopapi.entity.BgImg;
+import com.example.pipayshopapi.entity.dto.BgImgDTO;
 import com.example.pipayshopapi.entity.vo.BgImgVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -60,9 +61,9 @@ public class BgImgController {
     }
     @PostMapping("addBgImg")
     @ApiOperation("新增首页背景轮播图")
-    public ResponseVO addBgImg(MultipartFile file, BgImg bgImg){
+    public ResponseVO addBgImg(MultipartFile file, BgImgDTO bgImgDTO){
         try{
-            Boolean result= bgImgService.addBgImg(file,bgImg);
+            Boolean result= bgImgService.addBgImg(file,bgImgDTO);
             if (!result) {
                 throw new Exception();
             }
