@@ -4,7 +4,7 @@
 
     <insert id="insertItemCommodityEvaluateAddVO">
         insert into item_commodity_evaluate (evaluate_id,user_id,item_id,commodity_id,evaluate,score)
-        values (#{evaluateId},#{userId},#{itemId},#{commodityId},#{evaluate},#{score})
+        values (#{evaluateId},#{userId},(select item_id from item_commodity_info where commodity_id = #{commodityId}),#{commodityId},#{evaluate},#{score})
     </insert>
 
 

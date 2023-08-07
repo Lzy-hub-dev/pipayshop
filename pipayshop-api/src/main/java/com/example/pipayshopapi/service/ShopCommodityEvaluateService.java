@@ -32,4 +32,6 @@ public interface ShopCommodityEvaluateService extends IService<ShopCommodityEval
      * @return
      */
     Boolean deleteEvaluate(String evaluateId, String userId);
+
+    boolean isEvaluates(String commodityId, String userId);
 }

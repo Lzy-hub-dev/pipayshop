@@ -1,5 +1,6 @@
 package com.example.pipayshopapi.service.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ItemCommodityEvaluate;
@@ -50,7 +51,6 @@ public class ItemCommodityEvaluateServiceImpl extends ServiceImpl<ItemCommodityE
         int result = itemCommodityEvaluateMapper.insertItemCommodityEvaluateAddVO(
                 evaluateId,
                 itemCommodityEvaluateAddVO.getUserId(),
-                itemCommodityEvaluateAddVO.getItemId(),
                 itemCommodityEvaluateAddVO.getCommodityId(),
                 itemCommodityEvaluateAddVO.getEvaluate(),
                 itemCommodityEvaluateAddVO.getScore());
@@ -68,5 +68,13 @@ public class ItemCommodityEvaluateServiceImpl extends ServiceImpl<ItemCommodityE
                                                                     .eq("user_id", userId)
                                                                     .set("status", 1));
         return result > 0;
+    }
+
+
+    @Override
+    public boolean isEvaluates(String commodityId, String userId) {
+        return itemCommodityEvaluateMapper.selectCount(new QueryWrapper<ItemCommodityEvaluate>()
+                .eq("user_id", userId)
+                .eq("commodity_id", commodityId)).intValue() == 1;
     }
 }

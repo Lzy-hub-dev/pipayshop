@@ -26,11 +26,6 @@ public class ItemCommodityEvaluateAddVO {
     private String evaluate;
 
     /**
-     * 网店id
-     */
-    private String itemId;
-
-    /**
      * 商品id
      */
     private String commodityId;
