@@ -62,4 +62,5 @@ public class CommodityDetailVO {
     private Integer evaluateCount;
 
     private ItemVO itemVO;
+
 }

@@ -13,16 +13,16 @@ public class FastAuto1GeneratorTest {
                     builder.author("zxb") // 设置作者
 //.enableSwagger() // 开启 swagger 模式
                             .fileOverride() // 覆盖已生成文件
-                            .outputDir("D:\\demo"); // 指定输出目录
+                            .outputDir("D:\\reverseProject"); // 指定输出目录
                 })
                 .packageConfig(builder -> {
                     builder.parent("com.example") // 设置父包名
                             .moduleName("pipayshopapi") // 设置父包模块名
-                            .pathInfo(Collections.singletonMap(OutputFile.mapperXml, "D:\\demo"));
+                            .pathInfo(Collections.singletonMap(OutputFile.mapperXml, "D:\\reverseProject"));
 // 设置mapperXml生成路径
                 })
                 .strategyConfig(builder -> {
-                    builder.addInclude("recharge_permissions_order") // 设置需要生成的表名
+                    builder.addInclude("configuration") // 设置需要生成的表名
                             .addTablePrefix("t_", "c_"); // 设置过滤表前缀
                 })
                 .templateEngine(new FreemarkerTemplateEngine()) // 使用Freemarker

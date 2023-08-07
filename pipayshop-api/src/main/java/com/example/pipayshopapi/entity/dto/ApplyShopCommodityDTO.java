@@ -11,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class ApplyShopCommodityDTO {
+
     private String commodityName;
 
     private List<String> commodityImgList;

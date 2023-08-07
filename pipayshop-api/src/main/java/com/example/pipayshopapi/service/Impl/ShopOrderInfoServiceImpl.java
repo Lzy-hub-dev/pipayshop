@@ -7,6 +7,7 @@ import com.example.pipayshopapi.entity.AccountInfo;
 import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopOrderInfo;
+import com.example.pipayshopapi.entity.dto.ShopOrderDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.AccountInfoMapper;
@@ -93,12 +94,11 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public String generateUnpaidOrder(ItemOrderInfo itemOrderInfo) {
+    public String generateUnpaidOrder(ShopOrderDTO dto) {
         // 生成orderId
         String orderId = StringUtil.generateShortId();
-        ShopOrderInfo shopOrderInfo = new ShopOrderInfo(null, orderId, itemOrderInfo.getTransactionAmount(), null, null, itemOrderInfo.getCommodityId()
-                , itemOrderInfo.getUid(), itemOrderInfo.getItemId(), null, null,itemOrderInfo.getNumber());
-        int insert = shopOrderInfoMapper.insert(shopOrderInfo);
+        ShopOrderInfo info = new ShopOrderInfo(orderId, dto.getTransactionAmount(), dto.getCommodityId(), dto.getUid(), dto.getShopId(), dto.getNumber());
+        int insert = shopOrderInfoMapper.insert(info);
         if (insert < 1){
             String message = "生成未支付订单失败";
             throw new BusinessException(message);
