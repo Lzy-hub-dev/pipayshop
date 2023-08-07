@@ -34,4 +34,9 @@ public class ItemCommodityEvaluateAddVO {
      */
     private Double score;
 
+    /**
+     * 订单Id
+     */
+    private String orderId;
+
 }
