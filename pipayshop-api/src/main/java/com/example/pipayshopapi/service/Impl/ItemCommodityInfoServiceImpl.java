@@ -7,10 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.pipayshopapi.entity.BrandInfo;
-import com.example.pipayshopapi.entity.ItemCommodityEvaluate;
-import com.example.pipayshopapi.entity.ItemCommodityInfo;
-import com.example.pipayshopapi.entity.ItemFollowFocus;
+import com.example.pipayshopapi.entity.*;
 import com.example.pipayshopapi.entity.dto.ApplyItemCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
@@ -52,7 +49,6 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
 
     @Resource
     private ItemCommodityInfoMapper itemCommodityInfoMapper;
-
 
     /**
      * 某一二级分类下的商品列表分页展示
@@ -106,6 +102,14 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         itemCommodityInfo.setItemId(applyItemCommodityDTO.getItemId());
         itemCommodityInfo.setDetailImagList(JSON.toJSONString(applyItemCommodityDTO.getDetailImags()));
         itemCommodityInfo.setInventory(applyItemCommodityDTO.getInventory());
+
+        //网店商品上架剩余数-1
+        int update = itemInfoMapper.update(null,new UpdateWrapper<ItemInfo>()
+                .eq("item_id",applyItemCommodityDTO.getItemId())
+                .setSql("upload_balance = upload_balance - 1"));
+        if(update < 1){
+            throw new RuntimeException();
+        }
         int result = commodityInfoMapper.insert(itemCommodityInfo);
         return result > 0;
     }
@@ -134,6 +138,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         if (dto.getCreateTime()!=null) {
             wrapper.orderByDesc(ItemCommodityInfo::getCreateTime);
         }
+
         // 价格排序
         if (dto.getPriceOrder() != null) {
             if (dto.getPriceOrder() == 0) {

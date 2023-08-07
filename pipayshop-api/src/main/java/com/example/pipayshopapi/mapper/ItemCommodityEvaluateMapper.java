@@ -37,5 +37,6 @@ public interface ItemCommodityEvaluateMapper extends BaseMapper<ItemCommodityEva
                                          @Param("userId") String userId,
                                          @Param("itemId") String itemId,
                                          @Param("commodityId")String commodityId,
-                                         @Param("evaluate") String evaluate);
+                                         @Param("evaluate") String evaluate,
+                                         @Param("score") Double score);
 }

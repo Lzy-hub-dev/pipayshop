@@ -66,6 +66,7 @@ public class ShopCommodityLiveInfoServiceImpl extends ServiceImpl<ShopCommodityL
         List<HotelFacilityVO> basicList = null;
         List<HotelFacilityVO> bathList = null;
         List<HotelFacilityVO> applianceList = null;
+
         try {
             if(basic != null){
                 basicList = objectMapper.readValue(basic, new TypeReference<List<HotelFacilityVO>>() {});
@@ -209,5 +210,6 @@ public class ShopCommodityLiveInfoServiceImpl extends ServiceImpl<ShopCommodityL
                 .eq("room_id", shopCommodityLiveInfoUpVO.getRoomId()));
         return result > 0;
     }
+
 
 }

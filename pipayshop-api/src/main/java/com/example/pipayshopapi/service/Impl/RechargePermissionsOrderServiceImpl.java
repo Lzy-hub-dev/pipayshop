@@ -84,7 +84,7 @@ public class RechargePermissionsOrderServiceImpl extends ServiceImpl<RechargePer
                 orderVO.getTransactionAmount(), null, null, null, orderVO.getChargeType());
         // 生成订单
         int insert = rechargePermissionsOrderMapper.insert(order);
-        if (insert < 0){throw new RuntimeException();}
+        if (insert < 1){throw new RuntimeException();}
         return orderId;
     }
 
