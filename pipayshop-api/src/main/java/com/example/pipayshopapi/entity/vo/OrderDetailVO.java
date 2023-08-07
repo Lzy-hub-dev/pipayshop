@@ -57,4 +57,6 @@ public class OrderDetailVO {
      *商品的规格
      */
     private String commoditySpecification;
+
+    private String commodityId;
 }
