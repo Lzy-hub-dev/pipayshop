@@ -132,9 +132,15 @@
             item_commodity_info i
         where
             u.uid = #{userId}
-            <if test="orderStatus != -1">
+
+        <choose>
+            <when test="orderStatus == 2">
+                and o.order_status = 2 or o.order_status = 4
+            </when>
+            <when test="orderStatus != -1">
                 and o.order_status = #{orderStatus}
-            </if>
+            </when>
+        </choose>
             AND o.del_flag = 0
             AND o.commodity_id = i.commodity_id
             AND o.item_id = u.item_id

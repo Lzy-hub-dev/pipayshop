@@ -75,5 +75,4 @@ public class ShopCommodityEvaluateServiceImpl extends ServiceImpl<ShopCommodityE
                 .set(ShopCommodityEvaluate::getStatus, true)
         ) > 0;
     }
-
 }
