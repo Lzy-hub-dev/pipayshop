@@ -93,11 +93,10 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public String generateUnpaidOrder(ItemOrderInfo itemOrderInfo) {
+    public String generateUnpaidOrder(ShopOrderInfo shopOrderInfo) {
         // 生成orderId
         String orderId = StringUtil.generateShortId();
-        ShopOrderInfo shopOrderInfo = new ShopOrderInfo(null, orderId, itemOrderInfo.getTransactionAmount(), null, null, itemOrderInfo.getCommodityId()
-                , itemOrderInfo.getUid(), itemOrderInfo.getItemId(), null, null,itemOrderInfo.getNumber());
+        shopOrderInfo.setOrderId(orderId);
         int insert = shopOrderInfoMapper.insert(shopOrderInfo);
         if (insert < 1){
             String message = "生成未支付订单失败";

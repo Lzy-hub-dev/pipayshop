@@ -29,7 +29,7 @@ public interface ShopOrderInfoService extends IService<ShopOrderInfo> {
 
     void deleteFailOrders();
 
-    String generateUnpaidOrder(ItemOrderInfo itemOrderInfo);
+    String generateUnpaidOrder(ShopOrderInfo shopOrderInfo);
 
     boolean payOrder(PayOrderVO payOrderVO);
 
