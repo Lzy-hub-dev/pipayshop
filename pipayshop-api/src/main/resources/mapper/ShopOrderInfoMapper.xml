@@ -73,9 +73,14 @@
         shop_commodity_info i
         where
         o.uid = #{getOrderDataVO.userId}
-        <if test="getOrderDataVO.orderStatus != -1">
-            and o.order_status = #{getOrderDataVO.orderStatus}
-        </if>
+          <choose>
+              <when test="getOrderDataVO.orderStatus == 0">
+                  and o.order_status = 0
+              </when>
+              <when test="getOrderDataVO.orderStatus != -1">
+                  and o.order_status != 0
+              </when>
+          </choose>
         AND o.del_flag = 0
         AND o.commodity_id = i.commodity_id
         AND o.shop_id = u.shop_id
@@ -95,9 +100,14 @@
         shop_commodity_info i
         where
         o.shop_id = #{getOrderDataVO.shopId}
-        <if test="getOrderDataVO.orderStatus != -1">
-            and o.order_status = #{getOrderDataVO.orderStatus}
-        </if>
+        <choose>
+            <when test="getOrderDataVO.orderStatus == 0">
+                and o.order_status = 0
+            </when>
+            <when test="getOrderDataVO.orderStatus != -1">
+                and o.order_status != 0
+            </when>
+        </choose>
         AND o.del_flag = 0
         AND o.commodity_id = i.commodity_id
         AND o.shop_id = u.shop_id
@@ -130,9 +140,14 @@
         shop_commodity_info i
         where
         o.uid = #{getOrderDataVO.userId}
-        <if test="getOrderDataVO.orderStatus != -1">
-            and o.order_status = #{getOrderDataVO.orderStatus}
-        </if>
+        <choose>
+            <when test="getOrderDataVO.orderStatus == 0">
+                and o.order_status = 0
+            </when>
+            <when test="getOrderDataVO.orderStatus != -1">
+                and o.order_status != 0
+            </when>
+        </choose>
         AND o.del_flag = 0
         AND o.commodity_id = i.commodity_id
         AND o.shop_id = u.shop_id

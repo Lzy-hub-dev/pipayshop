@@ -134,11 +134,11 @@
             u.uid = #{userId}
 
         <choose>
-            <when test="orderStatus == 2">
-                and o.order_status = 2 or o.order_status = 4
+            <when test="orderStatus == 0">
+                and o.order_status = 0
             </when>
             <when test="orderStatus != -1">
-                and o.order_status = #{orderStatus}
+                and o.order_status != 0
             </when>
         </choose>
             AND o.del_flag = 0
@@ -157,9 +157,14 @@
                  JOIN item_commodity_info as ici	on ici.commodity_id=ioi.commodity_id
                  JOIN item_info as ii	on ii.item_id=ici.item_id
         WHERE ii.uid=#{Uid}
-          <if test="status!=-1">
-              and ioi.order_status=#{status}
-          </if>
+        <choose>
+            <when test="status == 0">
+                and ioi.order_status = 0
+            </when>
+            <when test="status != -1">
+                and ioi.order_status != 0
+            </when>
+        </choose>
            and ioi.del_flag=0
             LIMIT #{page},#{limit}
     </select>
@@ -169,9 +174,14 @@
                  JOIN item_commodity_info as ici	on ici.commodity_id=ioi.commodity_id
                  JOIN item_info as ii	on ii.item_id=ici.item_id
         WHERE ii.uid=#{Uid}
-                <if test="status!=-1">
-                    and ioi.order_status=#{status}
-                </if>
+        <choose>
+            <when test="status == 0">
+                and ioi.order_status = 0
+            </when>
+            <when test="status != -1">
+                and ioi.order_status != 0
+            </when>
+        </choose>
           and ioi.del_flag=0
     </select>
 
@@ -196,9 +206,14 @@
         item_commodity_info i
         where
         u.uid = #{userId}
-        <if test="orderStatus != -1">
-            and o.order_status = #{orderStatus}
-        </if>
+        <choose>
+            <when test="orderStatus == 0">
+                and o.order_status = 0
+            </when>
+            <when test="orderStatus != -1">
+                and o.order_status != 0
+            </when>
+        </choose>
         AND o.del_flag = 0
         AND o.commodity_id = i.commodity_id
         AND o.item_id = u.item_id
