@@ -61,6 +61,11 @@ public class ShopCommodityEvaluate implements Serializable {
     private LocalDateTime createTime;
 
     /**
+     * 服务评分
+     */
+    private Double score;
+
+    /**
      * 评价状态(0发布 1取消)
      */
     private Boolean status;

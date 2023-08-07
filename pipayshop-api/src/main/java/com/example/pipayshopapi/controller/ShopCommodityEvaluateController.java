@@ -2,6 +2,7 @@ package com.example.pipayshopapi.controller;
 
 
 import com.example.pipayshopapi.entity.ShopCommodityEvaluate;
+import com.example.pipayshopapi.entity.dto.ShopCommodityEvaluateDTO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -45,9 +46,9 @@ public class ShopCommodityEvaluateController {
 
     @PostMapping("addEvaluate")
     @ApiOperation("实体店-商品-添加评论")
-    public ResponseVO<String> addEvaluate(ShopCommodityEvaluate evaluate) {
+    public ResponseVO<String> addEvaluate(ShopCommodityEvaluateDTO dto) {
         try {
-            Boolean result = evaluationService.addEvaluate(evaluate);
+            Boolean result = evaluationService.addEvaluate(dto);
             if (!result) {
                 return ResponseVO.getFalseResponseVo("新增评论失败");
             }

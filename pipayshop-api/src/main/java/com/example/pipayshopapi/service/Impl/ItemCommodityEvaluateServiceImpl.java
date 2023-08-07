@@ -57,7 +57,6 @@ public class ItemCommodityEvaluateServiceImpl extends ServiceImpl<ItemCommodityE
         return result>0;
     }
 
-
     /**
      * 根据评价Id删除网店商品自己评价
      */
