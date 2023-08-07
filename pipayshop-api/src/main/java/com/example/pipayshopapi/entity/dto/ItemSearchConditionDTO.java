@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
 /**
  * @author: zxb
  */
@@ -20,18 +18,9 @@ public class ItemSearchConditionDTO {
      */
     private String brandId;
     /**
-     * 商品名称
+     * 商品名称（模糊查询）
      */
     private String commodityName;
-    /**
-     * 最小价格
-     */
-    private BigDecimal minPrice;
-
-    /**
-     * 最大价格
-     */
-    private BigDecimal maxPrice;
 
     /**
      * 折损率 枚举类

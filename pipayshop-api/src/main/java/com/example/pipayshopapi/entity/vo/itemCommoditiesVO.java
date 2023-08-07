@@ -31,10 +31,6 @@ public class itemCommoditiesVO {
     private String itemCommodityName;
 
     /**
-     * 商品首图
-     */
-    // private String commodityPic;
-    /**
      * 商品的展示图路径
      */
     private String avatarImag;

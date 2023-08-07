@@ -15,5 +15,4 @@ public class PipayshopApiApplication {
         SpringApplication.run(PipayshopApiApplication.class, args);
         System.out.println("PiPayShop启动成功！");
     }
-
 }

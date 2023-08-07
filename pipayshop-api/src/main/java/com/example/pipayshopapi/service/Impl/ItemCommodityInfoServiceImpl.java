@@ -14,7 +14,6 @@ import com.example.pipayshopapi.entity.ItemFollowFocus;
 import com.example.pipayshopapi.entity.dto.ApplyItemCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
-import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.*;
 import com.example.pipayshopapi.service.ItemCommodityInfoService;
 import com.example.pipayshopapi.util.StringUtil;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -111,30 +109,10 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
      */
     @Override
     public PageDataVO itemSearchCommodity(ItemSearchConditionDTO dto) {
-        if (dto == null) {
-            log.error("参数列表为空");
-            throw new BusinessException("服务器异常！");
-        }
         LambdaQueryWrapper<ItemCommodityInfo> wrapper = new LambdaQueryWrapper<ItemCommodityInfo>()
-                .eq(dto.getBrandId() != null && !"".equals(dto.getBrandId()), ItemCommodityInfo::getBrandId, dto.getBrandId())
+                .eq(dto.getBrandId() != null, ItemCommodityInfo::getBrandId, dto.getBrandId())
                 .eq(dto.getDegreeLoss() != null, ItemCommodityInfo::getDegreeLoss, dto.getDegreeLoss());
 
-
-        if (dto.getMaxPrice() != null && dto.getMinPrice() != null) {
-            // 过滤掉 最大价<最小价 的情况
-            if (dto.getMinPrice().compareTo(dto.getMaxPrice()) == 1) {
-                BigDecimal temp = dto.getMaxPrice();
-                dto.setMaxPrice(dto.getMinPrice());
-                dto.setMinPrice(temp);
-            }
-            wrapper.between(ItemCommodityInfo::getPrice, dto.getMinPrice(), dto.getMaxPrice());
-        } else if (dto.getMaxPrice() != null) {
-            // 最小价格为空
-            wrapper.le(ItemCommodityInfo::getPrice, dto.getMaxPrice());
-        } else if (dto.getMinPrice() != null) {
-            // 最大价格为空
-            wrapper.ge(ItemCommodityInfo::getPrice, dto.getMinPrice());
-        }
         // 模糊查询-商品名称
         if (dto.getCommodityName() != null) {
             wrapper.like(ItemCommodityInfo::getItemCommodityName, dto.getCommodityName());
@@ -143,8 +121,6 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         if (dto.getFreeShippingNum() != null) {
             if (dto.getFreeShippingNum() == 0) {
                 wrapper.eq(ItemCommodityInfo::getFreeShippingNum, 0);
-            } else {
-                wrapper.ne(ItemCommodityInfo::getFreeShippingNum, 0);
             }
         }
         // 价格排序
@@ -164,18 +140,17 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         Page<ItemCommodityInfo> page = new Page<>(dto.getPage(), dto.getLimit());
         wrapper.eq(ItemCommodityInfo::getStatus, 0);
         // 查询分页数据封装到page中
-        commodityInfoMapper.selectPage(page, wrapper);
+        commodityInfoMapper.selectPage(page, wrapper.select(ItemCommodityInfo::getCommodityId));
 
         //将每个商品的membership属性赋值
         List<ItemCommodityInfo> records = page.getRecords();
         if (records == null || records.size() == 0) {
             return null;
         }
-        List<String> commodityIdList = records.stream().map(commodity -> commodity.getCommodityId()).collect(Collectors.toList());
+        List<String> commodityIdList = records.stream().parallel().map(ItemCommodityInfo::getCommodityId).collect(Collectors.toList());
         List<itemCommoditiesVO> resultList = commodityInfoMapper.selectMembershipByCommodityIdList(commodityIdList);
         // 封装数据
         return new PageDataVO((int) page.getTotal(), resultList);
-
     }
 
     @Override
@@ -197,36 +172,20 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
                 itemCommodityInfo.getInventory(), itemCommodityInfo.getFreeShippingNum(), itemCommodityInfo.getCategoryId(),
                 null, null, itemCommodityInfo.getDegreeLoss(), null, null, null);
         String colorListString = itemCommodityInfo.getColorList();
-        if (colorListString != null) {
-            typeMap.put("colorList", JSON.parseArray(colorListString, String.class));
-        }
+        if (colorListString != null) {typeMap.put("colorList", JSON.parseArray(colorListString, String.class));}
         String sizeListString = itemCommodityInfo.getSizeList();
-        if (sizeListString != null) {
-            typeMap.put("sizeList", JSON.parseArray(sizeListString, String.class));
-        }
+        if (sizeListString != null) {typeMap.put("sizeList", JSON.parseArray(sizeListString, String.class));}
         String acceptAddressListString = itemCommodityInfo.getAcceptAddressList();
-        if (acceptAddressListString != null) {
-            commodityDetailVO.setAcceptAddressList(JSON.parseArray(acceptAddressListString, String.class));
-        }
+        if (acceptAddressListString != null) {commodityDetailVO.setAcceptAddressList(JSON.parseArray(acceptAddressListString, String.class));}
         String imagsListString = itemCommodityInfo.getImagsList();
-        if (imagsListString != null) {
-            commodityDetailVO.setImagsList(JSON.parseArray(imagsListString, String.class));
-        }
+        if (imagsListString != null) {commodityDetailVO.setImagsList(JSON.parseArray(imagsListString, String.class));}
         String couponsListString = itemCommodityInfo.getCouponsList();
-        if (couponsListString != null) {
-            commodityDetailVO.setCouponsList(JSON.parseArray(couponsListString, String.class));
-        }
+        if (couponsListString != null) {commodityDetailVO.setCouponsList(JSON.parseArray(couponsListString, String.class));}
         String tagListString = itemCommodityInfo.getTagList();
-        if (tagListString != null) {
-            commodityDetailVO.setTagList(JSON.parseArray(tagListString, String.class));
-        }
+        if (tagListString != null) {commodityDetailVO.setTagList(JSON.parseArray(tagListString, String.class));}
         String detailImagList = itemCommodityInfo.getDetailImagList();
-        if (detailImagList != null){
-            commodityDetailVO.setDetailImagList(JSON.parseArray(detailImagList, String.class));
-        }
-        if (typeMap.size() != 0) {
-            commodityDetailVO.setTypeMap(typeMap);
-        }
+        if (detailImagList != null){commodityDetailVO.setDetailImagList(JSON.parseArray(detailImagList, String.class));}
+        if (typeMap.size() != 0) {commodityDetailVO.setTypeMap(typeMap);}
         String brandId = itemCommodityInfo.getBrandId();
         if (brandId != null) {
             BrandInfo brandInfo = brandInfoMapper.selectOne(new QueryWrapper<BrandInfo>()
