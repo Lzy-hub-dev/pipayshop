@@ -117,17 +117,20 @@
 
 
     <resultMap id="paiedOrderDetailMap" type="com.example.pipayshopapi.entity.vo.ShopOrderDetailVO">
-        <result property="orderId" column="order_id" />
         <result property="createTime" column="create_time" />
         <result property="payTime" column="update_time" />
     </resultMap>
     <select id="getShopOrderDetailVO" resultMap="paiedOrderDetailMap" >
         select
-            create_time, update_time,number
+            o.create_time, o.update_time,o.number, c.validity_time, c.reservation_information
         from
-            shop_order_info
+            shop_order_info o
+        join
+            shop_commodity_info c
+        on
+            o.commodity_id = c.commodity_id
         where
-            order_id = #{orderId}
+            o.order_id = #{orderId}
     </select>
     <select id="getAllOrderList" resultType="java.lang.Integer">
         select

@@ -1,14 +1,11 @@
 package com.example.pipayshopapi.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ItemCommodityHistory;
-import com.example.pipayshopapi.entity.ShopCommodityHistory;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.mapper.ItemCommodityHistoryMapper;
 import com.example.pipayshopapi.service.ItemCommodityHistoryService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,4 +72,10 @@ public class ItemCommodityHistoryServiceImpl extends ServiceImpl<ItemCommodityHi
         }
         return result > 0;
     }
+
+//    @Override
+//    public boolean orderDeleteHistory() {
+//        itemCommodityHistoryMapper.delete(new QueryWrapper<>())
+//        return false;
+//    }
 }

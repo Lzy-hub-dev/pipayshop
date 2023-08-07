@@ -1,8 +1,7 @@
 package com.example.pipayshopapi.service;
 
-import com.example.pipayshopapi.entity.ItemCommodityHistory;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.entity.ItemCommodityHistory;
 
 /**
  * <p>
@@ -29,4 +28,6 @@ public interface ItemCommodityHistoryService extends IService<ItemCommodityHisto
      * @return
      */
     boolean addHistory(ItemCommodityHistory itemCommodityHistory);
+
+//    boolean orderDeleteHistory();
 }

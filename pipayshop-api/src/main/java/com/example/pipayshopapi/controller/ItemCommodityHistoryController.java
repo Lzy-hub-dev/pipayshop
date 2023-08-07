@@ -8,7 +8,10 @@ import com.example.pipayshopapi.service.ItemCommodityHistoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
@@ -59,5 +62,22 @@ public class ItemCommodityHistoryController {
         }
     }
 
+//    /**
+//     * 定期轮询删除超过十天的浏览历史足迹记录
+//     */
+//    @PostMapping("orderDeleteHistory")
+//    @ApiOperation("定期轮询删除超过十天的浏览历史足迹记录")
+//    public ResponseVO<String> orderDeleteHistory(){
+//        try {
+//            boolean result = itemCommodityHistoryService.orderDeleteHistory();
+//            if (!result){
+//                throw new Exception();
+//            }
+//            return ResponseVO.getSuccessResponseVo("定期轮询删除超过十天的浏览历史足迹记录");
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            throw new BusinessException("定期轮询删除超过十天的浏览历史足迹记录失败，请联系后台人员");
+//        }
+//    }
 
 }
