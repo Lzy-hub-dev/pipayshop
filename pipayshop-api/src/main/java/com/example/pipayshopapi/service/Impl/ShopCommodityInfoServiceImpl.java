@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopDetailInfoVO;
+import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.ShopTags;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.vo.*;
@@ -63,6 +64,11 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
                 applyShopCommodityDTO.getValidityTime(), applyShopCommodityDTO.getResidue(),
                 applyShopCommodityDTO.getReservationInformation(), null,
                 null, null);
+        //shop-1剩余数量
+        int shop_id = shopInfoMapper.update(null, new UpdateWrapper<ShopInfo>()
+                .eq("shop_id", applyShopCommodityDTO.getShopId())
+                .setSql("upload_commodity_balance= upload_commodity_balance -1"));
+        if (shop_id < 1){throw new RuntimeException();}
         return shopCommodityInfoMapper.insert(shopCommodityInfo) > 0;
     }
 
