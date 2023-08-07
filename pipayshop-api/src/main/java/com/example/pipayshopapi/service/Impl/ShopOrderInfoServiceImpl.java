@@ -96,6 +96,7 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
     public String generateUnpaidOrder(ShopOrderInfo shopOrderInfo) {
         // 生成orderId
         String orderId = StringUtil.generateShortId();
+        shopOrderInfo.setOrderId(orderId);
         int insert = shopOrderInfoMapper.insert(shopOrderInfo);
         if (insert < 1){
             String message = "生成未支付订单失败";
