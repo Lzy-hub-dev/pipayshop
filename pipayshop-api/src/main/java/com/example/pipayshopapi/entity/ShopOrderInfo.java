@@ -86,6 +86,12 @@ public class ShopOrderInfo implements Serializable {
      */
     private Integer number;
 
-
-
+    public ShopOrderInfo(String orderId, BigDecimal transactionAmount, String commodityId, String uid, String shopId, Integer number) {
+        this.orderId = orderId;
+        this.transactionAmount = transactionAmount;
+        this.commodityId = commodityId;
+        this.uid = uid;
+        this.shopId = shopId;
+        this.number = number;
+    }
 }

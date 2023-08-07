@@ -3,6 +3,7 @@ package com.example.pipayshopapi.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.example.pipayshopapi.entity.ShopOrderInfo;
+import com.example.pipayshopapi.entity.dto.ShopOrderDTO;
 import com.example.pipayshopapi.entity.vo.*;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public interface ShopOrderInfoService extends IService<ShopOrderInfo> {
 
     void deleteFailOrders();
 
-    String generateUnpaidOrder(ShopOrderInfo shopOrderInfo);
+    String generateUnpaidOrder(ShopOrderDTO shopOrderDTO);
 
     boolean payOrder(PayOrderVO payOrderVO);
 
