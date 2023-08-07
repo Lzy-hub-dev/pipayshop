@@ -56,6 +56,9 @@
         WHERE ic.user_id = #{userId}
           AND i.`status` = 0
           AND ic.`status` = 0
+        order by ic.update_time desc
+            limit #{page},#{limit}
+
     </select>
 
     <select id="selectHistoryProductByUserId" resultType="com.example.pipayshopapi.entity.vo.ItemCollectionVO">
@@ -88,6 +91,7 @@
         price
         FROM item_commodity_info
         WHERE item_id = #{itemId}
+order by update_time DESC
     </select>
 
 

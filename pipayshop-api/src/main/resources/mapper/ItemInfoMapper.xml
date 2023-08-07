@@ -24,6 +24,7 @@
         WHERE f.follow_id = #{userId}
           and f.`status` = 0
           and i.`status` = 0
+          order by f.update_time desc
         limit #{page},#{limit}
     </select>
 

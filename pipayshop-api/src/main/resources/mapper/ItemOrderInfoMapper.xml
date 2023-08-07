@@ -166,6 +166,7 @@
             </when>
         </choose>
            and ioi.del_flag=0
+           order by ioi.update_time desc
             LIMIT #{page},#{limit}
     </select>
     <select id="getAllMyOrderByUid" resultType="java.lang.Integer">

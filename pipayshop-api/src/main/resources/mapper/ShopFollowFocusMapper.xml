@@ -37,6 +37,7 @@
         WHERE f.follow_id = #{userId}
           and f.`status` = 0
           and i.`status` = 0
+          order by f.update_time desc
             LIMIT #{page},#{limit}
     </select>
     <select id="selectAllFollowProductByUserId" resultType="java.lang.Integer">
