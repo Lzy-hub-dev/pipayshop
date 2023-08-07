@@ -3,6 +3,7 @@ package com.example.pipayshopapi.service.Impl;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.BgImg;
+import com.example.pipayshopapi.entity.dto.BgImgDTO;
 import com.example.pipayshopapi.entity.vo.BgImgVO;
 import com.example.pipayshopapi.mapper.BgImgMapper;
 import com.example.pipayshopapi.service.BgImgService;
@@ -33,24 +34,21 @@ public class BgImgServiceImpl extends ServiceImpl<BgImgMapper, BgImg> implements
      * 新增首页背景轮播图
      *
      * @param file
-     * @param bgImg
      * @return
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean addBgImg(MultipartFile file, BgImg bgImg) {
+    public Boolean addBgImg(MultipartFile file, BgImgDTO bgImgDTO) {
         if (file == null) {
             log.error("未选择图片");
             return false;
         }
-        if (bgImg == null) {
+        if (bgImgDTO == null) {
             log.error("参数列表为空！");
             return false;
         }
         String picPath = FileUploadUtil.uploadFile(file, FileUploadUtil.BG_IMG);
-        bgImg.setImgUrl(picPath);
-        bgImg.setBgId(StringUtil.generateShortId());
-        return bgImgMapper.insert(bgImg) > 0;
+        return bgImgMapper.insert(new BgImg(StringUtil.generateShortId(),picPath,bgImgDTO.getCategory(),bgImgDTO.getContentId())) > 0;
     }
 
     /**

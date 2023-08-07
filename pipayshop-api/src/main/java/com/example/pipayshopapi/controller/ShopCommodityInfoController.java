@@ -1,6 +1,7 @@
 package com.example.pipayshopapi.controller;
 
 
+import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopDetailInfoVO;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.vo.ApplicationRecordVO;
@@ -36,8 +37,7 @@ public class ShopCommodityInfoController {
 
     @PostMapping(" issueShopCommodity")
     @ApiOperation("发布实体店商品")
-    public ResponseVO<String> issueShopCommodity(ApplyShopCommodityDTO applyShopCommodityDTO, @RequestParam("files") MultipartFile[] files) {
-
+    public ResponseVO<String> issueShopCommodity(ShopCommodityInfo applyShopCommodityDTO, @RequestParam("files") MultipartFile[] files) {
         try {
             boolean insert = shopCommodityService.issueShopCommodity(applyShopCommodityDTO, files);
             if (!insert) {

@@ -2,22 +2,18 @@ package com.example.pipayshopapi.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopCommodityLive;
-import com.example.pipayshopapi.entity.vo.InsertShopLiveVO;
 import com.example.pipayshopapi.entity.vo.LivePageVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityLiveVO;
-import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.ShopCommodityLiveMapper;
 import com.example.pipayshopapi.service.ShopCommodityLiveService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -76,7 +72,7 @@ public class ShopCommodityLiveServiceImpl extends ServiceImpl<ShopCommodityLiveM
     }
 
     /**
-     * 根据服务id更改服务信息
+     * 根据房型id更改房型信息
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
