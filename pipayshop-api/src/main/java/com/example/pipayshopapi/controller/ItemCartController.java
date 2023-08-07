@@ -39,11 +39,14 @@ public class ItemCartController {
         }
     }
 
-    @PostMapping("putItemCartById/{userId}/{commodityId}/{sumCount}")
+    @PostMapping("putItemCartById/{userId}/{commodityId}/{sumCount}/{commoditySpec}")
     @ApiOperation("放进购物车")
-    public ResponseVO putItemCartById(@PathVariable String userId,@PathVariable String commodityId,@PathVariable Integer sumCount){
+    public ResponseVO putItemCartById(@PathVariable String userId,
+                                      @PathVariable String commodityId,
+                                      @PathVariable Integer sumCount,
+                                      @PathVariable String commoditySpec){
         try {
-            boolean result = itemCartService.putItemCartById(userId, commodityId,sumCount);
+            boolean result = itemCartService.putItemCartById(userId, commodityId,sumCount,commoditySpec);
             if (!result){
                 throw new Exception();
             }

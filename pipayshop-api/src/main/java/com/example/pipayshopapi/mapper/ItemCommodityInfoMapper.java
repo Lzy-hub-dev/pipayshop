@@ -42,7 +42,7 @@ public interface ItemCommodityInfoMapper extends BaseMapper<ItemCommodityInfo> {
                                              @Param("price")Boolean price);
 
 
-    List<itemCommoditiesVO> selectMembershipByCommodityIdList(@Param("list") List<String> commodityIdList);
+    List<itemCommoditiesVO> selectMembershipByCommodityIdList(@Param("list") List<String> commodityIdList,@Param("priceOrder")Integer priceOrder);
 
 
     Integer getInfoSize(String itemId);

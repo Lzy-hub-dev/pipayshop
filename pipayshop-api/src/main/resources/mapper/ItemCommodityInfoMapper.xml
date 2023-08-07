@@ -143,6 +143,8 @@
         WHERE
         c.commodity_id IN
         <foreach item="item" collection="list" index="index" open="(" separator="," close=")">#{item}</foreach>
+        <if test="priceOrder!=null and priceOrder==0">order by price asc</if>
+        <if test="priceOrder!=null and priceOrder==1">order by price desc</if>
     </select>
     <select id="selectAllCollectProductByUserId" resultType="java.lang.Integer">
         select count(*)

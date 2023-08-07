@@ -135,6 +135,11 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
                 wrapper.eq(ItemCommodityInfo::getFreeShippingNum, 0);
             }
         }
+
+        // 发布时间升序排列
+        if (dto.getCreateTime()!=null) {
+            wrapper.orderByDesc(ItemCommodityInfo::getCreateTime);
+        }
         // 价格排序
         if (dto.getPriceOrder() != null) {
             if (dto.getPriceOrder() == 0) {
@@ -143,11 +148,6 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
                 wrapper.orderByDesc(ItemCommodityInfo::getPrice);
             }
         }
-        // 发布时间升序排列
-        if (dto.getCreateTime()!=null) {
-            wrapper.orderByDesc(ItemCommodityInfo::getCreateTime);
-        }
-
         // 设置分页参数
         Page<ItemCommodityInfo> page = new Page<>(dto.getPage(), dto.getLimit());
         wrapper.eq(ItemCommodityInfo::getStatus, 0);
@@ -160,7 +160,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
             return null;
         }
         List<String> commodityIdList = records.stream().parallel().map(ItemCommodityInfo::getCommodityId).collect(Collectors.toList());
-        List<itemCommoditiesVO> resultList = commodityInfoMapper.selectMembershipByCommodityIdList(commodityIdList);
+        List<itemCommoditiesVO> resultList = commodityInfoMapper.selectMembershipByCommodityIdList(commodityIdList,dto.getPriceOrder());
         // 封装数据
         return new PageDataVO((int) page.getTotal(), resultList);
     }

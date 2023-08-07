@@ -72,5 +72,8 @@ public class ItemCartVO {
      * 商品的尺寸集合
      */
     private String sizeList;
-
+    /**
+     * 商品规格
+     */
+    private String commoditySpec;
 }
