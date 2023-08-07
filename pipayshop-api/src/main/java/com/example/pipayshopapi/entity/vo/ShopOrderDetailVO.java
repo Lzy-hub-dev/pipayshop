@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -26,6 +27,22 @@ public class ShopOrderDetailVO {
     private String orderId;
 
     private Integer number;
+
+    /**
+     * 交易金额
+     */
+    private BigDecimal transactionAmount;
+
+    private String avatarImag;
+
+    private String commodityId;
+
+    /**
+     * 商品的名字
+     */
+    private String commodityName;
+
+
 
 
 }

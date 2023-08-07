@@ -7,19 +7,19 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopDetailInfoVO;
+import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.ShopTags;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.ShopCommodityEvaluateMapper;
 import com.example.pipayshopapi.mapper.ShopCommodityInfoMapper;
+import com.example.pipayshopapi.mapper.ShopInfoMapper;
 import com.example.pipayshopapi.mapper.ShopTagsMapper;
 import com.example.pipayshopapi.service.ShopCommodityInfoService;
-import com.example.pipayshopapi.util.FileUploadUtil;
 import com.example.pipayshopapi.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -45,24 +45,31 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
     private ShopCommodityEvaluateMapper shopCommodityEvaluateMapper;
     @Resource
     private ShopTagsMapper shopTagsMapper;
+    @Resource
+    private ShopInfoMapper shopInfoMapper;
     /**
      * 发布实体店商品
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean issueShopCommodity(ShopCommodityInfo applyShopCommodityDTO, MultipartFile[] files) {
-        // 创建一个集合存储商品图片
-        List<String> imagesList = new ArrayList<>();
-        for (MultipartFile multipartFile : files) {
-            // 获取存储到本地空间并返回图片url
-            imagesList.add(FileUploadUtil.uploadFile(multipartFile,FileUploadUtil.SHOP_COMMODITY_IMG));
-        }
-        // 将list集合转为string
-        String jsonString = JSON.toJSONString(imagesList);
+    public boolean issueShopCommodity(ApplyShopCommodityDTO applyShopCommodityDTO) {
         // 属性转移
-        applyShopCommodityDTO.setCommodityImgList(jsonString);
-        applyShopCommodityDTO.setCommodityId(StringUtil.generateShortId());
-        return shopCommodityInfoMapper.insert(applyShopCommodityDTO) > 0;
+        String commodityId = StringUtil.generateShortId();
+        ShopCommodityInfo shopCommodityInfo = new ShopCommodityInfo(null,
+                commodityId, applyShopCommodityDTO.getCommodityName(),
+                applyShopCommodityDTO.getCommodityImgList().get(0),
+                JSON.toJSONString(applyShopCommodityDTO.getCommodityImgList()),
+                applyShopCommodityDTO.getCommodityDetail(), applyShopCommodityDTO.getPrice(),
+                null, applyShopCommodityDTO.getShopId(), null, null,
+                applyShopCommodityDTO.getValidityTime(), applyShopCommodityDTO.getResidue(),
+                applyShopCommodityDTO.getReservationInformation(), null,
+                null, null);
+        //shop-1剩余数量
+        int shop_id = shopInfoMapper.update(null, new UpdateWrapper<ShopInfo>()
+                .eq("shop_id", applyShopCommodityDTO.getShopId())
+                .setSql("upload_commodity_balance= upload_commodity_balance -1"));
+        if (shop_id < 1){throw new RuntimeException();}
+        return shopCommodityInfoMapper.insert(shopCommodityInfo) > 0;
     }
 
     /**
@@ -104,7 +111,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
     @Transactional(rollbackFor = Exception.class)
     public boolean updateCommodityStatus(String commodityId, Integer status) {
         try {
-            if (!(status==0||status==1)){
+            if (!(status==1||status==2)){
                 throw new Exception();
             }
         }catch (Exception e){
@@ -127,7 +134,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
     public boolean updateCommodityUp(String commodityId) {
         int result = shopCommodityInfoMapper.update(null, new UpdateWrapper<ShopCommodityInfo>()
                 .eq("commodity_id", commodityId)
-                .set("status", 1));
+                .set("status", 2));
         return result > 0;
     }
 
@@ -141,7 +148,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
     public boolean updateCommodityCheck(String commodityId) {
         int result = shopCommodityInfoMapper.update(null, new UpdateWrapper<ShopCommodityInfo>()
                 .eq("commodity_id", commodityId)
-                .set("status", 2));
+                .set("status", 0));
         return result > 0;
     }
 
@@ -179,9 +186,9 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
                 .and(new Consumer<QueryWrapper<ShopCommodityInfo>>() {
                     @Override
                     public void accept(QueryWrapper<ShopCommodityInfo> wrapper) {
-                        wrapper.eq("status",0)
+                        wrapper.eq("status",1)
                                 .or()
-                                .eq("status",1);
+                                .eq("status",2);
                     }
                 }));
 

@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.text.Bidi;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,15 +13,18 @@ import java.text.Bidi;
 public class ApplyShopCommodityDTO {
 
     private String commodityName;
+
+    private List<String> commodityImgList;
+
     private  String commodityDetail;
+
     private BigDecimal price;
-    private Integer categoryTopId;
-    private Integer categoryId;
+
     private String shopId;
+
+    private Integer validityTime;
+
     private Integer residue;
+
     private String reservationInformation;
-    private String myEvaluate;
-    private String avatarImag;
-    private String originPhone;
-    private String originName;
 }

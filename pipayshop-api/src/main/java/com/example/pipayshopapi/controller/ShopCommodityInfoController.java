@@ -1,7 +1,6 @@
 package com.example.pipayshopapi.controller;
 
 
-import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopDetailInfoVO;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.vo.ApplicationRecordVO;
@@ -10,6 +9,7 @@ import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopCommodityInfoService;
+import com.example.pipayshopapi.util.FileUploadUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -37,9 +37,10 @@ public class ShopCommodityInfoController {
 
     @PostMapping(" issueShopCommodity")
     @ApiOperation("发布实体店商品")
-    public ResponseVO<String> issueShopCommodity(ShopCommodityInfo applyShopCommodityDTO, @RequestParam("files") MultipartFile[] files) {
+    public ResponseVO<String> issueShopCommodity(ApplyShopCommodityDTO applyShopCommodityDTO) {
+
         try {
-            boolean insert = shopCommodityService.issueShopCommodity(applyShopCommodityDTO, files);
+            boolean insert = shopCommodityService.issueShopCommodity(applyShopCommodityDTO);
             if (!insert) {
                 throw new Exception();
             }
@@ -140,7 +141,29 @@ public class ShopCommodityInfoController {
         }
     }
 
+    @PostMapping("shopCommodityTopImageUp")
+    @ApiOperation("实体店商品展示图上传")
+    public ResponseVO<String> shopCommodityTopImageUp(MultipartFile multipartFile){
+        try {
+            String shopCommodityTopImageUp = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.SHOP_COMMODITY_TOP_IMAGE_UP);
+            return ResponseVO.getSuccessResponseVo(shopCommodityTopImageUp);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("实体店商品展示图上传失败，请联系后台人员");
+        }
+    }
 
+    @PostMapping("shopCommodityImageUp")
+    @ApiOperation("实体店商品轮播图上传")
+    public ResponseVO<String> shopCommodityImageUp(MultipartFile multipartFile){
+        try {
+            String shopCommodityImageUp = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.SHOP_COMMODITY_IMAGE_UP);
+            return ResponseVO.getSuccessResponseVo(shopCommodityImageUp);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("实体店商品轮播图上传失败，请联系后台人员");
+        }
+    }
 
 
 

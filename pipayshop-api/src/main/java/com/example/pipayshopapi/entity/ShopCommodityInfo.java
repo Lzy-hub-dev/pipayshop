@@ -116,4 +116,5 @@ public class ShopCommodityInfo implements Serializable {
     private String tagList;
 
 
+
 }

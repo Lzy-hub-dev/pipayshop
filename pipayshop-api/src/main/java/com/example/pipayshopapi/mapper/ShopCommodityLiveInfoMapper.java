@@ -38,4 +38,6 @@ public interface ShopCommodityLiveInfoMapper extends BaseMapper<ShopCommodityLiv
     List<ShopCommodityLiveVO> selectShopCommodityLiveVO(@Param("limit")Integer limit, @Param("pages")Integer pages);
 
     Integer selectAllShopCommodityLiveVO();
+
+
 }

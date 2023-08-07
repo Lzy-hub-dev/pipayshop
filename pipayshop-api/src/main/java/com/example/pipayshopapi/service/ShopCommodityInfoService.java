@@ -7,7 +7,6 @@ import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.vo.ApplicationRecordVO;
 import com.example.pipayshopapi.entity.vo.CommodityStatusPageVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -24,10 +23,9 @@ public interface ShopCommodityInfoService extends IService<ShopCommodityInfo> {
     /**
      * 发布实体店商品
      * @param applyShopCommodityDTO
-     * @param files
      * @return
      */
-    boolean issueShopCommodity(ShopCommodityInfo applyShopCommodityDTO, MultipartFile[] files);
+    boolean issueShopCommodity(ApplyShopCommodityDTO applyShopCommodityDTO);
     /**
      * 根据用户id查询 用户收藏的商品列表
      * @param userId
