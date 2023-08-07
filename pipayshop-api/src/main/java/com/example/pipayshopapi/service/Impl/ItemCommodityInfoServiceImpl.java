@@ -130,7 +130,14 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         if (dto.getCreateTime()!=null) {
             wrapper.orderByDesc(ItemCommodityInfo::getCreateTime);
         }
-
+        // 价格排序
+        if (dto.getPriceOrder() != null) {
+            if (dto.getPriceOrder() == 0) {
+                wrapper.orderByAsc(ItemCommodityInfo::getPrice);
+            }else if (dto.getPriceOrder() == 1) {
+                wrapper.orderByDesc(ItemCommodityInfo::getPrice);
+            }
+        }
         // 设置分页参数
         Page<ItemCommodityInfo> page = new Page<>(dto.getPage(), dto.getLimit());
         wrapper.eq(ItemCommodityInfo::getStatus, 0);
@@ -143,16 +150,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
             return null;
         }
         List<String> commodityIdList = records.stream().parallel().map(ItemCommodityInfo::getCommodityId).collect(Collectors.toList());
-        List<itemCommoditiesVO> resultList = commodityInfoMapper.selectMembershipByCommodityIdList(commodityIdList);
-        // 价格排序
-        if (dto.getPriceOrder() != null) {
-            if (dto.getPriceOrder() == 0) {
-                resultList = resultList.stream().sorted(Comparator.comparing(itemCommoditiesVO::getPrice)).collect(Collectors.toList());
-
-            }else if (dto.getPriceOrder() == 1) {
-                resultList = resultList.stream().sorted((o1, o2) -> o2.getPrice().compareTo(o1.getPrice())).collect(Collectors.toList());
-            }
-        }
+        List<itemCommoditiesVO> resultList = commodityInfoMapper.selectMembershipByCommodityIdList(commodityIdList,dto.getPriceOrder());
         // 封装数据
         return new PageDataVO((int) page.getTotal(), resultList);
     }
