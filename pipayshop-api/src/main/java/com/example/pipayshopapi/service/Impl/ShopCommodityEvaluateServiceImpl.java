@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopCommodityEvaluate;
+import com.example.pipayshopapi.entity.dto.ShopCommodityEvaluateDTO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityEvaluateVO;
 import com.example.pipayshopapi.mapper.ShopCommodityEvaluateMapper;
@@ -32,7 +33,7 @@ public class ShopCommodityEvaluateServiceImpl extends ServiceImpl<ShopCommodityE
      */
     @Override
     public PageDataVO commodityEvaluateList(String commodityId, Integer pageNum, Integer pageSize) {
-        List<ShopCommodityEvaluateVO> result = shopCommodityEvaluateMapper.commodityEvaluateList(commodityId, pageNum - 1, pageSize);
+        List<ShopCommodityEvaluateVO> result = shopCommodityEvaluateMapper.commodityEvaluateList(commodityId, (pageNum-1)*pageSize, pageSize);
         Long count = shopCommodityEvaluateMapper.selectCount(new QueryWrapper<ShopCommodityEvaluate>()
                 .eq("commodity_id", commodityId)
                 .eq("status", 0));
@@ -43,7 +44,13 @@ public class ShopCommodityEvaluateServiceImpl extends ServiceImpl<ShopCommodityE
      * 实体店-商品-添加评论
      */
     @Override
-    public Boolean addEvaluate(ShopCommodityEvaluate evaluate) {
+    public Boolean addEvaluate(ShopCommodityEvaluateDTO dto) {
+        ShopCommodityEvaluate evaluate = new ShopCommodityEvaluate();
+        evaluate.setEvaluate(dto.getEvaluate());
+        evaluate.setUserId(dto.getUserId());
+        evaluate.setItemId(dto.getItemId());
+        evaluate.setScore(dto.getScore());
+        evaluate.setCommodityId(dto.getCommodityId());
         evaluate.setEvaluateId(StringUtil.generateShortId());
         evaluate.setStatus(false);
         return shopCommodityEvaluateMapper.insert(evaluate)>0;

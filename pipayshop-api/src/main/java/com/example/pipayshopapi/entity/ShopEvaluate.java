@@ -68,6 +68,10 @@ public class ShopEvaluate implements Serializable {
      * 评价状态(0发布 1取消)
      */
     private Integer status;
+    /**
+     * 评分
+     */
+    private Double score;
 
 
 }
