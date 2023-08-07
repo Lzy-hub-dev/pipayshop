@@ -34,5 +34,9 @@ public class ItemCommodityEvaluateAddVO {
      * 商品id
      */
     private String commodityId;
+    /**
+     * 商品评分
+     */
+    private Double score;
 
 }

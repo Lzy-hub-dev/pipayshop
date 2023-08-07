@@ -3,14 +3,14 @@
 <mapper namespace="com.example.pipayshopapi.mapper.ItemCommodityEvaluateMapper">
 
     <insert id="insertItemCommodityEvaluateAddVO">
-        insert into item_commodity_evaluate (evaluate_id,user_id,item_id,commodity_id,evaluate)
-        values (#{evaluateId},#{userId},#{itemId},#{commodityId},#{evaluate})
+        insert into item_commodity_evaluate (evaluate_id,user_id,item_id,commodity_id,evaluate,score)
+        values (#{evaluateId},#{userId},#{itemId},#{commodityId},#{evaluate},#{score})
     </insert>
 
 
     <select id="getItemCommodityEvaluates" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityEvaluateVO">
         select   e.evaluate ,e.create_time,e.evaluate_id
-        , e.user_id,u.user_name,u.user_image
+        , e.user_id,u.user_name,u.user_image,e.score
         from item_commodity_evaluate e
         left join user_info u on u.uid=e.user_id
         where commodity_id=#{commodityId} and e.status = 0 and u.status = 0

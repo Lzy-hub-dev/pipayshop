@@ -52,7 +52,8 @@ public class ItemCommodityEvaluateServiceImpl extends ServiceImpl<ItemCommodityE
                 itemCommodityEvaluateAddVO.getUserId(),
                 itemCommodityEvaluateAddVO.getItemId(),
                 itemCommodityEvaluateAddVO.getCommodityId(),
-                itemCommodityEvaluateAddVO.getEvaluate());
+                itemCommodityEvaluateAddVO.getEvaluate(),
+                itemCommodityEvaluateAddVO.getScore());
         return result>0;
     }
 
