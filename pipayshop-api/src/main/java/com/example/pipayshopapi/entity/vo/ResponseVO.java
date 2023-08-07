@@ -28,6 +28,12 @@ public class ResponseVO<T> {
     public static <T> ResponseVO<T> getFalseResponseVo(T data){
         return new ResponseVO<>( 500, "请求失败", data);
     }
+    /**
+     失败的信息响应
+     */
+    public static  ResponseVO<String> getFalseResponseMsg(String msg){
+        return new ResponseVO<>( 500, msg,null);
+    }
 
 
 }
