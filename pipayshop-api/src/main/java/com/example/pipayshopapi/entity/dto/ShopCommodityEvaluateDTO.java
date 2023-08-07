@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 /**
  * @author:
  * @ClassName ShopCommodityEvaluateDTO
@@ -17,10 +15,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ShopCommodityEvaluateDTO {
-    /**
-     * 实体店id
-     */
-    private String itemId;
 
     /**
      * 服务id

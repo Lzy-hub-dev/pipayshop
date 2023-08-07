@@ -9,6 +9,7 @@ import com.example.pipayshopapi.entity.vo.ShopCommodityInfoVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityListVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -77,4 +78,7 @@ public interface ShopCommodityInfoMapper extends BaseMapper<ShopCommodityInfo> {
     Integer selectCommdityListByShopId(@Param("shopId")String shopId);
 
     List<ApplicationRecordVO> selectCommdityListByShopIdPage(@Param("shopId")String shopId);
+
+    @Select("select shop_id from shop_commodity_info where commodity_id = #{commodityId}")
+    String selectShopIdByCommodityId(@Param("commodityId")String commodityId);
 }

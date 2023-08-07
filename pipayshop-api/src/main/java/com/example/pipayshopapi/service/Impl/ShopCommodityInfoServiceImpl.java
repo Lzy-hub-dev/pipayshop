@@ -65,10 +65,10 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
                 applyShopCommodityDTO.getReservationInformation(), null,
                 null, null);
         //shop-1剩余数量
-        int shop_id = shopInfoMapper.update(null, new UpdateWrapper<ShopInfo>()
+        int shopId = shopInfoMapper.update(null, new UpdateWrapper<ShopInfo>()
                 .eq("shop_id", applyShopCommodityDTO.getShopId())
                 .setSql("upload_commodity_balance= upload_commodity_balance -1"));
-        if (shop_id < 1){throw new RuntimeException();}
+        if (shopId < 1){throw new RuntimeException();}
         return shopCommodityInfoMapper.insert(shopCommodityInfo) > 0;
     }
 
