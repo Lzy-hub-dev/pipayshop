@@ -29,5 +29,8 @@ public interface ItemCommodityHistoryService extends IService<ItemCommodityHisto
      */
     boolean addHistory(ItemCommodityHistory itemCommodityHistory);
 
-//    boolean orderDeleteHistory();
+    /**
+     * 定期轮询删除超过十天的浏览历史足迹记录
+     */
+    boolean orderDeleteHistory();
 }

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ItemCommodityHistory;
 import com.example.pipayshopapi.mapper.ItemCommodityHistoryMapper;
+import com.example.pipayshopapi.mapper.ShopCommodityHistoryMapper;
 import com.example.pipayshopapi.service.ItemCommodityHistoryService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,8 @@ public class ItemCommodityHistoryServiceImpl extends ServiceImpl<ItemCommodityHi
     @Resource
     private ItemCommodityHistoryMapper itemCommodityHistoryMapper;
 
+    @Resource
+    private ShopCommodityHistoryMapper shopCommodityHistoryMapper;
     /**
      * 删除用户浏览网店商品的历史记录
      * @param userId
@@ -73,9 +76,11 @@ public class ItemCommodityHistoryServiceImpl extends ServiceImpl<ItemCommodityHi
         return result > 0;
     }
 
-//    @Override
-//    public boolean orderDeleteHistory() {
-//        itemCommodityHistoryMapper.delete(new QueryWrapper<>())
-//        return false;
-//    }
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean orderDeleteHistory() {
+        itemCommodityHistoryMapper.orderDeleteHistory();
+        shopCommodityHistoryMapper.orderDeleteHistory();
+        return true;
+    }
 }

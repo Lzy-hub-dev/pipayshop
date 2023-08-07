@@ -2,4 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.pipayshopapi.mapper.ItemCommodityHistoryMapper">
 
+
+    <delete id="orderDeleteHistory">
+        DELETE FROM item_commodity_history
+        WHERE DATEDIFF(NOW(), create_time) >= 10;
+    </delete>
 </mapper>

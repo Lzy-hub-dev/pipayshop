@@ -1,7 +1,7 @@
 package com.example.pipayshopapi.mapper;
 
-import com.example.pipayshopapi.entity.ItemCommodityHistory;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.pipayshopapi.entity.ItemCommodityHistory;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -16,4 +16,5 @@ import org.apache.ibatis.annotations.Mapper;
 
 public interface ItemCommodityHistoryMapper extends BaseMapper<ItemCommodityHistory> {
 
+    void orderDeleteHistory();
 }
