@@ -13,13 +13,12 @@ import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.ShopCommodityEvaluateMapper;
 import com.example.pipayshopapi.mapper.ShopCommodityInfoMapper;
+import com.example.pipayshopapi.mapper.ShopInfoMapper;
 import com.example.pipayshopapi.mapper.ShopTagsMapper;
 import com.example.pipayshopapi.service.ShopCommodityInfoService;
-import com.example.pipayshopapi.util.FileUploadUtil;
 import com.example.pipayshopapi.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -45,32 +44,25 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
     private ShopCommodityEvaluateMapper shopCommodityEvaluateMapper;
     @Resource
     private ShopTagsMapper shopTagsMapper;
+    @Resource
+    private ShopInfoMapper shopInfoMapper;
     /**
      * 发布实体店商品
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean issueShopCommodity(ApplyShopCommodityDTO applyShopCommodityDTO, MultipartFile[] files) {
-        // 创建一个集合存储商品图片
-        List<String> imagesList = new ArrayList<>();
-        for (MultipartFile multipartFile : files) {
-            // 获取存储到本地空间并返回图片url
-            imagesList.add(FileUploadUtil.uploadFile(multipartFile,FileUploadUtil.SHOP_COMMODITY_IMG));
-        }
-        // 将list集合转为string
-        String jsonString = JSON.toJSONString(imagesList);
+    public boolean issueShopCommodity(ApplyShopCommodityDTO applyShopCommodityDTO) {
         // 属性转移
-        ShopCommodityInfo shopCommodityInfo = new ShopCommodityInfo();
-        shopCommodityInfo.setCommodityId(StringUtil.generateShortId());
-        shopCommodityInfo.setCommodityName(applyShopCommodityDTO.getCommodityName());
-        shopCommodityInfo.setCommodityImgList(jsonString);
-        shopCommodityInfo.setCommodityDetail(applyShopCommodityDTO.getCommodityDetail());
-        shopCommodityInfo.setPrice(applyShopCommodityDTO.getPrice());
-        shopCommodityInfo.setShopId(applyShopCommodityDTO.getShopId());
-        shopCommodityInfo.setResidue(applyShopCommodityDTO.getResidue());
-        shopCommodityInfo.setReservationInformation(applyShopCommodityDTO.getReservationInformation());
-//        shopCommodityInfo.setTagList(applyShopCommodityDTO.getTagList());
-        shopCommodityInfo.setMyEvaluate(applyShopCommodityDTO.getMyEvaluate());
+        String commodityId = StringUtil.generateShortId();
+        ShopCommodityInfo shopCommodityInfo = new ShopCommodityInfo(null,
+                commodityId, applyShopCommodityDTO.getCommodityName(),
+                applyShopCommodityDTO.getCommodityImgList().get(0),
+                JSON.toJSONString(applyShopCommodityDTO.getCommodityImgList()),
+                applyShopCommodityDTO.getCommodityDetail(), applyShopCommodityDTO.getPrice(),
+                null, applyShopCommodityDTO.getShopId(), null, null,
+                applyShopCommodityDTO.getValidityTime(), applyShopCommodityDTO.getResidue(),
+                applyShopCommodityDTO.getReservationInformation(), null,
+                null, null);
         return shopCommodityInfoMapper.insert(shopCommodityInfo) > 0;
     }
 
