@@ -2,6 +2,7 @@ package com.example.pipayshopapi.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.BgImg;
+import com.example.pipayshopapi.entity.dto.BgImgDTO;
 import com.example.pipayshopapi.entity.vo.BgImgVO;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,10 +28,9 @@ public interface BgImgService extends IService<BgImg> {
     /**
      * 新增首页背景轮播图
      * @param file
-     * @param bgImg
      * @return
      */
-    Boolean addBgImg(MultipartFile file, BgImg bgImg);
+    Boolean addBgImg(MultipartFile file, BgImgDTO bgImgDTO);
 
     /**
      * 查询首页轮播背景图列表

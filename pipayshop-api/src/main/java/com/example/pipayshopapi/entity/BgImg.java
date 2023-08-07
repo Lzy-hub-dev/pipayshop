@@ -65,4 +65,11 @@ public class BgImg implements Serializable {
      */
     @ApiModelProperty(required = true)
     private String contentId;
+
+    public BgImg(String bgId, String imgUrl, Integer category, String contentId) {
+        this.bgId = bgId;
+        this.imgUrl = imgUrl;
+        this.category = category;
+        this.contentId = contentId;
+    }
 }
