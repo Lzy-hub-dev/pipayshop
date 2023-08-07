@@ -60,6 +60,8 @@ public class ShopCommodityEvaluateServiceImpl extends ServiceImpl<ShopCommodityE
         evaluate.setEvaluateId(StringUtil.generateShortId());
         evaluate.setStatus(false);
         return shopCommodityEvaluateMapper.insert(evaluate)>0;
+        // TODO 评价后将订单的状态改为4
+
     }
 
     /**

@@ -54,6 +54,7 @@ public class ItemCommodityEvaluateServiceImpl extends ServiceImpl<ItemCommodityE
                 itemCommodityEvaluateAddVO.getCommodityId(),
                 itemCommodityEvaluateAddVO.getEvaluate(),
                 itemCommodityEvaluateAddVO.getScore());
+        // TODO 评价后将订单的状态改为4
         return result>0;
     }
 
