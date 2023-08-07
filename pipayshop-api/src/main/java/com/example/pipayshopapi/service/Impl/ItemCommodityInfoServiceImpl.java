@@ -80,29 +80,8 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean issueItemCommodity(ApplyItemCommodityDTO applyItemCommodityDTO) {
-        // 属性转移
-        ItemCommodityInfo itemCommodityInfo = new ItemCommodityInfo();
-        itemCommodityInfo.setCommodityId(StringUtil.generateShortId());
-        itemCommodityInfo.setBrandId(applyItemCommodityDTO.getBrandId());
-        itemCommodityInfo.setOriginPrice(applyItemCommodityDTO.getOriginPrice());
-        itemCommodityInfo.setPrice(applyItemCommodityDTO.getPrice());
-        itemCommodityInfo.setDegreeLoss(applyItemCommodityDTO.getDegreeLoss());
-        itemCommodityInfo.setItemCommodityName(applyItemCommodityDTO.getItemCommodityName());
-        itemCommodityInfo.setOriginAddress(applyItemCommodityDTO.getOriginAddress());
-        itemCommodityInfo.setDetails(applyItemCommodityDTO.getDetails());
-        itemCommodityInfo.setFreeShippingNum(applyItemCommodityDTO.getFreeShippingNum());
-        itemCommodityInfo.setCategoryId(applyItemCommodityDTO.getCategoryId());
-        itemCommodityInfo.setInventory(applyItemCommodityDTO.getInventory());
-        itemCommodityInfo.setColorList(applyItemCommodityDTO.getColorList());
-        itemCommodityInfo.setAcceptAddressList(applyItemCommodityDTO.getAcceptAddressList());
-        itemCommodityInfo.setSizeList(applyItemCommodityDTO.getSizeList());
-        itemCommodityInfo.setOriginName(applyItemCommodityDTO.getOriginName());
-        itemCommodityInfo.setOriginPhone(applyItemCommodityDTO.getOriginPhone());
-        itemCommodityInfo.setAvatarImag(applyItemCommodityDTO.getAvatarImag());
-        itemCommodityInfo.setImagsList(applyItemCommodityDTO.getImagsList());
-        itemCommodityInfo.setDetailImagList(applyItemCommodityDTO.getDetailImagList());
-        int result = commodityInfoMapper.insert(itemCommodityInfo);
+    public boolean issueItemCommodity(ItemCommodityInfo applyItemCommodityDTO) {
+        int result = commodityInfoMapper.insert(applyItemCommodityDTO);
         return result > 0;
     }
 

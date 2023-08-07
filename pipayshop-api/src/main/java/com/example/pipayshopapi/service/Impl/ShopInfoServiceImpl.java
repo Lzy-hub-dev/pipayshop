@@ -8,15 +8,18 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.ShopTags;
+import com.example.pipayshopapi.entity.UserInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
 import com.example.pipayshopapi.entity.dto.ShopDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.ShopInfoMapper;
 import com.example.pipayshopapi.mapper.ShopTagsMapper;
+import com.example.pipayshopapi.mapper.UserInfoMapper;
 import com.example.pipayshopapi.service.ShopInfoService;
 import com.example.pipayshopapi.util.FileUploadUtil;
 import com.example.pipayshopapi.util.StringUtil;
+import com.google.common.collect.Sets;
 import com.javadocmd.simplelatlng.LatLng;
 import com.javadocmd.simplelatlng.LatLngTool;
 import com.javadocmd.simplelatlng.util.LengthUnit;
@@ -26,9 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -46,7 +47,10 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
 
     @Resource
     private ShopTagsMapper tagMapper;
+    @Resource
+    private UserInfoMapper userInfoMapper;
 
+    private static Set<String> userIdList = Sets.newConcurrentHashSet();
 
     /**
      * 根据二级分类-获取所有实体店列表
@@ -228,26 +232,43 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean applyShop(ApplyShopDTO applyShopDTO, MultipartFile[] file) {
-        // 创建一个集合存储商品图片
-        List<String> imagesList = new ArrayList<>();
-        for (MultipartFile multipartFile : file) {
-            // 获取存储到本地空间并返回图片url
-            imagesList.add(FileUploadUtil.uploadFile(multipartFile,FileUploadUtil.SHOP_IMG));
+        if (!userIdList.add(applyShopDTO.getUid())) {
+            return false;
         }
-        // 将list集合转为string
-        String jsonString = JSON.toJSONString(imagesList);
-        // 属性转移
-        ShopInfo shopInfo = new ShopInfo();
-        shopInfo.setShopId(StringUtil.generateShortId());
-        shopInfo.setShopImagList(jsonString);
-        shopInfo.setLocalhostLatitude(applyShopDTO.getLocalhostLatitude());
-        shopInfo.setLocalhostLongitude(applyShopDTO.getLocalhostLongitude());
-        shopInfo.setShopName(applyShopDTO.getShopName());
-        shopInfo.setPhone(applyShopDTO.getPhone());
-        shopInfo.setUid(applyShopDTO.getUid());
-        shopInfo.setCategoryId(applyShopDTO.getCategoryId());
-        shopInfo.setShopIntroduce(applyShopDTO.getShopIntroduce());
-        return shopInfoMapper.insert(shopInfo) > 0;
+        try {
+            // 创建一个集合存储商品图片
+            List<String> imagesList = new ArrayList<>();
+            for (MultipartFile multipartFile : file) {
+                // 获取存储到本地空间并返回图片url
+                imagesList.add(FileUploadUtil.uploadFile(multipartFile,FileUploadUtil.SHOP_IMG));
+            }
+            // 将list集合转为string
+            String jsonString = JSON.toJSONString(imagesList);
+            // 属性转移
+            ShopInfo shopInfo = new ShopInfo();
+            shopInfo.setShopId(StringUtil.generateShortId());
+            shopInfo.setShopImagList(jsonString);
+            shopInfo.setLocalhostLatitude(applyShopDTO.getLocalhostLatitude());
+            shopInfo.setLocalhostLongitude(applyShopDTO.getLocalhostLongitude());
+            shopInfo.setShopName(applyShopDTO.getShopName());
+            shopInfo.setPhone(applyShopDTO.getPhone());
+            shopInfo.setUid(applyShopDTO.getUid());
+            shopInfo.setCategoryId(applyShopDTO.getCategoryId());
+            shopInfo.setShopIntroduce(applyShopDTO.getShopIntroduce());
+            int update = userInfoMapper.update(null, new LambdaUpdateWrapper<UserInfo>()
+                    .eq(UserInfo::getUid, applyShopDTO.getUid())
+                    .eq(UserInfo::getStatus, 0)
+                    .gt(UserInfo::getShopBalance, 0)
+                    .setSql("shop_balance=shop_balance-1"));
+            if (update > 0) {
+                return shopInfoMapper.insert(shopInfo) > 0;
+            }
+            return false;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            userIdList.remove(applyShopDTO.getUid());
+        }
     }
     /**
      * 根据一级分类-获取所有实体店列表

@@ -61,4 +61,8 @@ public class ItemCart implements Serializable {
      * 总数
      */
     private Integer sumCount;
+    /**
+     * 商品规格
+     */
+    private String commoditySpec;
 }
