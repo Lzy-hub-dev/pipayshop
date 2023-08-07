@@ -3,6 +3,7 @@ package com.example.pipayshopapi.controller;
 
 import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.example.pipayshopapi.entity.ShopOrderInfo;
+import com.example.pipayshopapi.entity.dto.ShopOrderDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopOrderInfoService;
@@ -140,9 +141,9 @@ public class ShopOrderController {
      */
     @PostMapping("generateUnpaidOrder")
     @ApiOperation("生成未支付订单")
-    public ResponseVO<String> generateUnpaidOrder(@RequestBody ShopOrderInfo shopOrderInfo) {
+    public ResponseVO<String> generateUnpaidOrder(@RequestBody ShopOrderDTO shopOrderDTO) {
         try {
-            String orderId = shopOrderInfoService.generateUnpaidOrder(shopOrderInfo);
+            String orderId = shopOrderInfoService.generateUnpaidOrder(shopOrderDTO);
             return ResponseVO.getSuccessResponseVo("生成未支付订单成功" + "订单id为：" + orderId);
         } catch (Exception e) {
             log.error(e.getMessage());
