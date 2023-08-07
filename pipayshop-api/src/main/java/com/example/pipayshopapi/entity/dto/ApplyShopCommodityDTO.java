@@ -11,6 +11,7 @@ import java.text.Bidi;
 @NoArgsConstructor
 @Data
 public class ApplyShopCommodityDTO {
+
     private String commodityName;
     private  String commodityDetail;
     private BigDecimal price;

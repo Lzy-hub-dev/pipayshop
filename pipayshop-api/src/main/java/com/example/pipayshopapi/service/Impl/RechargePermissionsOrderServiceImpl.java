@@ -55,7 +55,7 @@ public class RechargePermissionsOrderServiceImpl extends ServiceImpl<RechargePer
                 .eq("uid", data.getUid())
                 .eq("status", 0)
                 .setSql("shop_balance = shop_balance +" + data.getPermissionsCount()));
-        if (update1 < 0){throw new RuntimeException();}
+        if (update1 < 1){throw new RuntimeException();}
         return true;
     }
 
@@ -84,7 +84,7 @@ public class RechargePermissionsOrderServiceImpl extends ServiceImpl<RechargePer
                 orderVO.getTransactionAmount(), null, null, null, orderVO.getChargeType());
         // 生成订单
         int insert = rechargePermissionsOrderMapper.insert(order);
-        if (insert < 0){throw new RuntimeException();}
+        if (insert < 1){throw new RuntimeException();}
         return orderId;
     }
 
@@ -101,12 +101,12 @@ public class RechargePermissionsOrderServiceImpl extends ServiceImpl<RechargePer
                 .eq("uid", data.getUid())
                 .eq("del_flag", 0)
                 .setSql("point_balance = point_balance -" + data.getTransactionAmount()));
-        if (update < 0){throw new RuntimeException();}
+        if (update < 1){throw new RuntimeException();}
         // 修改未支付订单的状态
         int update2 = rechargePermissionsOrderMapper.update(null, new UpdateWrapper<RechargePermissionsOrder>()
                 .eq("order_id", data.getOrderId())
                 .set("status", 1));
-        if (update2 < 0){throw new RuntimeException();}
+        if (update2 < 1){throw new RuntimeException();}
         return data;
     }
 }
