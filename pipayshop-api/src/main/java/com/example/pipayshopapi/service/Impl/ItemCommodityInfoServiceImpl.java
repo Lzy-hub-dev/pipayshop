@@ -50,6 +50,9 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     @Resource
     private ItemCommodityEvaluateMapper itemCommodityEvaluateMapper;
 
+    @Resource
+    private ItemCommodityInfoMapper itemCommodityInfoMapper;
+
 
     /**
      * 某一二级分类下的商品列表分页展示
@@ -82,8 +85,11 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         // 属性转移
         ItemCommodityInfo itemCommodityInfo = new ItemCommodityInfo();
         itemCommodityInfo.setCommodityId(StringUtil.generateShortId());
+        itemCommodityInfo.setUpdateTime(null);
+        itemCommodityInfo.setCreateTime(null);
+        itemCommodityInfo.setDeleteTime(null);
         itemCommodityInfo.setBrandId(applyItemCommodityDTO.getBrandId());
-        itemCommodityInfo.setOriginPrice(applyItemCommodityDTO.getOriginPrice());
+        itemCommodityInfo.setOriginPrice(null);
         itemCommodityInfo.setPrice(applyItemCommodityDTO.getPrice());
         itemCommodityInfo.setDegreeLoss(applyItemCommodityDTO.getDegreeLoss());
         itemCommodityInfo.setItemCommodityName(applyItemCommodityDTO.getItemCommodityName());
@@ -92,14 +98,20 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         itemCommodityInfo.setFreeShippingNum(applyItemCommodityDTO.getFreeShippingNum());
         itemCommodityInfo.setCategoryId(applyItemCommodityDTO.getCategoryId());
         itemCommodityInfo.setInventory(applyItemCommodityDTO.getInventory());
-        itemCommodityInfo.setColorList(applyItemCommodityDTO.getColorList());
-        itemCommodityInfo.setAcceptAddressList(applyItemCommodityDTO.getAcceptAddressList());
-        itemCommodityInfo.setSizeList(applyItemCommodityDTO.getSizeList());
+        //颜色集合
+        itemCommodityInfo.setColorList(JSON.toJSONString(applyItemCommodityDTO.getColorList()));
+        //收货人地址集合
+        itemCommodityInfo.setAcceptAddressList(JSON.toJSONString(applyItemCommodityDTO.getAcceptAddressList()));
+        //尺码集合
+        itemCommodityInfo.setSizeList(JSON.toJSONString(applyItemCommodityDTO.getSizeList()));
+        //商品图片的地址集合
+        itemCommodityInfo.setImagsList(JSON.toJSONString(applyItemCommodityDTO.getImagsList()));
+        itemCommodityInfo.setAvatarImag(applyItemCommodityDTO.getImagsList().get(0));
         itemCommodityInfo.setOriginName(applyItemCommodityDTO.getOriginName());
         itemCommodityInfo.setOriginPhone(applyItemCommodityDTO.getOriginPhone());
-        itemCommodityInfo.setAvatarImag(applyItemCommodityDTO.getAvatarImag());
-        itemCommodityInfo.setImagsList(applyItemCommodityDTO.getImagsList());
-        itemCommodityInfo.setDetailImagList(applyItemCommodityDTO.getDetailImagList());
+        itemCommodityInfo.setItemId(applyItemCommodityDTO.getItemId());
+        itemCommodityInfo.setDetailImagList(JSON.toJSONString(applyItemCommodityDTO.getDetailImags()));
+        itemCommodityInfo.setInventory(applyItemCommodityDTO.getInventory());
         int result = commodityInfoMapper.insert(itemCommodityInfo);
         return result > 0;
     }
