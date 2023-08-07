@@ -3,10 +3,12 @@ package com.example.pipayshopapi.service.Impl;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ItemCommodityEvaluate;
+import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.example.pipayshopapi.entity.vo.ItemCommodityEvaluateAddVO;
 import com.example.pipayshopapi.entity.vo.ItemCommodityEvaluateVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.mapper.ItemCommodityEvaluateMapper;
+import com.example.pipayshopapi.mapper.ItemOrderInfoMapper;
 import com.example.pipayshopapi.service.ItemCommodityEvaluateService;
 import com.example.pipayshopapi.util.StringUtil;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,8 @@ public class ItemCommodityEvaluateServiceImpl extends ServiceImpl<ItemCommodityE
 
     @Resource
     private ItemCommodityEvaluateMapper itemCommodityEvaluateMapper;
+    @Resource
+    private ItemOrderInfoMapper itemOrderInfoMapper;
 
     /**
      * 获取网店商品评价
@@ -53,7 +57,12 @@ public class ItemCommodityEvaluateServiceImpl extends ServiceImpl<ItemCommodityE
                 itemCommodityEvaluateAddVO.getCommodityId(),
                 itemCommodityEvaluateAddVO.getEvaluate(),
                 itemCommodityEvaluateAddVO.getScore());
+
         // TODO 评价后将订单的状态改为4
+        int update = itemOrderInfoMapper.update(null, new UpdateWrapper<ItemOrderInfo>()
+                .eq("order_id", itemCommodityEvaluateAddVO.getOrderId())
+                .set("order_status", 4));
+        if (update < 1){throw new RuntimeException();}
         return result>0;
     }
 

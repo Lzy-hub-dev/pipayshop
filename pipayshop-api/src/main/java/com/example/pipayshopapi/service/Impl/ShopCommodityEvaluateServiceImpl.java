@@ -2,13 +2,16 @@ package com.example.pipayshopapi.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopCommodityEvaluate;
+import com.example.pipayshopapi.entity.ShopOrderInfo;
 import com.example.pipayshopapi.entity.dto.ShopCommodityEvaluateDTO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityEvaluateVO;
 import com.example.pipayshopapi.mapper.ShopCommodityEvaluateMapper;
 import com.example.pipayshopapi.mapper.ShopCommodityInfoMapper;
+import com.example.pipayshopapi.mapper.ShopOrderInfoMapper;
 import com.example.pipayshopapi.service.ShopCommodityEvaluateService;
 import com.example.pipayshopapi.util.StringUtil;
 import org.springframework.stereotype.Service;
@@ -32,6 +35,9 @@ public class ShopCommodityEvaluateServiceImpl extends ServiceImpl<ShopCommodityE
 
     @Resource
     ShopCommodityInfoMapper shopCommodityInfoMapper;
+
+    @Resource
+    ShopOrderInfoMapper shopOrderInfoMapper;
     /**
      * 实体店-商品-评论列表
      */
@@ -59,8 +65,12 @@ public class ShopCommodityEvaluateServiceImpl extends ServiceImpl<ShopCommodityE
         evaluate.setCommodityId(dto.getCommodityId());
         evaluate.setEvaluateId(StringUtil.generateShortId());
         evaluate.setStatus(false);
-        return shopCommodityEvaluateMapper.insert(evaluate)>0;
         // TODO 评价后将订单的状态改为4
+        int update = shopOrderInfoMapper.update(null, new UpdateWrapper<ShopOrderInfo>()
+                .eq("order_id", dto.getOrderId())
+                .set("order_status", 4));
+        if (update < 1){throw new RuntimeException();}
+        return shopCommodityEvaluateMapper.insert(evaluate)>0;
 
     }
 
