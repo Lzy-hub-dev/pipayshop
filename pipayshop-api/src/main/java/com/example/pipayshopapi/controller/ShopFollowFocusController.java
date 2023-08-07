@@ -21,7 +21,7 @@ import javax.annotation.Resource;
  * @since 2023-07-29
  */
 @RestController
-@Api(value = "实体店title接口",tags = "实体店关注接口")
+@Api(value = "实体店关注接口",tags = "实体店关注接口")
 @RequestMapping("/pipayshopapi/shop-follow-focus")
 public class ShopFollowFocusController {
     @Resource

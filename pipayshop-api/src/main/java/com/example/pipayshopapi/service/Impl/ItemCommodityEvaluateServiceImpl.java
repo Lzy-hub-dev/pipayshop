@@ -50,7 +50,6 @@ public class ItemCommodityEvaluateServiceImpl extends ServiceImpl<ItemCommodityE
         int result = itemCommodityEvaluateMapper.insertItemCommodityEvaluateAddVO(
                 evaluateId,
                 itemCommodityEvaluateAddVO.getUserId(),
-                itemCommodityEvaluateAddVO.getItemId(),
                 itemCommodityEvaluateAddVO.getCommodityId(),
                 itemCommodityEvaluateAddVO.getEvaluate(),
                 itemCommodityEvaluateAddVO.getScore());
