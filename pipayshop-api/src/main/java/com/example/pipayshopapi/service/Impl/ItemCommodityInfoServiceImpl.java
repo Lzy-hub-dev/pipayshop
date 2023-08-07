@@ -21,10 +21,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * <p>
@@ -123,14 +125,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
                 wrapper.eq(ItemCommodityInfo::getFreeShippingNum, 0);
             }
         }
-        // 价格排序
-        if (dto.getPriceOrder() != null) {
-            if (dto.getPriceOrder() == 0) {
-                wrapper.orderByAsc(ItemCommodityInfo::getPrice);
-            }else if (dto.getPriceOrder() == 1) {
-                wrapper.orderByDesc(ItemCommodityInfo::getPrice);
-            }
-        }
+
         // 发布时间升序排列
         if (dto.getCreateTime()!=null) {
             wrapper.orderByDesc(ItemCommodityInfo::getCreateTime);
@@ -149,6 +144,15 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         }
         List<String> commodityIdList = records.stream().parallel().map(ItemCommodityInfo::getCommodityId).collect(Collectors.toList());
         List<itemCommoditiesVO> resultList = commodityInfoMapper.selectMembershipByCommodityIdList(commodityIdList);
+        // 价格排序
+        if (dto.getPriceOrder() != null) {
+            if (dto.getPriceOrder() == 0) {
+                resultList = resultList.stream().sorted(Comparator.comparing(itemCommoditiesVO::getPrice)).collect(Collectors.toList());
+
+            }else if (dto.getPriceOrder() == 1) {
+                resultList = resultList.stream().sorted((o1, o2) -> o2.getPrice().compareTo(o1.getPrice())).collect(Collectors.toList());
+            }
+        }
         // 封装数据
         return new PageDataVO((int) page.getTotal(), resultList);
     }

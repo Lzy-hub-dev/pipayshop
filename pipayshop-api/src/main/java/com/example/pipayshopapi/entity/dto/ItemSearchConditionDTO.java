@@ -44,7 +44,7 @@ public class ItemSearchConditionDTO {
     /**
      * 价格升降序
      */
-    @ApiModelProperty("价格升降序(0:升序,1:否降序)")
+    @ApiModelProperty("价格升降序(0:升序,1:降序)")
     private Integer priceOrder;
     /**
      * 发布时间
