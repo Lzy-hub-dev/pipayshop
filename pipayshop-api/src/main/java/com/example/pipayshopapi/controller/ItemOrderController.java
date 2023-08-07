@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * @author wzx
@@ -29,7 +28,7 @@ public class ItemOrderController {
      *  标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单
      */
     @GetMapping("getOrderList")
-    @ApiOperation("用户的全部订单列表分页展示标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单")
+    @ApiOperation("用户的全部网店订单列表分页展示标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单")
     public ResponseVO<PageDataVO> getOrderList(GetOrderDataVO getOrderDataVO) {
         try {
             PageDataVO list = itemOrderInfoService.getOrderList(getOrderDataVO);
