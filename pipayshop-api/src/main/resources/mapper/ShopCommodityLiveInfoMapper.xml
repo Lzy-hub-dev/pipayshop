@@ -16,4 +16,21 @@
     </select>
 
 
+    <select id="selectShopCommodityLiveVO" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityLiveVO">
+        SELECT l.room_id,l.shop_id,l.detail,l.tag_list,l.avatar_imag,l.price,e.evaluate, i.localhost_latitude,i.localhost_longitude,i.address,i.score
+        from shop_commodity_live_info as l
+                 LEFT JOIN shop_evaluate as e ON l.room_id=e.commodity_id
+                 LEFT JOIN shop_info as i ON l.shop_id=i.shop_id
+        GROUP BY e.commodity_id
+        ORDER BY e.create_time DESC
+            LIMIT #{pages},#{limit}
+    </select>
+    <select id="selectAllShopCommodityLiveVO" resultType="java.lang.Integer">
+        select count(*) from (SELECT l.room_id,l.shop_id,l.detail,l.tag_list,l.avatar_imag,l.price,e.evaluate, i.localhost_latitude,i.localhost_longitude,i.address,i.score
+                              from shop_commodity_live_info as l
+                                       LEFT JOIN shop_evaluate as e ON l.room_id=e.commodity_id
+                                       LEFT JOIN shop_info as i ON l.shop_id=i.shop_id
+                              GROUP BY e.commodity_id
+                              ORDER BY e.create_time DESC) p
+    </select>
 </mapper>

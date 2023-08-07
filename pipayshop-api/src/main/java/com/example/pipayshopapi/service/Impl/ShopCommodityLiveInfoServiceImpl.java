@@ -1,31 +1,27 @@
 package com.example.pipayshopapi.service.Impl;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopCommodityLiveInfo;
 import com.example.pipayshopapi.entity.ShopHotelRecord;
 import com.example.pipayshopapi.entity.ShopOrderInfo;
 import com.example.pipayshopapi.entity.dto.ShopHotelRecordDTO;
-import com.example.pipayshopapi.entity.vo.HotelFacilityVO;
-import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoListVO;
-import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoVO;
+import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.mapper.ShopCommodityLiveInfoMapper;
 import com.example.pipayshopapi.mapper.ShopEvaluateMapper;
 import com.example.pipayshopapi.mapper.ShopHotelRecordMapper;
 import com.example.pipayshopapi.mapper.ShopOrderInfoMapper;
 import com.example.pipayshopapi.service.ShopCommodityLiveInfoService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.service.ShopHotelRecordService;
 import com.example.pipayshopapi.util.StringUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.fasterxml.jackson.core.type.TypeReference;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -179,6 +175,39 @@ public class ShopCommodityLiveInfoServiceImpl extends ServiceImpl<ShopCommodityL
         shopHotelRecord.setOrderId(orderId);
         insert += shopHotelRecordMapper.insert(shopHotelRecord);
         return insert > 1;
+    }
+
+    @Override
+    public PageDataVO selectShopCommodityLiveInfoVO(Integer limit, Integer pages) {
+        Integer integer = shopCommodityLiveInfoMapper.selectAllShopCommodityLiveVO();
+        List<ShopCommodityLiveVO> shopCommodityLiveVOS = shopCommodityLiveInfoMapper.selectShopCommodityLiveVO(limit, (pages-1)*limit);
+        return new PageDataVO(integer,shopCommodityLiveVOS);
+    }
+
+    @Override
+    public boolean insertShopLive(ShopCommodityLiveInfo shopCommodityLiveInfo) {
+        shopCommodityLiveInfo.setRoomId(StringUtil.generateShortId());
+        int result = shopCommodityLiveInfoMapper.insert(shopCommodityLiveInfo);
+        return result>0;
+    }
+
+    @Override
+    public boolean updateShopLive(ShopCommodityLiveInfoUpVO shopCommodityLiveInfoUpVO) {
+        String roomId = StringUtil.generateShortId();
+        ShopCommodityLiveInfo shopCommodityLiveInfo = new ShopCommodityLiveInfo(null, roomId, shopCommodityLiveInfoUpVO.getRoomTypeName(),
+                null, shopCommodityLiveInfoUpVO.getInventory(),
+                shopCommodityLiveInfoUpVO.getDetail(), shopCommodityLiveInfoUpVO.getTagList(),
+                shopCommodityLiveInfoUpVO.getImageList(), shopCommodityLiveInfoUpVO.getLand(),
+                shopCommodityLiveInfoUpVO.getRoom(), shopCommodityLiveInfoUpVO.getRestRoom(),
+                shopCommodityLiveInfoUpVO.getBed(), shopCommodityLiveInfoUpVO.getAdult(),
+                shopCommodityLiveInfoUpVO.getChildren(), shopCommodityLiveInfoUpVO.getRestricted(),
+                shopCommodityLiveInfoUpVO.getBasics(), shopCommodityLiveInfoUpVO.getBath(),
+                shopCommodityLiveInfoUpVO.getAppliance(), shopCommodityLiveInfoUpVO.getPrice(),
+                null, null, shopCommodityLiveInfoUpVO.getAvatarImag(), null, shopCommodityLiveInfoUpVO.getBedType(),
+                shopCommodityLiveInfoUpVO.getFloor(), shopCommodityLiveInfoUpVO.getIsAdd());
+        int result = shopCommodityLiveInfoMapper.update(shopCommodityLiveInfo, new UpdateWrapper<ShopCommodityLiveInfo>()
+                .eq("room_id", shopCommodityLiveInfoUpVO.getRoomId()));
+        return result > 0;
     }
 
 }
