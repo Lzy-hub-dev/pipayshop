@@ -1,7 +1,7 @@
 package com.example.pipayshopapi.controller;
 
 
-import com.example.pipayshopapi.entity.ShopCommodityEvaluate;
+import com.example.pipayshopapi.entity.dto.ShopCommodityEvaluateDTO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -9,8 +9,9 @@ import com.example.pipayshopapi.service.ShopCommodityEvaluateService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
 
 /**
  * <p>
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/pipayshopapi/shop-commodity-evaluate")
 public class ShopCommodityEvaluateController {
 
-    @Autowired
+    @Resource
     private ShopCommodityEvaluateService evaluationService;
 
     @GetMapping("commodityEvaluateList/{commodityId}/{pageNum}/{pageSize}")
@@ -45,9 +46,9 @@ public class ShopCommodityEvaluateController {
 
     @PostMapping("addEvaluate")
     @ApiOperation("实体店-商品-添加评论")
-    public ResponseVO<String> addEvaluate(ShopCommodityEvaluate evaluate) {
+    public ResponseVO<String> addEvaluate(ShopCommodityEvaluateDTO dto) {
         try {
-            Boolean result = evaluationService.addEvaluate(evaluate);
+            Boolean result = evaluationService.addEvaluate(dto);
             if (!result) {
                 return ResponseVO.getFalseResponseVo("新增评论失败");
             }
@@ -70,5 +71,18 @@ public class ShopCommodityEvaluateController {
             throw new BusinessException("删除评论失败请联系后台人员");
         }
     }
+    /**
+     * 校验当前用户是否已经对该商品进行了评价
+     */
+    @GetMapping("isEvaluates/{commodityId}/{userId}")
+    @ApiOperation("校验当前用户是否已经对该商品进行了评价")
+    public ResponseVO<Boolean> isEvaluates(@PathVariable String commodityId,@PathVariable String userId){
 
+        try{
+            boolean flag = evaluationService.isEvaluates(commodityId,userId);
+            return ResponseVO.getSuccessResponseVo(flag);
+        }catch (Exception e){
+            throw new BusinessException("校验当前用户是否已经对该商品进行了评价失败，请联系后台人员");
+        }
+    }
 }

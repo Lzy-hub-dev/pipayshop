@@ -1,8 +1,6 @@
 package com.example.pipayshopapi.controller;
 
-import com.example.pipayshopapi.entity.ItemCommodityEvaluate;
 import com.example.pipayshopapi.entity.vo.ItemCommodityEvaluateAddVO;
-import com.example.pipayshopapi.entity.vo.ItemCommodityEvaluateVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -72,6 +70,22 @@ public class ItemCommodityEvaluateController {
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("根据评价Id删除网店商品的评价失败，请联系后台人员");
+        }
+    }
+
+    /**
+     * 校验当前用户是否已经对该商品进行了评价
+     */
+    @GetMapping("isEvaluates/{commodityId}/{userId}")
+    @ApiOperation("校验当前用户是否已经对该商品进行了评价")
+    public ResponseVO<Boolean> isEvaluates(@PathVariable String commodityId,@PathVariable String userId){
+
+        try{
+            boolean flag = itemCommodityEvaluateService.isEvaluates(commodityId,userId);
+            return ResponseVO.getSuccessResponseVo(flag);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            throw new BusinessException("校验当前用户是否已经对该商品进行了评价失败，请联系后台人员");
         }
     }
 }

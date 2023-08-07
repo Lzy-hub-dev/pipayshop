@@ -17,6 +17,7 @@
              , e.user_id
              , u.user_name
              , u.user_image
+             , e.score
         from
             shop_evaluate e
          left join user_info u

@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopCommodityEvaluate;
+import com.example.pipayshopapi.entity.dto.ShopCommodityEvaluateDTO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityEvaluateVO;
 import com.example.pipayshopapi.mapper.ShopCommodityEvaluateMapper;
+import com.example.pipayshopapi.mapper.ShopCommodityInfoMapper;
 import com.example.pipayshopapi.service.ShopCommodityEvaluateService;
 import com.example.pipayshopapi.util.StringUtil;
 import org.springframework.stereotype.Service;
@@ -27,12 +29,15 @@ public class ShopCommodityEvaluateServiceImpl extends ServiceImpl<ShopCommodityE
 
     @Resource
     private ShopCommodityEvaluateMapper shopCommodityEvaluateMapper;
+
+    @Resource
+    ShopCommodityInfoMapper shopCommodityInfoMapper;
     /**
      * 实体店-商品-评论列表
      */
     @Override
     public PageDataVO commodityEvaluateList(String commodityId, Integer pageNum, Integer pageSize) {
-        List<ShopCommodityEvaluateVO> result = shopCommodityEvaluateMapper.commodityEvaluateList(commodityId, pageNum - 1, pageSize);
+        List<ShopCommodityEvaluateVO> result = shopCommodityEvaluateMapper.commodityEvaluateList(commodityId, (pageNum-1)*pageSize, pageSize);
         Long count = shopCommodityEvaluateMapper.selectCount(new QueryWrapper<ShopCommodityEvaluate>()
                 .eq("commodity_id", commodityId)
                 .eq("status", 0));
@@ -43,7 +48,15 @@ public class ShopCommodityEvaluateServiceImpl extends ServiceImpl<ShopCommodityE
      * 实体店-商品-添加评论
      */
     @Override
-    public Boolean addEvaluate(ShopCommodityEvaluate evaluate) {
+    public Boolean addEvaluate(ShopCommodityEvaluateDTO dto) {
+        // 查询当前实体店商品所在的网店id
+        String shopId = shopCommodityInfoMapper.selectShopIdByCommodityId(dto.getCommodityId());
+        ShopCommodityEvaluate evaluate = new ShopCommodityEvaluate();
+        evaluate.setEvaluate(dto.getEvaluate());
+        evaluate.setUserId(dto.getUserId());
+        evaluate.setItemId(shopId);
+        evaluate.setScore(dto.getScore());
+        evaluate.setCommodityId(dto.getCommodityId());
         evaluate.setEvaluateId(StringUtil.generateShortId());
         evaluate.setStatus(false);
         return shopCommodityEvaluateMapper.insert(evaluate)>0;
@@ -59,5 +72,12 @@ public class ShopCommodityEvaluateServiceImpl extends ServiceImpl<ShopCommodityE
                 .eq(ShopCommodityEvaluate::getUserId, userId)
                 .set(ShopCommodityEvaluate::getStatus, true)
         ) > 0;
+    }
+
+    @Override
+    public boolean isEvaluates(String commodityId, String userId) {
+        return shopCommodityEvaluateMapper.selectCount(new QueryWrapper<ShopCommodityEvaluate>()
+                .eq("user_id", userId)
+                .eq("commodity_id", commodityId)).intValue() == 1;
     }
 }

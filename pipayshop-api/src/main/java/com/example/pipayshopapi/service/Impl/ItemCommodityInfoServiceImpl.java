@@ -68,12 +68,6 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
 
     /**
      * 发布网店商品
-     *
-     * @param itemCommodityInfoVO
-     * @return
-     */
-    /**
-     * 发布网店商品
      */
     @Override
     @Transactional(rollbackFor = Exception.class)

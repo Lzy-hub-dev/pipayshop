@@ -41,7 +41,6 @@ public class ShopOrderController {
     public ResponseVO<PageDataVO> getOrderList(GetOrderDataVO getOrderDataVO) {
         try {
             PageDataVO orderList = shopOrderInfoService.getOrderList(getOrderDataVO);
-
             return ResponseVO.getSuccessResponseVo(orderList);
         } catch (Exception e) {
             log.error(e.getMessage());

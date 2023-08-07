@@ -2,6 +2,7 @@ package com.example.pipayshopapi.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ShopCommodityEvaluate;
+import com.example.pipayshopapi.entity.dto.ShopCommodityEvaluateDTO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 
 /**
@@ -21,14 +22,16 @@ public interface ShopCommodityEvaluateService extends IService<ShopCommodityEval
 
     /**
      * 实体店-商品-添加评论
-     * @param evaluate
+     * @param dto
      * @return
      */
-    Boolean addEvaluate(ShopCommodityEvaluate evaluate);
+    Boolean addEvaluate(ShopCommodityEvaluateDTO dto);
 
     /**
      * 实体店-商品-删除评论
      * @return
      */
     Boolean deleteEvaluate(String evaluateId, String userId);
+
+    boolean isEvaluates(String commodityId, String userId);
 }
