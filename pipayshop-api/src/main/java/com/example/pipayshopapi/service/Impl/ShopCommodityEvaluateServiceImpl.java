@@ -76,10 +76,4 @@ public class ShopCommodityEvaluateServiceImpl extends ServiceImpl<ShopCommodityE
         ) > 0;
     }
 
-    @Override
-    public boolean isEvaluates(String commodityId, String userId) {
-        return shopCommodityEvaluateMapper.selectCount(new QueryWrapper<ShopCommodityEvaluate>()
-                .eq("user_id", userId)
-                .eq("commodity_id", commodityId)).intValue() == 1;
-    }
 }

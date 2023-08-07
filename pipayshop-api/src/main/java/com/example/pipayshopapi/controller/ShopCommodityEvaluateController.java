@@ -71,18 +71,4 @@ public class ShopCommodityEvaluateController {
             throw new BusinessException("删除评论失败请联系后台人员");
         }
     }
-    /**
-     * 校验当前用户是否已经对该商品进行了评价
-     */
-    @GetMapping("isEvaluates/{commodityId}/{userId}")
-    @ApiOperation("校验当前用户是否已经对该商品进行了评价")
-    public ResponseVO<Boolean> isEvaluates(@PathVariable String commodityId,@PathVariable String userId){
-
-        try{
-            boolean flag = evaluationService.isEvaluates(commodityId,userId);
-            return ResponseVO.getSuccessResponseVo(flag);
-        }catch (Exception e){
-            throw new BusinessException("校验当前用户是否已经对该商品进行了评价失败，请联系后台人员");
-        }
-    }
 }
