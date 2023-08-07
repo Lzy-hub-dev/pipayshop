@@ -50,7 +50,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean issueShopCommodity(ApplyShopCommodityDTO applyShopCommodityDTO, MultipartFile[] files) {
+    public boolean issueShopCommodity(ShopCommodityInfo applyShopCommodityDTO, MultipartFile[] files) {
         // 创建一个集合存储商品图片
         List<String> imagesList = new ArrayList<>();
         for (MultipartFile multipartFile : files) {
@@ -60,18 +60,9 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
         // 将list集合转为string
         String jsonString = JSON.toJSONString(imagesList);
         // 属性转移
-        ShopCommodityInfo shopCommodityInfo = new ShopCommodityInfo();
-        shopCommodityInfo.setCommodityId(StringUtil.generateShortId());
-        shopCommodityInfo.setCommodityName(applyShopCommodityDTO.getCommodityName());
-        shopCommodityInfo.setCommodityImgList(jsonString);
-        shopCommodityInfo.setCommodityDetail(applyShopCommodityDTO.getCommodityDetail());
-        shopCommodityInfo.setPrice(applyShopCommodityDTO.getPrice());
-        shopCommodityInfo.setShopId(applyShopCommodityDTO.getShopId());
-        shopCommodityInfo.setResidue(applyShopCommodityDTO.getResidue());
-        shopCommodityInfo.setReservationInformation(applyShopCommodityDTO.getReservationInformation());
-//        shopCommodityInfo.setTagList(applyShopCommodityDTO.getTagList());
-        shopCommodityInfo.setMyEvaluate(applyShopCommodityDTO.getMyEvaluate());
-        return shopCommodityInfoMapper.insert(shopCommodityInfo) > 0;
+        applyShopCommodityDTO.setCommodityImgList(jsonString);
+        applyShopCommodityDTO.setCommodityId(StringUtil.generateShortId());
+        return shopCommodityInfoMapper.insert(applyShopCommodityDTO) > 0;
     }
 
     /**
