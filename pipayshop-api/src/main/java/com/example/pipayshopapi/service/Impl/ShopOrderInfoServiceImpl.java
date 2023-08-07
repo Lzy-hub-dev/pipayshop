@@ -40,9 +40,10 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
 
     @Override
     public PageDataVO getOrderList(GetOrderDataVO getOrderDataVO) {
+        getOrderDataVO.setCurrentPage((getOrderDataVO.getCurrentPage()-1)*getOrderDataVO.getPageSize());
         Integer allOrderList = shopOrderInfoMapper.getAllOrderList(getOrderDataVO);
         List<OrderListVO> orderList = shopOrderInfoMapper.getOrderList(getOrderDataVO);
-        return new PageDataVO(allOrderList-1,orderList);
+        return new PageDataVO(allOrderList,orderList);
     }
 
     @Override
