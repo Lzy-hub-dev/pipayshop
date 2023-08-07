@@ -1,15 +1,10 @@
 package com.example.pipayshopapi.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ItemInfo;
-import com.example.pipayshopapi.entity.vo.EvaluateVO;
-import com.example.pipayshopapi.entity.vo.ItemCommodityMinVO;
-import com.example.pipayshopapi.entity.vo.ItemCommodityVO;
-import com.example.pipayshopapi.entity.vo.ItemInfoVO;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.mapper.ItemCommodityEvaluateMapper;
 import com.example.pipayshopapi.mapper.ItemCommodityInfoMapper;
 import com.example.pipayshopapi.mapper.ItemInfoMapper;
@@ -70,7 +65,7 @@ public class ItemInfoServiceImpl extends ServiceImpl<ItemInfoMapper, ItemInfo> i
     @Override
     public PageDataVO getFollowList(String userId, Integer page, Integer limit) {
         Integer integer = itemInfoMapper.selectAllFollowItemByUserId(userId);
-        List<ItemInfo> itemInfos = itemInfoMapper.selectFollowItemByUserId(userId, (page - 1) * limit, limit);
+        List<ItemListVO> itemInfos = itemInfoMapper.selectFollowItemByUserId(userId, (page - 1) * limit, limit);
         return new PageDataVO(integer,itemInfos);
     }
     /**
@@ -84,20 +79,6 @@ public class ItemInfoServiceImpl extends ServiceImpl<ItemInfoMapper, ItemInfo> i
         LambdaQueryWrapper<ItemInfo> wrapper = new LambdaQueryWrapper<ItemInfo>().eq(ItemInfo::getStatus, 0)
                 .eq(ItemInfo::getUid, userId);
         return itemInfoMapper.selectCount(wrapper).intValue();
-    }
-
-    /**
-     * 根据网店id获取网店地址
-     * @param itemId
-     * @return
-     */
-    @Override
-    public String getItemAddressById(String itemId) {
-        ItemInfo itemInfo = itemInfoMapper.selectOne(new QueryWrapper<ItemInfo>()
-                .eq("item_id", itemId)
-                .select("address"));
-
-        return itemInfo.getAddress();
     }
 
     /**

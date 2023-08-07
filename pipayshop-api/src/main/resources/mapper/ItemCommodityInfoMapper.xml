@@ -37,7 +37,7 @@
              ON
                  c.item_id = i.item_id
     </select>
-    <select id="selectCollectProductByUserId" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityInfoVO">
+    <select id="selectCollectProductByUserId" resultType="com.example.pipayshopapi.entity.vo.ItemCollectionVO">
         select avatar_imag     as commodity_pic,
                i.item_commodity_name,
                i.price,
@@ -58,11 +58,10 @@
           AND ic.`status` = 0
     </select>
 
-    <select id="selectHistoryProductByUserId" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityInfoVO">
+    <select id="selectHistoryProductByUserId" resultType="com.example.pipayshopapi.entity.vo.ItemCollectionVO">
         SELECT avatar_imag     as commodity_pic,
                i.item_commodity_name,
                i.price,
-               h.create_time   as accessTime,
                i.commodity_id,
                info.item_name,
                info.user_image as sellerPic,
@@ -75,7 +74,9 @@
                  inner join item_info info
                             on info.item_id = i.item_id
         WHERE h.user_id = #{userId}
+        order by h.create_time DESC
             LIMIT #{page},#{limit}
+
     </select>
 
 

@@ -1,7 +1,9 @@
 package com.example.pipayshopapi.controller;
 
 
-import com.example.pipayshopapi.entity.vo.*;
+import com.example.pipayshopapi.entity.vo.ItemInfoVO;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.ItemInfoMapper;
 import com.example.pipayshopapi.service.ItemInfoService;
@@ -88,18 +90,6 @@ public class ItemInfoController {
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new BusinessException("获取网店信息失败，请联系后台人员");
-        }
-    }
-
-    @GetMapping("getItemAddressById/{itemId}")
-    @ApiOperation("根据网店id获取网店地址")
-    public ResponseVO getItemAddressById(String itemId) {
-        try {
-            String itemAddressById = itemInfoService.getItemAddressById(itemId);
-            return ResponseVO.getSuccessResponseVo(itemAddressById);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new BusinessException("根据网店id获取网店地址失败，请联系后台人员");
         }
     }
 

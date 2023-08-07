@@ -1,8 +1,9 @@
 package com.example.pipayshopapi.service;
 
-import com.example.pipayshopapi.entity.ItemInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.pipayshopapi.entity.vo.*;
+import com.example.pipayshopapi.entity.ItemInfo;
+import com.example.pipayshopapi.entity.vo.ItemInfoVO;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 
 import java.util.List;
 
@@ -41,13 +42,6 @@ public interface ItemInfoService extends IService<ItemInfo> {
      */
     Integer getItemCountByUserId(String userId);
 
-    /**
-     * 根据网店id获取网店地址
-     * @param itemId
-     * @return
-     */
-
-    String getItemAddressById(String itemId);
 
     /**
      * 根据用户id-网店-升级vip

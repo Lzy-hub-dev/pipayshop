@@ -116,7 +116,6 @@ public class ShopInfoController {
             log.error(e.getMessage());
             return ResponseVO.getFalseResponseVo(null);
         }
-
     }
     @PostMapping("applyShop")
     @ApiOperation("申请实体店")

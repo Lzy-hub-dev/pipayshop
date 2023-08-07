@@ -1,17 +1,14 @@
 package com.example.pipayshopapi.entity;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 /**
  * <p>
@@ -44,15 +41,6 @@ public class ItemInfo implements Serializable {
     private String itemName;
 
     /**
-     * 坐标维度
-     */
-    private BigDecimal localhostLatitude;
-
-    /**
-     * 坐标经度
-     */
-    private BigDecimal localhostLongitude;
-    /**
      * 是否会员(0映射为false，1映射为true)
      */
     private Boolean membership;
@@ -60,11 +48,6 @@ public class ItemInfo implements Serializable {
      * 网店的标签id集合
      */
     private String tagList;
-
-    /**
-     * 网店地址
-     */
-    private String address;
 
     /**
      * 网店评分

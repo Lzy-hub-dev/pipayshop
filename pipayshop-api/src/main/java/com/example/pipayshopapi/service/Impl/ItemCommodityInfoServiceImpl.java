@@ -228,7 +228,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     @Override
     public PageDataVO getCollectList(Integer page,Integer limit,String userId) {
         Integer integer = commodityInfoMapper.selectAllCollectProductByUserId(userId);
-        List<ItemCommodityInfoVO> itemCommodityInfoVOS = commodityInfoMapper.selectCollectProductByUserId((page - 1) * limit, limit, userId);
+        List<ItemCollectionVO> itemCommodityInfoVOS = commodityInfoMapper.selectCollectProductByUserId((page - 1) * limit, limit, userId);
         return new PageDataVO(integer,itemCommodityInfoVOS);
     }
 
@@ -240,7 +240,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     @Override
     public PageDataVO historyList(Integer page,Integer limit,String userId) {
         Integer integer = commodityInfoMapper.selectAllHistoryProductByUserId(userId);
-        List<ItemCommodityInfoVO> itemCommodityInfoVOS = commodityInfoMapper.selectHistoryProductByUserId((page - 1) * limit, limit, userId);
+        List<ItemCollectionVO> itemCommodityInfoVOS = commodityInfoMapper.selectHistoryProductByUserId((page - 1) * limit, limit, userId);
         return new PageDataVO(integer,itemCommodityInfoVOS);
     }
 

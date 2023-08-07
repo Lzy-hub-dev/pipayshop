@@ -15,8 +15,8 @@
         </where>
     </select>
 
-    <select id="selectFollowItemByUserId" resultType="com.example.pipayshopapi.entity.ItemInfo">
-        SELECT *
+    <select id="selectFollowItemByUserId" resultType="com.example.pipayshopapi.entity.vo.ItemListVO">
+        SELECT i.item_id, i.item_name, i.membership, i.score, i.user_image
         FROM item_follow_focus f
                  INNER JOIN
              item_info i

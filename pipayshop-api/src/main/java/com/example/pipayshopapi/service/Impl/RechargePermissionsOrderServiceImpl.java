@@ -32,6 +32,9 @@ import javax.annotation.Resource;
 public class RechargePermissionsOrderServiceImpl extends ServiceImpl<RechargePermissionsOrderMapper, RechargePermissionsOrder> implements RechargePermissionsOrderService {
 
     @Resource
+    RechargePermissionsOrderService rechargePermissionsOrderService;
+
+    @Resource
     RechargePermissionsOrderMapper rechargePermissionsOrderMapper;
 
     @Resource
@@ -49,7 +52,7 @@ public class RechargePermissionsOrderServiceImpl extends ServiceImpl<RechargePer
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean addShopSum(String orderId) {
-        RechargePermissionsOrder data = rechargeComplete(orderId);
+        RechargePermissionsOrder data = rechargePermissionsOrderService.rechargeComplete(orderId);
         // 增加实体店绑定数
         int update1 = userInfoMapper.update(null, new UpdateWrapper<UserInfo>()
                 .eq("uid", data.getUid())
@@ -62,7 +65,7 @@ public class RechargePermissionsOrderServiceImpl extends ServiceImpl<RechargePer
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean updateUploadBalanceInfo(String orderId) {
-        RechargePermissionsOrder data = rechargeComplete(orderId);
+        RechargePermissionsOrder data = rechargePermissionsOrderService.rechargeComplete(orderId);
         // 更改可上架商品数值
         int update1 = itemInfoMapper.update(null,new UpdateWrapper<ItemInfo>()
                 .eq("uid",data.getUid())
@@ -91,7 +94,8 @@ public class RechargePermissionsOrderServiceImpl extends ServiceImpl<RechargePer
     /**
      * 两个下单操作的共用类
      */
-    private RechargePermissionsOrder rechargeComplete(String orderId){
+    @Transactional(rollbackFor = Exception.class)
+    public RechargePermissionsOrder rechargeComplete(String orderId){
         // 校验订单id是否已经存在，保证接口的幂等性，避免重复下单
         RechargePermissionsOrder data = rechargePermissionsOrderMapper.selectOne(new QueryWrapper<RechargePermissionsOrder>()
                 .eq("order_id", orderId));

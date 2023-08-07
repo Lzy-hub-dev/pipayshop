@@ -22,4 +22,6 @@ public interface RechargePermissionsOrderService extends IService<RechargePermis
     boolean updateUploadBalanceInfo(String orderId);
 
     String getUploadBalanceNoPayOrder(RechargePermissionsOrderVO rechargePermissionsOrderVO);
+
+    RechargePermissionsOrder rechargeComplete(String orderId);
 }
