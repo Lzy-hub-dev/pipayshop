@@ -27,7 +27,7 @@ public interface ShopCommodityInfoService extends IService<ShopCommodityInfo> {
      * @param files
      * @return
      */
-    boolean issueShopCommodity(ApplyShopCommodityDTO applyShopCommodityDTO, MultipartFile[] files);
+    boolean issueShopCommodity(ShopCommodityInfo applyShopCommodityDTO, MultipartFile[] files);
     /**
      * 根据用户id查询 用户收藏的商品列表
      * @param userId

@@ -1,10 +1,11 @@
 package com.example.pipayshopapi.service;
 
-import com.example.pipayshopapi.entity.ShopCommodityLiveInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.pipayshopapi.entity.ShopCommodityLiveInfo;
 import com.example.pipayshopapi.entity.dto.ShopHotelRecordDTO;
-import com.example.pipayshopapi.entity.vo.HotelFacilityVO;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoListVO;
+import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoUpVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoVO;
 
 import java.util.Date;
@@ -54,4 +55,10 @@ public interface ShopCommodityLiveInfoService extends IService<ShopCommodityLive
      * 提交入住酒店
      */
     boolean applyShopCommodityLive(ShopHotelRecordDTO shopHotelRecordDTO);
+
+    PageDataVO selectShopCommodityLiveInfoVO(Integer limit, Integer pages);
+
+    boolean insertShopLive(ShopCommodityLiveInfo shopCommodityLiveInfo);
+
+    boolean updateShopLive(ShopCommodityLiveInfoUpVO shopCommodityLiveInfoUpVO);
 }
