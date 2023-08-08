@@ -51,11 +51,9 @@
 
 
     <select id="getIndexShopInfoVOCount" resultType="java.lang.Integer">
-        select COUNT(*)
+        select count(*)
         from shop_info
-        <where>
-            <if test="categoryId != null and categoryId != '-1' ">category_id=#{categoryId} </if>
-        </where>
+        WHERE category_id = #{categoryId} AND status=0
     </select>
 
 
@@ -112,18 +110,10 @@
     </select>
 
     <select id="getIndexShopInfoVOById" resultType="com.example.pipayshopapi.entity.vo.IndexShopInfoVO">
-        select shop_id,shop_name,score,localhost_latitude,localhost_longitude,user_image, shop_introduce,tag_list,address,membership
+        select shop_id,shop_name,score,localhost_latitude,localhost_longitude,user_image,
+               shop_introduce,tag_list,address,membership
         from shop_info
-        <where>
-
-            <if test="categoryId != null and categoryId != '-1' ">shop_info.category_id IN(SELECT
-                s.category_id
-                FROM
-                shop_category s
-                WHERE
-                s.category_pid = #{categoryId})
-            </if>
-        </where>
+        WHERE category_id = #{categoryId} AND status=0
         LIMIT ${page},${limit}
     </select>
 
