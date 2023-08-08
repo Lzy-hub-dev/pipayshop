@@ -2,7 +2,6 @@ package com.example.pipayshopapi.controller;
 
 
 import com.example.pipayshopapi.entity.ItemOrderInfo;
-import com.example.pipayshopapi.entity.ShopOrderInfo;
 import com.example.pipayshopapi.entity.dto.ShopOrderDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;

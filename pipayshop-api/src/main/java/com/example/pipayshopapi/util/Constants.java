@@ -10,4 +10,13 @@ public class Constants {
      */
     public static final Integer USER_ACTIVE_TIME = 180 * 60;
 
+    /**
+     * JWT密钥
+     */
+    public static final String TOKEN_SECRET = "pairuan";
+
+    /**
+     * JWT有效期(默认10min)
+     */
+    public static final long TOKEN_INVALID_TIME = 1000 * 60 * 10L;
 }

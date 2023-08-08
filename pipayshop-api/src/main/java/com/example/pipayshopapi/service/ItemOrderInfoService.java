@@ -2,6 +2,9 @@ package com.example.pipayshopapi.service;
 
 import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.pipayshopapi.entity.dto.CompleteDTO;
+import com.example.pipayshopapi.entity.dto.IncompleteDTO;
+import com.example.pipayshopapi.entity.dto.PaymentDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import org.springframework.web.bind.annotation.PathVariable;
 

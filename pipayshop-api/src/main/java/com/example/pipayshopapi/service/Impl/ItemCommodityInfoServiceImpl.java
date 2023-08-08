@@ -11,6 +11,7 @@ import com.example.pipayshopapi.entity.*;
 import com.example.pipayshopapi.entity.dto.ApplyItemCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
+import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.*;
 import com.example.pipayshopapi.service.ItemCommodityInfoService;
 import com.example.pipayshopapi.util.StringUtil;
@@ -65,6 +66,8 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         return new PageDataVO(commodityInfoMapper.listCount(commodityPageVO.getSecondCategoryId()), commodityList);
 
     }
+
+
 
     /**
      * 发布网店商品
@@ -248,15 +251,15 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         return new PageDataVO(integer,itemCommodityInfoVOS);
     }
 
-    @Override
+    /*@Override
     public boolean changeCommodityStatus(String commodity, String status) {
         LambdaUpdateWrapper<ItemCommodityInfo> wr = new LambdaUpdateWrapper<ItemCommodityInfo>()
                 .eq(ItemCommodityInfo::getCommodityId, commodity);
-        if ("0".equals(status) || "1".equals(status)) {
+        if ("1".equals(status) || "2".equals(status)) {
             wr.set(ItemCommodityInfo::getStatus, status);
         }
         return commodityInfoMapper.update(null, wr) > 0;
-    }
+    }*/
 
     /**
      * 根据商品id，上架变为下架
@@ -265,12 +268,18 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean changeCommodityUp(String commodity) {
-        int result = commodityInfoMapper.update(null, new UpdateWrapper<ItemCommodityInfo>()
+        int result1 = commodityInfoMapper.update(null, new UpdateWrapper<ItemCommodityInfo>()
                 .eq("commodity_id", commodity)
                 .set("status", 1));
-        return result > 0;
+        int result2 = itemInfoMapper.addUploadBalanceByCommodityId(commodity);
+        if (result1 <= 0 || result2 <= 0) {
+            throw new BusinessException();
+        }
+        return true;
     }
+
 
     /**
      * 根据商品id，下架变为审核中
@@ -280,6 +289,11 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
      */
     @Override
     public boolean changeCommodityCheck(String commodity) {
+        //判断商品上架剩余数 是否为0
+        int balance = itemInfoMapper.selectUploadCommodityBalanceByCommodityId(commodity);
+        if (balance <= 0) {
+            throw new BusinessException("商品可上架数量为0");
+        }
         int result = commodityInfoMapper.update(null, new UpdateWrapper<ItemCommodityInfo>()
                 .eq("commodity_id", commodity)
                 .set("status", 2));
