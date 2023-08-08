@@ -1,10 +1,12 @@
 package com.example.pipayshopapi.mapper;
 
-import com.example.pipayshopapi.entity.AccountInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.pipayshopapi.entity.AccountInfo;
 import com.example.pipayshopapi.entity.vo.AccountInfoVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.math.BigDecimal;
 
 /**
  * <p>
@@ -25,4 +27,5 @@ public interface AccountInfoMapper extends BaseMapper<AccountInfo> {
      */
     AccountInfoVO selectAccountInfo(@Param("uid") String uid);
 
+    int updatePointBalanceByShopId(@Param("shopId") String shopId, @Param("transactionAmount")BigDecimal transactionAmount);
 }

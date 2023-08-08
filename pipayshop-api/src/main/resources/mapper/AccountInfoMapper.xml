@@ -2,6 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.pipayshopapi.mapper.AccountInfoMapper">
 
+    <update id="updatePointBalanceByShopId">
+        update
+            account_info a
+            join
+            shop_info s
+        set
+            a.point_balance = a.point_balance + #{transactionAmount},
+            a.update_time = DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s')
+        where
+            s.uid = a.uid
+    </update>
+
     <select id="selectAccountInfo" resultType="com.example.pipayshopapi.entity.vo.AccountInfoVO">
         select point_balance,pi_balance FROM account_info where uid=#{uid};
     </select>
