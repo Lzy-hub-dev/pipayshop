@@ -33,14 +33,12 @@ public class ShopCategoryMinServiceImpl extends ServiceImpl<ShopCategoryMinMappe
     }
 
     /**
-     * 实体店三级分类标签列表对应的店铺列表条件分页展示
-     * 根据三级ID来查二级ID
+     * 实体店二级分类标签列表对应的店铺列表条件分页展示
      */
     @Override
     public PageDataVO getShopInfoMinListByCondition(Integer limit, Integer pages, String categoryId) {
         // 获取总条数
         Integer indexShopInfoVOCount = shopInfoMapper.getIndexShopInfoVOCount(categoryId);
-        // stata==1,按评分从低到高；stata==2,按评分从高到低
         List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVOById(categoryId, (pages - 1) * limit, limit);
         return new PageDataVO(indexShopInfoVOCount,indexShopInfoVO);
     }
