@@ -1,45 +1,25 @@
 package com.example.pipayshopapi.service.Impl;
 
-import cn.hutool.http.HttpRequest;
-import cn.hutool.http.HttpResponse;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.pipayshopapi.config.CommonConfig;
-import com.example.pipayshopapi.config.RedisConfig;
 import com.example.pipayshopapi.entity.AccountInfo;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.ItemOrderInfo;
-import com.example.pipayshopapi.entity.dto.CompleteDTO;
-import com.example.pipayshopapi.entity.dto.IncompleteDTO;
-import com.example.pipayshopapi.entity.dto.PaymentDTO;
-import com.example.pipayshopapi.entity.dto.TransactionDTO;
-import com.example.pipayshopapi.entity.enums.PaymentEnum;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.AccountInfoMapper;
 import com.example.pipayshopapi.mapper.ItemCommodityInfoMapper;
 import com.example.pipayshopapi.mapper.ItemOrderInfoMapper;
 import com.example.pipayshopapi.service.ItemOrderInfoService;
-import com.example.pipayshopapi.util.HttpClientUtil;
 import com.example.pipayshopapi.util.StringUtil;
-import okhttp3.*;
-import org.redisson.api.RLock;
-import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
+
 
 /**
  * <p>
@@ -61,11 +41,6 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
     @Resource
     ItemCommodityInfoMapper itemCommodityInfoMapper;
 
-    @Resource
-    private CommonConfig commonConfig;
-
-    @Resource
-    private RedissonClient redissonClient;
     @Override
     public PageDataVO getOrderList(GetOrderDataVO getOrderDataVO) {
         int pageSize = getOrderDataVO.getPageSize();

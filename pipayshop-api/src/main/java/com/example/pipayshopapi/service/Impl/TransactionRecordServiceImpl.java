@@ -36,7 +36,7 @@ public class TransactionRecordServiceImpl extends ServiceImpl<TransactionRecordM
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean recordTransaction(String token) {
-//        // 解密JWT获取数据，记录交易日志
+        // 解密JWT获取数据，记录交易日志
         Claims claims = TokenUtil.getUserIdFromToken(token);
         String shopId = claims.get("shopId", String.class);
         String userId = claims.get("user_id", String.class);

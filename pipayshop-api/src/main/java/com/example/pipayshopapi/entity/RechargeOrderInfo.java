@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -52,7 +51,7 @@ public class RechargeOrderInfo implements Serializable {
     private BigDecimal piSum;
 
     /**
-     * 0:待支付1:已支付2：已完成3：无效订单4：已评论订单
+     * 0:待支付1:已支付
      */
     private Integer orderStatus;
 
