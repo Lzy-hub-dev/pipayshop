@@ -17,7 +17,6 @@ import com.example.pipayshopapi.mapper.ShopInfoMapper;
 import com.example.pipayshopapi.mapper.ShopTagsMapper;
 import com.example.pipayshopapi.mapper.UserInfoMapper;
 import com.example.pipayshopapi.service.ShopInfoService;
-import com.example.pipayshopapi.util.FileUploadUtil;
 import com.example.pipayshopapi.util.StringUtil;
 import com.google.common.collect.Sets;
 import com.javadocmd.simplelatlng.LatLng;
@@ -25,11 +24,13 @@ import com.javadocmd.simplelatlng.LatLngTool;
 import com.javadocmd.simplelatlng.util.LengthUnit;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -226,35 +227,23 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     /**
      * 申请实体店
      * @param applyShopDTO
-     * @param file
      * @return
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean applyShop(ApplyShopDTO applyShopDTO, MultipartFile[] file) {
+    public boolean applyShop(ApplyShopDTO applyShopDTO) {
         if (!userIdList.add(applyShopDTO.getUid())) {
             throw new BusinessException("请勿重复提交!");
         }
         try {
-            // 创建一个集合存储商品图片
-            List<String> imagesList = new ArrayList<>();
-            for (MultipartFile multipartFile : file) {
-                // 获取存储到本地空间并返回图片url
-                imagesList.add(FileUploadUtil.uploadFile(multipartFile,FileUploadUtil.SHOP_IMG));
-            }
-            // 将list集合转为string
-            String jsonString = JSON.toJSONString(imagesList);
-            // 属性转移
-            ShopInfo shopInfo = new ShopInfo();
-            shopInfo.setShopId(StringUtil.generateShortId());
-            shopInfo.setShopImagList(jsonString);
-            shopInfo.setLocalhostLatitude(applyShopDTO.getLocalhostLatitude());
-            shopInfo.setLocalhostLongitude(applyShopDTO.getLocalhostLongitude());
-            shopInfo.setShopName(applyShopDTO.getShopName());
-            shopInfo.setPhone(applyShopDTO.getPhone());
-            shopInfo.setUid(applyShopDTO.getUid());
-            shopInfo.setCategoryId(applyShopDTO.getCategoryId());
-            shopInfo.setShopIntroduce(applyShopDTO.getShopIntroduce());
+        // 属性转移
+            ShopInfo shopInfo = new ShopInfo(null,StringUtil.generateShortId(),applyShopDTO.getShopName(),
+                    applyShopDTO.getLocalhostLatitude(),applyShopDTO.getLocalhostLongitude(),
+                    null,applyShopDTO.getPhone(),applyShopDTO.getAddress(),null,
+                    applyShopDTO.getShopIntroduce(),JSON.toJSONString(applyShopDTO.getShopImagList()),
+                    applyShopDTO.getShopImagList().get(0),applyShopDTO.getCategoryId(),
+                    applyShopDTO.getUid(),null,null,applyShopDTO.getUploadCommodityBalance());
+        //用户剩余数量减一
             int update = userInfoMapper.update(null, new LambdaUpdateWrapper<UserInfo>()
                     .eq(UserInfo::getUid, applyShopDTO.getUid())
                     .eq(UserInfo::getStatus, 0)

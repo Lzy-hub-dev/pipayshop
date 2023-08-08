@@ -7,7 +7,6 @@ import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ShopInfoVO;
 import com.example.pipayshopapi.entity.vo.ShopInfoVO1;
 import com.example.pipayshopapi.entity.vo.UidPageVO;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -71,10 +70,9 @@ public interface ShopInfoService extends IService<ShopInfo> {
     /**
      * 申请实体店
      * @param applyShopDTO
-     * @param file
      * @return
      */
-    boolean applyShop(ApplyShopDTO applyShopDTO , MultipartFile[] file);
+    boolean applyShop(ApplyShopDTO applyShopDTO );
 
     /**
      * 根据一级分类-获取所有实体店列表
