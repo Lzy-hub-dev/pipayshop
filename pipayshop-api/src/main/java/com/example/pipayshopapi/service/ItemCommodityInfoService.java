@@ -78,7 +78,7 @@ public interface ItemCommodityInfoService extends IService<ItemCommodityInfo> {
      * @param status 1:上架;2:下架
      * @return
      */
-    boolean changeCommodityStatus(String commodity, String status);
+    // boolean changeCommodityStatus(String commodity, String status);
 
     /**
      * 根据商品id，上架变为下架

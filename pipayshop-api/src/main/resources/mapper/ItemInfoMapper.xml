@@ -1,8 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.pipayshopapi.mapper.ItemInfoMapper">
-
-
+    <insert id="addUploadBalanceByCommodityId">
+        UPDATE item_info i
+            INNER JOIN item_commodity_info c
+        ON i.item_id = c.item_id
+            SET i.upload_balance = i.upload_balance + 1
+        WHERE c.commodity_id = #{commodityId}
+    </insert>
+    <update id="reduceUploadBalanceByCommodityId">
+        UPDATE item_info i
+            INNER JOIN item_commodity_info c
+        ON i.item_id = c.item_id
+            SET i.upload_balance = i.upload_balance - 1
+        WHERE c.commodity_id = #{commodityId}
+            and i.upload_balance>0;
+    </update>
+    <select id="selectUploadCommodityBalanceByCommodityId" resultType="java.lang.Integer">
+        select
+            s.upload_balance
+        FROM
+            item_info s
+                INNER JOIN
+            item_commodity_info sc
+            ON
+                s.item_id=sc.item_id
+        WHERE
+            sc.commodity_id=#{commodityId}
+    </select>
 
     <select id="selectItemInfoByItemIdOrUserId" resultType="com.example.pipayshopapi.entity.vo.ItemInfoVO">
         select i.item_id,i.item_name,i.score,i.item_imag_list,i.user_image,i.membership,
@@ -56,5 +81,6 @@
           and f.`status` = 0
           and i.`status` = 0
     </select>
+
 
 </mapper>

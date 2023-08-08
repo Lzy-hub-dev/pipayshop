@@ -61,4 +61,24 @@ public interface ShopInfoMapper extends BaseMapper<ShopInfo> {
      */
     Integer updateAllNumber(@Param("shopId") String shopId);
 
+
+    /**
+     * 根据服务id 查询 对应实体店可上传服务余额
+     * @param commodityId
+     * @return
+     */
+    int selectUploadCommodityBalanceByCommodityId(@Param("commodityId")String commodityId);
+
+    /**
+     * 根据服务id   -1  商品可上架数量余额
+     * @param commodityId
+     * @return
+     */
+    int reduceUploadBalanceByCommodityId(@Param("commodityId")String commodityId);
+    /**
+     * 根据服务id   +1  商品可上架数量余额
+     * @param commodityId
+     * @return
+     */
+    int addUploadBalanceByCommodityId(@Param("commodityId")String commodityId);
 }
