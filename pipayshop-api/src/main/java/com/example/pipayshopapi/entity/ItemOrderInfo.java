@@ -57,7 +57,7 @@ public class ItemOrderInfo implements Serializable {
     /**
      * 0:待支付1:已支付2：已完成3：无效订单
      */
-    private Boolean orderStatus;
+    private Integer orderStatus;
 
     /**
      * 0:未删除1：逻辑删除2：真实删除

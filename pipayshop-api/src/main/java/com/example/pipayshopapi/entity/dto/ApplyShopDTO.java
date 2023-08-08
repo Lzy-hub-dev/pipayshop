@@ -24,4 +24,6 @@ public class ApplyShopDTO {
     private String uid;
 
     private Integer uploadCommodityBalance;
+
+    private String qrcode;
 }

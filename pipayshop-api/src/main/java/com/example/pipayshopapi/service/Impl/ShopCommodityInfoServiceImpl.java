@@ -131,11 +131,16 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean updateCommodityUp(String commodityId) {
-        int result = shopCommodityInfoMapper.update(null, new UpdateWrapper<ShopCommodityInfo>()
+        int result1 = shopCommodityInfoMapper.update(null, new UpdateWrapper<ShopCommodityInfo>()
                 .eq("commodity_id", commodityId)
                 .set("status", 1));
-        return result > 0;
+        int result2 = shopInfoMapper.addUploadBalanceByCommodityId(commodityId);
+        if (result2 <= 0 || result1 <= 0) {
+            throw new BusinessException("服务异常,请稍后重试");
+        }
+        return true;
     }
 
     /**
@@ -145,7 +150,12 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean updateCommodityCheck(String commodityId) {
+        int balance = shopInfoMapper.selectUploadCommodityBalanceByCommodityId(commodityId);
+        if (balance <= 0) {
+            throw new BusinessException("该店铺商品可上架数量余额不足！");
+        }
         int result = shopCommodityInfoMapper.update(null, new UpdateWrapper<ShopCommodityInfo>()
                 .eq("commodity_id", commodityId)
                 .set("status", 2));

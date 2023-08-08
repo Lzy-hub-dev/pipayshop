@@ -1,6 +1,7 @@
 package com.example.pipayshopapi.controller;
 
 
+import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.dto.ApplyItemCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
@@ -162,7 +163,6 @@ public class ItemCommodityInfoController {
     }
 
 
-
     @GetMapping("commodityList/{itemId}")
     @ApiOperation("根据网店id查询网店的商品列表")
     public ResponseVO commodityList(@PathVariable("itemId") String itemId) {
@@ -172,24 +172,6 @@ public class ItemCommodityInfoController {
                 throw new Exception();
             }
             return ResponseVO.getSuccessResponseVo(vo);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            throw new BusinessException("查询失败，请联系后台人员");
-        }
-    }
-
-    @PostMapping("changeCommodityStatus/{commodity}/{status}")
-    @ApiOperation("根据商品id上架/下架 商品")
-    public ResponseVO changeCommodityStatus(@PathVariable("commodity") String commodity,
-                                            @PathVariable("status")
-                                            @ApiParam("1:上架;2:下架")
-                                            String status) {
-        try {
-            boolean flag = commodityInfoService.changeCommodityStatus(commodity, status);
-            if (!flag) {
-                throw new Exception();
-            }
-            return ResponseVO.getSuccessResponseVo(null);
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new BusinessException("查询失败，请联系后台人员");
@@ -213,23 +195,20 @@ public class ItemCommodityInfoController {
 
     @PostMapping("changeCommodityStatus/{commodityId}")
     @ApiOperation("根据商品id，下架变为审核中")
-    public ResponseVO changeCommodityCheck(@PathVariable String commodityId){
-        try {
-            boolean result = commodityInfoService.changeCommodityCheck(commodityId);
-            if (!result){
-                throw new Exception();
-            }
-            return ResponseVO.getSuccessResponseVo("根据商品id，下架变为审核中成功");
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new BusinessException("根据商品id，下架变为审核中失败，请联系后台人员");
+    public ResponseVO changeCommodityCheck(@PathVariable String commodityId) {
+
+        boolean result = commodityInfoService.changeCommodityCheck(commodityId);
+        if (!result) {
+            throw new BusinessException("服务异常,请联系管理人员");
         }
+        return ResponseVO.getSuccessResponseVo("根据商品id，下架变为审核中成功");
+
     }
 
 
     @PostMapping("deleteHistory")
     @ApiOperation("删除用户浏览网店商品的历史记录")
-    public ResponseVO deleteHistory( String userId,
+    public ResponseVO deleteHistory(String userId,
                                     String commodityId) {
 
         try {
@@ -280,5 +259,15 @@ public class ItemCommodityInfoController {
         }
     }
 
-
+    @GetMapping("getOriginAddressById/{commodityId}")
+    @ApiOperation("根据商品id，查找买家发货地址")
+    public ResponseVO<String> getOriginAddressById(@PathVariable String commodityId){
+        try {
+            String originAddress = commodityInfoService.getOriginAddressById(commodityId);
+            return ResponseVO.getSuccessResponseVo(originAddress);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("根据商品id，查找买家发货地址失败，请联系后台人员");
+        }
+    }
 }

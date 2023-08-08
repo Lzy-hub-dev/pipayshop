@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.pipayshopapi.mapper.ShopInfoMapper">
+    <insert id="addUploadBalanceByCommodityId">
+        UPDATE shop_info i
+            INNER JOIN shop_commodity_info c
+        ON i.shop_id = c.shop_id
+            SET i.upload_commodity_balance = i.upload_commodity_balance + 1
+        WHERE c.commodity_id = #{commodityId}
+    </insert>
+    <update id="reduceUploadBalanceByCommodityId">
+        UPDATE shop_info i
+            INNER JOIN shop_commodity_info c
+        ON i.shop_id = c.shop_id
+            SET i.upload_commodity_balance = i.upload_commodity_balance - 1
+        WHERE c.commodity_id = #{commodityId}
+          and i.upload_commodity_balance>0;
+    </update>
 
     <select id="selectShopInfoByTopCate" resultType="com.example.pipayshopapi.entity.ShopInfo">
         select *
@@ -36,11 +51,9 @@
 
 
     <select id="getIndexShopInfoVOCount" resultType="java.lang.Integer">
-        select COUNT(*)
+        select count(*)
         from shop_info
-        <where>
-            <if test="categoryId != null and categoryId != '-1' ">category_id=#{categoryId} </if>
-        </where>
+        WHERE category_id = #{categoryId} AND status=0
     </select>
 
 
@@ -97,23 +110,27 @@
     </select>
 
     <select id="getIndexShopInfoVOById" resultType="com.example.pipayshopapi.entity.vo.IndexShopInfoVO">
-        select shop_id,shop_name,score,localhost_latitude,localhost_longitude,user_image, shop_introduce,tag_list,address,membership
+        select shop_id,shop_name,score,localhost_latitude,localhost_longitude,user_image,
+               shop_introduce,tag_list,address,membership
         from shop_info
-        <where>
-
-            <if test="categoryId != null and categoryId != '-1' ">shop_info.category_id IN(SELECT
-                s.category_id
-                FROM
-                shop_category s
-                WHERE
-                s.category_pid = #{categoryId})
-            </if>
-        </where>
+        WHERE category_id = #{categoryId} AND status=0
         LIMIT ${page},${limit}
     </select>
 
     <select id="updateAllNumber" resultType="java.lang.Integer">
         select upload_commodity_balance from shop_info where shop_id=#{shopId};
+    </select>
+    <select id="selectUploadCommodityBalanceByCommodityId" resultType="java.lang.Integer">
+        select
+            s.upload_commodity_balance
+        FROM
+            shop_info s
+                INNER JOIN
+            shop_commodity_info sc
+            ON
+                s.shop_id=sc.shop_id
+        WHERE
+            sc.commodity_id=#{commodityId}
     </select>
 
 </mapper>

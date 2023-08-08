@@ -145,15 +145,12 @@ public class ShopCommodityInfoController {
     @PostMapping("updateCommodityCheck/{commodityId}")
     @ApiOperation("根据商品id，下架变为审核中")
     public ResponseVO<String> updateCommodityCheck(@PathVariable String commodityId) {
-        try {
             boolean result = shopCommodityService.updateCommodityCheck(commodityId);
             if (!result) {
-                throw new Exception();
+                throw new BusinessException("服务异常，请联系管理人员");
             }
             return ResponseVO.getSuccessResponseVo("根据商品id，下架变为审核中成功");
-        } catch (Exception e) {
-            throw new BusinessException("根据商品id，下架变为审核中失败，请联系后台人员");
-        }
+
     }
 
     @PostMapping("shopCommodityTopImageUp")

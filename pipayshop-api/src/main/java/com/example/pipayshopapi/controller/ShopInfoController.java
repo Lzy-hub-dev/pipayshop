@@ -218,4 +218,32 @@ public class ShopInfoController {
         }
     }
 
+    /**
+     * 校验商家的付款ID
+     */
+    @GetMapping("checkId")
+    @ApiOperation("校验商家的付款ID")
+    public ResponseVO<CheckVO> checkId(String qrcode){
+        try {
+            CheckVO checkId = infoService.checkId(qrcode);
+            return ResponseVO.getSuccessResponseVo(checkId);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("失败");
+        }
+    }
+
+
+    @PostMapping("piIdImageUp")
+    @ApiOperation("pi_Id_Image上传")
+    public ResponseVO<String> piIdImageUp(MultipartFile multipartFile){
+        try {
+            String piIdImageUp = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.PI_ID_IMAGE);
+            return ResponseVO.getSuccessResponseVo(piIdImageUp);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("pi_Id_Image上传失败，请联系后台人员");
+        }
+    }
+
 }

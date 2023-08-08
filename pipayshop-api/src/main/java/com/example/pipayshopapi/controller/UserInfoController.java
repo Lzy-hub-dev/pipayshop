@@ -1,8 +1,11 @@
 package com.example.pipayshopapi.controller;
 
+import com.example.pipayshopapi.entity.UserInfo;
+import com.example.pipayshopapi.entity.dto.LoginDTO;
 import com.example.pipayshopapi.entity.vo.ItemMinInfoVo;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
+import com.example.pipayshopapi.entity.vo.UserWithTokenVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.UserInfoService;
 import io.swagger.annotations.Api;
@@ -27,6 +30,22 @@ public class UserInfoController {
 
     @Resource
     private UserInfoService userInfoService;
+
+    public ResponseVO<UserInfo> login(@RequestBody LoginDTO loginDTO) {
+        try {
+
+
+            UserInfo userInfo = userInfoService.login(loginDTO);
+            if (userInfo == null) {
+                throw new Exception();
+            }
+
+            return ResponseVO.getSuccessResponseVo(userInfo);
+        } catch (Exception e) {
+
+            throw new BusinessException("登录注册失败，请联系后台人员 + "+e.getLocalizedMessage()+e+e.getCause().toString());
+        }
+    }
 
     @GetMapping("selectUserInfoByUid/{uid}")
     @ApiOperation("根据用户Id查找用户数据表的基本信息")
