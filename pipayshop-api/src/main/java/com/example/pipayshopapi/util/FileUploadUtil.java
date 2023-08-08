@@ -47,6 +47,10 @@ public class FileUploadUtil {
     public static String SHOP_COMMODITY_TOP_IMAGE_UP =  "shop_commodity_top_imageUp";
     //实体店商品轮播图上传
     public static String SHOP_COMMODITY_IMAGE_UP  = "shop_commodity_image_Up";
+    //实体店展示图上传
+    public static String SHOP_TOP_IMAGE_UP =  "shop_top_imageUp";
+    //实体店轮播图上传
+    public static String SHOP_IMAGE_UP  = "shop_image_Up";
 
 
     /**
