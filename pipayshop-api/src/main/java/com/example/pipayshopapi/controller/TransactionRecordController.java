@@ -29,17 +29,17 @@ public class TransactionRecordController {
     TransactionRecordService transactionRecordService;
 
     /**
-     * 记录交易，数据采用JWT 加密传输
+     * 数据交换并记录交易，数据采用JWT 加密传输
      */
     @PostMapping("recordTransaction")
-    @ApiOperation("记录交易，数据采用JWT 加密传输")
+    @ApiOperation("数据交换并记录交易，数据采用JWT 加密传输")
     public ResponseVO<Boolean> recordTransaction(String token){
         try {
             boolean flag = transactionRecordService.recordTransaction(token);
             return ResponseVO.getSuccessResponseVo(flag);
         }catch (Exception e){
             e.printStackTrace();
-            throw new BusinessException("记录交易失败，请联系后台人员");
+            throw new BusinessException("数据交换并记录交易失败，请联系后台人员");
         }
     }
 

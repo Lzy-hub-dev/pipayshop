@@ -6,6 +6,8 @@ import com.example.pipayshopapi.entity.vo.AccountInfoVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
+
 /**
  * <p>
  * 用户账户表 Mapper 接口
@@ -26,4 +28,5 @@ public interface AccountInfoMapper extends BaseMapper<AccountInfo> {
     AccountInfoVO selectAccountInfo(@Param("uid") String uid);
 
     int createAccount(String userId);
+    int updatePointBalanceByShopId(@Param("shopId") String shopId, @Param("transactionAmount")BigDecimal transactionAmount);
 }

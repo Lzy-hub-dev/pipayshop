@@ -221,9 +221,9 @@ public class ShopInfoController {
     /**
      * 校验商家的付款ID
      */
-    @GetMapping("checkId/{qrcode}")
+    @GetMapping("checkId")
     @ApiOperation("校验商家的付款ID")
-    public ResponseVO<CheckVO> checkId(@PathVariable String qrcode){
+    public ResponseVO<CheckVO> checkId(String qrcode){
         try {
             CheckVO checkId = infoService.checkId(qrcode);
             return ResponseVO.getSuccessResponseVo(checkId);
