@@ -3,7 +3,6 @@ package com.example.pipayshopapi.service.Impl;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -11,6 +10,7 @@ import com.example.pipayshopapi.entity.*;
 import com.example.pipayshopapi.entity.dto.ApplyItemCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
+import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.*;
 import com.example.pipayshopapi.service.ItemCommodityInfoService;
 import com.example.pipayshopapi.util.StringUtil;
@@ -247,16 +247,6 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         List<ItemCollectionVO> itemCommodityInfoVOS = commodityInfoMapper.selectHistoryProductByUserId((page - 1) * limit, limit, userId);
         return new PageDataVO(integer,itemCommodityInfoVOS);
     }
-
-    /*@Override
-    public boolean changeCommodityStatus(String commodity, String status) {
-        LambdaUpdateWrapper<ItemCommodityInfo> wr = new LambdaUpdateWrapper<ItemCommodityInfo>()
-                .eq(ItemCommodityInfo::getCommodityId, commodity);
-        if ("1".equals(status) || "2".equals(status)) {
-            wr.set(ItemCommodityInfo::getStatus, status);
-        }
-        return commodityInfoMapper.update(null, wr) > 0;
-    }*/
 
     /**
      * 根据商品id，上架变为下架
