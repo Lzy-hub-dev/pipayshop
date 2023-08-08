@@ -248,7 +248,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     public boolean changeCommodityStatus(String commodity, String status) {
         LambdaUpdateWrapper<ItemCommodityInfo> wr = new LambdaUpdateWrapper<ItemCommodityInfo>()
                 .eq(ItemCommodityInfo::getCommodityId, commodity);
-        if ("1".equals(status) || "2".equals(status)) {
+        if ("0".equals(status) || "1".equals(status)) {
             wr.set(ItemCommodityInfo::getStatus, status);
         }
         return commodityInfoMapper.update(null, wr) > 0;
@@ -264,7 +264,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     public boolean changeCommodityUp(String commodity) {
         int result = commodityInfoMapper.update(null, new UpdateWrapper<ItemCommodityInfo>()
                 .eq("commodity_id", commodity)
-                .set("status", 2));
+                .set("status", 1));
         return result > 0;
     }
 
@@ -278,7 +278,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     public boolean changeCommodityCheck(String commodity) {
         int result = commodityInfoMapper.update(null, new UpdateWrapper<ItemCommodityInfo>()
                 .eq("commodity_id", commodity)
-                .set("status", 0));
+                .set("status", 2));
         return result > 0;
     }
 
