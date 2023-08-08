@@ -6,9 +6,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.config.CommonConfig;
 import com.example.pipayshopapi.entity.AccountInfo;
-import com.example.pipayshopapi.entity.ItemOrderInfo;
+import com.example.pipayshopapi.entity.RechargeInfo;
 import com.example.pipayshopapi.entity.RechargeOrderInfo;
 import com.example.pipayshopapi.entity.dto.CompleteDTO;
 import com.example.pipayshopapi.entity.dto.IncompleteDTO;
@@ -25,6 +26,7 @@ import com.example.pipayshopapi.util.HttpClientUtil;
 import com.example.pipayshopapi.util.StringUtil;
 import com.example.pipayshopapi.util.TokenUtil;
 import io.jsonwebtoken.Claims;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -48,6 +50,7 @@ import java.util.concurrent.TimeUnit;
  * @since 2023-08-08
  */
 @Service
+@Slf4j
 public class RechargeOrderInfoServiceImpl extends ServiceImpl<RechargeOrderInfoMapper, RechargeOrderInfo> implements RechargeOrderInfoService {
 
     @Resource
