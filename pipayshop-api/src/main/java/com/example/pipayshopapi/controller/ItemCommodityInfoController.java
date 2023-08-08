@@ -1,6 +1,7 @@
 package com.example.pipayshopapi.controller;
 
 
+import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.dto.ApplyItemCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
@@ -58,15 +59,15 @@ public class ItemCommodityInfoController {
 
     @PostMapping("issueItemCommodity")
     @ApiOperation("发布网店商品")
-    public ResponseVO issueItemCommodity(@RequestBody ApplyItemCommodityDTO applyItemCommodityDTO) {
+    public ResponseVO issueItemCommodity(@RequestBody ApplyItemCommodityDTO applyItemCommodityDTO){
 
         try {
             boolean result = commodityInfoService.issueItemCommodity(applyItemCommodityDTO);
-            if (!result) {
+            if (!result){
                 throw new Exception();
             }
             return ResponseVO.getSuccessResponseVo("发布网店商品成功");
-        } catch (Exception e) {
+        }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("发布网店商品失败，请联系后台人员");
         }
@@ -125,7 +126,7 @@ public class ItemCommodityInfoController {
 
     @GetMapping("collectList/{page}/{limit}/{userId}")
     @ApiOperation("根据用户id查询 用户收藏的商品列表")
-    public ResponseVO<PageDataVO> collectList(@PathVariable Integer page, @PathVariable Integer limit, @PathVariable("userId") String userId) {
+    public ResponseVO<PageDataVO> collectList(@PathVariable Integer page,@PathVariable Integer limit,@PathVariable("userId") String userId) {
         try {
             PageDataVO collectList = commodityInfoService.getCollectList(page, limit, userId);
             return ResponseVO.getSuccessResponseVo(collectList);
@@ -136,9 +137,10 @@ public class ItemCommodityInfoController {
     }
 
 
+
     @GetMapping("history/{page}/{limit}/{userId}")
     @ApiOperation("根据用户id查询用户浏览商品历史")
-    public ResponseVO<PageDataVO> historyList(@PathVariable Integer page, @PathVariable Integer limit, @PathVariable("userId") String userId) {
+    public ResponseVO<PageDataVO> historyList(@PathVariable Integer page,@PathVariable Integer limit,@PathVariable("userId") String userId) {
         try {
             PageDataVO pageDataVO = commodityInfoService.historyList(page, limit, userId);
             return ResponseVO.getSuccessResponseVo(pageDataVO);
@@ -176,34 +178,16 @@ public class ItemCommodityInfoController {
         }
     }
 
-    /*@PostMapping("changeCommodityStatus/{commodity}/{status}")
-    @ApiOperation("根据商品id上架/下架 商品")
-    public ResponseVO changeCommodityStatus(@PathVariable("commodity") String commodity,
-                                            @PathVariable("status")
-                                            @ApiParam("1:上架;2:下架")
-                                            String status) {
-        try {
-            boolean flag = commodityInfoService.changeCommodityStatus(commodity, status);
-            if (!flag) {
-                throw new Exception();
-            }
-            return ResponseVO.getSuccessResponseVo(null);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            throw new BusinessException("查询失败，请联系后台人员");
-        }
-    }*/
-
     @PostMapping("changeCommodityUp/{commodityId}")
     @ApiOperation("根据商品id，上架变为下架")
-    public ResponseVO changeCommodityUp(@PathVariable String commodityId) {
+    public ResponseVO changeCommodityUp(@PathVariable String commodityId){
         try {
             boolean result = commodityInfoService.changeCommodityUp(commodityId);
-            if (!result) {
+            if (!result){
                 throw new Exception();
             }
             return ResponseVO.getSuccessResponseVo("根据商品id，上架变为下架成功");
-        } catch (Exception e) {
+        }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("根据商品id，上架变为下架失败，请联系后台人员");
         }
@@ -241,11 +225,11 @@ public class ItemCommodityInfoController {
 
     @PostMapping("itemTopImags")
     @ApiOperation("网店头像图片上传")
-    public ResponseVO<String> itemTopImagsUp(MultipartFile multipartFile) {
+    public ResponseVO<String> itemTopImagsUp(MultipartFile multipartFile){
         try {
             String itemTopImags = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.ROOM_TOP_IMG);
             return ResponseVO.getSuccessResponseVo(itemTopImags);
-        } catch (Exception e) {
+        }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("网店头像图片上传失败，请联系后台人员");
         }
@@ -253,11 +237,11 @@ public class ItemCommodityInfoController {
 
     @PostMapping("itemImagsListUp")
     @ApiOperation("商品图片的地址集合上传")
-    public ResponseVO<String> itemImagsListUp(MultipartFile multipartFile) {
+    public ResponseVO<String> itemImagsListUp(MultipartFile multipartFile){
         try {
             String itemImagsList = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.ROOM_TOP_IMG);
             return ResponseVO.getSuccessResponseVo(itemImagsList);
-        } catch (Exception e) {
+        }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("商品图片的地址集合上传失败，请联系后台人员");
         }
@@ -265,11 +249,11 @@ public class ItemCommodityInfoController {
 
     @PostMapping("itemDetailImagsUp")
     @ApiOperation("商品详情图片上传")
-    public ResponseVO<String> roomTopImageUp(MultipartFile multipartFile) {
+    public ResponseVO<String> roomTopImageUp(MultipartFile multipartFile){
         try {
             String itemDetailImags = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.ROOM_TOP_IMG);
             return ResponseVO.getSuccessResponseVo(itemDetailImags);
-        } catch (Exception e) {
+        }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("商品详情图片上传失败，请联系后台人员");
         }
