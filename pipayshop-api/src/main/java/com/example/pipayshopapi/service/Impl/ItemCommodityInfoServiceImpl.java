@@ -173,15 +173,18 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
 
     @Override
     public CommodityDetailVO itemCommodityDetail(String commodityId) {
+        // 获取网店的数据
         ItemCommodityInfo itemCommodityInfo = commodityInfoMapper.selectOne(new QueryWrapper<ItemCommodityInfo>()
                 .eq("commodity_id", commodityId));
         String itemId = itemCommodityInfo.getItemId();
         Map<String, List<String>> typeMap = new HashMap<>();
+        // 转移部分非json型的数据
         CommodityDetailVO commodityDetailVO = new CommodityDetailVO(itemCommodityInfo.getCommodityId(), null, itemCommodityInfo.getItemCommodityName()
                 , itemCommodityInfo.getOriginPrice(), null, itemCommodityInfo.getOriginAddress(), null
                 , itemId, itemCommodityInfo.getPrice(), itemCommodityInfo.getDetails(), null,
                 itemCommodityInfo.getInventory(), itemCommodityInfo.getFreeShippingNum(), itemCommodityInfo.getCategoryId(),
                 null, null, itemCommodityInfo.getDegreeLoss(), null, null, null);
+        // 序列化json的数据存入结果封装类中
         String colorListString = itemCommodityInfo.getColorList();
         if (colorListString != null) {typeMap.put("colorList", JSON.parseArray(colorListString, String.class));}
         String sizeListString = itemCommodityInfo.getSizeList();
@@ -198,6 +201,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         if (detailImagList != null){commodityDetailVO.setDetailImagList(JSON.parseArray(detailImagList, String.class));}
         if (typeMap.size() != 0) {commodityDetailVO.setTypeMap(typeMap);}
         String brandId = itemCommodityInfo.getBrandId();
+        // 解析品牌字段
         if (brandId != null) {
             BrandInfo brandInfo = brandInfoMapper.selectOne(new QueryWrapper<BrandInfo>()
                     .eq("b_id", brandId)
