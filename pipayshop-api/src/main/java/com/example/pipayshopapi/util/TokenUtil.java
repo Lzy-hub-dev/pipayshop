@@ -1,28 +1,15 @@
 package com.example.pipayshopapi.util;
 
-import io.jsonwebtoken.*;
-
-import java.util.Date;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.Jwts;
 
 /**
  * @author wzx
  */
 public class TokenUtil {
 
-    /**
-     * 获取token，将传递的数据封装进JWT的荷载中
-     */
-    public static String getToken(String userId){
-        if (userId == null){return null;}
-        JwtBuilder jwtBuilder = Jwts.builder();
-        return jwtBuilder
-                        .setHeaderParam("typ", "JWT")
-                        .setHeaderParam("alg", "HS256")
-                        .claim("userId", userId)
-                        .setExpiration(new Date(System.currentTimeMillis() + Constants.TOKEN_INVALID_TIME))
-                        .signWith(SignatureAlgorithm.HS256, Constants.TOKEN_SECRET)
-                        .compact();
-    }
 
     /**
      * 解密Token，拿到内部封装的userId数据
