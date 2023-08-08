@@ -1,7 +1,7 @@
 package com.example.pipayshopapi.service;
 
-import com.example.pipayshopapi.entity.TransactionRecord;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.pipayshopapi.entity.TransactionRecord;
 
 /**
  * <p>
@@ -13,4 +13,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface TransactionRecordService extends IService<TransactionRecord> {
 
+    /**
+     * 记录交易，数据采用JWT 加密传输
+     */
+    boolean recordTransaction(String token);
 }

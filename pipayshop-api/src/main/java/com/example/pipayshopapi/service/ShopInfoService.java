@@ -92,4 +92,5 @@ public interface ShopInfoService extends IService<ShopInfo> {
     Integer updateShopCommodity(String shopId);
 
     CheckVO checkId(String qrcode);
+
 }
