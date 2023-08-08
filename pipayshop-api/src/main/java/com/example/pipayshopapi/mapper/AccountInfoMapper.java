@@ -25,4 +25,5 @@ public interface AccountInfoMapper extends BaseMapper<AccountInfo> {
      */
     AccountInfoVO selectAccountInfo(@Param("uid") String uid);
 
+    int createAccount(String userId);
 }
