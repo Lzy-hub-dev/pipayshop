@@ -1,11 +1,13 @@
 package com.example.pipayshopapi.controller;
 
 
+import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.vo.ItemInfoVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.ItemInfoMapper;
+import com.example.pipayshopapi.service.ItemCommodityInfoService;
 import com.example.pipayshopapi.service.ItemInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,6 +37,24 @@ public class ItemInfoController {
     @Resource
     private ItemInfoMapper itemInfoMapper;
 
+    @Resource
+    private ItemCommodityInfoService itemCommodityInfoService;
+
+    @GetMapping("getInventoryByCommodityId/{CommodityId}")
+    @ApiOperation("根据商品id获取商品库存")
+    public ResponseVO getInventoryByCommodityId(@PathVariable("CommodityId")String commodityId){
+        try {
+            Integer Residue = itemCommodityInfoService.getInventoryByCommodityId(commodityId);
+            if (Residue == null) {
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo(Residue);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException("查询失败，请联系后台人员");
+        }
+    }
+
     @GetMapping("getUploadBalance/{itemId}")
     @ApiOperation("根据网店id获取商品上架剩余数")
     public ResponseVO<Integer> getUploadBalance(String itemId){
@@ -52,7 +72,10 @@ public class ItemInfoController {
 
     @GetMapping("getItemInfo/{itemId}/{page}/{limit}/{price}")
     @ApiOperation("根据网店id获取网店商品信息")
-    public ResponseVO<PageDataVO> getItemInfo(@PathVariable String itemId,@PathVariable Integer page,@PathVariable Integer limit,@PathVariable Boolean price) {
+    public ResponseVO<PageDataVO> getItemInfo(@PathVariable String itemId,
+                                              @PathVariable Integer page,
+                                              @PathVariable Integer limit,
+                                              @PathVariable Boolean price) {
         try {
             PageDataVO pageDataVO = itemInfoService.getItemInfo(itemId,page,limit,price);
 

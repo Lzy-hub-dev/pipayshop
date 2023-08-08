@@ -91,4 +91,6 @@ public interface ShopCommodityInfoService extends IService<ShopCommodityInfo> {
      * @return
      */
     boolean updateCommodityCheck(String commodityId);
+
+    Integer getResidueByCommodityId(String commodityId);
 }

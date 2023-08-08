@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.pipayshopapi.mapper.ShopCommodityInfoMapper">
+    <update id="reduceStock">
+        UPDATE
+            shop_commodity_info
+        SET
+            residue = residue-#{num}
+        WHERE
+            commodity_id=#{commodityId}
+          AND
+            residue>=#{num}
+    </update>
 
     <select id="selectAllTopContentList" resultType="com.example.pipayshopapi.entity.ShopCommodityInfo">
         SELECT *
