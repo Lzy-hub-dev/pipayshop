@@ -218,4 +218,22 @@ public class ShopInfoController {
         }
     }
 
+    /**
+     * 校验商家的付款ID
+     */
+    @GetMapping("checkId/{qrcode}")
+    @ApiOperation("校验商家的付款ID")
+    public ResponseVO<CheckVO> checkId(@PathVariable String qrcode){
+        try {
+            CheckVO checkId = infoService.checkId(qrcode);
+            return ResponseVO.getSuccessResponseVo(checkId);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("失败");
+        }
+    }
+
+    /**
+     *
+     */
 }

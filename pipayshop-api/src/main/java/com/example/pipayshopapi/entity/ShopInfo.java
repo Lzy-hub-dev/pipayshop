@@ -113,4 +113,8 @@ public class ShopInfo implements Serializable {
      * 商品上架数量
      */
     private Integer uploadCommodityBalance;
+    /**
+     * 商家的付款ID
+     */
+    private String qrcode;
 }

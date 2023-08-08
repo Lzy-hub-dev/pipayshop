@@ -242,7 +242,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
                     null,applyShopDTO.getPhone(),applyShopDTO.getAddress(),null,
                     applyShopDTO.getShopIntroduce(),JSON.toJSONString(applyShopDTO.getShopImagList()),
                     applyShopDTO.getShopImagList().get(0),applyShopDTO.getCategoryId(),
-                    applyShopDTO.getUid(),null,null,applyShopDTO.getUploadCommodityBalance());
+                    applyShopDTO.getUid(),null,null,applyShopDTO.getUploadCommodityBalance(), applyShopDTO.getQrcode());
         //用户剩余数量减一
             int update = userInfoMapper.update(null, new LambdaUpdateWrapper<UserInfo>()
                     .eq(UserInfo::getUid, applyShopDTO.getUid())
@@ -261,11 +261,6 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     }
     /**
      * 根据一级分类-获取所有实体店列表
-     *
-     * @param limit
-     * @param pages
-     * @param categoryId
-     * @return
      */
     @Override
     public PageDataVO getSecShopInfoListByCondition(Integer limit, Integer pages, String categoryId) {
@@ -326,5 +321,15 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     @Override
     public Integer updateShopCommodity(String shopId) {
         return shopInfoMapper.updateAllNumber(shopId);
+    }
+
+    @Override
+    public CheckVO checkId(String qrcode) {
+        ShopInfo shopInfo = shopInfoMapper.selectOne(new QueryWrapper<ShopInfo>().eq("qrcode", qrcode)
+                .eq("status", 0));
+        if (shopInfo == null) {
+            return null;
+        }
+        return new CheckVO(shopInfo.getShopId(), shopInfo.getShopName(), shopInfo.getUserImage());
     }
 }

@@ -3,10 +3,7 @@ package com.example.pipayshopapi.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
-import com.example.pipayshopapi.entity.vo.ShopInfoVO;
-import com.example.pipayshopapi.entity.vo.ShopInfoVO1;
-import com.example.pipayshopapi.entity.vo.UidPageVO;
+import com.example.pipayshopapi.entity.vo.*;
 
 import java.util.List;
 
@@ -93,4 +90,6 @@ public interface ShopInfoService extends IService<ShopInfo> {
      * 校验实体店是否可以上传的商品
      */
     Integer updateShopCommodity(String shopId);
+
+    CheckVO checkId(String qrcode);
 }
