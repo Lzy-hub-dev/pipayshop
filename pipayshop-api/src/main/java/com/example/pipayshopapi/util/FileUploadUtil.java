@@ -51,6 +51,8 @@ public class FileUploadUtil {
     public static String SHOP_TOP_IMAGE_UP =  "shop_top_imageUp";
     //实体店轮播图上传
     public static String SHOP_IMAGE_UP  = "shop_image_Up";
+    //PI ID 图上传
+    public static String PI_ID_IMAGE = "pi_id_image";
 
 
     /**

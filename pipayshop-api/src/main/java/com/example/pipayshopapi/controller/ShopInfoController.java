@@ -218,4 +218,16 @@ public class ShopInfoController {
         }
     }
 
+    @PostMapping("piIdImageUp")
+    @ApiOperation("pi_Id_Image上传")
+    public ResponseVO<String> piIdImageUp(MultipartFile multipartFile){
+        try {
+            String piIdImageUp = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.PI_ID_IMAGE);
+            return ResponseVO.getSuccessResponseVo(piIdImageUp);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("pi_Id_Image上传失败，请联系后台人员");
+        }
+    }
+
 }
