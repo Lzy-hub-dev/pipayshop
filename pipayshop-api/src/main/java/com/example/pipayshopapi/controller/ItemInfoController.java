@@ -42,7 +42,7 @@ public class ItemInfoController {
 
     @GetMapping("getInventoryByCommodityId/{CommodityId}")
     @ApiOperation("根据商品id获取商品库存")
-    public ResponseVO getResidueByCommodityId(@PathVariable("CommodityId")String commodityId){
+    public ResponseVO getInventoryByCommodityId(@PathVariable("CommodityId")String commodityId){
         try {
             Integer Residue = itemCommodityInfoService.getInventoryByCommodityId(commodityId);
             if (Residue == null) {
