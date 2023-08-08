@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.AccountInfo;
 import com.example.pipayshopapi.entity.TransactionRecord;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.AccountInfoMapper;
 import com.example.pipayshopapi.mapper.TransactionRecordMapper;
@@ -60,5 +61,12 @@ public class TransactionRecordServiceImpl extends ServiceImpl<TransactionRecordM
             throw new BusinessException("增加店铺对应的店主的账户数据失败");
         }
         return true;
+    }
+
+
+    @Override
+    public PageDataVO getRecordTransaction(String shopId) {
+//        LinkerServicestransactionRecordMapper.getRecordTransaction(shopId);
+        return null;
     }
 }
