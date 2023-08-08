@@ -139,8 +139,9 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
         String orderId = StringUtil.generateShortId();
         try {
             itemOrderInfo.setOrderId(orderId);
+            int i = itemCommodityInfoMapper.reduceStock(itemOrderInfo.getNumber(), itemOrderInfo.getCommodityId());
             int insert = itemOrderInfoMapper.insert(itemOrderInfo);
-            if (insert < 1){
+            if (insert < 1 || i < 1) {
                 String message = "生成未支付订单失败";
                 throw new BusinessException(message);
             }

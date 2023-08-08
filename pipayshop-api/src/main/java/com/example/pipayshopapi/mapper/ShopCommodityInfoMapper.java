@@ -81,4 +81,12 @@ public interface ShopCommodityInfoMapper extends BaseMapper<ShopCommodityInfo> {
 
     @Select("select shop_id from shop_commodity_info where commodity_id = #{commodityId}")
     String selectShopIdByCommodityId(@Param("commodityId")String commodityId);
+
+    /**
+     * 根据购买数量、商品id
+     * @param num
+     * @param commodityId
+     * @return
+     */
+    int reduceStock(@Param("num")Integer num,@Param("commodityId")String commodityId);
 }

@@ -97,8 +97,11 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
         // 生成orderId
         String orderId = StringUtil.generateShortId();
         ShopOrderInfo info = new ShopOrderInfo(orderId, dto.getTransactionAmount(), dto.getCommodityId(), dto.getUid(), dto.getShopId(), dto.getNumber());
+        //库存递减
+        int reduce = shopCommodityInfoMapper.reduceStock(dto.getNumber(), dto.getCommodityId());
         int insert = shopOrderInfoMapper.insert(info);
-        if (insert < 1){
+
+        if (insert < 1 || reduce < 1) {
             String message = "生成未支付订单失败";
             throw new BusinessException(message);
         }

@@ -1,5 +1,7 @@
 package com.example.pipayshopapi.service.Impl;
 
+import cn.hutool.core.collection.ConcurrentHashSet;
+import cn.hutool.core.thread.ThreadUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -35,6 +37,8 @@ import java.util.stream.Collectors;
 @Service
 public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoMapper, ItemCommodityInfo> implements ItemCommodityInfoService {
 
+    private static ConcurrentHashSet concurrentHashSet = new ConcurrentHashSet();
+
     @Resource
     private ItemCommodityInfoMapper commodityInfoMapper;
     @Resource
@@ -68,53 +72,69 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     }
 
 
-
     /**
      * 发布网店商品
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean issueItemCommodity(ApplyItemCommodityDTO applyItemCommodityDTO) {
-        // 属性转移
-        ItemCommodityInfo itemCommodityInfo = new ItemCommodityInfo();
-        itemCommodityInfo.setCommodityId(StringUtil.generateShortId());
-        itemCommodityInfo.setUpdateTime(null);
-        itemCommodityInfo.setCreateTime(null);
-        itemCommodityInfo.setDeleteTime(null);
-        itemCommodityInfo.setBrandId(applyItemCommodityDTO.getBrandId());
-        itemCommodityInfo.setOriginPrice(null);
-        itemCommodityInfo.setPrice(applyItemCommodityDTO.getPrice());
-        itemCommodityInfo.setDegreeLoss(applyItemCommodityDTO.getDegreeLoss());
-        itemCommodityInfo.setItemCommodityName(applyItemCommodityDTO.getItemCommodityName());
-        itemCommodityInfo.setOriginAddress(applyItemCommodityDTO.getOriginAddress());
-        itemCommodityInfo.setDetails(applyItemCommodityDTO.getDetails());
-        itemCommodityInfo.setFreeShippingNum(applyItemCommodityDTO.getFreeShippingNum());
-        itemCommodityInfo.setCategoryId(applyItemCommodityDTO.getCategoryId());
-        itemCommodityInfo.setInventory(applyItemCommodityDTO.getInventory());
-        //颜色集合
-        itemCommodityInfo.setColorList(JSON.toJSONString(applyItemCommodityDTO.getColorList()));
-        //收货人地址集合
-        itemCommodityInfo.setAcceptAddressList(JSON.toJSONString(applyItemCommodityDTO.getAcceptAddressList()));
-        //尺码集合
-        itemCommodityInfo.setSizeList(JSON.toJSONString(applyItemCommodityDTO.getSizeList()));
-        //商品图片的地址集合
-        itemCommodityInfo.setImagsList(JSON.toJSONString(applyItemCommodityDTO.getImagsList()));
-        itemCommodityInfo.setAvatarImag(applyItemCommodityDTO.getImagsList().get(0));
-        itemCommodityInfo.setOriginName(applyItemCommodityDTO.getOriginName());
-        itemCommodityInfo.setOriginPhone(applyItemCommodityDTO.getOriginPhone());
-        itemCommodityInfo.setItemId(applyItemCommodityDTO.getItemId());
-        itemCommodityInfo.setDetailImagList(JSON.toJSONString(applyItemCommodityDTO.getDetailImags()));
-        itemCommodityInfo.setInventory(applyItemCommodityDTO.getInventory());
-
-        //网店商品上架剩余数-1
-        int update = itemInfoMapper.update(null,new UpdateWrapper<ItemInfo>()
-                .eq("item_id",applyItemCommodityDTO.getItemId())
-                .setSql("upload_balance = upload_balance - 1"));
-        if(update < 1){
-            throw new RuntimeException();
+        boolean add = concurrentHashSet.add(applyItemCommodityDTO.getItemId());
+        if (!add) {
+            return false;
         }
-        int result = commodityInfoMapper.insert(itemCommodityInfo);
-        return result > 0;
+        try {
+            // 属性转移
+            ItemCommodityInfo itemCommodityInfo = new ItemCommodityInfo();
+            itemCommodityInfo.setCommodityId(StringUtil.generateShortId());
+            itemCommodityInfo.setUpdateTime(null);
+            itemCommodityInfo.setCreateTime(null);
+            itemCommodityInfo.setDeleteTime(null);
+            itemCommodityInfo.setBrandId(applyItemCommodityDTO.getBrandId());
+            itemCommodityInfo.setOriginPrice(null);
+            itemCommodityInfo.setPrice(applyItemCommodityDTO.getPrice());
+            itemCommodityInfo.setDegreeLoss(applyItemCommodityDTO.getDegreeLoss());
+            itemCommodityInfo.setItemCommodityName(applyItemCommodityDTO.getItemCommodityName());
+            itemCommodityInfo.setOriginAddress(applyItemCommodityDTO.getOriginAddress());
+            itemCommodityInfo.setDetails(applyItemCommodityDTO.getDetails());
+            itemCommodityInfo.setFreeShippingNum(applyItemCommodityDTO.getFreeShippingNum());
+            itemCommodityInfo.setCategoryId(applyItemCommodityDTO.getCategoryId());
+            itemCommodityInfo.setInventory(applyItemCommodityDTO.getInventory());
+            // 颜色集合
+            itemCommodityInfo.setColorList(JSON.toJSONString(applyItemCommodityDTO.getColorList()));
+            // 收货人地址集合
+            itemCommodityInfo.setAcceptAddressList(JSON.toJSONString(applyItemCommodityDTO.getAcceptAddressList()));
+            // 尺码集合
+            itemCommodityInfo.setSizeList(JSON.toJSONString(applyItemCommodityDTO.getSizeList()));
+            // 商品图片的地址集合
+            itemCommodityInfo.setImagsList(JSON.toJSONString(applyItemCommodityDTO.getImagsList()));
+            itemCommodityInfo.setAvatarImag(applyItemCommodityDTO.getImagsList().get(0));
+            itemCommodityInfo.setOriginName(applyItemCommodityDTO.getOriginName());
+            itemCommodityInfo.setOriginPhone(applyItemCommodityDTO.getOriginPhone());
+            itemCommodityInfo.setItemId(applyItemCommodityDTO.getItemId());
+            itemCommodityInfo.setDetailImagList(JSON.toJSONString(applyItemCommodityDTO.getDetailImags()));
+            itemCommodityInfo.setInventory(applyItemCommodityDTO.getInventory());
+            // 网店商品上架剩余数-1
+            int update = itemInfoMapper.update(null, new UpdateWrapper<ItemInfo>()
+                    .eq("item_id", applyItemCommodityDTO.getItemId())
+                    .gt("upload_balance", 0)
+                    .setSql("upload_balance = upload_balance - 1"));
+            if (update < 1) {
+                throw new RuntimeException();
+            }
+            int result = commodityInfoMapper.insert(itemCommodityInfo);
+            return result > 0;
+        } finally {
+            ThreadUtil.execAsync(() -> {
+                try {
+                    Thread.sleep(5000);
+                    concurrentHashSet.remove(applyItemCommodityDTO.getItemId());
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+            });
+
+        }
     }
 
     /**
@@ -138,7 +158,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         }
 
         // 发布时间升序排列
-        if (dto.getCreateTime()!=null) {
+        if (dto.getCreateTime() != null) {
             wrapper.orderByDesc(ItemCommodityInfo::getCreateTime);
         }
 
@@ -146,7 +166,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         if (dto.getPriceOrder() != null) {
             if (dto.getPriceOrder() == 0) {
                 wrapper.orderByAsc(ItemCommodityInfo::getPrice);
-            }else if (dto.getPriceOrder() == 1) {
+            } else if (dto.getPriceOrder() == 1) {
                 wrapper.orderByDesc(ItemCommodityInfo::getPrice);
             }
         }
@@ -156,13 +176,13 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         // 查询分页数据封装到page中
         commodityInfoMapper.selectPage(page, wrapper.select(ItemCommodityInfo::getCommodityId));
 
-        //将每个商品的membership属性赋值
+        // 将每个商品的membership属性赋值
         List<ItemCommodityInfo> records = page.getRecords();
         if (records == null || records.size() == 0) {
             return null;
         }
         List<String> commodityIdList = records.stream().parallel().map(ItemCommodityInfo::getCommodityId).collect(Collectors.toList());
-        List<itemCommoditiesVO> resultList = commodityInfoMapper.selectMembershipByCommodityIdList(commodityIdList,dto.getPriceOrder());
+        List<itemCommoditiesVO> resultList = commodityInfoMapper.selectMembershipByCommodityIdList(commodityIdList, dto.getPriceOrder());
         // 封装数据
         return new PageDataVO((int) page.getTotal(), resultList);
     }
@@ -189,20 +209,36 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
                 null, null, itemCommodityInfo.getDegreeLoss(), null, null, null);
         // 序列化json的数据存入结果封装类中
         String colorListString = itemCommodityInfo.getColorList();
-        if (colorListString != null) {typeMap.put("colorList", JSON.parseArray(colorListString, String.class));}
+        if (colorListString != null) {
+            typeMap.put("colorList", JSON.parseArray(colorListString, String.class));
+        }
         String sizeListString = itemCommodityInfo.getSizeList();
-        if (sizeListString != null) {typeMap.put("sizeList", JSON.parseArray(sizeListString, String.class));}
+        if (sizeListString != null) {
+            typeMap.put("sizeList", JSON.parseArray(sizeListString, String.class));
+        }
         String acceptAddressListString = itemCommodityInfo.getAcceptAddressList();
-        if (acceptAddressListString != null) {commodityDetailVO.setAcceptAddressList(JSON.parseArray(acceptAddressListString, String.class));}
+        if (acceptAddressListString != null) {
+            commodityDetailVO.setAcceptAddressList(JSON.parseArray(acceptAddressListString, String.class));
+        }
         String imagsListString = itemCommodityInfo.getImagsList();
-        if (imagsListString != null) {commodityDetailVO.setImagsList(JSON.parseArray(imagsListString, String.class));}
+        if (imagsListString != null) {
+            commodityDetailVO.setImagsList(JSON.parseArray(imagsListString, String.class));
+        }
         String couponsListString = itemCommodityInfo.getCouponsList();
-        if (couponsListString != null) {commodityDetailVO.setCouponsList(JSON.parseArray(couponsListString, String.class));}
+        if (couponsListString != null) {
+            commodityDetailVO.setCouponsList(JSON.parseArray(couponsListString, String.class));
+        }
         String tagListString = itemCommodityInfo.getTagList();
-        if (tagListString != null) {commodityDetailVO.setTagList(JSON.parseArray(tagListString, String.class));}
+        if (tagListString != null) {
+            commodityDetailVO.setTagList(JSON.parseArray(tagListString, String.class));
+        }
         String detailImagList = itemCommodityInfo.getDetailImagList();
-        if (detailImagList != null){commodityDetailVO.setDetailImagList(JSON.parseArray(detailImagList, String.class));}
-        if (typeMap.size() != 0) {commodityDetailVO.setTypeMap(typeMap);}
+        if (detailImagList != null) {
+            commodityDetailVO.setDetailImagList(JSON.parseArray(detailImagList, String.class));
+        }
+        if (typeMap.size() != 0) {
+            commodityDetailVO.setTypeMap(typeMap);
+        }
         String brandId = itemCommodityInfo.getBrandId();
         // 解析品牌字段
         if (brandId != null) {
@@ -233,22 +269,21 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
      * 根据用户id查询 对应的 网店收藏列表
      */
     @Override
-    public PageDataVO getCollectList(Integer page,Integer limit,String userId) {
+    public PageDataVO getCollectList(Integer page, Integer limit, String userId) {
         Integer integer = commodityInfoMapper.selectAllCollectProductByUserId(userId);
         List<ItemCollectionVO> itemCommodityInfoVOS = commodityInfoMapper.selectCollectProductByUserId((page - 1) * limit, limit, userId);
-        return new PageDataVO(integer,itemCommodityInfoVOS);
+        return new PageDataVO(integer, itemCommodityInfoVOS);
     }
-
 
 
     /**
      * 根据用户id查询用户浏览商品历史-网店
      */
     @Override
-    public PageDataVO historyList(Integer page,Integer limit,String userId) {
+    public PageDataVO historyList(Integer page, Integer limit, String userId) {
         Integer integer = commodityInfoMapper.selectAllHistoryProductByUserId(userId);
         List<ItemCollectionVO> itemCommodityInfoVOS = commodityInfoMapper.selectHistoryProductByUserId((page - 1) * limit, limit, userId);
-        return new PageDataVO(integer,itemCommodityInfoVOS);
+        return new PageDataVO(integer, itemCommodityInfoVOS);
     }
 
     /*@Override
@@ -289,7 +324,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
      */
     @Override
     public boolean changeCommodityCheck(String commodity) {
-        //判断商品上架剩余数 是否为0
+        // 判断商品上架剩余数 是否为0
         int balance = itemInfoMapper.selectUploadCommodityBalanceByCommodityId(commodity);
         if (balance <= 0) {
             throw new BusinessException("商品可上架数量为0");
@@ -312,9 +347,9 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
      */
     @Override
     public ItemInfoVO commodityList(String itemId) {
-        //获取商品列表
+        // 获取商品列表
         List<ItemCommodityVO> voList = commodityInfoMapper.commodityList(itemId);
-        //获取网店基本信息
+        // 获取网店基本信息
         List<ItemInfoVO> itemInfoVO = itemInfoMapper.selectItemInfoByItemIdOrUserId(null, itemId);
         if (itemInfoVO != null) {
             ItemInfoVO vo = itemInfoVO.get(0);
