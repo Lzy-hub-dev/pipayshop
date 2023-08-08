@@ -19,5 +19,5 @@ public interface TransactionRecordService extends IService<TransactionRecord> {
      */
     boolean recordTransaction(String token);
 
-    PageDataVO getRecordTransaction(String shopId);
+    PageDataVO getRecordTransaction(String shopId, int page, int limit          );
 }

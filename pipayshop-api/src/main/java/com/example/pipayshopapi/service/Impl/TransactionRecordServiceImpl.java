@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.AccountInfo;
 import com.example.pipayshopapi.entity.TransactionRecord;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.entity.vo.RecordTransactionVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.AccountInfoMapper;
 import com.example.pipayshopapi.mapper.TransactionRecordMapper;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -65,8 +67,10 @@ public class TransactionRecordServiceImpl extends ServiceImpl<TransactionRecordM
 
 
     @Override
-    public PageDataVO getRecordTransaction(String shopId) {
-//        LinkerServicestransactionRecordMapper.getRecordTransaction(shopId);
-        return null;
+    public PageDataVO getRecordTransaction(String shopId, int page, int limit) {
+        List<RecordTransactionVO> list = transactionRecordMapper
+                .getRecordTransaction(shopId,(page - 1) * limit,limit);
+        int count = transactionRecordMapper.getRecordTransactionCount(shopId);
+        return new PageDataVO(count, list);
     }
 }

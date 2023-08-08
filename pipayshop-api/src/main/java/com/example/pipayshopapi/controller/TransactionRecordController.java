@@ -45,11 +45,13 @@ public class TransactionRecordController {
     /**
      * 获取记账流水数据
      */
-    @GetMapping("getRecordTransaction/{shopId}")
+    @GetMapping("getRecordTransaction/{shopId}/{page}/{limit}")
     @ApiOperation("获取记账流水数据")
-    public ResponseVO<PageDataVO> getRecordTransaction(@PathVariable String shopId){
+    public ResponseVO<PageDataVO> getRecordTransaction(@PathVariable String shopId,
+                                                       @PathVariable int page,
+                                                       @PathVariable int limit){
         try {
-            PageDataVO list = transactionRecordService.getRecordTransaction(shopId);
+            PageDataVO list = transactionRecordService.getRecordTransaction(shopId,page,limit);
             return ResponseVO.getSuccessResponseVo(list);
         }catch (Exception e){
             e.printStackTrace();
