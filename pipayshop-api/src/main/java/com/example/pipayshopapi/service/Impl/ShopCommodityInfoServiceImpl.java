@@ -152,6 +152,15 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
         return result > 0;
     }
 
+    @Override
+    public Integer getResidueByCommodityId(String commodityId) {
+        QueryWrapper wrapper = new QueryWrapper<ShopCommodityInfo>();
+        wrapper.select("residue");
+        wrapper.eq("commodity_id",commodityId);
+        ShopCommodityInfo shopCommodityInfo = shopCommodityInfoMapper.selectOne(wrapper);
+        return shopCommodityInfo.getResidue();
+    }
+
     /**
      * 根据店铺id查找实体店商品的详情信息列表
      */

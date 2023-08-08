@@ -282,6 +282,15 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         return result > 0;
     }
 
+    @Override
+    public Integer getInventoryByCommodityId(String commodityId) {
+        QueryWrapper wrapper = new QueryWrapper<ItemCommodityInfo>();
+        wrapper.select("inventory");
+        wrapper.eq("commodity_id",commodityId);
+        ItemCommodityInfo shopCommodityInfo = itemCommodityInfoMapper.selectOne(wrapper);
+        return shopCommodityInfo.getInventory();
+    }
+
     /**
      * 根据网店id查询网店的商品列表
      */

@@ -34,6 +34,21 @@ public class ShopCommodityInfoController {
     @Resource
     private ShopCommodityInfoService shopCommodityService;
 
+    @GetMapping("getResidueByCommodityId/{CommodityId}")
+    @ApiOperation("根据商品id获取商品库存")
+    public ResponseVO getResidueByCommodityId(@PathVariable("CommodityId")String commodityId){
+        try {
+            Integer Residue = shopCommodityService.getResidueByCommodityId(commodityId);
+            if (Residue == null) {
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo(Residue);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException("查询失败，请联系后台人员");
+        }
+    }
+
 
     @PostMapping(" issueShopCommodity")
     @ApiOperation("发布实体店商品")
