@@ -8,8 +8,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="pipayshop-api (1) (com.example.pipayshop-api)" />
-        <module name="pipayshop" />
         <module name="pipayshop-api" />
+        <module name="pipayshop" />
       </profile>
     </annotationProcessing>
   </component>
