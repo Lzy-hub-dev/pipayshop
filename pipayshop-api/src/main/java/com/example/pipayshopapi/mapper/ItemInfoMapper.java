@@ -34,4 +34,23 @@ public interface ItemInfoMapper extends BaseMapper<ItemInfo> {
 
     @Select("select upload_balance from item_info where item_id = #{itemId}")
     Integer getUploadBalance(@Param("itemId")String itemId);
+
+    /**
+     * 根据商品id -1 商品上架剩余数
+     * @param commodityId
+     * @return
+     */
+    int reduceUploadBalanceByCommodityId(@Param("commodityId")String commodityId);
+    /**
+     * 根据商品id +1 商品上架剩余数
+     * @param commodityId
+     * @return
+     */
+    int addUploadBalanceByCommodityId(@Param("commodityId")String commodityId);
+    /**
+     * 根据商品id 查询 可上传服务余额
+     * @param commodityId
+     * @return
+     */
+    int selectUploadCommodityBalanceByCommodityId(@Param("commodityId")String commodityId);
 }

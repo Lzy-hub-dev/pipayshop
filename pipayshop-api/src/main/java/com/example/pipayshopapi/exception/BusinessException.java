@@ -25,6 +25,9 @@ public class BusinessException extends RuntimeException {
         super(message);
         this.message = message;
     }
+    public BusinessException() {
+        this.message = "服务异常,请联系后台管理人员";
+    }
 
     public BusinessException(Throwable e) {
         super(e);
