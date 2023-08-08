@@ -6,6 +6,7 @@ import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopInfoService;
+import com.example.pipayshopapi.util.FileUploadUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -119,9 +120,9 @@ public class ShopInfoController {
     }
     @PostMapping("applyShop")
     @ApiOperation("申请实体店")
-    public ResponseVO applyShop(ApplyShopDTO applyShopDTO,@RequestParam("files") MultipartFile[] files) {
+    public ResponseVO applyShop(ApplyShopDTO applyShopDTO) {
         try {
-            Boolean insert = infoService.applyShop(applyShopDTO,files);
+            Boolean insert = infoService.applyShop(applyShopDTO);
             if (!insert){
                 throw new Exception();
             }
@@ -190,6 +191,58 @@ public class ShopInfoController {
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("失败");
+        }
+    }
+
+    @PostMapping("shopTopImageUp")
+    @ApiOperation("实体店展示图上传")
+    public ResponseVO<String> shopTopImageUp(MultipartFile multipartFile){
+        try {
+            String shopTopImageUp = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.SHOP_TOP_IMAGE_UP);
+            return ResponseVO.getSuccessResponseVo(shopTopImageUp);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("实体店展示图上传失败，请联系后台人员");
+        }
+    }
+
+    @PostMapping("shopImageUp")
+    @ApiOperation("实体店轮播图上传")
+    public ResponseVO<String> shopImageUp(MultipartFile multipartFile){
+        try {
+            String shopImageUp = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.SHOP_IMAGE_UP);
+            return ResponseVO.getSuccessResponseVo(shopImageUp);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("实体店轮播图上传失败，请联系后台人员");
+        }
+    }
+
+    /**
+     * 校验商家的付款ID
+     */
+    @GetMapping("checkId/{qrcode}")
+    @ApiOperation("校验商家的付款ID")
+    public ResponseVO<CheckVO> checkId(@PathVariable String qrcode){
+        try {
+            CheckVO checkId = infoService.checkId(qrcode);
+            return ResponseVO.getSuccessResponseVo(checkId);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("失败");
+        }
+    }
+
+
+    @PostMapping("piIdImageUp")
+    @ApiOperation("pi_Id_Image上传")
+    public ResponseVO<String> piIdImageUp(MultipartFile multipartFile){
+        try {
+            String piIdImageUp = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.PI_ID_IMAGE);
+            return ResponseVO.getSuccessResponseVo(piIdImageUp);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("pi_Id_Image上传失败，请联系后台人员");
         }
     }
 

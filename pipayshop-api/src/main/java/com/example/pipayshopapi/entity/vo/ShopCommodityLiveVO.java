@@ -13,7 +13,7 @@ public class ShopCommodityLiveVO {
     /**
      * 服务id
      */
-    private String commodityId;
+    private String roomId;
 
     /**
      * 实体店id

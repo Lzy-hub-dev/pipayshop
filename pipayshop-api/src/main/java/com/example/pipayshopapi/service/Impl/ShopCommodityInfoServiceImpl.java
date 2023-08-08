@@ -111,7 +111,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
     @Transactional(rollbackFor = Exception.class)
     public boolean updateCommodityStatus(String commodityId, Integer status) {
         try {
-            if (!(status==1||status==2)){
+            if (!(status==0||status==1)){
                 throw new Exception();
             }
         }catch (Exception e){
@@ -196,9 +196,9 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
                 .and(new Consumer<QueryWrapper<ShopCommodityInfo>>() {
                     @Override
                     public void accept(QueryWrapper<ShopCommodityInfo> wrapper) {
-                        wrapper.eq("status",1)
+                        wrapper.eq("status",0)
                                 .or()
-                                .eq("status",2);
+                                .eq("status",1);
                     }
                 }));
 

@@ -275,5 +275,15 @@ public class ItemCommodityInfoController {
         }
     }
 
-
+    @GetMapping("getOriginAddressById/{commodityId}")
+    @ApiOperation("根据商品id，查找买家发货地址")
+    public ResponseVO<String> getOriginAddressById(@PathVariable String commodityId){
+        try {
+            String originAddress = commodityInfoService.getOriginAddressById(commodityId);
+            return ResponseVO.getSuccessResponseVo(originAddress);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("根据商品id，查找买家发货地址失败，请联系后台人员");
+        }
+    }
 }
