@@ -31,7 +31,7 @@ public class RechargeOrderInfoController {
     @Resource
     RechargeOrderInfoService rechargeOrderInfoService;
     /**
-     * 处理充值未完成的订单
+     * 处理未完成的订单
      */
     @PostMapping("payOrder/incomplete")
     @ApiOperation("处理充值未完成的订单")
