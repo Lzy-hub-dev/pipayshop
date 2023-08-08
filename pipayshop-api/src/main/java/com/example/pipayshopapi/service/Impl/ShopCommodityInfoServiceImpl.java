@@ -111,7 +111,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
     @Transactional(rollbackFor = Exception.class)
     public boolean updateCommodityStatus(String commodityId, Integer status) {
         try {
-            if (!(status==1||status==2)){
+            if (!(status==0||status==1)){
                 throw new Exception();
             }
         }catch (Exception e){
@@ -134,7 +134,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
     public boolean updateCommodityUp(String commodityId) {
         int result = shopCommodityInfoMapper.update(null, new UpdateWrapper<ShopCommodityInfo>()
                 .eq("commodity_id", commodityId)
-                .set("status", 2));
+                .set("status", 1));
         return result > 0;
     }
 
@@ -148,7 +148,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
     public boolean updateCommodityCheck(String commodityId) {
         int result = shopCommodityInfoMapper.update(null, new UpdateWrapper<ShopCommodityInfo>()
                 .eq("commodity_id", commodityId)
-                .set("status", 0));
+                .set("status", 2));
         return result > 0;
     }
 
@@ -186,9 +186,9 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
                 .and(new Consumer<QueryWrapper<ShopCommodityInfo>>() {
                     @Override
                     public void accept(QueryWrapper<ShopCommodityInfo> wrapper) {
-                        wrapper.eq("status",1)
+                        wrapper.eq("status",0)
                                 .or()
-                                .eq("status",2);
+                                .eq("status",1);
                     }
                 }));
 
