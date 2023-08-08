@@ -96,4 +96,5 @@ public interface ItemCommodityInfoService extends IService<ItemCommodityInfo> {
     boolean changeCommodityCheck(String commodity);
 
 
+    String getOriginAddressById(String commodityId);
 }

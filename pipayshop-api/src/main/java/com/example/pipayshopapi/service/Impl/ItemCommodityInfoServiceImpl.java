@@ -282,6 +282,13 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         return result > 0;
     }
 
+    @Override
+    public String getOriginAddressById(String commodityId) {
+        ItemCommodityInfo commodity_id = commodityInfoMapper.selectOne(new QueryWrapper<ItemCommodityInfo>()
+                .eq("commodity_id", commodityId));
+        return commodity_id.getOriginAddress();
+    }
+
     /**
      * 根据网店id查询网店的商品列表
      */
