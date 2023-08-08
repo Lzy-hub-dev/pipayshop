@@ -336,6 +336,15 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     }
 
     @Override
+    public Integer getInventoryByCommodityId(String commodityId) {
+        QueryWrapper wrapper = new QueryWrapper<ItemCommodityInfo>();
+        wrapper.select("inventory");
+        wrapper.eq("commodity_id",commodityId);
+        ItemCommodityInfo shopCommodityInfo = itemCommodityInfoMapper.selectOne(wrapper);
+        return shopCommodityInfo.getInventory();
+    }
+
+    @Override
     public String getOriginAddressById(String commodityId) {
         ItemCommodityInfo commodity_id = commodityInfoMapper.selectOne(new QueryWrapper<ItemCommodityInfo>()
                 .eq("commodity_id", commodityId));

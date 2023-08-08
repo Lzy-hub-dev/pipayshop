@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.pipayshopapi.config.CommonConfig;
 import com.example.pipayshopapi.entity.AccountInfo;
 import com.example.pipayshopapi.entity.ItemOrderInfo;
+import com.example.pipayshopapi.entity.RechargeInfo;
 import com.example.pipayshopapi.entity.RechargeOrderInfo;
 import com.example.pipayshopapi.entity.dto.CompleteDTO;
 import com.example.pipayshopapi.entity.dto.IncompleteDTO;
@@ -62,34 +63,37 @@ public class RechargeOrderInfoServiceImpl extends ServiceImpl<RechargeOrderInfoM
 
     @Resource
     RedissonClient redissonClient;
+
+
     @Override
     public ResponseVO incomplete(IncompleteDTO incompleteDTO) {
         log.error("incomplete--------------------------------");
         try {
-            //先处理未完成的订单
-            String oldpaymentId = incompleteDTO.getIdentifier();
+            // 先处理未完成的订单
+            String oldPaymentId = incompleteDTO.getIdentifier();
             TransactionDTO transaction = incompleteDTO.getTransaction();
             log.error("?transation--------------------"+transaction);
-            log.error("?oldpaymentId------------------"+oldpaymentId);
+            log.error("?oldpaymentId------------------"+oldPaymentId);
             if (null != transaction) {
                 log.error("transation--------------------"+transaction);
-                log.error("oldpaymentId------------------"+oldpaymentId);
+                log.error("oldpaymentId------------------"+oldPaymentId);
                 String txid = transaction.getTxid();
                 String txURL = transaction.get_link();
-
-                RechargeOrderInfo  rechargeOrderInfo = rechargeOrderInfoMapper.selectOne(new QueryWrapper<RechargeOrderInfo>().eq("order_id", oldpaymentId));
-                if (null == rechargeOrderInfo) {
-                    log.error("order-----------------null");
-                    return new ResponseVO(2, PaymentEnum.getStatusByCode(2),PaymentEnum.getMsgByCode(2));
-                }
-
-                if (rechargeOrderInfo.getOrderStatus()==1) {
-                    return new ResponseVO(2,PaymentEnum.getStatusByCode(2),PaymentEnum.getMsgByCode(2));
-                }
-
+//                RechargeOrderInfo  rechargeOrderInfo = rechargeOrderInfoMapper.selectOne(new QueryWrapper<RechargeOrderInfo>()
+//                        .eq("order_id", oldPaymentId));
+//                if (null == rechargeOrderInfo) {
+//                    log.error("order-----------------null");
+//                    return new ResponseVO(2, PaymentEnum.getStatusByCode(2),PaymentEnum.getMsgByCode(2));
+//                }
+//
+//                if (rechargeOrderInfo.getOrderStatus()==1) {
+//                    return new ResponseVO(2,PaymentEnum.getStatusByCode(2),PaymentEnum.getMsgByCode(2));
+//                }
+                // 发请求获取未处理订单的信息
                 String get = HttpClientUtil.sendGet(txURL);
                 JSONObject jsonObject1 = JSON.parseObject(get);
-                String piOrderId = jsonObject1.getString("memo");//我方订单ID
+                // 获取订单ID
+                String piOrderId = jsonObject1.getString("memo");
 
                 log.error("memo---------------------"+piOrderId);
 
@@ -249,10 +253,29 @@ public class RechargeOrderInfoServiceImpl extends ServiceImpl<RechargeOrderInfoM
                     rechargeOrderInfo.setOrderStatus(1);
                     // 更新订单
                     rechargeOrderInfoMapper.updateById(rechargeOrderInfo);
+                    // 获取账号
+                    AccountInfo accountInfo = accountInfoMapper.selectOne(new QueryWrapper<AccountInfo>().eq("uid", rechargeOrderInfo.getUid()));
+                    BigDecimal pointBalance = accountInfo.getPointBalance();
+                    BigDecimal add = pointBalance.add(rechargeOrderInfo.getPointAmount());
+
                     // 加积分
-                    AccountInfo a = accountInfoMapper.selectOne(new QueryWrapper<AccountInfo>().eq("uid", rechargeOrderInfo.getUid()));
+                    accountInfo.setPointBalance(add);
+                    int insert = accountInfoMapper.updateById(accountInfo);
+
 
                     // 记录充值记录
+                    RechargeInfo rechargeInfo = new RechargeInfo();
+                    rechargeInfo.setUserId(rechargeOrderInfo.getUid());
+                    rechargeInfo.setPiNum(rechargeOrderInfo.getPiSum());
+                    rechargeInfo.setPrePi(accountInfo.getPiBalance());
+                    rechargeInfo.setLastPi(accountInfo.getPiBalance());
+                    rechargeInfo.setPointSum(rechargeOrderInfo.getPointAmount());
+                    rechargeInfo.setPrePoint(accountInfo.getPointBalance());
+                    rechargeInfo.setLastPoint(add);
+                    insert += rechargeInfoMapper.insert(rechargeInfo);
+
+
+                    if (insert < 2){ throw new RuntimeException(); }
 
                     log.error("支付成功------------------------------------------------------");
                     // 支付成功

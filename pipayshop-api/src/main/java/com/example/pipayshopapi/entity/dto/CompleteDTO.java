@@ -27,6 +27,8 @@ public class CompleteDTO {
     // 充值订单ID【余额支付参数】
     private String rechargeOrderId;
 
+
+
     // 支付方式：0：PI钱包 1：积分支付
     private String payType;
 }
