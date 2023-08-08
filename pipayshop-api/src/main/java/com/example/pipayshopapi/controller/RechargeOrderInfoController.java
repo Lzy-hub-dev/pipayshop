@@ -110,6 +110,7 @@ public class RechargeOrderInfoController {
             }
             return ResponseVO.getSuccessResponseVo(orderId);
         } catch (Exception e) {
+            log.error(e.getLocalizedMessage());
             throw new BusinessException("生成pi币充值的未支付订单失败，请联系后台人员");
         }
     }
