@@ -23,8 +23,9 @@ public class GlobalExceptionHandler {
         return ResponseVO.getFalseResponseMsg(e.getMessage());
     }
     @ExceptionHandler(Exception.class)
-    public ResponseVO baseException(BusinessException e) {
+    public ResponseVO baseException(Exception e) {
         e.printStackTrace();
         return ResponseVO.getFalseResponseMsg("服务异常，请联系客服");
     }
+
 }
