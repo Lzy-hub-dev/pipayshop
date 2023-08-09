@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class GetOrderDataVO {
 
     /**
-     标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单
+     标识id -1：所有订单   0:待支付1:已支付2：已完成3：无效订单4:已评价
     */
     private Integer orderStatus;
 
