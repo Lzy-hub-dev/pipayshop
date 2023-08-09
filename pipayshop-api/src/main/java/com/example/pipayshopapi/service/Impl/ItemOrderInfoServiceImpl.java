@@ -5,6 +5,7 @@ import cn.hutool.http.HttpResponse;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.config.CommonConfig;
@@ -117,10 +118,19 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int failOrder(String orderId) {
-        return itemOrderInfoMapper.update(null, new UpdateWrapper<ItemOrderInfo>()
+        ItemOrderInfo itemOrderInfo = itemOrderInfoMapper.selectOne(new LambdaUpdateWrapper<ItemOrderInfo>()
+                .eq(ItemOrderInfo::getOrderId, orderId)
+                .eq(ItemOrderInfo::getDelFlag, 0));
+
+        int i = itemCommodityInfoMapper.addStock(itemOrderInfo.getNumber(), itemOrderInfo.getCommodityId());
+        int i1 = itemOrderInfoMapper.update(null, new UpdateWrapper<ItemOrderInfo>()
                 .eq("order_id", orderId)
                 .set("order_status", 3)
                 .set("update_time", new Date()));
+        if (i < 1 || i1 < 1) {
+            throw new RuntimeException();
+        }
+        return 1;
     }
 
     @Override
@@ -189,5 +199,23 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
         Integer allMyOrderByUid = itemOrderInfoMapper.getAllMyOrderByUid(uid,status);
         List<MyItemOrderInfoVO> myOrderByUid = itemOrderInfoMapper.getMyOrderByUid((page - 1) * limit, limit, uid,status);
         return new PageDataVO(allMyOrderByUid,myOrderByUid);
+    }
+
+    /**
+     * 未支付订单改价接口
+     *
+     * @param orderId
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int changePrice(String orderId, BigDecimal price) {
+        if (price.doubleValue() < 0) {
+            throw new BusinessException("输入的金额不合法");
+        }
+        return itemOrderInfoMapper.update(null, new LambdaUpdateWrapper<ItemOrderInfo>()
+                .eq(ItemOrderInfo::getOrderId, orderId)
+                .eq(ItemOrderInfo::getOrderStatus, 0)
+                .eq(ItemOrderInfo::getDelFlag, 0)
+                .set(ItemOrderInfo::getTransactionAmount, price));
     }
 }

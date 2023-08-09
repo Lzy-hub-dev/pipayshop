@@ -1,6 +1,8 @@
 package com.example.pipayshopapi.service.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.AccountInfo;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -76,10 +79,18 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int failOrder(String orderId) {
-        return shopOrderInfoMapper.update(null, new UpdateWrapper<ShopOrderInfo>()
+        ShopOrderInfo one = shopOrderInfoMapper.selectOne(new LambdaQueryWrapper<ShopOrderInfo>()
+                .eq(ShopOrderInfo::getOrderId, orderId)
+                .eq(ShopOrderInfo::getDelFlag, 0));
+        int i = shopCommodityInfoMapper.addStock(one.getNumber(), one.getCommodityId());
+        int i1 = shopOrderInfoMapper.update(null, new UpdateWrapper<ShopOrderInfo>()
                 .eq("order_id", orderId)
                 .set("order_status", 3)
                 .set("update_time", new Date()));
+        if (i < 1 || i1 < 1) {
+            throw new RuntimeException();
+        }
+        return 1;
     }
 
     @Override
@@ -141,5 +152,23 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
     @Override
     public List<OrderListVO> getOrderListByShopId(GetOrderDataVO getOrderDataVO) {
         return shopOrderInfoMapper.getOrderListByShopId(getOrderDataVO);
+    }
+
+    /**
+     * 未支付订单改价接口
+     *
+     * @param orderId
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int changePrice(String orderId, BigDecimal price) {
+        if (price.doubleValue() < 0) {
+            throw new BusinessException("输入的金额不合法");
+        }
+        return shopOrderInfoMapper.update(null, new LambdaUpdateWrapper<ShopOrderInfo>()
+                .eq(ShopOrderInfo::getOrderId, orderId)
+                .eq(ShopOrderInfo::getOrderStatus, 0)
+                .eq(ShopOrderInfo::getDelFlag, 0)
+                .set(ShopOrderInfo::getTransactionAmount, price));
     }
 }
