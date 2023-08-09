@@ -87,14 +87,16 @@ public interface ShopInfoMapper extends BaseMapper<ShopInfo> {
 
     Integer setItemScore();
 
-    List<HotelInfoVO> getHotelInfoByCondition(@Param("limit") Integer limit,
+    List<HotelInfoVO> getHotelInfoByCondition(@Param("shopName")String shopName,
+                                              @Param("limit") Integer limit,
                                               @Param("page")Integer page,
                                               @Param("checkInTime")Date checkInTime,
                                               @Param("departureTime")Date departureTime,
                                               @Param("adult")Integer adult,
                                               @Param("children")Integer children);
 
-    Integer getHotelInfoNum(@Param("checkInTime") Date checkInTime,
+    Integer getHotelInfoNum(@Param("shopName")String shopName,
+                            @Param("checkInTime") Date checkInTime,
                             @Param("departureTime")Date departureTime,
                             @Param("adult")Integer adult,
                             @Param("children")Integer children);

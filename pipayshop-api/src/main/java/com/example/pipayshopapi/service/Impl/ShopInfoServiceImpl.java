@@ -349,7 +349,9 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     public PageDataVO getHotelInfoByCondition(LivePageVO livePageVO) {
         Integer limit = livePageVO.getLimit();
         Integer page = livePageVO.getPage();
+        System.out.println(livePageVO);
         List<HotelInfoVO> hotelInfoVO = shopInfoMapper.getHotelInfoByCondition(
+                livePageVO.getShopName(),
                 limit,
                 (page-1)*limit,
                 livePageVO.getCheckInTime(),
@@ -358,6 +360,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
                 livePageVO.getChildren());
 
         Integer num = shopInfoMapper.getHotelInfoNum(
+                livePageVO.getShopName(),
                 livePageVO.getCheckInTime(),
                 livePageVO.getDepartureTime(),
                 livePageVO.getAdult(),
