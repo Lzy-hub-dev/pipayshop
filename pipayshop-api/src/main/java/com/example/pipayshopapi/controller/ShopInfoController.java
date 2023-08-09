@@ -11,10 +11,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -29,7 +29,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/pipayshopapi/shop-info")
 public class ShopInfoController {
-    @Autowired
+    @Resource
     private ShopInfoService infoService;
     private static final Logger log = LoggerFactory.getLogger(ShopTagsController.class);
 

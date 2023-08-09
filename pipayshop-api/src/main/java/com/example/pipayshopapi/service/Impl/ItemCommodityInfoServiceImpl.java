@@ -112,6 +112,8 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
             itemCommodityInfo.setItemId(applyItemCommodityDTO.getItemId());
             itemCommodityInfo.setDetailImagList(JSON.toJSONString(applyItemCommodityDTO.getDetailImags()));
             itemCommodityInfo.setInventory(applyItemCommodityDTO.getInventory());
+            // 商品状态为审核中
+            itemCommodityInfo.setStatus(2);
             // 网店商品上架剩余数-1
             int update = itemInfoMapper.update(null, new UpdateWrapper<ItemInfo>()
                     .eq("item_id", applyItemCommodityDTO.getItemId())
