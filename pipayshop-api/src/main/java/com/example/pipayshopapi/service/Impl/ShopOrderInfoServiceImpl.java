@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.pipayshopapi.config.QueueConfig;
 import com.example.pipayshopapi.entity.AccountInfo;
 import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
@@ -18,12 +19,15 @@ import com.example.pipayshopapi.mapper.ShopCommodityInfoMapper;
 import com.example.pipayshopapi.mapper.ShopOrderInfoMapper;
 import com.example.pipayshopapi.service.ShopOrderInfoService;
 import com.example.pipayshopapi.util.StringUtil;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -41,7 +45,8 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
 
     @Resource
     ShopCommodityInfoMapper shopCommodityInfoMapper;
-
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
     @Override
     public PageDataVO getOrderList(GetOrderDataVO getOrderDataVO) {
         getOrderDataVO.setCurrentPage((getOrderDataVO.getCurrentPage()-1)*getOrderDataVO.getPageSize());
@@ -92,7 +97,11 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
     public int failOrder(String orderId) {
         ShopOrderInfo one = shopOrderInfoMapper.selectOne(new LambdaQueryWrapper<ShopOrderInfo>()
                 .eq(ShopOrderInfo::getOrderId, orderId)
-                .eq(ShopOrderInfo::getDelFlag, 0));
+                .eq(ShopOrderInfo::getDelFlag, 0)
+                .eq(ShopOrderInfo::getOrderStatus, 0));
+        if (one == null) {
+            return 0;
+        }
         int i = shopCommodityInfoMapper.addStock(one.getNumber(), one.getCommodityId());
         int i1 = shopOrderInfoMapper.update(null, new UpdateWrapper<ShopOrderInfo>()
                 .eq("order_id", orderId)
@@ -101,6 +110,7 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
         if (i < 1 || i1 < 1) {
             throw new RuntimeException();
         }
+
         return 1;
     }
 
@@ -127,6 +137,11 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
             String message = "生成未支付订单失败";
             throw new BusinessException(message);
         }
+        String pre = "shop_";
+        rabbitTemplate.convertAndSend(QueueConfig.QUEUE_MESSAGE_DELAY, pre+orderId, message1 -> {
+            message1.getMessageProperties().setExpiration(1000*60*10+"");
+            return message1;
+        });
         return orderId;
     }
 

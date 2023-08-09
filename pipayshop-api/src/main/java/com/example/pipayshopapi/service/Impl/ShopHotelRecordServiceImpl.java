@@ -9,7 +9,9 @@ import com.example.pipayshopapi.mapper.ShopCommodityLiveInfoMapper;
 import com.example.pipayshopapi.mapper.ShopHotelRecordMapper;
 import com.example.pipayshopapi.service.ShopHotelRecordService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.pipayshopapi.util.StringUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.Wrapper;
@@ -40,6 +42,14 @@ public class ShopHotelRecordServiceImpl extends ServiceImpl<ShopHotelRecordMappe
                 .getInventory();
         Integer rent = shopHotelRecordMapper.getRentByTime(roomId,startTime,endTime);
         return Inventory - rent;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean createShopHotelRecord(ShopHotelRecord shopHotelRecord) {
+        String recordId = StringUtil.generateShortId();
+        shopHotelRecord.setRecordId(recordId);
+        return shopHotelRecordMapper.insert(shopHotelRecord) > 0;
     }
 
 }

@@ -87,7 +87,11 @@
             <version>1.1.1</version>
         </dependency>
 
-
+        <!--加入ampq-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
         <!--邮件发送-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
