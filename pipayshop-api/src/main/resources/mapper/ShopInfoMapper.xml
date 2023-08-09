@@ -143,8 +143,8 @@
     </select>
 
 
-    <select id="getHotelInfoByCondition" resultType="com.example.pipayshopapi.entity.vo.HotelInfoVO">
-        select shop_id,shop_name,tag_list,address,score,shop_introduce,user_image
+    <select id="getHotelInfoByCondition" resultType="com.example.pipayshopapi.entity.vo.IndexShopInfoVO">
+        select shop_id,shop_name,tag_list,address,score,shop_introduce,user_image,localhost_latitude,localhost_longitude,membership
         from shop_info
         where
         status = 0
@@ -157,7 +157,7 @@
             where  adult >= #{adult}
             AND children >= #{children}
             AND del_flag = 0
-            AND status = 1
+            AND status = 0
         )
         limit #{page},#{limit}
     </select>
@@ -165,18 +165,17 @@
     <select id="getHotelInfoNum" resultType="java.lang.Integer">
         select count(*)
         from shop_info
-        where
-        status = 0
+        where status = 0
         <if test="shopName != null">
             and shop_name like concat('%',#{shopName},'%')
         </if>
         and shop_id in(
-        select shop_id
-        from shop_commodity_live_info
-        where  adult >= #{adult}
-        AND children >= #{children}
-        AND del_flag = 0
-        AND status = 1
+            select shop_id
+            from shop_commodity_live_info
+            where  adult >= #{adult}
+            AND children >= #{children}
+            AND del_flag = 0
+            AND status = 0
         )
     </select>
 
