@@ -73,14 +73,17 @@
         shop_commodity_info i
         where
         o.uid = #{getOrderDataVO.userId}
-          <choose>
-              <when test="getOrderDataVO.orderStatus == -1">
-                  and o.order_status != 3
-              </when>
-              <otherwise>
-                  and o.order_status = #{getOrderDataVO.orderStatus}
-              </otherwise>
-          </choose>
+        <choose>
+            <when test="getOrderDataVO.orderStatus == -1">
+                and o.order_status != 3
+            </when>
+            <when test="getOrderDataVO.orderStatus == 0">
+                and o.order_status = 0
+            </when>
+            <otherwise>
+                and o.order_status != 3 and o.order_status != 0
+            </otherwise>
+        </choose>
         AND o.del_flag = 0
         AND o.commodity_id = i.commodity_id
         AND o.shop_id = u.shop_id
@@ -104,8 +107,11 @@
             <when test="getOrderDataVO.orderStatus == -1">
                 and o.order_status != 3
             </when>
+            <when test="getOrderDataVO.orderStatus == 0">
+                and o.order_status = 0
+            </when>
             <otherwise>
-                and o.order_status = #{getOrderDataVO.orderStatus}
+                and o.order_status != 3 and o.order_status != 0
             </otherwise>
         </choose>
         AND o.del_flag = 0
@@ -130,8 +136,11 @@
             <when test="getOrderDataVO.orderStatus == -1">
                 and o.order_status != 3
             </when>
+            <when test="getOrderDataVO.orderStatus == 0">
+                and o.order_status = 0
+            </when>
             <otherwise>
-                and o.order_status = #{getOrderDataVO.orderStatus}
+                and o.order_status != 3 and o.order_status != 0
             </otherwise>
         </choose>
         AND o.del_flag = 0
@@ -170,8 +179,11 @@
             <when test="getOrderDataVO.orderStatus == -1">
                 and o.order_status != 3
             </when>
+            <when test="getOrderDataVO.orderStatus == 0">
+                and o.order_status = 0
+            </when>
             <otherwise>
-                and o.order_status = #{getOrderDataVO.orderStatus}
+                and o.order_status != 3 and o.order_status != 0
             </otherwise>
         </choose>
         AND o.del_flag = 0
