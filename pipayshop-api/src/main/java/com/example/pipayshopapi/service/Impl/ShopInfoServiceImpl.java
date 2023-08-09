@@ -141,6 +141,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         ShopInfo shopInfo = shopInfoMapper.selectOne(new QueryWrapper<ShopInfo>()
                 .eq("status", 0)
                 .eq("shop_id",shopId));
+        System.out.println(shopId);
         List<String> taglist = JSON.parseArray(shopInfo.getTagList(), String.class);
         List<String> imagelist = JSON.parseArray(shopInfo.getShopImagList(), String.class);
         for (String s : taglist) {
