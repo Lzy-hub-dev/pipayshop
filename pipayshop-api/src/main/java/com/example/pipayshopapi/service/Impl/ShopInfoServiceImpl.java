@@ -268,6 +268,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         Integer n = shopInfoMapper.getAllIndexShopInfoVO(categoryId);
         // stata==1,按评分从低到高；stata==2,按评分从高到低
         List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVOById(categoryId, (pages - 1) * limit, limit);
+        // TODO
         for (IndexShopInfoVO shopInfoVO : indexShopInfoVO) {
             List<String> list1 = new ArrayList<>();
             List<String> list = JSON.parseArray(shopInfoVO.getTagList(), String.class);
@@ -346,12 +347,13 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
      * @param livePageVO
      * @return
      */
+    // TODO
     @Override
     public PageDataVO getHotelInfoByCondition(LivePageVO livePageVO) {
         Integer limit = livePageVO.getLimit();
         Integer page = livePageVO.getPage();
         System.out.println(livePageVO);
-        List<HotelInfoVO> hotelInfoVO = shopInfoMapper.getHotelInfoByCondition(
+        List<IndexShopInfoVO> indexShopInfoVOS = shopInfoMapper.getHotelInfoByCondition(
                 livePageVO.getShopName(),
                 limit,
                 (page-1)*limit,
@@ -359,6 +361,19 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
                 livePageVO.getDepartureTime(),
                 livePageVO.getAdult(),
                 livePageVO.getChildren());
+        for (IndexShopInfoVO shopInfoVO : indexShopInfoVOS) {
+            List<String> list1 = new ArrayList<>();
+            List<String> list = JSON.parseArray(shopInfoVO.getTagList(), String.class);
+            if (list == null || list.isEmpty()) {
+                continue;
+            }
+            for (String s : list) {
+                String tag_id = tagMapper.selectOneContent(s);
+                list1.add(tag_id);
+            }
+            System.out.println(list1);
+            shopInfoVO.setShopTagsList(list1);
+        }
 
         Integer num = shopInfoMapper.getHotelInfoNum(
                 livePageVO.getShopName(),
@@ -366,6 +381,6 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
                 livePageVO.getDepartureTime(),
                 livePageVO.getAdult(),
                 livePageVO.getChildren());
-        return new PageDataVO(num,hotelInfoVO);
+        return new PageDataVO(num,indexShopInfoVOS);
     }
 }

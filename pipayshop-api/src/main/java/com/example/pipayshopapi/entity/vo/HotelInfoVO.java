@@ -3,6 +3,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 /**
  * fileName: HotelInfoVO
@@ -22,4 +23,6 @@ public class HotelInfoVO {
     private Double score;
     private String shopIntroduce;
     private String userImage;
+    private BigDecimal localhostLongitude;
+    private BigDecimal localhostLatitude;
 }
