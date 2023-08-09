@@ -254,10 +254,10 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         commodityDetailVO.setEvaluateCount(evaluateCount);
         // 封装该商品的所在店铺数据
         ItemVO itemVO = itemInfoMapper.selectBasicData(itemId);
-        int fanSum = itemFollowFocusMapper.selectCount(new QueryWrapper<ItemFollowFocus>().eq("item_id", itemId)
-                .eq("status", 0)).intValue();
-        int commoditySum = commodityInfoMapper.selectCount(new QueryWrapper<ItemCommodityInfo>().eq("item_id", itemId)
-                .eq("status", 0)).intValue();
+        int fanSum = Math.toIntExact(itemFollowFocusMapper.selectCount(new QueryWrapper<ItemFollowFocus>().eq("item_id", itemId)
+                .eq("status", 0)));
+        int commoditySum = Math.toIntExact(commodityInfoMapper.selectCount(new QueryWrapper<ItemCommodityInfo>().eq("item_id", itemId)
+                .eq("status", 0)));
         itemVO.setFanSum(fanSum);
         itemVO.setItemCommoditySum(commoditySum);
         commodityDetailVO.setItemVO(itemVO);
