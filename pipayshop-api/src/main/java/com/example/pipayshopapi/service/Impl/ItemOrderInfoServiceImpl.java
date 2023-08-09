@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.AccountInfo;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.ItemOrderInfo;
+import com.example.pipayshopapi.entity.dto.ChangePriceDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.AccountInfoMapper;
@@ -180,18 +181,17 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
     /**
      * 未支付订单改价接口
      *
-     * @param orderId
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int changePrice(String orderId, BigDecimal price) {
-        if (price.doubleValue() < 0) {
+    public int changePrice(ChangePriceDTO priceDTO) {
+        if (priceDTO.getPrice().doubleValue() < 0) {
             throw new BusinessException("输入的金额不合法");
         }
         return itemOrderInfoMapper.update(null, new LambdaUpdateWrapper<ItemOrderInfo>()
-                .eq(ItemOrderInfo::getOrderId, orderId)
+                .eq(ItemOrderInfo::getOrderId, priceDTO.getOrderId())
                 .eq(ItemOrderInfo::getOrderStatus, 0)
                 .eq(ItemOrderInfo::getDelFlag, 0)
-                .set(ItemOrderInfo::getTransactionAmount, price));
+                .set(ItemOrderInfo::getTransactionAmount, priceDTO.getPrice()));
     }
 }

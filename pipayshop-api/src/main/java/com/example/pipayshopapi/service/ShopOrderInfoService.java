@@ -3,6 +3,7 @@ package com.example.pipayshopapi.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.example.pipayshopapi.entity.ShopOrderInfo;
+import com.example.pipayshopapi.entity.dto.ChangePriceDTO;
 import com.example.pipayshopapi.entity.dto.ShopOrderDTO;
 import com.example.pipayshopapi.entity.vo.*;
 
@@ -39,5 +40,5 @@ public interface ShopOrderInfoService extends IService<ShopOrderInfo> {
     /**
      * 未支付订单改价接口
      */
-    int changePrice(String orderId, BigDecimal price);
+    int changePrice(ChangePriceDTO priceDTO);
 }
