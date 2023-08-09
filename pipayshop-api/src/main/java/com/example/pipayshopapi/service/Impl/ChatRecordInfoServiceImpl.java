@@ -43,7 +43,7 @@ public class ChatRecordInfoServiceImpl extends ServiceImpl<ChatRecordInfoMapper,
         // 获取两个用户的id
         String userId1 = chatRecordVO.getUserId1();
         String userId2 = chatRecordVO.getUserId2();
-        // 坚持数据库中是否有该条数据
+        // 检查数据库中是否有该条数据
         ChatRecordInfo chatRecordInfo = chatRecordInfoMapper.selectOne(new QueryWrapper<ChatRecordInfo>().eq("user_id1", userId1).eq("user_id2", userId2));
         if (chatRecordInfo == null){
             chatRecordInfo = chatRecordInfoMapper.selectOne(new QueryWrapper<ChatRecordInfo>().eq("user_id2", userId1).eq("user_id1", userId2));

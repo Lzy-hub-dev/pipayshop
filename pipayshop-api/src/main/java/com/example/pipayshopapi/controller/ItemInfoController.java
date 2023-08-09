@@ -40,6 +40,21 @@ public class ItemInfoController {
     @Resource
     private ItemCommodityInfoService itemCommodityInfoService;
 
+    @PostMapping("setItemScore")
+    @ApiOperation("根据评论评分设置网店评分")
+    public ResponseVO setItemScore(){
+        try {
+            Boolean Residue = itemInfoService.setItemScore();
+            if (!Residue) {
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo(Residue);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException("评论评分设置失败，请联系后台人员");
+        }
+    }
+
     @GetMapping("getInventoryByCommodityId/{CommodityId}")
     @ApiOperation("根据商品id获取商品库存")
     public ResponseVO getInventoryByCommodityId(@PathVariable("CommodityId")String commodityId){

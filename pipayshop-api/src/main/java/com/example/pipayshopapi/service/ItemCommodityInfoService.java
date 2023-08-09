@@ -99,4 +99,6 @@ public interface ItemCommodityInfoService extends IService<ItemCommodityInfo> {
     Integer getInventoryByCommodityId(String commodityId);
 
     String getOriginAddressById(String commodityId);
+
+
 }

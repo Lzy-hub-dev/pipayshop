@@ -1,7 +1,7 @@
 package com.example.pipayshopapi.service;
 
+import com.example.pipayshopapi.entity.BUserInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.pipayshopapi.entity.RechargeInfo;
 
 /**
  * <p>
@@ -9,9 +9,8 @@ import com.example.pipayshopapi.entity.RechargeInfo;
  * </p>
  *
  * @author zxb
- * @since 2023-08-08
+ * @since 2023-08-09
  */
-public interface RechargeInfoService extends IService<RechargeInfo> {
-
+public interface BUserInfoService extends IService<BUserInfo> {
 
 }

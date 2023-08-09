@@ -93,4 +93,5 @@ public interface ShopInfoService extends IService<ShopInfo> {
 
     CheckVO checkId(String qrcode);
 
+    Boolean setShopScore();
 }

@@ -53,4 +53,6 @@ public interface ItemInfoMapper extends BaseMapper<ItemInfo> {
      * @return
      */
     int selectUploadCommodityBalanceByCommodityId(@Param("commodityId")String commodityId);
+
+    Integer setItemScore();
 }

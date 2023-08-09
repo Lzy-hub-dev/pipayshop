@@ -332,4 +332,11 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         }
         return new CheckVO(shopInfo.getShopId(), shopInfo.getShopName(), shopInfo.getUserImage());
     }
+
+    @Override
+    @Transactional
+    public Boolean setShopScore() {
+        Integer update = shopInfoMapper.setItemScore();
+        return update >0;
+    }
 }

@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.AccountInfo;
 import com.example.pipayshopapi.entity.TransactionRecord;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.entity.vo.RecordTransactionVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.AccountInfoMapper;
 import com.example.pipayshopapi.mapper.TransactionRecordMapper;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -36,7 +39,7 @@ public class TransactionRecordServiceImpl extends ServiceImpl<TransactionRecordM
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean recordTransaction(String token) {
-//        // 解密JWT获取数据，记录交易日志
+        // 解密JWT获取数据，记录交易日志
         Claims claims = TokenUtil.getUserIdFromToken(token);
         String shopId = claims.get("shopId", String.class);
         String userId = claims.get("user_id", String.class);
@@ -60,5 +63,14 @@ public class TransactionRecordServiceImpl extends ServiceImpl<TransactionRecordM
             throw new BusinessException("增加店铺对应的店主的账户数据失败");
         }
         return true;
+    }
+
+
+    @Override
+    public PageDataVO getRecordTransaction(String shopId, int page, int limit) {
+        List<RecordTransactionVO> list = transactionRecordMapper
+                .getRecordTransaction(shopId,(page - 1) * limit,limit);
+        int count = transactionRecordMapper.getRecordTransactionCount(shopId);
+        return new PageDataVO(count, list);
     }
 }

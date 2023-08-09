@@ -81,4 +81,6 @@ public interface ShopInfoMapper extends BaseMapper<ShopInfo> {
      * @return
      */
     int addUploadBalanceByCommodityId(@Param("commodityId")String commodityId);
+
+    Integer setItemScore();
 }

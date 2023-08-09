@@ -10,6 +10,7 @@ import com.example.pipayshopapi.mapper.ItemCommodityInfoMapper;
 import com.example.pipayshopapi.mapper.ItemInfoMapper;
 import com.example.pipayshopapi.service.ItemInfoService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -115,5 +116,14 @@ public class ItemInfoServiceImpl extends ServiceImpl<ItemInfoMapper, ItemInfo> i
         return new PageDataVO(size,itemCommodityEvaluate);
     }
 
-
+    /**
+     * 根据评论评分设置网店评分
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean setItemScore() {
+        Integer update = itemInfoMapper.setItemScore();
+        return update >0;
+    }
 }

@@ -5,7 +5,6 @@ import cn.hutool.core.thread.ThreadUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -286,16 +285,6 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         return new PageDataVO(integer, itemCommodityInfoVOS);
     }
 
-    /*@Override
-    public boolean changeCommodityStatus(String commodity, String status) {
-        LambdaUpdateWrapper<ItemCommodityInfo> wr = new LambdaUpdateWrapper<ItemCommodityInfo>()
-                .eq(ItemCommodityInfo::getCommodityId, commodity);
-        if ("1".equals(status) || "2".equals(status)) {
-            wr.set(ItemCommodityInfo::getStatus, status);
-        }
-        return commodityInfoMapper.update(null, wr) > 0;
-    }*/
-
     /**
      * 根据商品id，上架变为下架
      *
@@ -350,6 +339,8 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
                 .eq("commodity_id", commodityId));
         return commodity_id.getOriginAddress();
     }
+
+
 
     /**
      * 根据网店id查询网店的商品列表

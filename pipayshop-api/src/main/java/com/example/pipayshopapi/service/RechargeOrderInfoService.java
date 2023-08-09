@@ -1,7 +1,7 @@
 package com.example.pipayshopapi.service;
 
-import com.example.pipayshopapi.entity.RechargeOrderInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.pipayshopapi.entity.RechargeOrderInfo;
 import com.example.pipayshopapi.entity.dto.CompleteDTO;
 import com.example.pipayshopapi.entity.dto.IncompleteDTO;
 import com.example.pipayshopapi.entity.dto.PaymentDTO;
@@ -25,4 +25,9 @@ public interface RechargeOrderInfoService extends IService<RechargeOrderInfo> {
 
 
     Boolean cancelled(String rechargeOrderId);
+
+    /**
+     * 生成pi币充值的未支付订单
+     */
+    String getNoPidOrder(String token);
 }
