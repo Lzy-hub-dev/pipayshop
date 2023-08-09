@@ -141,6 +141,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         ShopInfo shopInfo = shopInfoMapper.selectOne(new QueryWrapper<ShopInfo>()
                 .eq("status", 0)
                 .eq("shop_id",shopId));
+        System.out.println(shopId);
         List<String> taglist = JSON.parseArray(shopInfo.getTagList(), String.class);
         List<String> imagelist = JSON.parseArray(shopInfo.getShopImagList(), String.class);
         for (String s : taglist) {
@@ -267,6 +268,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         Integer n = shopInfoMapper.getAllIndexShopInfoVO(categoryId);
         // stata==1,按评分从低到高；stata==2,按评分从高到低
         List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVOById(categoryId, (pages - 1) * limit, limit);
+        // TODO
         for (IndexShopInfoVO shopInfoVO : indexShopInfoVO) {
             List<String> list1 = new ArrayList<>();
             List<String> list = JSON.parseArray(shopInfoVO.getTagList(), String.class);
@@ -338,5 +340,47 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     public Boolean setShopScore() {
         Integer update = shopInfoMapper.setItemScore();
         return update >0;
+    }
+
+    /**
+     * 根据条件查询酒店信息
+     * @param livePageVO
+     * @return
+     */
+    // TODO
+    @Override
+    public PageDataVO getHotelInfoByCondition(LivePageVO livePageVO) {
+        Integer limit = livePageVO.getLimit();
+        Integer page = livePageVO.getPage();
+        System.out.println(livePageVO);
+        List<IndexShopInfoVO> indexShopInfoVOS = shopInfoMapper.getHotelInfoByCondition(
+                livePageVO.getShopName(),
+                limit,
+                (page-1)*limit,
+                livePageVO.getCheckInTime(),
+                livePageVO.getDepartureTime(),
+                livePageVO.getAdult(),
+                livePageVO.getChildren());
+        for (IndexShopInfoVO shopInfoVO : indexShopInfoVOS) {
+            List<String> list1 = new ArrayList<>();
+            List<String> list = JSON.parseArray(shopInfoVO.getTagList(), String.class);
+            if (list == null || list.isEmpty()) {
+                continue;
+            }
+            for (String s : list) {
+                String tag_id = tagMapper.selectOneContent(s);
+                list1.add(tag_id);
+            }
+            System.out.println(list1);
+            shopInfoVO.setShopTagsList(list1);
+        }
+
+        Integer num = shopInfoMapper.getHotelInfoNum(
+                livePageVO.getShopName(),
+                livePageVO.getCheckInTime(),
+                livePageVO.getDepartureTime(),
+                livePageVO.getAdult(),
+                livePageVO.getChildren());
+        return new PageDataVO(num,indexShopInfoVOS);
     }
 }

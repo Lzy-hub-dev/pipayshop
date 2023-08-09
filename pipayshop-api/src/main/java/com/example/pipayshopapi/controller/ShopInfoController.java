@@ -33,6 +33,21 @@ public class ShopInfoController {
     private ShopInfoService infoService;
     private static final Logger log = LoggerFactory.getLogger(ShopTagsController.class);
 
+    @PostMapping("getHotelInfoByCondition")
+    @ApiOperation("根据条件筛选酒店信息")
+    public ResponseVO<PageDataVO> getHotelInfoByCondition(@RequestBody LivePageVO livePageVO){
+        try {
+            PageDataVO pageDataVO = infoService.getHotelInfoByCondition(livePageVO);
+            if (pageDataVO == null) {
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo(pageDataVO);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException("评论评分设置失败，请联系后台人员");
+        }
+    }
+
     @PostMapping("setShopScore")
     @ApiOperation("根据评论评分设置网店评分")
     public ResponseVO setShopScore(){

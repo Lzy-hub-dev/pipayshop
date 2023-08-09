@@ -55,4 +55,10 @@ public interface ItemCommodityInfoMapper extends BaseMapper<ItemCommodityInfo> {
      * @return
      */
     int reduceStock(@Param("num")Integer num,@Param("commodityId")String commodityId);
+
+    /**
+     * 根据购买数量、商品id =》商品库存复原
+     * @return
+     */
+    int addStock(@Param("num")Integer num,@Param("commodityId")String commodityId);
 }

@@ -1,14 +1,11 @@
 package com.example.pipayshopapi.controller;
 
 import com.example.pipayshopapi.entity.ItemOrderInfo;
-import com.example.pipayshopapi.entity.dto.CompleteDTO;
-import com.example.pipayshopapi.entity.dto.IncompleteDTO;
-import com.example.pipayshopapi.entity.dto.PaymentDTO;
+import com.example.pipayshopapi.entity.dto.ChangePriceDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ItemOrderInfoService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +29,7 @@ public class ItemOrderController {
      *  标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单
      */
     @GetMapping("getOrderList")
-    @ApiOperation("用户的全部网店订单列表分页展示标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单")
+    @ApiOperation("（买家）用户的全部网店订单列表分页展示标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单")
     public ResponseVO<PageDataVO> getOrderList(GetOrderDataVO getOrderDataVO) {
         try {
             PageDataVO list = itemOrderInfoService.getOrderList(getOrderDataVO);
@@ -121,6 +118,19 @@ public class ItemOrderController {
             throw new BusinessException("订单超时未支付导致失效失败，请联系后台人员");
         }
     }
+    /**
+        未支付订单改价接口
+     */
+    @PostMapping("changePrice")
+    @ApiOperation("未支付订单改价接口")
+    public ResponseVO<String> changePrice(@RequestBody ChangePriceDTO priceDTO) {
+            int update = itemOrderInfoService.changePrice(priceDTO);
+            if (update < 1){
+                throw new RuntimeException();
+            }
+            return ResponseVO.getSuccessResponseVo("未支付订单改价成功");
+
+    }
 
     /**
     定时轮询删除失效订单接口
@@ -172,7 +182,7 @@ public class ItemOrderController {
     }
 
     @GetMapping("getMyOrderByUid/{page}/{limit}/{uid}/{status}")
-    @ApiOperation("根据用户id查询网店的所有订单")
+    @ApiOperation("（卖家）根据用户id查询网店的所有订单")
     public ResponseVO<PageDataVO> getMyOrderByUid(@PathVariable Integer page,@PathVariable Integer limit,@PathVariable String uid,@PathVariable Integer status){
         try {
             PageDataVO myOrderByUid = itemOrderInfoService.getMyOrderByUid(page, limit, uid,status);

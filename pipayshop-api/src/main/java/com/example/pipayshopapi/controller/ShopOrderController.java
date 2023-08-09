@@ -1,7 +1,7 @@
 package com.example.pipayshopapi.controller;
 
 
-import com.example.pipayshopapi.entity.ItemOrderInfo;
+import com.example.pipayshopapi.entity.dto.ChangePriceDTO;
 import com.example.pipayshopapi.entity.dto.ShopOrderDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * <p>
@@ -36,7 +35,7 @@ public class ShopOrderController {
      *  标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单
      */
     @GetMapping("getOrderList")
-    @ApiOperation("用户的全部订单列表分页展示标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单")
+    @ApiOperation("（买家）用户的全部订单列表分页展示标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单")
     public ResponseVO<PageDataVO> getOrderList(GetOrderDataVO getOrderDataVO) {
         try {
             PageDataVO orderList = shopOrderInfoService.getOrderList(getOrderDataVO);
@@ -46,6 +45,19 @@ public class ShopOrderController {
             throw new BusinessException("用户的订单列表展示数据为0");
         }
     }
+
+    @GetMapping("getOrderLiveList")
+    @ApiOperation("（买家）用户的全部酒店订单列表分页展示标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单")
+    public ResponseVO<PageDataVO> getOrderLiveList(GetOrderDataVO getOrderDataVO) {
+        try {
+            PageDataVO orderList = shopOrderInfoService.getOrderLiveList(getOrderDataVO);
+            return ResponseVO.getSuccessResponseVo(orderList);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new BusinessException("用户的酒店订单列表展示数据为0");
+        }
+    }
+
 
     /**
      删除订单接口
@@ -73,6 +85,24 @@ public class ShopOrderController {
     public ResponseVO<ShopOrderDetailVO> getOrderDetail(@PathVariable String orderId) {
         try {
             ShopOrderDetailVO orderDetail = shopOrderInfoService.getOrderDetail(orderId);
+            if (orderDetail == null){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo(orderDetail);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new BusinessException("订单的详情获取失败，请联系后台人员");
+        }
+    }
+
+    /**
+     酒店订单的详情接口
+     */
+    @GetMapping("getLiveOrderDetail/{orderId}")
+    @ApiOperation("酒店订单（未支付 / 已支付）的详情接口")
+    public ResponseVO<ShopLiveOrderDetailVO> getLiveOrderDetail(@PathVariable String orderId) {
+        try {
+            ShopLiveOrderDetailVO orderDetail = shopOrderInfoService.getLiveOrderDetail(orderId);
             if (orderDetail == null){
                 throw new Exception();
             }
@@ -118,7 +148,15 @@ public class ShopOrderController {
             throw new BusinessException("订单超时未支付导致失效失败，请联系后台人员");
         }
     }
-
+    @PostMapping("changePrice")
+    @ApiOperation("未支付订单改价接口")
+    public ResponseVO<String> changePrice(@RequestBody ChangePriceDTO priceDTO) {
+            int update = shopOrderInfoService.changePrice(priceDTO);
+            if (update < 1){
+                throw new RuntimeException();
+            }
+            return ResponseVO.getSuccessResponseVo("未支付订单改价成功");
+    }
     /**
      定时轮询删除失效订单接口
      */
@@ -175,10 +213,10 @@ public class ShopOrderController {
      *  标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单
      */
     @GetMapping("getOrderListByShopId")
-    @ApiOperation("实体店的全部订单列表分页展示标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单")
-    public ResponseVO<List<OrderListVO>> getOrderListByShopId(GetOrderDataVO getOrderDataVO) {
+    @ApiOperation("(卖家)实体店的全部订单列表分页展示标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单")
+    public ResponseVO<PageDataVO> getOrderListByShopId(GetOrderDataVO getOrderDataVO) {
         try {
-            List<OrderListVO> list = shopOrderInfoService.getOrderListByShopId(getOrderDataVO);
+            PageDataVO list = shopOrderInfoService.getOrderListByShopId(getOrderDataVO);
             if (list == null){
                 throw new Exception();
             }
@@ -186,6 +224,21 @@ public class ShopOrderController {
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new BusinessException("实体店的订单列表展示数据为0");
+        }
+    }
+
+    @GetMapping("getOrderLiveListByShopId")
+    @ApiOperation("(卖家)实体店的酒店全部订单列表分页展示标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单")
+    public ResponseVO<PageDataVO> getOrderLiveListByShopId(GetOrderDataVO getOrderDataVO) {
+        try {
+            PageDataVO list = shopOrderInfoService.getOrderLiveListByShopId(getOrderDataVO);
+            if (list == null){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo(list);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new BusinessException("实体店的酒店订单列表展示数据为0");
         }
     }
 

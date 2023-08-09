@@ -2,10 +2,7 @@ package com.example.pipayshopapi.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.pipayshopapi.entity.ShopOrderInfo;
-import com.example.pipayshopapi.entity.vo.GetOrderDataVO;
-import com.example.pipayshopapi.entity.vo.OrderListVO;
-import com.example.pipayshopapi.entity.vo.ShopOrderDetailVO;
-import com.example.pipayshopapi.entity.vo.ShopOrderInfoVO;
+import com.example.pipayshopapi.entity.vo.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -43,6 +40,21 @@ public interface ShopOrderInfoMapper extends BaseMapper<ShopOrderInfo> {
     List<OrderListVO> getOrderList(@Param("getOrderDataVO") GetOrderDataVO getOrderDataVO);
     Integer getAllOrderList(@Param("getOrderDataVO") GetOrderDataVO getOrderDataVO);
 
+    List<OrderLiveListVO> getOrderLiveList(@Param("getOrderDataVO") GetOrderDataVO getOrderDataVO);
+    Integer getAllOrderLiveList(@Param("getOrderDataVO") GetOrderDataVO getOrderDataVO);
+
     ShopOrderDetailVO getShopOrderDetailVO(@Param("orderId") String orderId);
     List<OrderListVO> getOrderListByShopId(@Param("getOrderDataVO") GetOrderDataVO getOrderDataVO);
+
+    Integer getOrderListCountByShopId(@Param("getOrderDataVO") GetOrderDataVO getOrderDataVO);
+
+    List<OrderLiveListVO> getOrderLiveListByShopId(@Param("getOrderDataVO") GetOrderDataVO getOrderDataVO);
+
+    Integer getAllOrderLiveListByShopId(@Param("getOrderDataVO") GetOrderDataVO getOrderDataVO);
+
+    ShopLiveOrderDetailVO getLiveOrderDetail(@Param("orderId") String orderId);
+
+    //getLiveOrderDetail
+
+
 }

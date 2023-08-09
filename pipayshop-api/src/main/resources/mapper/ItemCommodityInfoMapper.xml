@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.pipayshopapi.mapper.ItemCommodityInfoMapper">
+    <insert id="addStock">
+        UPDATE
+            item_commodity_info
+        SET
+            inventory = inventory+#{num}
+        WHERE
+            commodity_id=#{commodityId}
+    </insert>
     <update id="reduceStock">
         UPDATE
             item_commodity_info
@@ -18,7 +26,9 @@
         FROM item_commodity_info as i
                  join item_info it on it.item_id = i.item_id
                  JOIN item_commodity_category as c on i.category_id = c.category_id
-        where c.category_id = #{secondCategoryId} limit ${startIndex}
+        where c.category_id = #{secondCategoryId}
+                and i.status = 0
+         limit ${startIndex}
             , ${number}
 
     </select>
@@ -28,6 +38,7 @@
         FROM item_commodity_info as i
                  JOIN item_commodity_category as c on i.category_id = c.category_id
         where c.category_id = #{secondCategoryId}
+          and i.status = 0
     </select>
     <select id="itemCommodityChoose" resultType="com.example.pipayshopapi.entity.vo.CommodityVO">
         select i.commodity_id,i.item_commodity_name,i.origin_price,i.price,i.details,i.imags_list,it.membership
@@ -101,6 +112,8 @@
         price
         FROM item_commodity_info
         WHERE item_id = #{itemId}
+        and
+            status in (0,1)
         order by update_time DESC
     </select>
 

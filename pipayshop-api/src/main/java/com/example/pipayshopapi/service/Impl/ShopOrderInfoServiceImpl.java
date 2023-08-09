@@ -1,12 +1,15 @@
 package com.example.pipayshopapi.service.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.AccountInfo;
 import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopOrderInfo;
+import com.example.pipayshopapi.entity.dto.ChangePriceDTO;
 import com.example.pipayshopapi.entity.dto.ShopOrderDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -45,6 +49,16 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
         List<OrderListVO> orderList = shopOrderInfoMapper.getOrderList(getOrderDataVO);
         return new PageDataVO(allOrderList,orderList);
     }
+
+    @Override
+    public PageDataVO getOrderLiveList(GetOrderDataVO getOrderDataVO) {
+        getOrderDataVO.setCurrentPage((getOrderDataVO.getCurrentPage()-1)*getOrderDataVO.getPageSize());
+        Integer allOrderLiveList = shopOrderInfoMapper.getAllOrderLiveList(getOrderDataVO);
+        List<OrderLiveListVO> orderLiveList = shopOrderInfoMapper.getOrderLiveList(getOrderDataVO);
+        return new PageDataVO(allOrderLiveList,orderLiveList);
+    }
+
+
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -76,10 +90,18 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int failOrder(String orderId) {
-        return shopOrderInfoMapper.update(null, new UpdateWrapper<ShopOrderInfo>()
+        ShopOrderInfo one = shopOrderInfoMapper.selectOne(new LambdaQueryWrapper<ShopOrderInfo>()
+                .eq(ShopOrderInfo::getOrderId, orderId)
+                .eq(ShopOrderInfo::getDelFlag, 0));
+        int i = shopCommodityInfoMapper.addStock(one.getNumber(), one.getCommodityId());
+        int i1 = shopOrderInfoMapper.update(null, new UpdateWrapper<ShopOrderInfo>()
                 .eq("order_id", orderId)
                 .set("order_status", 3)
                 .set("update_time", new Date()));
+        if (i < 1 || i1 < 1) {
+            throw new RuntimeException();
+        }
+        return 1;
     }
 
     @Override
@@ -139,7 +161,44 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
     }
 
     @Override
-    public List<OrderListVO> getOrderListByShopId(GetOrderDataVO getOrderDataVO) {
-        return shopOrderInfoMapper.getOrderListByShopId(getOrderDataVO);
+    public PageDataVO getOrderListByShopId(GetOrderDataVO getOrderDataVO) {
+        getOrderDataVO.setCurrentPage((getOrderDataVO.getCurrentPage() - 1) * getOrderDataVO.getPageSize());
+        List<OrderListVO> voList = shopOrderInfoMapper.getOrderListByShopId(getOrderDataVO);
+        Integer count = shopOrderInfoMapper.getOrderListCountByShopId(getOrderDataVO);
+        return new PageDataVO(count,voList);
     }
+
+    //卖家的酒店所有订单展示
+    @Override
+    public PageDataVO getOrderLiveListByShopId(GetOrderDataVO getOrderDataVO) {
+        getOrderDataVO.setCurrentPage((getOrderDataVO.getCurrentPage() - 1) * getOrderDataVO.getPageSize());
+        Integer allOrderLiveListByShopId = shopOrderInfoMapper.getAllOrderLiveListByShopId(getOrderDataVO);
+        List<OrderLiveListVO> orderLiveListByShopId = shopOrderInfoMapper.getOrderLiveListByShopId(getOrderDataVO);
+        return new PageDataVO(allOrderLiveListByShopId,orderLiveListByShopId);
+    }
+
+    @Override
+    public ShopLiveOrderDetailVO getLiveOrderDetail(String orderId) {
+        ShopLiveOrderDetailVO liveOrderDetail = shopOrderInfoMapper.getLiveOrderDetail(orderId);
+        return liveOrderDetail;
+    }
+
+    /**
+     * 未支付订单改价接口
+     *
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int changePrice(ChangePriceDTO priceDTO) {
+        if (priceDTO.getPrice().doubleValue() < 0) {
+            throw new BusinessException("输入的金额不合法");
+        }
+        return shopOrderInfoMapper.update(null, new LambdaUpdateWrapper<ShopOrderInfo>()
+                .eq(ShopOrderInfo::getOrderId, priceDTO.getOrderId())
+                .eq(ShopOrderInfo::getOrderStatus, 0)
+                .eq(ShopOrderInfo::getDelFlag, 0)
+                .set(ShopOrderInfo::getTransactionAmount, priceDTO.getPrice()));
+    }
+
+
 }

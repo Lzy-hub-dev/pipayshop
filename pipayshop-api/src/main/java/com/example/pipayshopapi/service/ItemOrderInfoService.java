@@ -2,6 +2,7 @@ package com.example.pipayshopapi.service;
 
 import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.pipayshopapi.entity.dto.ChangePriceDTO;
 import com.example.pipayshopapi.entity.dto.CompleteDTO;
 import com.example.pipayshopapi.entity.dto.IncompleteDTO;
 import com.example.pipayshopapi.entity.dto.PaymentDTO;
@@ -42,4 +43,8 @@ public interface ItemOrderInfoService extends IService<ItemOrderInfo> {
      * 根据用户id查询网店的所有订单
      */
     PageDataVO getMyOrderByUid(Integer page,Integer limit,String uid,Integer status);
+    /**
+     * 未支付订单改价接口
+     */
+    int changePrice(ChangePriceDTO priceDTO);
 }

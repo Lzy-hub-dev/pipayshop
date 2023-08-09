@@ -319,7 +319,7 @@ public class RechargeOrderInfoServiceImpl extends ServiceImpl<RechargeOrderInfoM
     @Transactional(rollbackFor = Exception.class)
     public String getNoPidOrder(String token) {
         // 解密JWT获取数据
-        Claims claims = TokenUtil.getUserIdFromToken(token);
+        Claims claims = TokenUtil.getDataFromToken(token);
         String uid = claims.get("uid", String.class);
         BigDecimal pointAmount = new BigDecimal(claims.get("point_amount", Integer.class));
         BigDecimal piSum = new BigDecimal(claims.get("pi_sum", Integer.class));

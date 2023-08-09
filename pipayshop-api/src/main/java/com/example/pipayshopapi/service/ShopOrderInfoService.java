@@ -3,9 +3,11 @@ package com.example.pipayshopapi.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.example.pipayshopapi.entity.ShopOrderInfo;
+import com.example.pipayshopapi.entity.dto.ChangePriceDTO;
 import com.example.pipayshopapi.entity.dto.ShopOrderDTO;
 import com.example.pipayshopapi.entity.vo.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -34,5 +36,15 @@ public interface ShopOrderInfoService extends IService<ShopOrderInfo> {
 
     boolean payOrder(PayOrderVO payOrderVO);
 
-    List<OrderListVO> getOrderListByShopId(GetOrderDataVO getOrderDataVO);
+    PageDataVO getOrderListByShopId(GetOrderDataVO getOrderDataVO);
+    /**
+     * 未支付订单改价接口
+     */
+    int changePrice(ChangePriceDTO priceDTO);
+
+    PageDataVO getOrderLiveList(GetOrderDataVO getOrderDataVO);
+
+    PageDataVO getOrderLiveListByShopId(GetOrderDataVO getOrderDataVO);
+
+    ShopLiveOrderDetailVO getLiveOrderDetail(String orderId);
 }
