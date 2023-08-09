@@ -51,7 +51,7 @@ public class TransactionRecordController {
                                                        @PathVariable int page,
                                                        @PathVariable int limit){
         try {
-            PageDataVO list = transactionRecordService.getRecordTransaction(shopId,page,limit);
+            PageDataVO list = transactionRecordService.     getRecordTransaction(shopId,page,limit);
             return ResponseVO.getSuccessResponseVo(list);
         }catch (Exception e){
             e.printStackTrace();

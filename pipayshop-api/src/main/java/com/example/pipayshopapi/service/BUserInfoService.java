@@ -1,7 +1,8 @@
 package com.example.pipayshopapi.service;
 
-import com.example.pipayshopapi.entity.BUserInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.pipayshopapi.entity.BUserInfo;
+import com.example.pipayshopapi.entity.vo.BUserLoginVO;
 
 /**
  * <p>
@@ -13,4 +14,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface BUserInfoService extends IService<BUserInfo> {
 
+    /**
+     * 校验登录
+     */
+    String login(BUserLoginVO bUserLoginVO);
+
+    /**
+     * 修改密码
+     */
+    boolean updatePassWord(BUserLoginVO bUserLoginVO);
 }

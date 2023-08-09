@@ -1,6 +1,5 @@
 package com.example.pipayshopapi.entity;
 
-import com.example.pipayshopapi.entity.vo.EvaluateVO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -62,9 +61,4 @@ public class ShopDetailInfoVO {
      * 注意事項
      */
     private String reservationInformation;
-    /**
-     * 顾客评价列表10条
-     * TODO
-     */
-    private List<EvaluateVO> evaluateVOList;
 }
