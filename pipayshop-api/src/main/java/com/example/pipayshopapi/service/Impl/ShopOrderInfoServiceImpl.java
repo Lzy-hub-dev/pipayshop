@@ -151,8 +151,11 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
     }
 
     @Override
-    public List<OrderListVO> getOrderListByShopId(GetOrderDataVO getOrderDataVO) {
-        return shopOrderInfoMapper.getOrderListByShopId(getOrderDataVO);
+    public PageDataVO getOrderListByShopId(GetOrderDataVO getOrderDataVO) {
+        getOrderDataVO.setCurrentPage((getOrderDataVO.getCurrentPage() - 1) * getOrderDataVO.getPageSize());
+        List<OrderListVO> voList = shopOrderInfoMapper.getOrderListByShopId(getOrderDataVO);
+        Integer count = shopOrderInfoMapper.getOrderListCountByShopId(getOrderDataVO);
+        return new PageDataVO(count,voList);
     }
 
     /**
