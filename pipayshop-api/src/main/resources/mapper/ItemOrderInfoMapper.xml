@@ -131,7 +131,7 @@
         JOIN
             item_commodity_info i
         where
-            u.uid = #{userId}
+            o.uid = #{userId}
 
         <choose>
             <when test="orderStatus == 0">
@@ -206,7 +206,7 @@
         JOIN
         item_commodity_info i
         where
-        u.uid = #{userId}
+        o.uid = #{userId}
         <choose>
             <when test="orderStatus == 0">
                 and o.order_status = 0
