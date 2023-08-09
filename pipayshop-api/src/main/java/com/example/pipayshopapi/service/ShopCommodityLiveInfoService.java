@@ -58,5 +58,4 @@ public interface ShopCommodityLiveInfoService extends IService<ShopCommodityLive
     boolean insertShopLive(ShopCommodityLiveInfo shopCommodityLiveInfo);
 
     boolean updateShopLive(ShopCommodityLiveInfoUpVO shopCommodityLiveInfoUpVO);
-
 }

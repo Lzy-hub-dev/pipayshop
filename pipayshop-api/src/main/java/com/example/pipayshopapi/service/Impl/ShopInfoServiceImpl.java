@@ -339,4 +339,29 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         Integer update = shopInfoMapper.setItemScore();
         return update >0;
     }
+
+    /**
+     * 根据条件查询酒店信息
+     * @param livePageVO
+     * @return
+     */
+    @Override
+    public PageDataVO getHotelInfoByCondition(LivePageVO livePageVO) {
+        Integer limit = livePageVO.getLimit();
+        Integer page = livePageVO.getPage();
+        List<HotelInfoVO> hotelInfoVO = shopInfoMapper.getHotelInfoByCondition(
+                limit,
+                (page-1)*limit,
+                livePageVO.getCheckInTime(),
+                livePageVO.getDepartureTime(),
+                livePageVO.getAdult(),
+                livePageVO.getChildren());
+
+        Integer num = shopInfoMapper.getHotelInfoNum(
+                livePageVO.getCheckInTime(),
+                livePageVO.getDepartureTime(),
+                livePageVO.getAdult(),
+                livePageVO.getChildren());
+        return new PageDataVO(num,hotelInfoVO);
+    }
 }

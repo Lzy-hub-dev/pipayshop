@@ -94,4 +94,11 @@ public interface ShopInfoService extends IService<ShopInfo> {
     CheckVO checkId(String qrcode);
 
     Boolean setShopScore();
+
+    /**
+     * 根据条件查询酒店信息
+     * @param livePageVO
+     * @return
+     */
+    PageDataVO getHotelInfoByCondition(LivePageVO livePageVO);
 }
