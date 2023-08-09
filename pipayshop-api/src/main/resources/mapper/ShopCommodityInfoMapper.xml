@@ -158,6 +158,8 @@
             shop_commodity_info i
         WHERE
             i.shop_id=#{shopId}
+            and
+            i.status in (0,1)
     </select>
 
 </mapper>
