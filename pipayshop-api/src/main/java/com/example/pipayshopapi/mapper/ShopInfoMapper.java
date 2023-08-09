@@ -2,11 +2,14 @@ package com.example.pipayshopapi.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.pipayshopapi.entity.ShopInfo;
+import com.example.pipayshopapi.entity.vo.HotelInfoVO;
 import com.example.pipayshopapi.entity.vo.IndexShopInfoVO;
+import com.example.pipayshopapi.entity.vo.ShopInfoVO;
 import com.example.pipayshopapi.entity.vo.ShopInfoVO1;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -83,4 +86,16 @@ public interface ShopInfoMapper extends BaseMapper<ShopInfo> {
     int addUploadBalanceByCommodityId(@Param("commodityId")String commodityId);
 
     Integer setItemScore();
+
+    List<HotelInfoVO> getHotelInfoByCondition(@Param("limit") Integer limit,
+                                              @Param("page")Integer page,
+                                              @Param("checkInTime")Date checkInTime,
+                                              @Param("departureTime")Date departureTime,
+                                              @Param("adult")Integer adult,
+                                              @Param("children")Integer children);
+
+    Integer getHotelInfoNum(@Param("checkInTime") Date checkInTime,
+                            @Param("departureTime")Date departureTime,
+                            @Param("adult")Integer adult,
+                            @Param("children")Integer children);
 }

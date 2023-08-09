@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -38,6 +39,4 @@ public interface ShopCommodityLiveInfoMapper extends BaseMapper<ShopCommodityLiv
     List<ShopCommodityLiveVO> selectShopCommodityLiveVO(@Param("limit")Integer limit, @Param("pages")Integer pages);
 
     Integer selectAllShopCommodityLiveVO();
-
-
 }
