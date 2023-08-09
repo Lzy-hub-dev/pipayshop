@@ -40,10 +40,10 @@ public class TransactionRecordServiceImpl extends ServiceImpl<TransactionRecordM
     @Transactional(rollbackFor = Exception.class)
     public boolean recordTransaction(String token) {
         // 解密JWT获取数据，记录交易日志
-        Claims claims = TokenUtil.getUserIdFromToken(token);
+        Claims claims = TokenUtil.getDataFromToken(token);
         String shopId = claims.get("shopId", String.class);
         String userId = claims.get("user_id", String.class);
-        BigDecimal transactionAmount = claims.get("transactionAmount", BigDecimal.class);
+        BigDecimal transactionAmount = new BigDecimal(claims.get("transactionAmount", Integer.class));
         int insert = transactionRecordMapper.insert(new TransactionRecord(null, StringUtil.generateShortId()
                 , shopId, userId, transactionAmount, null, null));
         if (insert < 1) {

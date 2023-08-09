@@ -1,7 +1,6 @@
 package com.example.pipayshopapi.controller;
 
 
-import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.example.pipayshopapi.entity.dto.ChangePriceDTO;
 import com.example.pipayshopapi.entity.dto.ShopOrderDTO;
 import com.example.pipayshopapi.entity.vo.*;
@@ -13,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * <p>
@@ -38,7 +35,7 @@ public class ShopOrderController {
      *  标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单
      */
     @GetMapping("getOrderList")
-    @ApiOperation("用户的全部订单列表分页展示标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单")
+    @ApiOperation("（买家）用户的全部订单列表分页展示标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单")
     public ResponseVO<PageDataVO> getOrderList(GetOrderDataVO getOrderDataVO) {
         try {
             PageDataVO orderList = shopOrderInfoService.getOrderList(getOrderDataVO);
@@ -185,7 +182,7 @@ public class ShopOrderController {
      *  标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单
      */
     @GetMapping("getOrderListByShopId")
-    @ApiOperation("实体店的全部订单列表分页展示标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单")
+    @ApiOperation("(卖家)实体店的全部订单列表分页展示标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单")
     public ResponseVO<PageDataVO> getOrderListByShopId(GetOrderDataVO getOrderDataVO) {
         try {
             PageDataVO list = shopOrderInfoService.getOrderListByShopId(getOrderDataVO);

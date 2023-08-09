@@ -220,11 +220,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
     @Override
     public ShopDetailInfoVO selectShopInfoByCommodityId(String commodityId) {
         //获取商品基本信息
-        ShopDetailInfoVO shopDetailInfoVO = shopCommodityInfoMapper.selectShopInfoByCommodityId(commodityId);
-        //根据商品ID 查十条商品评论列表
-        List<EvaluateVO> list = shopCommodityEvaluateMapper.getEvaluateList(shopDetailInfoVO.getCommodityId());
-        shopDetailInfoVO.setEvaluateVOList(list);
-        return shopDetailInfoVO;
+        return shopCommodityInfoMapper.selectShopInfoByCommodityId(commodityId);
     }
 
 

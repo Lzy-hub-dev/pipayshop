@@ -2,20 +2,15 @@ package com.example.pipayshopapi.controller;
 
 import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.example.pipayshopapi.entity.dto.ChangePriceDTO;
-import com.example.pipayshopapi.entity.dto.CompleteDTO;
-import com.example.pipayshopapi.entity.dto.IncompleteDTO;
-import com.example.pipayshopapi.entity.dto.PaymentDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ItemOrderInfoService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 
 /**
  * @author wzx
@@ -34,7 +29,7 @@ public class ItemOrderController {
      *  标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单
      */
     @GetMapping("getOrderList")
-    @ApiOperation("用户的全部网店订单列表分页展示标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单")
+    @ApiOperation("（买家）用户的全部网店订单列表分页展示标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单")
     public ResponseVO<PageDataVO> getOrderList(GetOrderDataVO getOrderDataVO) {
         try {
             PageDataVO list = itemOrderInfoService.getOrderList(getOrderDataVO);
@@ -187,7 +182,7 @@ public class ItemOrderController {
     }
 
     @GetMapping("getMyOrderByUid/{page}/{limit}/{uid}/{status}")
-    @ApiOperation("根据用户id查询网店的所有订单")
+    @ApiOperation("（卖家）根据用户id查询网店的所有订单")
     public ResponseVO<PageDataVO> getMyOrderByUid(@PathVariable Integer page,@PathVariable Integer limit,@PathVariable String uid,@PathVariable Integer status){
         try {
             PageDataVO myOrderByUid = itemOrderInfoService.getMyOrderByUid(page, limit, uid,status);

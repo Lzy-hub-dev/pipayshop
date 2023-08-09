@@ -136,8 +136,11 @@
             <when test="orderStatus == -1">
                 and o.order_status != 3
             </when>
+            <when test="orderStatus == 0">
+                and o.order_status = 0
+            </when>
             <otherwise>
-                and o.order_status = #{getOrderDataVO.orderStatus}
+                and o.order_status != 3 and o.order_status != 0
             </otherwise>
         </choose>
             AND o.commodity_id = i.commodity_id
@@ -156,12 +159,15 @@
                  JOIN item_info as ii	on ii.item_id=ici.item_id
         WHERE ii.uid=#{Uid}
         <choose>
+            <when test="status == -1">
+                and ioi.order_status != 3
+            </when>
             <when test="status == 0">
                 and ioi.order_status = 0
             </when>
-            <when test="status != -1">
-                and ioi.order_status != 0
-            </when>
+            <otherwise>
+                and ioi.order_status != 3 and ioi.order_status != 0
+            </otherwise>
         </choose>
            and ioi.del_flag=0
            order by ioi.update_time desc
@@ -174,12 +180,15 @@
                  JOIN item_info as ii	on ii.item_id=ici.item_id
         WHERE ii.uid=#{Uid}
         <choose>
+            <when test="status == -1">
+                and ioi.order_status != 3
+            </when>
             <when test="status == 0">
                 and ioi.order_status = 0
             </when>
-            <when test="status != -1">
-                and ioi.order_status != 0
-            </when>
+            <otherwise>
+                and ioi.order_status != 3 and ioi.order_status != 0
+            </otherwise>
         </choose>
           and ioi.del_flag=0
     </select>
@@ -209,8 +218,11 @@
             <when test="orderStatus == -1">
                 and o.order_status != 3
             </when>
+            <when test="orderStatus == 0">
+                and o.order_status = 0
+            </when>
             <otherwise>
-                and o.order_status = #{getOrderDataVO.orderStatus}
+                and o.order_status != 3 and o.order_status != 0
             </otherwise>
         </choose>
         AND o.commodity_id = i.commodity_id
