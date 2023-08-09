@@ -41,7 +41,8 @@ public class ItemFollowFocusServiceImpl extends ServiceImpl<ItemFollowFocusMappe
         int update = itemFollowFocusMapper.update(null, new UpdateWrapper<ItemFollowFocus>()
                 .eq("follow_id", followId)
                 .eq("item_id", itemId)
-                .set("update_time", date));
+                .set("update_time", date)
+                .set("status",0));
         if (update < 1){
             ItemFollowFocus itemFollowFocus = new ItemFollowFocus();
             itemFollowFocus.setFollowId(followId);

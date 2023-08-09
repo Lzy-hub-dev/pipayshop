@@ -45,7 +45,7 @@ public class ItemCommodityCategoryController {
         }
     }
 
-    @GetMapping("getSecShopInfoListByCondition/{limit}/{pages}/{categoryId}")
+    /*@GetMapping("getSecShopInfoListByCondition/{limit}/{pages}/{categoryId}")
     @ApiOperation("根据一级分类-获取所有网店商品列表")
     public ResponseVO<PageDataVO> getSecShopInfoListByCondition(@PathVariable Integer limit, @PathVariable Integer pages, @PathVariable String categoryId){
         try {
@@ -56,6 +56,6 @@ public class ItemCommodityCategoryController {
             e.printStackTrace();
             throw new BusinessException("根据条件筛选后获取网店列表失败，请联系后台人员");
         }
-    }
+    }*/
 
 }
