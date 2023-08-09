@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 
 /**
  * @author wzx
@@ -120,6 +121,19 @@ public class ItemOrderController {
             log.error(e.getMessage());
             throw new BusinessException("订单超时未支付导致失效失败，请联系后台人员");
         }
+    }
+    /**
+        未支付订单改价接口
+     */
+    @PostMapping("changePrice")
+    @ApiOperation("未支付订单改价接口")
+    public ResponseVO<String> changePrice( String orderId,@RequestBody BigDecimal price) {
+            int update = itemOrderInfoService.changePrice(orderId,price);
+            if (update < 1){
+                throw new RuntimeException();
+            }
+            return ResponseVO.getSuccessResponseVo("未支付订单改价成功");
+
     }
 
     /**

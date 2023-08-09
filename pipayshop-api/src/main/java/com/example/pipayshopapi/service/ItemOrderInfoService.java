@@ -42,4 +42,8 @@ public interface ItemOrderInfoService extends IService<ItemOrderInfo> {
      * 根据用户id查询网店的所有订单
      */
     PageDataVO getMyOrderByUid(Integer page,Integer limit,String uid,Integer status);
+    /**
+     * 未支付订单改价接口
+     */
+    int changePrice(String orderId, BigDecimal price);
 }
