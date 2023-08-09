@@ -33,6 +33,20 @@ public class ShopInfoController {
     private ShopInfoService infoService;
     private static final Logger log = LoggerFactory.getLogger(ShopTagsController.class);
 
+    @PostMapping("setShopScore")
+    @ApiOperation("根据评论评分设置网店评分")
+    public ResponseVO setShopScore(){
+        try {
+            Boolean Residue = infoService.setShopScore();
+            if (!Residue) {
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo(Residue);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException("评论评分设置失败，请联系后台人员");
+        }
+    }
 
     @GetMapping("getShopInfoListByCondition/{limit}/{pages}/{categoryId}/{score}")
     @ApiOperation("根据条件获取所有实体店列表")

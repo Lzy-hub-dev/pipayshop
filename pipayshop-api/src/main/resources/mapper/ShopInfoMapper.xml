@@ -17,6 +17,15 @@
           and i.upload_commodity_balance>0;
     </update>
 
+    <update id="setItemScore">
+        UPDATE shop_info i
+        SET i.score = (
+            SELECT AVG(c.score)
+            FROM shop_commodity_evaluate c
+            WHERE c.item_id = i.shop_id
+            )
+    </update>
+
     <select id="selectShopInfoByTopCate" resultType="com.example.pipayshopapi.entity.ShopInfo">
         select *
         FROM shop_info i

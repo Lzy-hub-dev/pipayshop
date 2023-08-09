@@ -63,4 +63,6 @@ public interface ItemInfoService extends IService<ItemInfo> {
      * @return
      */
     PageDataVO getItemEvaluate(String itemId,Integer page,Integer limit);
+
+    Boolean setItemScore();
 }

@@ -16,6 +16,16 @@
         WHERE c.commodity_id = #{commodityId}
             and i.upload_balance>0;
     </update>
+
+    <update id="setItemScore">
+        UPDATE item_info i
+        SET i.score = (
+            SELECT AVG(c.score)
+            FROM item_commodity_evaluate c
+            WHERE c.item_id = i.item_id
+            )
+    </update>
+
     <select id="selectUploadCommodityBalanceByCommodityId" resultType="java.lang.Integer">
         select
             s.upload_balance
