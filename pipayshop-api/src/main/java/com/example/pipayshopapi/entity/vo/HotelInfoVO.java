@@ -20,7 +20,6 @@ public class HotelInfoVO {
     private String tagList;
     private String address;
     private Double score;
-    private String shopImagList;
     private String shopIntroduce;
     private String userImage;
 }

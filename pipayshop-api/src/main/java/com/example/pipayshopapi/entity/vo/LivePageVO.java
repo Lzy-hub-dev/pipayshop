@@ -23,6 +23,7 @@ public class LivePageVO {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private  Date departureTime;
 
+    private String shopName;
     private Integer adult;
     private Integer children;
 }
