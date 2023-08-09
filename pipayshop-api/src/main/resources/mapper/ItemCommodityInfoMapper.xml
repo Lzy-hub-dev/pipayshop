@@ -112,6 +112,8 @@
         price
         FROM item_commodity_info
         WHERE item_id = #{itemId}
+        and
+            status in (0,1)
         order by update_time DESC
     </select>
 
