@@ -27,6 +27,7 @@ public class BUserInfo implements Serializable {
 
     private Long id;
 
+
     /**
      * 实体店商家用户的id
      */
