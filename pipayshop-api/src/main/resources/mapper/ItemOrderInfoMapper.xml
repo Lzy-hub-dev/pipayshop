@@ -132,16 +132,14 @@
             item_commodity_info i
         where
             o.uid = #{userId}
-
         <choose>
-            <when test="orderStatus == 0">
-                and o.order_status = 0
+            <when test="orderStatus == -1">
+                and o.order_status != 3
             </when>
-            <when test="orderStatus != -1">
-                and o.order_status != 0
-            </when>
+            <otherwise>
+                and o.order_status = #{getOrderDataVO.orderStatus}
+            </otherwise>
         </choose>
-            AND o.del_flag = 0
             AND o.commodity_id = i.commodity_id
             AND o.item_id = u.item_id
         ORDER BY
@@ -198,7 +196,7 @@
 
     <select id="getOrderListCount" resultType="java.lang.Integer">
         select
-        count(*)
+        count(1)
         from
         item_order_info o
         JOIN
@@ -208,18 +206,15 @@
         where
         o.uid = #{userId}
         <choose>
-            <when test="orderStatus == 0">
-                and o.order_status = 0
+            <when test="orderStatus == -1">
+                and o.order_status != 3
             </when>
-            <when test="orderStatus != -1">
-                and o.order_status != 0
-            </when>
+            <otherwise>
+                and o.order_status = #{getOrderDataVO.orderStatus}
+            </otherwise>
         </choose>
-        AND o.del_flag = 0
         AND o.commodity_id = i.commodity_id
         AND o.item_id = u.item_id
-        ORDER BY
-        o.update_time DESC
     </select>
 
 

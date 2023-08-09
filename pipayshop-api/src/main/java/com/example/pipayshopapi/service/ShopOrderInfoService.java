@@ -36,7 +36,7 @@ public interface ShopOrderInfoService extends IService<ShopOrderInfo> {
 
     boolean payOrder(PayOrderVO payOrderVO);
 
-    List<OrderListVO> getOrderListByShopId(GetOrderDataVO getOrderDataVO);
+    PageDataVO getOrderListByShopId(GetOrderDataVO getOrderDataVO);
     /**
      * 未支付订单改价接口
      */

@@ -186,9 +186,9 @@ public class ShopOrderController {
      */
     @GetMapping("getOrderListByShopId")
     @ApiOperation("实体店的全部订单列表分页展示标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单")
-    public ResponseVO<List<OrderListVO>> getOrderListByShopId(GetOrderDataVO getOrderDataVO) {
+    public ResponseVO<PageDataVO> getOrderListByShopId(GetOrderDataVO getOrderDataVO) {
         try {
-            List<OrderListVO> list = shopOrderInfoService.getOrderListByShopId(getOrderDataVO);
+            PageDataVO list = shopOrderInfoService.getOrderListByShopId(getOrderDataVO);
             if (list == null){
                 throw new Exception();
             }

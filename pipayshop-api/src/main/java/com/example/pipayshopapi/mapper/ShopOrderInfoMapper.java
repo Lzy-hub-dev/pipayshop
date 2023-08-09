@@ -45,4 +45,6 @@ public interface ShopOrderInfoMapper extends BaseMapper<ShopOrderInfo> {
 
     ShopOrderDetailVO getShopOrderDetailVO(@Param("orderId") String orderId);
     List<OrderListVO> getOrderListByShopId(@Param("getOrderDataVO") GetOrderDataVO getOrderDataVO);
+
+    Integer getOrderListCountByShopId(@Param("getOrderDataVO") GetOrderDataVO getOrderDataVO);
 }
