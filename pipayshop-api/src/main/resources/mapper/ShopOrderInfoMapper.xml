@@ -157,7 +157,7 @@
     </select>
     <select id="getAllOrderList" resultType="java.lang.Integer">
         select
-        count(*)
+        count(1)
         from
         shop_order_info o
         JOIN
@@ -167,18 +167,16 @@
         where
         o.uid = #{getOrderDataVO.userId}
         <choose>
-            <when test="getOrderDataVO.orderStatus == 0">
-                and o.order_status = 0
+            <when test="getOrderDataVO.orderStatus == -1">
+                and o.order_status != 3
             </when>
-            <when test="getOrderDataVO.orderStatus != -1">
-                and o.order_status != 0
-            </when>
+            <otherwise>
+                and o.order_status = #{getOrderDataVO.orderStatus}
+            </otherwise>
         </choose>
         AND o.del_flag = 0
         AND o.commodity_id = i.commodity_id
         AND o.shop_id = u.shop_id
-        ORDER BY
-        o.update_time ASC
     </select>
 
 
