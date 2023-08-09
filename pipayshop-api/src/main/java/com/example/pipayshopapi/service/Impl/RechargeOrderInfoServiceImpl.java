@@ -6,9 +6,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.config.CommonConfig;
 import com.example.pipayshopapi.entity.AccountInfo;
-import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.example.pipayshopapi.entity.RechargeInfo;
 import com.example.pipayshopapi.entity.RechargeOrderInfo;
 import com.example.pipayshopapi.entity.dto.CompleteDTO;
@@ -22,8 +22,11 @@ import com.example.pipayshopapi.mapper.AccountInfoMapper;
 import com.example.pipayshopapi.mapper.RechargeInfoMapper;
 import com.example.pipayshopapi.mapper.RechargeOrderInfoMapper;
 import com.example.pipayshopapi.service.RechargeOrderInfoService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.util.HttpClientUtil;
+import com.example.pipayshopapi.util.StringUtil;
+import com.example.pipayshopapi.util.TokenUtil;
+import io.jsonwebtoken.Claims;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -47,6 +50,7 @@ import java.util.concurrent.TimeUnit;
  * @since 2023-08-08
  */
 @Service
+@Slf4j
 public class RechargeOrderInfoServiceImpl extends ServiceImpl<RechargeOrderInfoMapper, RechargeOrderInfo> implements RechargeOrderInfoService {
 
     @Resource
@@ -302,5 +306,22 @@ public class RechargeOrderInfoServiceImpl extends ServiceImpl<RechargeOrderInfoM
                 .eq("order_id", rechargeOrderId)
                 .set("order_status", 3));
         return update > 0;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String getNoPidOrder(String token) {
+        // 解密JWT获取数据
+        Claims claims = TokenUtil.getUserIdFromToken(token);
+        String uid = claims.get("uid", String.class);
+        BigDecimal pointAmount = new BigDecimal(claims.get("point_amount", Integer.class));
+        BigDecimal piSum = new BigDecimal(claims.get("pi_sum", Integer.class));
+        // 生成未支付订单
+        String orderId = StringUtil.generateShortId();
+        RechargeOrderInfo rechargeOrderInfo = new RechargeOrderInfo(null, orderId, uid, pointAmount
+                , piSum, 0, null, null, null);
+        int insert = rechargeOrderInfoMapper.insert(rechargeOrderInfo);
+        if (insert < 1){throw new BusinessException("生成未支付订单失败");}
+        return orderId;
     }
 }

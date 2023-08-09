@@ -5,7 +5,6 @@ import com.example.pipayshopapi.entity.dto.LoginDTO;
 import com.example.pipayshopapi.entity.vo.ItemMinInfoVo;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
-import com.example.pipayshopapi.entity.vo.UserWithTokenVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.UserInfoService;
 import io.swagger.annotations.Api;
@@ -31,6 +30,8 @@ public class UserInfoController {
     @Resource
     private UserInfoService userInfoService;
 
+    @PostMapping("login")
+    @ApiOperation("登录")
     public ResponseVO<UserInfo> login(@RequestBody LoginDTO loginDTO) {
         try {
 

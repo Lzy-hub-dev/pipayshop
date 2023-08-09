@@ -1,7 +1,7 @@
 package com.example.pipayshopapi.service;
 
-import com.example.pipayshopapi.entity.RechargeInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.pipayshopapi.entity.RechargeInfo;
 
 /**
  * <p>
@@ -12,5 +12,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2023-08-08
  */
 public interface RechargeInfoService extends IService<RechargeInfo> {
+
 
 }

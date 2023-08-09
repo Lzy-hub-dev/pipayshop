@@ -12,8 +12,6 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.stereotype.Controller;
-
 import javax.annotation.Resource;
 
 /**
@@ -97,5 +95,23 @@ public class RechargeOrderInfoController {
             throw new BusinessException("取消失败，请联系后台人员"+e.getLocalizedMessage()+e.toString()+e.getCause().toString());
         }
 
+    }
+
+    /**
+     * 生成pi币充值的未支付订单
+     */
+    @PostMapping("getNoPidOrder")
+    @ApiOperation("生成pi币充值的未支付订单，并返回订单的id")
+    public ResponseVO<String> getNoPidOrder(String token) {
+        try {
+            String orderId = rechargeOrderInfoService.getNoPidOrder(token);
+            if (orderId== null || "".equals(orderId)){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo(orderId);
+        } catch (Exception e) {
+            log.error(e.getLocalizedMessage());
+            throw new BusinessException("生成pi币充值的未支付订单失败，请联系后台人员");
+        }
     }
 }
