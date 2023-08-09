@@ -51,6 +51,16 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
     }
 
     @Override
+    public PageDataVO getOrderLiveList(GetOrderDataVO getOrderDataVO) {
+        getOrderDataVO.setCurrentPage((getOrderDataVO.getCurrentPage()-1)*getOrderDataVO.getPageSize());
+        Integer allOrderLiveList = shopOrderInfoMapper.getAllOrderLiveList(getOrderDataVO);
+        List<OrderLiveListVO> orderLiveList = shopOrderInfoMapper.getOrderLiveList(getOrderDataVO);
+        return new PageDataVO(allOrderLiveList,orderLiveList);
+    }
+
+
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public int delOrderByOrderId(String orderId) {
         if (orderId == null || "".equals(orderId)){
@@ -158,6 +168,21 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
         return new PageDataVO(count,voList);
     }
 
+    //卖家的酒店所有订单展示
+    @Override
+    public PageDataVO getOrderLiveListByShopId(GetOrderDataVO getOrderDataVO) {
+        getOrderDataVO.setCurrentPage((getOrderDataVO.getCurrentPage() - 1) * getOrderDataVO.getPageSize());
+        Integer allOrderLiveListByShopId = shopOrderInfoMapper.getAllOrderLiveListByShopId(getOrderDataVO);
+        List<OrderLiveListVO> orderLiveListByShopId = shopOrderInfoMapper.getOrderLiveListByShopId(getOrderDataVO);
+        return new PageDataVO(allOrderLiveListByShopId,orderLiveListByShopId);
+    }
+
+    @Override
+    public ShopLiveOrderDetailVO getLiveOrderDetail(String orderId) {
+        ShopLiveOrderDetailVO liveOrderDetail = shopOrderInfoMapper.getLiveOrderDetail(orderId);
+        return liveOrderDetail;
+    }
+
     /**
      * 未支付订单改价接口
      *
@@ -174,4 +199,6 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
                 .eq(ShopOrderInfo::getDelFlag, 0)
                 .set(ShopOrderInfo::getTransactionAmount, priceDTO.getPrice()));
     }
+
+
 }

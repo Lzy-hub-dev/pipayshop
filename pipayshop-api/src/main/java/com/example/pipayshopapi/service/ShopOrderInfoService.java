@@ -41,4 +41,10 @@ public interface ShopOrderInfoService extends IService<ShopOrderInfo> {
      * 未支付订单改价接口
      */
     int changePrice(ChangePriceDTO priceDTO);
+
+    PageDataVO getOrderLiveList(GetOrderDataVO getOrderDataVO);
+
+    PageDataVO getOrderLiveListByShopId(GetOrderDataVO getOrderDataVO);
+
+    ShopLiveOrderDetailVO getLiveOrderDetail(String orderId);
 }
