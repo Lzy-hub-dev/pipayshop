@@ -149,9 +149,10 @@
         where status = 0 and shop_id in(
             select shop_id
             from shop_commodity_live_info
-            where  adult > #{adult}
-            AND children > #{children}
+            where  adult >= #{adult}
+            AND children >= #{children}
             AND del_flag = 0
+            AND status = 1
         )
         limit #{page},#{limit}
     </select>
@@ -162,9 +163,10 @@
         where status = 0 and shop_id in(
             select shop_id
             from shop_commodity_live_info
-            where adult > #{adult}
-            AND children > #{children}
+            where adult >= #{adult}
+            AND children >= #{children}
             AND del_flag = 0
+            AND status = 1
         )
     </select>
 
