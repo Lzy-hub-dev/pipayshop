@@ -9,6 +9,7 @@ import com.example.pipayshopapi.entity.AccountInfo;
 import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopOrderInfo;
+import com.example.pipayshopapi.entity.dto.ChangePriceDTO;
 import com.example.pipayshopapi.entity.dto.ShopOrderDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -157,18 +158,17 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
     /**
      * 未支付订单改价接口
      *
-     * @param orderId
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int changePrice(String orderId, BigDecimal price) {
-        if (price.doubleValue() < 0) {
+    public int changePrice(ChangePriceDTO priceDTO) {
+        if (priceDTO.getPrice().doubleValue() < 0) {
             throw new BusinessException("输入的金额不合法");
         }
         return shopOrderInfoMapper.update(null, new LambdaUpdateWrapper<ShopOrderInfo>()
-                .eq(ShopOrderInfo::getOrderId, orderId)
+                .eq(ShopOrderInfo::getOrderId, priceDTO.getOrderId())
                 .eq(ShopOrderInfo::getOrderStatus, 0)
                 .eq(ShopOrderInfo::getDelFlag, 0)
-                .set(ShopOrderInfo::getTransactionAmount, price));
+                .set(ShopOrderInfo::getTransactionAmount, priceDTO.getPrice()));
     }
 }

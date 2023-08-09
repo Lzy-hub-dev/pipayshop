@@ -2,6 +2,7 @@ package com.example.pipayshopapi.controller;
 
 
 import com.example.pipayshopapi.entity.ItemOrderInfo;
+import com.example.pipayshopapi.entity.dto.ChangePriceDTO;
 import com.example.pipayshopapi.entity.dto.ShopOrderDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -121,8 +122,8 @@ public class ShopOrderController {
     }
     @PostMapping("changePrice")
     @ApiOperation("未支付订单改价接口")
-    public ResponseVO<String> changePrice( String orderId,@RequestBody BigDecimal price) {
-            int update = shopOrderInfoService.changePrice(orderId,price);
+    public ResponseVO<String> changePrice(@RequestBody ChangePriceDTO priceDTO) {
+            int update = shopOrderInfoService.changePrice(priceDTO);
             if (update < 1){
                 throw new RuntimeException();
             }
