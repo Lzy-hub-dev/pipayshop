@@ -69,7 +69,6 @@ public class RechargeOrderInfoController {
     public ResponseVO complete(@RequestBody CompleteDTO completeDTO) {
 
         try {
-
             return rechargeOrderInfoService.complete(completeDTO);
         } catch (Exception e) {
             log.error("报错如下：{}", e.getMessage());
@@ -82,10 +81,9 @@ public class RechargeOrderInfoController {
     /**
      * 取消支付,订单关闭
      */
-    @PostMapping("payOrder/cancelled/{rechargeOrderId]")
+    @PostMapping("payOrder/cancelled/{rechargeOrderId}")
     @ApiOperation("取消支付,订单关闭")
     public ResponseVO<String> cancelled(@PathVariable String rechargeOrderId) {
-
         try {
             Boolean order = rechargeOrderInfoService.cancelled(rechargeOrderId);
             if (!order){throw  new BusinessException("取消订单失败");}

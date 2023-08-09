@@ -1,4 +1,4 @@
-package com.example.pipayshopapi.service.impl;
+package com.example.pipayshopapi.service.Impl;
 
 import com.example.pipayshopapi.entity.BUserInfo;
 import com.example.pipayshopapi.mapper.BUserInfoMapper;
