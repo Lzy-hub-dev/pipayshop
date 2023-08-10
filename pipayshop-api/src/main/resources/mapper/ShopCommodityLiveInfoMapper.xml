@@ -3,7 +3,7 @@
 <mapper namespace="com.example.pipayshopapi.mapper.ShopCommodityLiveInfoMapper">
 
     <select id="selectShopCommodityLiveInfoList" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoListVO">
-        select room_id,room_type_name,tag_list,land,price,avatar_imag
+        select room_id,room_type_name,tag_list,land,price,avatar_imag,bed_type
         from shop_commodity_live_info
         where
         shop_id=#{shopId}

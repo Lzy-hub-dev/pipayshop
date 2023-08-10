@@ -22,4 +22,5 @@ public class ShopCommodityLiveInfoListVO {
     private BigDecimal price;
     private String avatarImag;
     private Integer inventory;
+    private String bedType;
 }
