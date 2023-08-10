@@ -32,11 +32,11 @@ public class ItemCartServiceImpl extends ServiceImpl<ItemCartMapper, ItemCart> i
      * 根据用户id查找购物车
      */
     @Override
-    public PageDataVO selectItemCartByIds(Integer limit, Integer pages, String userId) {
-        Integer integer = itemCartMapper.selectItemCartTotal(userId);
-        int page = (pages-1) * limit;
-        List<ItemCartVO> itemCartList = itemCartMapper.selectItemCartByIds(limit, page, userId);
-        return new PageDataVO(integer,itemCartList);
+    public  List<ItemCartVO>  selectItemCartByIds(String userId) {
+
+
+        List<ItemCartVO> itemCartList = itemCartMapper.selectItemCartByIds(userId);
+        return itemCartList;
     }
 
     /**

@@ -21,7 +21,7 @@ public interface ItemCartService extends IService<ItemCart> {
     /**
      * 根据用户id查找购物车
      */
-    PageDataVO selectItemCartByIds(Integer limit, Integer pages, String userId);
+    List<ItemCartVO>  selectItemCartByIds( String userId);
 
     /**
      * 放进购物车
