@@ -65,4 +65,6 @@ public class OrderLiveListVO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private String endTime;
+
+    private String shopIntroduce;
 }
