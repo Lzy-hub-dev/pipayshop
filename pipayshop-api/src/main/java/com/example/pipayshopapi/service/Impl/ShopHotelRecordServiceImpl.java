@@ -35,7 +35,7 @@ public class ShopHotelRecordServiceImpl extends ServiceImpl<ShopHotelRecordMappe
     private ShopCommodityLiveInfoMapper shopCommodityLiveInfoMapper;
 
     @Override
-    public Integer getInventory(Integer roomId, Date startTime, Date endTime) {
+    public Integer getInventory(String roomId, Date startTime, Date endTime) {
         //根据roomId 找库存
         Integer Inventory = shopCommodityLiveInfoMapper.selectOne(new QueryWrapper<ShopCommodityLiveInfo>()
                 .eq("room_id",roomId))

@@ -25,5 +25,5 @@ public interface ShopHotelRecordMapper extends BaseMapper<ShopHotelRecord> {
      * @param endTime
      * @return
      */
-    Integer getRentByTime(@Param("roomId") Integer roomId,@Param("startTime") Date startTime,@Param("endTime") Date endTime);
+    Integer getRentByTime(@Param("roomId") String roomId,@Param("startTime") Date startTime,@Param("endTime") Date endTime);
 }
