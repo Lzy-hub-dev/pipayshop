@@ -22,8 +22,8 @@ import java.util.Map;
  * @Version 1.0
  */
 
-@Component
-@RabbitListener(queues = QueueConfig.QUEUE_MESSAGE)
+//@Component
+//@RabbitListener(queues = QueueConfig.QUEUE_MESSAGE)
 public class MessageListener {
 
 
