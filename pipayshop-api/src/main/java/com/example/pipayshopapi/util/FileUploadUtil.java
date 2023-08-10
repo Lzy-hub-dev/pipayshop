@@ -71,7 +71,7 @@ public class FileUploadUtil {
             return "文件名不能为空";
         }
 
-//        System.out.println("文件名: " + fileName);
+
         String postStr = fileName.substring(fileName.lastIndexOf("."));
         String preStr = StringUtil.generateShortId();
         fileName = preStr +  postStr;
@@ -81,7 +81,7 @@ public class FileUploadUtil {
         }
         //将文件复制到指定路径
         File destFile = new File(readPath.getAbsolutePath()+SEPARATOR + fileName);
-//        System.out.println("保存路径: " + readPath);
+
 
         try {
             FileCopyUtils.copy(multipartFile.getBytes(), destFile);
@@ -101,7 +101,6 @@ public class FileUploadUtil {
         File file = new File(UPLOAD_PRE+fileName);
         //判断文件存不存在
         if(!file.exists()){
-            System.out.println("删除文件失败："+fileName+"不存在！");
             return false;
         }else{;
             //判断这是不是一个文件，ps：有可能是文件夹

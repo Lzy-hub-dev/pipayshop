@@ -126,7 +126,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         double distance = LatLngTool.distance(point1, point2, LengthUnit.KILOMETER);
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         String r = decimalFormat.format(distance);
-        System.out.println("距离： " + r + " km");
+
         return r + "km";
     }
 
@@ -141,7 +141,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         ShopInfo shopInfo = shopInfoMapper.selectOne(new QueryWrapper<ShopInfo>()
                 .eq("status", 0)
                 .eq("shop_id",shopId));
-        System.out.println(shopId);
+
         List<String> taglist = JSON.parseArray(shopInfo.getTagList(), String.class);
         List<String> imagelist = JSON.parseArray(shopInfo.getShopImagList(), String.class);
         for (String s : taglist) {
@@ -279,7 +279,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
                 String tag_id = tagMapper.selectOneContent(s);
                 list1.add(tag_id);
             }
-            System.out.println(list1);
+
             shopInfoVO.setShopTagsList(list1);
         }
         return new PageDataVO(n,indexShopInfoVO);
@@ -352,7 +352,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     public PageDataVO getHotelInfoByCondition(LivePageVO livePageVO) {
         Integer limit = livePageVO.getLimit();
         Integer page = livePageVO.getPage();
-        System.out.println(livePageVO);
+
         List<IndexShopInfoVO> indexShopInfoVOS = shopInfoMapper.getHotelInfoByCondition(
                 livePageVO.getShopName(),
                 limit,
@@ -371,7 +371,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
                 String tag_id = tagMapper.selectOneContent(s);
                 list1.add(tag_id);
             }
-            System.out.println(list1);
+
             shopInfoVO.setShopTagsList(list1);
         }
 
