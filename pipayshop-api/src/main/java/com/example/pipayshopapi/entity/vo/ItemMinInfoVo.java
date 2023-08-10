@@ -18,7 +18,7 @@ public class ItemMinInfoVo {
     /**
      * 网店ID
      */
-    private Integer itemId;
+    private String itemId;
 
     /**
      * 商品数量

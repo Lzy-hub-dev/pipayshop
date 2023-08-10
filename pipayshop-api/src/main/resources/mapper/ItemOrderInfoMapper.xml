@@ -89,8 +89,7 @@
     </select>
 
 
-    <resultMap id="paiedOrderDetailMap" type="com.example.pipayshopapi.entity.vo.OrderDetailVO">
-        <result property="orderId" column="order_id" />
+    <resultMap id="paiedOrderDetailMap" type="com.example.pipayshopapi.entity.vo.ItemOrderDetailVO">
         <result property="createTime" column="create_time" />
         <result property="payTime" column="update_time" />
         <result property="address" column="address" />
@@ -100,7 +99,7 @@
 
     <select id="getOrderDetail" resultMap="paiedOrderDetailMap">
         SELECT
-            o.order_id ,o.create_time,o.update_time, u.address, u.phone, u.user_name, o.transaction_amount,o.number,o.commodity_id
+           o.create_time,o.update_time, u.address, u.phone, o.number
         FROM
             item_order_info o
         JOIN
@@ -132,22 +131,11 @@
             item_commodity_info i
         where
             o.uid = #{userId}
-        <choose>
-            <when test="orderStatus == -1">
                 and o.order_status != 3
-            </when>
-            <when test="orderStatus == 0">
-                and o.order_status = 0
-            </when>
-            <otherwise>
-                and o.order_status != 3 and o.order_status != 0
-            </otherwise>
-        </choose>
             AND o.commodity_id = i.commodity_id
             AND o.item_id = u.item_id
         ORDER BY
             o.update_time DESC
-            LIMIT ${currentPage},${pageSize}
     </select>
 
 
@@ -193,41 +181,6 @@
           and ioi.del_flag=0
     </select>
 
-    <select id="getOrderMinDeatail" resultType="com.example.pipayshopapi.entity.vo.OrderDetailVO">
-        SELECT details,avatar_imag
-        FROM item_commodity_info
-        WHERE commodity_id = (
-	    SELECT commodity_id
-	    FROM item_order_info
-	    WHERE order_id = #{orderId}
-    )
-    </select>
-
-    <select id="getOrderListCount" resultType="java.lang.Integer">
-        select
-        count(1)
-        from
-        item_order_info o
-        JOIN
-        item_info u
-        JOIN
-        item_commodity_info i
-        where
-        o.uid = #{userId}
-        <choose>
-            <when test="orderStatus == -1">
-                and o.order_status != 3
-            </when>
-            <when test="orderStatus == 0">
-                and o.order_status = 0
-            </when>
-            <otherwise>
-                and o.order_status != 3 and o.order_status != 0
-            </otherwise>
-        </choose>
-        AND o.commodity_id = i.commodity_id
-        AND o.item_id = u.item_id
-    </select>
 
 
 </mapper>

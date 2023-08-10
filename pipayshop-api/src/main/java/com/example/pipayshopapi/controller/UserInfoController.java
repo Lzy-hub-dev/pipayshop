@@ -127,7 +127,7 @@ public class UserInfoController {
             return ResponseVO.getSuccessResponseVo(result);
         }catch (Exception e){
             e.printStackTrace();
-            throw new RuntimeException("上传失败，请联系后台人员");
+            throw new RuntimeException("根据用户ID获取网店ID和商品数量失败，请联系后台人员");
         }
     }
 

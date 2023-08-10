@@ -62,7 +62,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
                 applyShopCommodityDTO.getCommodityDetail(), applyShopCommodityDTO.getPrice(),
                 null, applyShopCommodityDTO.getShopId(), null, null,
                 applyShopCommodityDTO.getValidityTime(), applyShopCommodityDTO.getResidue(),
-                applyShopCommodityDTO.getReservationInformation(), null,
+                applyShopCommodityDTO.getReservationInformation(), 2,
                 null, null);
         //shop-1剩余数量
         int shopId = shopInfoMapper.update(null, new UpdateWrapper<ShopInfo>()

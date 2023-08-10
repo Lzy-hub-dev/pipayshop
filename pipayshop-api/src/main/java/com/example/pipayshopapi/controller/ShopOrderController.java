@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -34,11 +35,11 @@ public class ShopOrderController {
      * 查看未支付/已支付/已完成订单列表接口(通过一个标识id来获取对应的状态的列表展示)
      *  标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单
      */
-    @GetMapping("getOrderList")
+    @GetMapping("getOrderList/{userId}")
     @ApiOperation("（买家）用户的全部订单列表分页展示标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单")
-    public ResponseVO<PageDataVO> getOrderList(GetOrderDataVO getOrderDataVO) {
+    public ResponseVO<List<OrderListVO>> getOrderList(@PathVariable String userId) {
         try {
-            PageDataVO orderList = shopOrderInfoService.getOrderList(getOrderDataVO);
+            List<OrderListVO> orderList = shopOrderInfoService.getOrderList(userId);
             return ResponseVO.getSuccessResponseVo(orderList);
         } catch (Exception e) {
             log.error(e.getMessage());
