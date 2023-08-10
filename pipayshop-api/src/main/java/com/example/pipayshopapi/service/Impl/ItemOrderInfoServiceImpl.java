@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.pipayshopapi.config.QueueConfig;
 import com.example.pipayshopapi.entity.AccountInfo;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.ItemOrderInfo;
@@ -15,12 +16,15 @@ import com.example.pipayshopapi.mapper.ItemCommodityInfoMapper;
 import com.example.pipayshopapi.mapper.ItemOrderInfoMapper;
 import com.example.pipayshopapi.service.ItemOrderInfoService;
 import com.example.pipayshopapi.util.StringUtil;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -43,7 +47,8 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
 
     @Resource
     ItemCommodityInfoMapper itemCommodityInfoMapper;
-
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
     @Override
     public PageDataVO getOrderList(GetOrderDataVO getOrderDataVO) {
         int pageSize = getOrderDataVO.getPageSize();
@@ -97,8 +102,11 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
     public int failOrder(String orderId) {
         ItemOrderInfo itemOrderInfo = itemOrderInfoMapper.selectOne(new LambdaUpdateWrapper<ItemOrderInfo>()
                 .eq(ItemOrderInfo::getOrderId, orderId)
-                .eq(ItemOrderInfo::getDelFlag, 0));
-
+                .eq(ItemOrderInfo::getDelFlag, 0)
+                .eq(ItemOrderInfo::getOrderStatus, 0));
+        if (itemOrderInfo == null){
+            return 0;
+        }
         int i = itemCommodityInfoMapper.addStock(itemOrderInfo.getNumber(), itemOrderInfo.getCommodityId());
         int i1 = itemOrderInfoMapper.update(null, new UpdateWrapper<ItemOrderInfo>()
                 .eq("order_id", orderId)
@@ -125,6 +133,7 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
         // 生成orderId
         String orderId = StringUtil.generateShortId();
         try {
+
             itemOrderInfo.setOrderId(orderId);
             int i = itemCommodityInfoMapper.reduceStock(itemOrderInfo.getNumber(), itemOrderInfo.getCommodityId());
             int insert = itemOrderInfoMapper.insert(itemOrderInfo);
@@ -135,6 +144,11 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+        rabbitTemplate.convertAndSend(QueueConfig.QUEUE_MESSAGE_DELAY, "item_"+orderId, message1 -> {
+            message1.getMessageProperties().setExpiration("10000");
+            return message1;
+        });
         return orderId;
     }
 

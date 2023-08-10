@@ -15,7 +15,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="pipayshop-api" options="" />
+      <module name="pipayshop-api" options="-parameters" />
       <module name="pipayshop-api (1) (com.example.pipayshop-api)" options="-parameters" />
     </option>
   </component>

@@ -83,8 +83,8 @@ public class RechargeOrderInfoServiceImpl extends ServiceImpl<RechargeOrderInfoM
                 log.error("oldpaymentId------------------"+oldPaymentId);
                 String txid = transaction.getTxid();
                 String txURL = transaction.get_link();
-//                RechargeOrderInfo  rechargeOrderInfo = rechargeOrderInfoMapper.selectOne(new QueryWrapper<RechargeOrderInfo>()
-//                        .eq("order_id", oldPaymentId));
+                RechargeOrderInfo  rechargeOrderInfo = rechargeOrderInfoMapper.selectOne(new QueryWrapper<RechargeOrderInfo>()
+                        .eq("order_id", oldPaymentId));
 //                if (null == rechargeOrderInfo) {
 //                    log.error("order-----------------null");
 //                    return new ResponseVO(2, PaymentEnum.getStatusByCode(2),PaymentEnum.getMsgByCode(2));
@@ -109,7 +109,7 @@ public class RechargeOrderInfoServiceImpl extends ServiceImpl<RechargeOrderInfoM
                 heads.put("Authorization", "Key " + commonConfig.getServerAccessKey());
 
                 try {
-                    HttpResponse response = HttpRequest.post("https://api.minepi.com/v2/payments/" + piOrderId + "/cancel")
+                    HttpResponse response = HttpRequest.post("https://api.minepi.com/v2/payments/" + piOrderId + "/complete")
                             .headerMap(heads, false)
                             .body(String.valueOf(jsonObject))
                             .timeout(5 * 60 * 1000)
@@ -143,7 +143,8 @@ public class RechargeOrderInfoServiceImpl extends ServiceImpl<RechargeOrderInfoM
         if (null == rechargeOrderInfo) {
             return new ResponseVO(1,PaymentEnum.getStatusByCode(1),PaymentEnum.getMsgByCode(1));
         }
-        if (!"0".equals(rechargeOrderInfo.getOrderStatus())) {
+        log.error("status--------------------------------"+rechargeOrderInfo.getOrderStatus());
+        if (rechargeOrderInfo.getOrderStatus() != 0) {
             return new ResponseVO(2,PaymentEnum.getStatusByCode(2),PaymentEnum.getMsgByCode(2));
 
         }
@@ -182,8 +183,9 @@ public class RechargeOrderInfoServiceImpl extends ServiceImpl<RechargeOrderInfoM
                     .post(RequestBody.create("", MediaType.parse("application/json")))
                     .build();
             try (Response response1 = client1.newCall(request1).execute()) {
+                String string1 = response1.body().string();
                 if (!response1.isSuccessful()) {
-                    throw new RuntimeException("approve error: ");
+                    throw new RuntimeException("approve error: " +string1);
                 }
                 log.error("return-------------------------------------------------------------");
             } catch (RuntimeException | IOException e) {
@@ -261,11 +263,9 @@ public class RechargeOrderInfoServiceImpl extends ServiceImpl<RechargeOrderInfoM
                     AccountInfo accountInfo = accountInfoMapper.selectOne(new QueryWrapper<AccountInfo>().eq("uid", rechargeOrderInfo.getUid()));
                     BigDecimal pointBalance = accountInfo.getPointBalance();
                     BigDecimal add = pointBalance.add(rechargeOrderInfo.getPointAmount());
-
-                    // 加积分
-                    accountInfo.setPointBalance(add);
-                    int insert = accountInfoMapper.updateById(accountInfo);
-
+                    log.error("pointBalance-----------------------------"+pointBalance);
+                    log.error("add-----------------------------"+add);
+                    log.error("getPointAmount-----------------------------"+rechargeOrderInfo.getPointAmount());
 
                     // 记录充值记录
                     RechargeInfo rechargeInfo = new RechargeInfo();
@@ -276,7 +276,14 @@ public class RechargeOrderInfoServiceImpl extends ServiceImpl<RechargeOrderInfoM
                     rechargeInfo.setPointSum(rechargeOrderInfo.getPointAmount());
                     rechargeInfo.setPrePoint(accountInfo.getPointBalance());
                     rechargeInfo.setLastPoint(add);
-                    insert += rechargeInfoMapper.insert(rechargeInfo);
+                    int insert = rechargeInfoMapper.insert(rechargeInfo);
+
+                    // 加积分
+                    accountInfo.setPointBalance(add);
+                     insert += accountInfoMapper.updateById(accountInfo);
+
+
+
 
 
                     if (insert < 2){ throw new RuntimeException(); }
