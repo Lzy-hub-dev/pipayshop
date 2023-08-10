@@ -192,7 +192,7 @@
     </select>
     <select id="getOrderLiveList" resultType="com.example.pipayshopapi.entity.vo.OrderLiveListVO">
         select o.order_id,o.order_status,o.commodity_id,o.transaction_amount,
-               l.avatar_imag,l.room_type_name,  s.address,s.user_image,s.shop_name
+               l.avatar_imag,l.room_type_name,  s.address,s.user_image,s.shop_name,s.shop_introduce
                 ,r.start_time,r.end_time
         FROM shop_order_info as o
                  join shop_commodity_live_info as l
@@ -230,7 +230,7 @@
     </select>
     <select id="getOrderLiveListByShopId" resultType="com.example.pipayshopapi.entity.vo.OrderLiveListVO">
         select o.order_id,o.order_status,o.commodity_id,o.transaction_amount,
-               l.avatar_imag,l.room_type_name,  s.address,s.user_image,s.shop_name
+               l.avatar_imag,l.room_type_name,  s.address,s.user_image,s.shop_name,s.shop_introduce
                 ,r.start_time,r.end_time
         FROM shop_order_info as o
         join shop_commodity_live_info as l
