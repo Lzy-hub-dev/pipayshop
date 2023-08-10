@@ -18,6 +18,7 @@ public class QueueConfig {
 
     /**
      * 短信发送队列
+     * @return
      */
     @Bean
     public Queue messageQueue() {

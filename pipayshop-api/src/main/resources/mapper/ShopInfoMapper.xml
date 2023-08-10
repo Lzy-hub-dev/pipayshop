@@ -122,7 +122,13 @@
         select shop_id,shop_name,score,localhost_latitude,localhost_longitude,user_image,
                shop_introduce,tag_list,address,membership
         from shop_info
-        WHERE category_id = #{categoryId} AND status=0
+        WHERE category_id IN
+              (SELECT
+                   sc.category_id
+               FROM
+                   shop_category sc
+               WHERE
+                   sc.category_pid=#{categoryId}) AND status=0
         LIMIT ${page},${limit}
     </select>
 
