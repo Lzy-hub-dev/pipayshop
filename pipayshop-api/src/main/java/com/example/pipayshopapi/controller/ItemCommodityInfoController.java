@@ -51,7 +51,6 @@ public class ItemCommodityInfoController {
             return ResponseVO.getSuccessResponseVo(pageDataVO);
         } catch (Exception e) {
             log.error(e.getMessage());
-            System.out.println(e.getMessage());
             throw new BusinessException("某二级分类下的商品列表分页展示失败，请联系后台人员");
         }
     }
@@ -85,7 +84,6 @@ public class ItemCommodityInfoController {
             return ResponseVO.getSuccessResponseVo(pageDataVO);
         } catch (Exception e) {
             log.error(e.getMessage());
-            System.out.println(e.getMessage());
             throw new BusinessException("网店首页条件搜索失败，请联系后台人员");
         }
     }
@@ -102,7 +100,6 @@ public class ItemCommodityInfoController {
             return ResponseVO.getSuccessResponseVo(commodityVOS);
         } catch (Exception e) {
             log.error(e.getMessage());
-            System.out.println(e.getMessage());
             throw new BusinessException("获取同一网店同一品牌的商品失败，请联系后台人员");
         }
     }
@@ -119,7 +116,6 @@ public class ItemCommodityInfoController {
             return ResponseVO.getSuccessResponseVo(commodityDetailVO);
         } catch (Exception e) {
             log.error(e.getMessage());
-            System.out.println(e.getMessage());
             throw new BusinessException("获取网店商品详情接口失败，请联系后台人员");
         }
     }
