@@ -18,7 +18,7 @@ public interface ShopHotelRecordService extends IService<ShopHotelRecord> {
     /**
      * 获取房型剩余数量
      */
-    Integer getInventory(Integer roomId,Date startTime,Date endTime);
+    Integer getInventory(String roomId,Date startTime,Date endTime);
 
     Boolean createShopHotelRecord(ShopHotelRecord shopHotelRecord);
 }

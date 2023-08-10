@@ -15,7 +15,7 @@ import java.text.DecimalFormat;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ShopCommodityLiveInfoListVO {
-    private Integer roomId;
+    private String roomId;
     private String roomTypeName;
     private String tagList;
     private Integer land;
