@@ -72,24 +72,13 @@
         JOIN
         shop_commodity_info i
         where
-        o.uid = #{getOrderDataVO.userId}
-        <choose>
-            <when test="getOrderDataVO.orderStatus == -1">
+        o.uid = #{userId}
                 and o.order_status != 3
-            </when>
-            <when test="getOrderDataVO.orderStatus == 0">
-                and o.order_status = 0
-            </when>
-            <otherwise>
-                and o.order_status != 3 and o.order_status != 0
-            </otherwise>
-        </choose>
         AND o.del_flag = 0
         AND o.commodity_id = i.commodity_id
         AND o.shop_id = u.shop_id
         ORDER BY
         o.update_time ASC
-        LIMIT #{getOrderDataVO.currentPage},#{getOrderDataVO.pageSize};
     </select>
     <select id="getOrderListByShopId" resultMap="orderListResultMap">
         select

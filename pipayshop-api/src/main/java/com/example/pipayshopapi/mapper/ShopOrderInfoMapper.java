@@ -37,7 +37,7 @@ public interface ShopOrderInfoMapper extends BaseMapper<ShopOrderInfo> {
     Integer selectAllOrderByUidAndStatus(@Param("uid") String uid,@Param("status") Integer status);
 
 
-    List<OrderListVO> getOrderList(@Param("getOrderDataVO") GetOrderDataVO getOrderDataVO);
+    List<OrderListVO> getOrderList(@Param("userId") String userId);
     Integer getAllOrderList(@Param("getOrderDataVO") GetOrderDataVO getOrderDataVO);
 
     List<OrderLiveListVO> getOrderLiveList(@Param("getOrderDataVO") GetOrderDataVO getOrderDataVO);

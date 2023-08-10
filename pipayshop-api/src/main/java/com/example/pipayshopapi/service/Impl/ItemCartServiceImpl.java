@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ItemCart;
 import com.example.pipayshopapi.entity.vo.ItemCartVO;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.mapper.ItemCartMapper;
 import com.example.pipayshopapi.service.ItemCartService;
 import com.example.pipayshopapi.util.StringUtil;
@@ -32,11 +31,8 @@ public class ItemCartServiceImpl extends ServiceImpl<ItemCartMapper, ItemCart> i
      * 根据用户id查找购物车
      */
     @Override
-    public PageDataVO selectItemCartByIds(Integer limit, Integer pages, String userId) {
-        Integer integer = itemCartMapper.selectItemCartTotal(userId);
-        int page = (pages-1) * limit;
-        List<ItemCartVO> itemCartList = itemCartMapper.selectItemCartByIds(limit, page, userId);
-        return new PageDataVO(integer,itemCartList);
+    public List<ItemCartVO> selectItemCartByIds(String userId) {
+        return itemCartMapper.selectItemCartByIds(userId);
     }
 
     /**

@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.pipayshopapi.config.QueueConfig;
 import com.example.pipayshopapi.entity.AccountInfo;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.ItemOrderInfo;
@@ -17,14 +16,11 @@ import com.example.pipayshopapi.mapper.ItemOrderInfoMapper;
 import com.example.pipayshopapi.service.ItemOrderInfoService;
 import com.example.pipayshopapi.util.StringUtil;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -47,20 +43,12 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
 
     @Resource
     ItemCommodityInfoMapper itemCommodityInfoMapper;
-    @Autowired
+
+    @Resource
     private RabbitTemplate rabbitTemplate;
     @Override
-    public PageDataVO getOrderList(GetOrderDataVO getOrderDataVO) {
-        int pageSize = getOrderDataVO.getPageSize();
-        int currentPage = getOrderDataVO.getCurrentPage();
-        // 获取分页数据
-        String userId = getOrderDataVO.getUserId();
-        int orderStatus = getOrderDataVO.getOrderStatus();
-        List<OrderListVO> orderList = itemOrderInfoMapper.getOrderList(orderStatus, userId
-        ,(currentPage - 1) * pageSize, pageSize);
-        // 获取总条数
-        int count = itemOrderInfoMapper.getOrderListCount(userId, orderStatus);
-        return new PageDataVO(count, orderList);
+    public List<OrderListVO> getOrderList(String userId) {
+        return itemOrderInfoMapper.getOrderList(userId);
     }
 
     @Override
@@ -77,15 +65,8 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
 
 
     @Override
-    public OrderDetailVO getOrderDetail(String orderId) {
-        OrderDetailVO orderDetailVO = itemOrderInfoMapper.getOrderDetail(orderId);
-        String userImage = itemCommodityInfoMapper.getItemIdByOrderId(orderId);
-        OrderDetailVO orderDetailVOI = itemOrderInfoMapper.getOrderMinDeatail(orderId);
-        orderDetailVO.setUserImage(userImage);
-        orderDetailVO.setDetails(orderDetailVOI.getDetails());
-        orderDetailVO.setAvatarImag(orderDetailVOI.getAvatarImag());
-
-        return orderDetailVO;
+    public ItemOrderDetailVO getOrderDetail(String orderId) {
+        return itemOrderInfoMapper.getOrderDetail(orderId);
     }
 
     @Override
@@ -145,10 +126,10 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
             throw new RuntimeException(e);
         }
 
-        rabbitTemplate.convertAndSend(QueueConfig.QUEUE_MESSAGE_DELAY, "item_"+orderId, message1 -> {
-            message1.getMessageProperties().setExpiration("10000");
-            return message1;
-        });
+//        rabbitTemplate.convertAndSend(QueueConfig.QUEUE_MESSAGE_DELAY, "item_"+orderId, message1 -> {
+//            message1.getMessageProperties().setExpiration("10000");
+//            return message1;
+//        });
         return orderId;
     }
 

@@ -1,15 +1,13 @@
 package com.example.pipayshopapi.service;
 
-import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.example.pipayshopapi.entity.dto.ChangePriceDTO;
-import com.example.pipayshopapi.entity.dto.CompleteDTO;
-import com.example.pipayshopapi.entity.dto.IncompleteDTO;
-import com.example.pipayshopapi.entity.dto.PaymentDTO;
-import com.example.pipayshopapi.entity.vo.*;
-import org.springframework.web.bind.annotation.PathVariable;
+import com.example.pipayshopapi.entity.vo.ItemOrderDetailVO;
+import com.example.pipayshopapi.entity.vo.OrderListVO;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.entity.vo.PayOrderVO;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -23,11 +21,11 @@ import java.util.List;
 public interface ItemOrderInfoService extends IService<ItemOrderInfo> {
 
 
-    PageDataVO getOrderList(GetOrderDataVO getOrderDataVO);
+    List<OrderListVO> getOrderList(String userId);
 
     int delOrderByOrderId(String orderId);
 
-    OrderDetailVO getOrderDetail(String orderId);
+    ItemOrderDetailVO getOrderDetail(String orderId);
 
     int completedOrder(String orderId);
 

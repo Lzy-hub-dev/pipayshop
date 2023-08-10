@@ -4,14 +4,6 @@ import org.springframework.amqp.core.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * @author: jiangjiafeng
- * @ClassName QueueConfig
- * @Description rabbitmq配置  创建2个队列、一个交换机
- * @date 2023/8/9 20:03
- * @Version 1.0
- */
-
 @Configuration
 public class QueueConfig {
 
@@ -26,7 +18,6 @@ public class QueueConfig {
 
     /**
      * 短信发送队列
-     * @return
      */
     @Bean
     public Queue messageQueue() {
@@ -35,7 +26,6 @@ public class QueueConfig {
 
     /**
      * 短信发送队列
-     * @return
      */
     @Bean
     public Queue delayMessageQueue() {
@@ -47,7 +37,6 @@ public class QueueConfig {
 
     /***
      * 创建交换机
-     * @return
      */
     @Bean
     public DirectExchange directExchange(){
@@ -57,9 +46,6 @@ public class QueueConfig {
 
     /***
      * 交换机与队列绑定
-     * @param messageQueue
-     * @param directExchange
-     * @return
      */
     @Bean
     public Binding basicBinding(Queue messageQueue, DirectExchange directExchange) {
