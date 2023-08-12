@@ -51,7 +51,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     @Resource
     private UserInfoMapper userInfoMapper;
 
-    private static Set<String> userIdList = Sets.newConcurrentHashSet();
+    private final static Set<String> USER_ID_LIST = Sets.newConcurrentHashSet();
 
     /**
      * 根据二级分类-获取所有实体店列表
@@ -196,8 +196,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
      */
     @Override
     public ShopInfoVO1 getShopInfoVO(String shopId) {
-        ShopInfoVO1 shopInfoVO = shopInfoMapper.getShopInfoVO(shopId);
-        return shopInfoVO;
+        return shopInfoMapper.getShopInfoVO(shopId);
     }
 
     /**
@@ -227,13 +226,11 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
 
     /**
      * 申请实体店
-     * @param applyShopDTO
-     * @return
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean applyShop(ApplyShopDTO applyShopDTO) {
-        if (!userIdList.add(applyShopDTO.getUid())) {
+        if (!USER_ID_LIST.add(applyShopDTO.getUid())) {
             throw new BusinessException("请勿重复提交!");
         }
         try {
@@ -257,7 +254,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
-            userIdList.remove(applyShopDTO.getUid());
+            USER_ID_LIST.remove(applyShopDTO.getUid());
         }
     }
     /**
@@ -344,10 +341,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
 
     /**
      * 根据条件查询酒店信息
-     * @param livePageVO
-     * @return
      */
-    // TODO
     @Override
     public PageDataVO getHotelInfoByCondition(LivePageVO livePageVO) {
         Integer limit = livePageVO.getLimit();
@@ -368,8 +362,8 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
                 continue;
             }
             for (String s : list) {
-                String tag_id = tagMapper.selectOneContent(s);
-                list1.add(tag_id);
+                String tagId = tagMapper.selectOneContent(s);
+                list1.add(tagId);
             }
 
             shopInfoVO.setShopTagsList(list1);

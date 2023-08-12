@@ -62,7 +62,9 @@
     <select id="getIndexShopInfoVOCount" resultType="java.lang.Integer">
         select count(*)
         from shop_info
-        WHERE category_id = #{categoryId} AND status=0
+        <if test="categoryId != null and categoryId != -1">
+            WHERE category_id = #{categoryId} AND status=0
+        </if>
     </select>
 
 
