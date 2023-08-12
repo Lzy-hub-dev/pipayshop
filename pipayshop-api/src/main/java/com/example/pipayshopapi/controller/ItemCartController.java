@@ -1,7 +1,7 @@
 package com.example.pipayshopapi.controller;
 
 
-import com.example.pipayshopapi.entity.vo.ItemCartVO;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ItemCartService;
@@ -29,9 +29,9 @@ public class ItemCartController {
 
     @GetMapping("selectItemCartByIds{userId}")
     @ApiOperation("根据用户id展示购物车列表")
-    public ResponseVO<List<ItemCartVO>> selectItemCartByIds(@PathVariable String userId){
+    public ResponseVO<PageDataVO> selectItemCartByIds(@PathVariable String userId){
         try {
-            List<ItemCartVO> list = itemCartService.selectItemCartByIds(userId);
+            PageDataVO list = itemCartService.selectItemCartByIds(userId);
             return ResponseVO.getSuccessResponseVo(list);
         }catch (Exception e){
             e.printStackTrace();

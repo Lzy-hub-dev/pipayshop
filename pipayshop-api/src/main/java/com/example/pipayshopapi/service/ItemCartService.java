@@ -2,7 +2,7 @@ package com.example.pipayshopapi.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ItemCart;
-import com.example.pipayshopapi.entity.vo.ItemCartVO;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public interface ItemCartService extends IService<ItemCart> {
     /**
      * 根据用户id查找购物车
      */
-    List<ItemCartVO> selectItemCartByIds(String userId);
+    PageDataVO selectItemCartByIds(String userId);
 
     /**
      * 放进购物车
