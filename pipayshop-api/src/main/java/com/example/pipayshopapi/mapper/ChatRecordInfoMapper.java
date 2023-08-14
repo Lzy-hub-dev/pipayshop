@@ -29,4 +29,6 @@ public interface ChatRecordInfoMapper extends BaseMapper<ChatRecordInfo> {
 
 
     List<ChatVO> getChatRecord(@Param("chatDataVO") ChatDataVO chatDataVO);
+
+    Integer getChatRecordSum(@Param("chatDataVO") ChatDataVO chatDataVO);
 }

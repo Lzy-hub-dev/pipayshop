@@ -3,7 +3,7 @@ package com.example.pipayshopapi.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ChatRecordInfo;
 import com.example.pipayshopapi.entity.vo.ChatDataVO;
-import com.example.pipayshopapi.entity.vo.ChatVO;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public interface ChatRecordInfoService extends IService<ChatRecordInfo> {
     /**
      * 获取聊天记录
      */
-    List<ChatVO> getChatRecord(ChatDataVO chatDataVO);
+    PageDataVO getChatRecord(ChatDataVO chatDataVO);
 }
 
 

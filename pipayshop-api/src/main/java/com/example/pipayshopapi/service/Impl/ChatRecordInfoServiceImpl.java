@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ChatRecordInfo;
 import com.example.pipayshopapi.entity.vo.ChatDataVO;
 import com.example.pipayshopapi.entity.vo.ChatVO;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.mapper.ChatRecordInfoMapper;
 import com.example.pipayshopapi.service.ChatRecordInfoService;
 import org.springframework.stereotype.Service;
@@ -53,9 +54,11 @@ public class ChatRecordInfoServiceImpl extends ServiceImpl<ChatRecordInfoMapper,
 
 
     @Override
-    public List<ChatVO> getChatRecord(ChatDataVO chatDataVO) {
+    public PageDataVO getChatRecord(ChatDataVO chatDataVO) {
         // 满足分页的page格式
         chatDataVO.setPage((chatDataVO.getPage() - 1) * chatDataVO.getLimit());
-        return chatRecordInfoMapper.getChatRecord(chatDataVO);
+        List<ChatVO> chatRecord = chatRecordInfoMapper.getChatRecord(chatDataVO);
+        Integer count = chatRecordInfoMapper.getChatRecordSum(chatDataVO);
+        return new PageDataVO(count, chatRecord);
     }
 }

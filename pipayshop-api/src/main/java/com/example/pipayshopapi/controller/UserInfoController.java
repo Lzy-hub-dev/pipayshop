@@ -1,7 +1,6 @@
 package com.example.pipayshopapi.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.pipayshopapi.config.RestTemplateConfig;
 import com.example.pipayshopapi.entity.UserInfo;
 import com.example.pipayshopapi.entity.dto.LoginDTO;
 import com.example.pipayshopapi.entity.vo.ItemMinInfoVo;
@@ -78,8 +77,6 @@ public class UserInfoController {
     @ApiOperation("登录")
     public ResponseVO<UserInfo> login(@RequestBody LoginDTO loginDTO) {
         try {
-
-
             UserInfo userInfo = userInfoService.login(loginDTO);
             if (userInfo == null) {
                 throw new Exception();

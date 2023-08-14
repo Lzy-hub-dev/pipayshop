@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.pipayshopapi.entity.ItemInfo;
 import com.example.pipayshopapi.entity.LoginRecord;
 import com.example.pipayshopapi.entity.UserInfo;
 import com.example.pipayshopapi.entity.dto.LoginDTO;
@@ -17,7 +18,9 @@ import com.example.pipayshopapi.mapper.ItemInfoMapper;
 import com.example.pipayshopapi.mapper.LoginRecordMapper;
 import com.example.pipayshopapi.mapper.UserInfoMapper;
 import com.example.pipayshopapi.service.UserInfoService;
+import com.example.pipayshopapi.util.Constants;
 import com.example.pipayshopapi.util.FileUploadUtil;
+import com.example.pipayshopapi.util.StringUtil;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -103,9 +106,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             //新用户
             UserInfo newUser = new UserInfo();
             // 属性转移
-            newUser.setUserName(loginDTO.getUserName());
+            String userName = loginDTO.getUserName();
+            newUser.setUserName(userName);
             newUser.setAccessToken(loginDTO.getAccessToken());
-            newUser.setUid(loginDTO.getUserId());
+            newUser.setUid(userId);
+            newUser.setUserImage(Constants.AVATAR_IMAG);
             // 插入数据
             int insert = userInfoMapper.insert(newUser);
             //创建用户账号
@@ -117,6 +122,14 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             loginRecordMapper.insert(loginRecord);
 
             if (insert < 2){throw new BusinessException(REGISTER_FALSE);}
+            // 给新用户开一家网店
+            ItemInfo itemInfo = new ItemInfo(null, StringUtil.generateShortId(), userName, false, null, 0.0, null, null,
+                    null, userId, 0, Constants.AVATAR_IMAG, 1);
+            int insert1 = itemInfoMapper.insert(itemInfo);
+            if (insert1 < 1) {
+                log.error("给新用户开一家网店失败");
+                throw new RuntimeException();
+            }
             // 获取最新的注册后的用户数据（包含默认值）
             return userInfoMapper.selectOne(new QueryWrapper<UserInfo>().eq("uid", userId));
 
