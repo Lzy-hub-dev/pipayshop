@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.pipayshopapi.entity.LoginRecord;
 import com.example.pipayshopapi.entity.UserInfo;
 import com.example.pipayshopapi.entity.dto.LoginDTO;
 import com.example.pipayshopapi.entity.vo.ItemMinInfoVo;
@@ -13,6 +14,7 @@ import com.example.pipayshopapi.entity.vo.UserInfoVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.AccountInfoMapper;
 import com.example.pipayshopapi.mapper.ItemInfoMapper;
+import com.example.pipayshopapi.mapper.LoginRecordMapper;
 import com.example.pipayshopapi.mapper.UserInfoMapper;
 import com.example.pipayshopapi.service.UserInfoService;
 import com.example.pipayshopapi.util.FileUploadUtil;
@@ -20,11 +22,16 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
+import org.lionsoul.ip2region.xdb.Searcher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 
@@ -49,7 +56,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Resource
     private AccountInfoMapper accountInfoMapper;
 
+    private Searcher searcher;
 
+    @Resource
+    private LoginRecordMapper loginRecordMapper;
     @Override
     @Transactional(rollbackFor = Exception.class)
     public UserInfo login(LoginDTO loginDTO) {
@@ -66,6 +76,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                 userInfo.setAccessToken(loginDTO.getAccessToken());
                 userInfoMapper.updateById(userInfo);
             }
+            // 记录登录
+            String ip = getIp();
+            String region = getIp2Region(ip);
+            LoginRecord loginRecord = new LoginRecord(userId, ip, region, new Date());
+            loginRecordMapper.insert(loginRecord);
             // 已注册
             return userInfo;
         }
@@ -95,7 +110,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             int insert = userInfoMapper.insert(newUser);
             //创建用户账号
             insert += accountInfoMapper.createAccount(loginDTO.getUserId());
-
+            // 记录登录
+            String ip = getIp();
+            String region = getIp2Region(ip);
+            LoginRecord loginRecord = new LoginRecord(userId, ip, region, new Date());
+            loginRecordMapper.insert(loginRecord);
 
             if (insert < 2){throw new BusinessException(REGISTER_FALSE);}
             // 获取最新的注册后的用户数据（包含默认值）
@@ -195,5 +214,70 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     public String getItemIdByUserId(String userId) {
         return userInfoMapper.getItemIdByUserId(userId);
+    }
+
+    private String getIp(){
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String ipAddress = null;
+        try {
+            // 获取请求客户端的ip
+            ipAddress = request.getHeader("x-forwarded-for");
+            if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+                ipAddress = request.getHeader("Proxy-Client-IP");
+            }
+            if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+                ipAddress = request.getHeader("WL-Proxy-Client-IP");
+            }
+            if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+                ipAddress = request.getRemoteAddr();
+                if (ipAddress.equals("127.0.0.1")||ipAddress.equals("0:0:0:0:0:0:0:1")) {
+                    ipAddress = "127.0.0.1";
+                }
+            }
+            // 判断ip是否符合规格
+            if (ipAddress != null && ipAddress.length() > 15) { // "***.***.***.***".length()
+                // = 15
+                if (ipAddress.indexOf(",") > 0) {
+                    ipAddress = ipAddress.substring(0, ipAddress.indexOf(","));
+                }
+            }
+        } catch (Exception e) {
+            ipAddress="";
+        }
+        return ipAddress;
+    }
+    public String getIp2Region(String ipAddress){
+
+
+        if ("127.0.0.1".equals(ipAddress) || ipAddress.startsWith("192.168")) {
+            return "局域网 ip";
+        }
+        String dbPath;
+        if (searcher == null) {
+            try {
+                // 加载ip2region 文件
+                searcher=Searcher.newWithFileOnly("pipayshop-api/src/main/resources/ipdb/ip2region.xdb");
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        String region = null;
+        String errorMessage = null;
+        try {
+            // 获取地区
+            region = searcher.search(ipAddress);
+        } catch (Exception e) {
+            errorMessage = e.getMessage();
+            if (errorMessage != null && errorMessage.length() > 256) {
+                errorMessage = errorMessage.substring(0,256);
+            }
+            e.printStackTrace();
+        }
+        // 输出 region
+        return region;
+
     }
 }
