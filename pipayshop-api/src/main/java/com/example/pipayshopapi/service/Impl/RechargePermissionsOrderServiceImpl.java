@@ -87,8 +87,8 @@ public class RechargePermissionsOrderServiceImpl extends ServiceImpl<RechargePer
         String orderId = StringUtil.generateShortId();
         Claims dataFromToken = TokenUtil.getDataFromToken(token);
         String uid = dataFromToken.get("uid", String.class);
-        Integer permissionsCount = dataFromToken.get("uid", Integer.class);
-        BigDecimal transactionAmount = new BigDecimal(dataFromToken.get("transactionAmount", Integer.class));
+        Integer permissionsCount = dataFromToken.get("permissionsCount", Integer.class);
+        BigDecimal transactionAmount = BigDecimal.valueOf(dataFromToken.get("transactionAmount", Double.class));
         Integer chargeType = dataFromToken.get("chargeType", Integer.class);
         RechargePermissionsOrder order = new RechargePermissionsOrder(null, orderId, uid, permissionsCount,
                 transactionAmount, null, null, null, chargeType);

@@ -2,8 +2,6 @@ package com.example.pipayshopapi.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ShopOrderInfo;
-import com.example.pipayshopapi.entity.dto.ChangePriceDTO;
-import com.example.pipayshopapi.entity.dto.ShopOrderDTO;
 import com.example.pipayshopapi.entity.vo.*;
 
 import java.util.List;
@@ -30,15 +28,15 @@ public interface ShopOrderInfoService extends IService<ShopOrderInfo> {
 
     void deleteFailOrders();
 
-    String generateUnpaidOrder(ShopOrderDTO shopOrderDTO);
+    String generateUnpaidOrder(String token);
 
-    boolean payOrder(PayOrderVO payOrderVO);
+    boolean payOrder(String token);
 
     PageDataVO getOrderListByShopId(GetOrderDataVO getOrderDataVO);
     /**
      * 未支付订单改价接口
      */
-    int changePrice(ChangePriceDTO priceDTO);
+    int changePrice(String token);
 
     PageDataVO getOrderLiveList(GetOrderDataVO getOrderDataVO);
 

@@ -1,8 +1,6 @@
 package com.example.pipayshopapi.controller;
 
 
-import com.example.pipayshopapi.entity.dto.ChangePriceDTO;
-import com.example.pipayshopapi.entity.dto.ShopOrderDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopOrderInfoService;
@@ -151,8 +149,8 @@ public class ShopOrderController {
     }
     @PostMapping("changePrice")
     @ApiOperation("未支付订单改价接口")
-    public ResponseVO<String> changePrice(@RequestBody ChangePriceDTO priceDTO) {
-            int update = shopOrderInfoService.changePrice(priceDTO);
+    public ResponseVO<String> changePrice(String token) {
+            int update = shopOrderInfoService.changePrice(token);
             if (update < 1){
                 throw new RuntimeException();
             }
@@ -178,10 +176,10 @@ public class ShopOrderController {
      */
     @PostMapping("generateUnpaidOrder")
     @ApiOperation("生成未支付订单")
-    public ResponseVO<String> generateUnpaidOrder(@RequestBody ShopOrderDTO shopOrderDTO) {
+    public ResponseVO<String> generateUnpaidOrder(String token) {
         try {
-            String orderId = shopOrderInfoService.generateUnpaidOrder(shopOrderDTO);
-            return ResponseVO.getSuccessResponseVo("生成未支付订单成功" + "订单id为：" + orderId);
+            String orderId = shopOrderInfoService.generateUnpaidOrder(token);
+            return ResponseVO.getSuccessResponseVo(orderId);
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new BusinessException("生成未支付订单失败，请联系后台人员");
@@ -194,9 +192,9 @@ public class ShopOrderController {
      */
     @PostMapping("payOrder")
     @ApiOperation("支付下单接口")
-    public ResponseVO<String> payOrder(@RequestBody PayOrderVO payOrderVO) {
+    public ResponseVO<String> payOrder(String token) {
         try {
-            boolean flag = shopOrderInfoService.payOrder(payOrderVO);
+            boolean flag = shopOrderInfoService.payOrder(token);
             if (!flag) {
                 throw new Exception();
             }

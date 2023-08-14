@@ -43,7 +43,7 @@ public class TransactionRecordServiceImpl extends ServiceImpl<TransactionRecordM
         Claims claims = TokenUtil.getDataFromToken(token);
         String shopId = claims.get("shopId", String.class);
         String userId = claims.get("user_id", String.class);
-        BigDecimal transactionAmount = new BigDecimal(claims.get("transactionAmount", Integer.class));
+        BigDecimal transactionAmount = BigDecimal.valueOf(claims.get("transactionAmount", Double.class));
         int insert = transactionRecordMapper.insert(new TransactionRecord(null, StringUtil.generateShortId()
                 , shopId, userId, transactionAmount, null, null));
         if (insert < 1) {

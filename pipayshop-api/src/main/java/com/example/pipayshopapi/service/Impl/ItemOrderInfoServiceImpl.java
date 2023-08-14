@@ -7,19 +7,24 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.AccountInfo;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.ItemOrderInfo;
-import com.example.pipayshopapi.entity.dto.ChangePriceDTO;
-import com.example.pipayshopapi.entity.vo.*;
+import com.example.pipayshopapi.entity.vo.ItemOrderDetailVO;
+import com.example.pipayshopapi.entity.vo.MyItemOrderInfoVO;
+import com.example.pipayshopapi.entity.vo.OrderListVO;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.AccountInfoMapper;
 import com.example.pipayshopapi.mapper.ItemCommodityInfoMapper;
 import com.example.pipayshopapi.mapper.ItemOrderInfoMapper;
 import com.example.pipayshopapi.service.ItemOrderInfoService;
 import com.example.pipayshopapi.util.StringUtil;
+import com.example.pipayshopapi.util.TokenUtil;
+import io.jsonwebtoken.Claims;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -110,13 +115,23 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public String generateUnpaidOrder(ItemOrderInfo itemOrderInfo) {
+    public String generateUnpaidOrder(String token) {
         // 生成orderId
         String orderId = StringUtil.generateShortId();
+        // 解析token
+        Claims dataFromToken = TokenUtil.getDataFromToken(token);
+        String uid = dataFromToken.get("uid", String.class);
+        String itemId = dataFromToken.get("itemId", String.class);
+        String buyerDataId = dataFromToken.get("buyerDataId", String.class);
+        BigDecimal transactionAmount = BigDecimal.valueOf(dataFromToken.get("transactionAmount", Double.class));
+        String commodityId = dataFromToken.get("commodityId", String.class);
+        Integer number = dataFromToken.get("number", Integer.class);
+        String commoditySpecification = dataFromToken.get("commoditySpecification", String.class);
+        // 生成插入的实体类
+        ItemOrderInfo itemOrderInfo = new ItemOrderInfo(null, orderId, transactionAmount, commodityId, uid, itemId
+                , null, null, null, null, buyerDataId, number, commoditySpecification);
         try {
-
-            itemOrderInfo.setOrderId(orderId);
-            int i = itemCommodityInfoMapper.reduceStock(itemOrderInfo.getNumber(), itemOrderInfo.getCommodityId());
+            int i = itemCommodityInfoMapper.reduceStock(number, commodityId);
             int insert = itemOrderInfoMapper.insert(itemOrderInfo);
             if (insert < 1 || i < 1) {
                 String message = "生成未支付订单失败";
@@ -135,27 +150,33 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean payOrder(PayOrderVO payOrderVO) {
+    public boolean payOrder(String token) {
+        Claims dataFromToken = TokenUtil.getDataFromToken(token);
+        String orderId = dataFromToken.get("orderId", String.class);
+        String uid1 = dataFromToken.get("uid", String.class);
+        BigDecimal transactionAmount = BigDecimal.valueOf(dataFromToken.get("transactionAmount", Double.class));
+        String commodityId = dataFromToken.get("commodityId", String.class);
+        Integer number = dataFromToken.get("number", Integer.class);
         // 校验订单id是否已经存在，保证接口的幂等性，避免重复下单
         Long count = itemOrderInfoMapper.selectCount(new QueryWrapper<ItemOrderInfo>()
-                .eq("order_id", payOrderVO.getOrderId())
+                .eq("order_id", orderId)
                 .eq("order_status", 1));
         if (count != 0){throw new BusinessException("该订单已经支付，请勿重复下单！");}
         // 用户余额更新
         int uid = accountInfoMapper.update(null, new UpdateWrapper<AccountInfo>()
-                .eq("uid", payOrderVO.getUid())
-                .setSql("point_balance = point_balance - " + payOrderVO.getTransactionAmount())
+                .eq("uid", uid1)
+                .setSql("point_balance = point_balance - " + transactionAmount)
                 .set("update_time", new Date()));
         if (uid < 1){throw new RuntimeException();}
         // 商品库存更新
         int update = itemCommodityInfoMapper.update(null, new UpdateWrapper<ItemCommodityInfo>()
-                .eq("commodity_id", payOrderVO.getCommodityId())
-                .setSql("inventory = inventory - "+payOrderVO.getNumber())
+                .eq("commodity_id", commodityId)
+                .setSql("inventory = inventory - "+number)
                 .set("update_time", new Date()));
         if (update < 1){throw new RuntimeException();}
         // 订单状态、修改时间更新
         int update1 = itemOrderInfoMapper.update(null, new UpdateWrapper<ItemOrderInfo>()
-                .eq("order_id", payOrderVO.getOrderId())
+                .eq("order_id", orderId)
                 .set("order_status", 1)
                 .set("update_time", new Date()));
         if (update1 < 1){throw new RuntimeException();}
@@ -179,14 +200,17 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int changePrice(ChangePriceDTO priceDTO) {
-        if (priceDTO.getPrice().doubleValue() < 0) {
+    public int changePrice(String token) {
+        Claims dataFromToken = TokenUtil.getDataFromToken(token);
+        String orderId = dataFromToken.get("orderId", String.class);
+        BigDecimal price = BigDecimal.valueOf(dataFromToken.get("price", Double.class));
+        if (price.doubleValue() < 0) {
             throw new BusinessException("输入的金额不合法");
         }
         return itemOrderInfoMapper.update(null, new LambdaUpdateWrapper<ItemOrderInfo>()
-                .eq(ItemOrderInfo::getOrderId, priceDTO.getOrderId())
+                .eq(ItemOrderInfo::getOrderId, orderId)
                 .eq(ItemOrderInfo::getOrderStatus, 0)
                 .eq(ItemOrderInfo::getDelFlag, 0)
-                .set(ItemOrderInfo::getTransactionAmount, priceDTO.getPrice()));
+                .set(ItemOrderInfo::getTransactionAmount, price));
     }
 }

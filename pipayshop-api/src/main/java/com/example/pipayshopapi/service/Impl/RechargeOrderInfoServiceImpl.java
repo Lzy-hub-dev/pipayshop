@@ -321,8 +321,8 @@ public class RechargeOrderInfoServiceImpl extends ServiceImpl<RechargeOrderInfoM
         // 解密JWT获取数据
         Claims claims = TokenUtil.getDataFromToken(token);
         String uid = claims.get("uid", String.class);
-        BigDecimal pointAmount = new BigDecimal(claims.get("point_amount", Integer.class));
-        BigDecimal piSum = new BigDecimal(claims.get("pi_sum", Integer.class));
+        BigDecimal pointAmount = BigDecimal.valueOf(claims.get("point_amount", Double.class));
+        BigDecimal piSum = BigDecimal.valueOf(claims.get("pi_sum", Double.class));
         // 生成未支付订单
         String orderId = StringUtil.generateShortId();
         RechargeOrderInfo rechargeOrderInfo = new RechargeOrderInfo(null, orderId, uid, pointAmount

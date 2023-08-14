@@ -52,10 +52,11 @@
         ) as follows
         from shop_info
         WHERE uid=#{uid}
+        and status = 0
             LIMIT #{page},#{limit}
     </select>
     <select id="getShopNumber" resultType="java.lang.Integer">
-        SELECT COUNT(*) FROM shop_info where uid=#{uid}
+        SELECT COUNT(*) FROM shop_info where uid=#{uid} and status = 0
     </select>
 
 

@@ -1,8 +1,9 @@
 package com.example.pipayshopapi.controller;
 
-import com.example.pipayshopapi.entity.ItemOrderInfo;
-import com.example.pipayshopapi.entity.dto.ChangePriceDTO;
-import com.example.pipayshopapi.entity.vo.*;
+import com.example.pipayshopapi.entity.vo.ItemOrderDetailVO;
+import com.example.pipayshopapi.entity.vo.OrderListVO;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ItemOrderInfoService;
 import io.swagger.annotations.Api;
@@ -124,13 +125,12 @@ public class ItemOrderController {
      */
     @PostMapping("changePrice")
     @ApiOperation("未支付订单改价接口")
-    public ResponseVO<String> changePrice(@RequestBody ChangePriceDTO priceDTO) {
-            int update = itemOrderInfoService.changePrice(priceDTO);
+    public ResponseVO<String> changePrice(String token) {
+            int update = itemOrderInfoService.changePrice(token);
             if (update < 1){
                 throw new RuntimeException();
             }
             return ResponseVO.getSuccessResponseVo("未支付订单改价成功");
-
     }
 
     /**
@@ -153,10 +153,10 @@ public class ItemOrderController {
      */
     @PostMapping("generateUnpaidOrder")
     @ApiOperation("生成未支付订单")
-    public ResponseVO<String> generateUnpaidOrder(@RequestBody ItemOrderInfo itemOrderInfo) {
+    public ResponseVO<String> generateUnpaidOrder(String token) {
         try {
-            String orderId = itemOrderInfoService.generateUnpaidOrder(itemOrderInfo);
-            return ResponseVO.getSuccessResponseVo("生成未支付订单成功" + "订单id为：" + orderId);
+            String orderId = itemOrderInfoService.generateUnpaidOrder(token);
+            return ResponseVO.getSuccessResponseVo(orderId);
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new BusinessException("生成未支付订单失败，请联系后台人员");
@@ -169,9 +169,9 @@ public class ItemOrderController {
      */
     @PostMapping("payOrder")
     @ApiOperation("支付下单接口")
-    public ResponseVO<String> payOrder(@RequestBody PayOrderVO payOrderVO) {
+    public ResponseVO<String> payOrder(String token) {
         try {
-            boolean flag = itemOrderInfoService.payOrder(payOrderVO);
+            boolean flag = itemOrderInfoService.payOrder(token);
             if (!flag) {
                 throw new Exception();
             }
