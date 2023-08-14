@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author zxb
@@ -17,28 +16,26 @@ import java.util.List;
 @NoArgsConstructor
 public class ChatRecordVO {
 
-
     /**
-     * 用户1
+     * 发送者
      */
-    private String userId1;
+    private String senderId;
 
     /**
-     * 用户2
+     * 接收者
      */
-    private String userId2;
+    private String receiverId;
 
     /**
-     * 最后发送时间
+     * 聊天内容
+     */
+    private String message;
+
+    /**
+     * 发送时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date sendTime;
-
-
-    /**
-     * 每条聊天的数据
-     */
-    private List<ChatVO> chatVOList;
 
 }

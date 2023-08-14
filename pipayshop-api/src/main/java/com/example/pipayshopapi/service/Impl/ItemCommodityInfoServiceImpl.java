@@ -247,7 +247,9 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
                     .eq("b_id", brandId)
                     .eq("del_flag", 0)
                     .select("title"));
-            commodityDetailVO.setTitle(brandInfo.getTitle());
+            if (brandInfo != null) {
+                commodityDetailVO.setTitle(brandInfo.getTitle());
+            }
         }
         // 封装该商品的评论总数
         int evaluateCount = itemCommodityEvaluateMapper.selectCount(new QueryWrapper<ItemCommodityEvaluate>()

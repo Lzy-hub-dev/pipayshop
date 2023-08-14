@@ -129,7 +129,7 @@ public class ShopInfoController {
     @ApiOperation("根据id删除实体店")
     public ResponseVO deleteShopInfoById(@PathVariable String shopId) {
         try {
-            Boolean aBoolean = infoService.deleteShopInfoById(shopId);
+            boolean aBoolean = infoService.deleteShopInfoById(shopId);
             return aBoolean ? ResponseVO.getSuccessResponseVo(null) : ResponseVO.getFalseResponseVo(null);
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -140,7 +140,7 @@ public class ShopInfoController {
     @ApiOperation("根据id修改实体店")
     public ResponseVO updateShopInfoById(@RequestBody ShopInfo shopInfo) {
         try {
-            Boolean aBoolean = infoService.updateShopInfoById(shopInfo);
+            boolean aBoolean = infoService.updateShopInfoById(shopInfo);
             return aBoolean ? ResponseVO.getSuccessResponseVo(null) : ResponseVO.getFalseResponseVo(null);
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -149,9 +149,9 @@ public class ShopInfoController {
     }
     @PostMapping("applyShop")
     @ApiOperation("申请实体店")
-    public ResponseVO applyShop(ApplyShopDTO applyShopDTO) {
+    public ResponseVO<String> applyShop(ApplyShopDTO applyShopDTO) {
         try {
-            Boolean insert = infoService.applyShop(applyShopDTO);
+            boolean insert = infoService.applyShop(applyShopDTO);
             if (!insert){
                 throw new Exception();
             }

@@ -32,25 +32,30 @@ public class ChatRecordInfo implements Serializable {
     private Long id;
 
     /**
-     * 对话者1
+     * 发送者
      */
-    private String userId1;
+    private String senderId;
 
     /**
-     * 对话者2
+     * 接收者
      */
-    private String userId2;
+    private String receiverId;
 
     /**
-     * 最后发送时间
+     * 聊天内容
+     */
+    private String message;
+
+    /**
+     * 发送时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date sendTime;
 
     /**
-     * 聊天记录
+     * 0:正常1:逻辑删除
      */
-    private String msgList;
+    private Integer delFlag;
 
 }
