@@ -1,14 +1,16 @@
 package com.example.pipayshopapi.controller;
 
 
-import com.example.pipayshopapi.entity.vo.RechargePermissionsOrderVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.RechargePermissionsOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
@@ -65,9 +67,9 @@ public class RechargePermissionsOrderController {
 
     @PostMapping("getUploadBalanceNoPayOrder")
     @ApiOperation("生成充值余额数据的未支付订单，并返回订单id")
-    public ResponseVO<String> getUploadBalanceNoPayOrder(@RequestBody RechargePermissionsOrderVO rechargePermissionsOrderVO){
+    public ResponseVO<String> getUploadBalanceNoPayOrder(String token){
         try {
-            String orderId = rechargePermissionsOrderService.getUploadBalanceNoPayOrder(rechargePermissionsOrderVO);
+            String orderId = rechargePermissionsOrderService.getUploadBalanceNoPayOrder(token);
             if(orderId == null || "".equals(orderId)){
                 throw new Exception();
             }

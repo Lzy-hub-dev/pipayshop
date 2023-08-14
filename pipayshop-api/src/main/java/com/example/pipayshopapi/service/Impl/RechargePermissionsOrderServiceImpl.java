@@ -7,7 +7,6 @@ import com.example.pipayshopapi.entity.AccountInfo;
 import com.example.pipayshopapi.entity.ItemInfo;
 import com.example.pipayshopapi.entity.RechargePermissionsOrder;
 import com.example.pipayshopapi.entity.UserInfo;
-import com.example.pipayshopapi.entity.vo.RechargePermissionsOrderVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.AccountInfoMapper;
 import com.example.pipayshopapi.mapper.ItemInfoMapper;
@@ -15,10 +14,13 @@ import com.example.pipayshopapi.mapper.RechargePermissionsOrderMapper;
 import com.example.pipayshopapi.mapper.UserInfoMapper;
 import com.example.pipayshopapi.service.RechargePermissionsOrderService;
 import com.example.pipayshopapi.util.StringUtil;
+import com.example.pipayshopapi.util.TokenUtil;
+import io.jsonwebtoken.Claims;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 
 /**
  * <p>
@@ -81,10 +83,15 @@ public class RechargePermissionsOrderServiceImpl extends ServiceImpl<RechargePer
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public String getUploadBalanceNoPayOrder(RechargePermissionsOrderVO orderVO) {
+    public String getUploadBalanceNoPayOrder(String token) {
         String orderId = StringUtil.generateShortId();
-        RechargePermissionsOrder order = new RechargePermissionsOrder(null, orderId, orderVO.getUid(), orderVO.getPermissionsCount(),
-                orderVO.getTransactionAmount(), null, null, null, orderVO.getChargeType());
+        Claims dataFromToken = TokenUtil.getDataFromToken(token);
+        String uid = dataFromToken.get("uid", String.class);
+        Integer permissionsCount = dataFromToken.get("uid", Integer.class);
+        BigDecimal transactionAmount = new BigDecimal(dataFromToken.get("transactionAmount", Integer.class));
+        Integer chargeType = dataFromToken.get("chargeType", Integer.class);
+        RechargePermissionsOrder order = new RechargePermissionsOrder(null, orderId, uid, permissionsCount,
+                transactionAmount, null, null, null, chargeType);
         // 生成订单
         int insert = rechargePermissionsOrderMapper.insert(order);
         if (insert < 1){throw new RuntimeException();}
