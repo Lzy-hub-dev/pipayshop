@@ -2,7 +2,6 @@ package com.example.pipayshopapi.service.Impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ChatRecordInfo;
-import com.example.pipayshopapi.entity.vo.ChatRecordVO;
 import com.example.pipayshopapi.entity.vo.ChatVO;
 import com.example.pipayshopapi.mapper.ChatRecordInfoMapper;
 import com.example.pipayshopapi.service.ChatRecordInfoService;
@@ -11,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>
@@ -34,14 +34,25 @@ public class ChatRecordInfoServiceImpl extends ServiceImpl<ChatRecordInfoMapper,
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean saveChatRecord(ChatRecordVO chatRecordVO) {
-        return false;
+    public boolean saveChatRecord(List<ChatRecordInfo> chatRecordInfoList) {
+        // 校验数据正确性
+        if (chatRecordInfoList == null || chatRecordInfoList.size() == 0) {
+            return false;
+        }
+        // 插入
+        long count = chatRecordInfoList.stream()
+                .parallel()
+                .filter(Objects::nonNull)
+                .peek(chatRecordInfo -> {
+                    chatRecordInfoMapper.insert(chatRecordInfo);
+                })
+                .count();
+        return count >= chatRecordInfoList.size();
     }
 
 
     @Override
-    public List<ChatVO> getChatRecord(String userId1, String userId2) {
-        return null;
-
+    public List<ChatVO> getChatRecord(String senderId, String receiverId) {
+        return chatRecordInfoMapper.getChatRecord(senderId, receiverId);
     }
 }

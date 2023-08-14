@@ -19,18 +19,17 @@ public class ChatVO {
     /**
      * 发送者id
      */
-    private String sendId;
+    private String senderId;
 
     /**
      * 发送时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date time;
+    private Date sendTime;
 
     /**
      * 消息内容
      */
-    private String content;
-
+    private String message;
 }
