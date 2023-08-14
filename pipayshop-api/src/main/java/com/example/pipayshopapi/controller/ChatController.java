@@ -1,6 +1,7 @@
 package com.example.pipayshopapi.controller;
 
 import com.example.pipayshopapi.entity.ChatRecordInfo;
+import com.example.pipayshopapi.entity.vo.ChatDataVO;
 import com.example.pipayshopapi.entity.vo.ChatVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -61,11 +62,11 @@ public class ChatController {
     /**
      * 获取聊天数据(分页 + 按时间倒序排列)
      */
-    @GetMapping("getChatRecord/{senderId}/{receiverId}")
+    @GetMapping("getChatRecord")
     @ApiOperation("获取聊天数据(分页 + 按时间倒序排列)")
-    public ResponseVO<List<ChatVO>> getChatRecord(@PathVariable String senderId, @PathVariable String receiverId) {
+    public ResponseVO<List<ChatVO>> getChatRecord(ChatDataVO chatDataVO) {
         try {
-            List<ChatVO> list = chatRecordInfoService.getChatRecord(senderId, receiverId);
+            List<ChatVO> list = chatRecordInfoService.getChatRecord(chatDataVO);
             return ResponseVO.getSuccessResponseVo(list);
         } catch (Exception e) {
             log.error("获取聊天记录失败,报错如下：{}", e.getMessage());

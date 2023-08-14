@@ -7,10 +7,22 @@
 
     <select id="getChatRecord" resultType="com.example.pipayshopapi.entity.vo.ChatVO">
         SELECT * FROM (
-            SELECT sender_id, message, send_time FROM chat_record_info WHERE sender_id = #{senderId} and receiver_id = #{receiverId} and del_flag = 0
+                SELECT
+                    sender_id, message, send_time
+                FROM
+                    chat_record_info
+                WHERE
+                    sender_id = #{chatDataVO.senderId} and receiver_id = #{chatDataVO.receiverId} and del_flag = 0
             UNION
-            SELECT sender_id, message, send_time FROM chat_record_info WHERE sender_id = #{receiverId} and receiver_id = #{senderId} and del_flag = 0
+                SELECT
+                    sender_id, message, send_time
+                FROM
+                    chat_record_info
+                WHERE
+                    sender_id = #{chatDataVO.receiverId} and receiver_id = #{chatDataVO.senderId} and del_flag = 0
         ) AS chat
-        ORDER BY send_time ASC
+        ORDER BY
+            send_time DESC
+        LIMIT ${chatDataVO.page}, ${chatDataVO.limit}
     </select>
 </mapper>
