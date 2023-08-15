@@ -234,13 +234,20 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
             throw new BusinessException("请勿重复提交!");
         }
         try {
-        // 属性转移
+            // 看该用户是否是vip用户，如果是就将他绑定的这家实体店直接升级为vip店铺
+            String uid = applyShopDTO.getUid();
+            UserInfo userInfo = userInfoMapper.selectOne(new QueryWrapper<UserInfo>()
+                    .eq("uid", uid)
+                    .eq("status", 0));
+            if (userInfo == null){return false;}
+            Integer membership = userInfo.getLevel();
+            // 属性转移
             ShopInfo shopInfo = new ShopInfo(null,StringUtil.generateShortId(),applyShopDTO.getShopName(),
                     applyShopDTO.getLocalhostLatitude(),applyShopDTO.getLocalhostLongitude(),
                     null,applyShopDTO.getPhone(),applyShopDTO.getAddress(),null,
                     applyShopDTO.getShopIntroduce(),JSON.toJSONString(applyShopDTO.getShopImagList()),
                     applyShopDTO.getShopImagList().get(0),applyShopDTO.getCategoryId(),
-                    applyShopDTO.getUid(),null,null,applyShopDTO.getUploadCommodityBalance(), applyShopDTO.getQrcode());
+                    uid,null,null,membership, applyShopDTO.getUploadCommodityBalance(), applyShopDTO.getQrcode());
         //用户剩余数量减一
             int update = userInfoMapper.update(null, new LambdaUpdateWrapper<UserInfo>()
                     .eq(UserInfo::getUid, applyShopDTO.getUid())
@@ -253,7 +260,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
             // 新增实体店
             int insert = shopInfoMapper.insert(shopInfo);
             if (insert < 1){return false;}
-            // TODO 如果是第一次绑定实体店的话要给他分配一个B端账号
+            // todo 如果是第一次绑定实体店的话要给他分配一个B端账号
 
             return false;
         } catch (Exception e) {

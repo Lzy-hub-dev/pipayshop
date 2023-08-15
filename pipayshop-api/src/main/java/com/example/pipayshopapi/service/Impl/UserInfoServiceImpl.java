@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ItemInfo;
 import com.example.pipayshopapi.entity.LoginRecord;
+import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.UserInfo;
 import com.example.pipayshopapi.entity.dto.LoginDTO;
 import com.example.pipayshopapi.entity.vo.ItemMinInfoVo;
@@ -73,7 +74,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         if (userInfo != null) {
             // 刷新记录当前登录的时间f
             userInfoMapper.update(null, new UpdateWrapper<UserInfo>()
-                    .eq("pi_name", loginDTO.getUserName()).set("last_login", new Date()));
+                    .eq("pi_name", userId).set("last_login", new Date()));
             //更新token
             if (!userInfo.getAccessToken().equals(loginDTO.getAccessToken())) {
                 userInfo.setAccessToken(loginDTO.getAccessToken());
@@ -313,6 +314,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                 .eq("uid", userId)
                 .eq("status", 0)
                 .set("level", 1));
+        // 将其名下的商店店铺都升级为vip店铺
+        shopInfoMapper.update(null, new UpdateWrapper<ShopInfo>()
+                .eq("uid", userId)
+                .eq("status", 0)
+                .set("membership", 1));
         return update > 0;
     }
 
@@ -322,8 +328,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                 .eq("uid", uid)
                 .eq("status", 0)
                 .eq("level", 1));
-        // todo 将其名下的商店店铺都升级为vip店铺
-//        shopInfoMapper.update()
         return count.intValue() == 1;
     }
 }

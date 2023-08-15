@@ -81,7 +81,7 @@ public class UserInfo implements Serializable {
     /**
      * 0:普通用户1:商家用户
      */
-    private Boolean level;
+    private Integer level;
 
     /**
      * 年龄

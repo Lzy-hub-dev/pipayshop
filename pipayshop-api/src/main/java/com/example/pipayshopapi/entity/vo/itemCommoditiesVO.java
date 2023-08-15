@@ -6,13 +6,6 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
-/**
- * @author:
- * @ClassName itemCommoditysVO
- * @Description TODO
- * @date 2023/8/4 11:15
- * @Version 1.0
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

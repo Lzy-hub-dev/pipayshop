@@ -6,13 +6,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-/**
- * @author: jiangjiafeng
- * @ClassName FansVO
- * @Description TODO
- * @date 2023/8/2 10:08
- * @Version 1.0
- */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

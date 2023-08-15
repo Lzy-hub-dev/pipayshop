@@ -58,7 +58,6 @@ public class ItemCommodityEvaluateServiceImpl extends ServiceImpl<ItemCommodityE
                 itemCommodityEvaluateAddVO.getEvaluate(),
                 itemCommodityEvaluateAddVO.getScore());
 
-        // TODO 评价后将订单的状态改为4
         int update = itemOrderInfoMapper.update(null, new UpdateWrapper<ItemOrderInfo>()
                 .eq("order_id", itemCommodityEvaluateAddVO.getOrderId())
                 .set("order_status", 4));

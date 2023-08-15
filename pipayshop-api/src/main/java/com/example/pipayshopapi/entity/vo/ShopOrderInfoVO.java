@@ -7,13 +7,6 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.util.Date;
 
-/**
- * @author: jiangjiafeng
- * @ClassName ShopOrderInfoVO
- * @Description TODO
- * @date 2023/7/29 15:30
- * @Version 1.0
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

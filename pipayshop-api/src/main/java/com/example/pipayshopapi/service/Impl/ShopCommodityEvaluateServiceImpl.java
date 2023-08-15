@@ -65,7 +65,6 @@ public class ShopCommodityEvaluateServiceImpl extends ServiceImpl<ShopCommodityE
         evaluate.setCommodityId(dto.getCommodityId());
         evaluate.setEvaluateId(StringUtil.generateShortId());
         evaluate.setStatus(false);
-        // TODO 评价后将订单的状态改为4
         int update = shopOrderInfoMapper.update(null, new UpdateWrapper<ShopOrderInfo>()
                 .eq("order_id", dto.getOrderId())
                 .set("order_status", 4));

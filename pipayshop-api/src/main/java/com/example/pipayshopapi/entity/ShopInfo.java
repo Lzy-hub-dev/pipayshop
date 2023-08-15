@@ -110,6 +110,11 @@ public class ShopInfo implements Serializable {
     private Date createTime;
 
     /**
+     * vip
+     */
+    private Integer membership;
+
+    /**
      * 商品上架数量
      */
     private Integer uploadCommodityBalance;

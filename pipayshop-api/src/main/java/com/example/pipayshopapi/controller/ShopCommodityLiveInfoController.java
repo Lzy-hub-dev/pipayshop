@@ -87,7 +87,6 @@ public class ShopCommodityLiveInfoController {
 
     @PostMapping("updateShopLiveInfo")
     @ApiOperation("根据房型id更改房型的详细信息")
-    // TODO 测
     public ResponseVO<String> updateShopLiveInfo(@RequestBody ShopCommodityLiveInfo shopCommodityLiveInfo){
         try {
             boolean result = shopCommodityLiveInfoService.updateShopLiveInfo(shopCommodityLiveInfo);
