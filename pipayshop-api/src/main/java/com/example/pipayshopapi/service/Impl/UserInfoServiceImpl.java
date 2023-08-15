@@ -13,10 +13,7 @@ import com.example.pipayshopapi.entity.dto.LoginDTO;
 import com.example.pipayshopapi.entity.vo.ItemMinInfoVo;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
 import com.example.pipayshopapi.exception.BusinessException;
-import com.example.pipayshopapi.mapper.AccountInfoMapper;
-import com.example.pipayshopapi.mapper.ItemInfoMapper;
-import com.example.pipayshopapi.mapper.LoginRecordMapper;
-import com.example.pipayshopapi.mapper.UserInfoMapper;
+import com.example.pipayshopapi.mapper.*;
 import com.example.pipayshopapi.service.UserInfoService;
 import com.example.pipayshopapi.util.Constants;
 import com.example.pipayshopapi.util.FileUploadUtil;
@@ -63,17 +60,20 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Resource
     private LoginRecordMapper loginRecordMapper;
+
+    @Resource
+    private ShopInfoMapper shopInfoMapper;
     @Override
     @Transactional(rollbackFor = Exception.class)
     public UserInfo login(LoginDTO loginDTO) {
         String userId = loginDTO.getUserId();
-        // 根据user_id查询数据库
-        UserInfo userInfo = userInfoMapper.selectOne(new QueryWrapper<UserInfo>().eq("uid", userId));
+        // 根据pi_name查询数据库
+        UserInfo userInfo = userInfoMapper.selectOne(new QueryWrapper<UserInfo>().eq("pi_name", loginDTO.getUserName()));
         // 根据是否为空选择是否进行注册登录
         if (userInfo != null) {
             // 刷新记录当前登录的时间f
             userInfoMapper.update(null, new UpdateWrapper<UserInfo>()
-                    .eq("uid", userId).set("last_login", new Date()));
+                    .eq("pi_name", loginDTO.getUserName()).set("last_login", new Date()));
             //更新token
             if (!userInfo.getAccessToken().equals(loginDTO.getAccessToken())) {
                 userInfo.setAccessToken(loginDTO.getAccessToken());
@@ -152,13 +152,25 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean updateUserInfoByUid(UserInfoVO userInfoVO) {
+        String userName = userInfoVO.getUserName();
+        String uid = userInfoVO.getUid();
         int result = userInfoMapper.update(null, new UpdateWrapper<UserInfo>()
-                                                            .eq("uid", userInfoVO.getUid())
-                                                            .set(!"".equals(userInfoVO.getUserName()) && userInfoVO.getUserName() != null,"user_name", userInfoVO.getUserName())
+                                                            .eq("uid", uid)
+                                                            .set(!"".equals(userName) && userInfoVO.getUserName() != null,"user_name", userInfoVO.getUserName())
                                                             .set(!"".equals(userInfoVO.getPersonalProfile() ) && userInfoVO.getPersonalProfile() != null,"personal_profile", userInfoVO.getPersonalProfile())
                                                             .set(userInfoVO.getLanguage() != null ,"language", userInfoVO.getLanguage())
                                                             .set(!"".equals(userInfoVO.getEmail()) && userInfoVO.getEmail() != null,"email", userInfoVO.getEmail())
                                                             .set(userInfoVO.getAge() != null,"age", userInfoVO.getAge()));
+        // 要求网店名和用户名保持一致，如果修改了用户名要求同步网店名
+        if (userName != null && !"".equals(userName)){
+            int update = itemInfoMapper.update(null, new UpdateWrapper<ItemInfo>()
+                    .eq("uid", uid)
+                    .eq("status", 0)
+                    .set("item_name", userName));
+            if (update < 1) {
+                throw new RuntimeException();
+            }
+        }
         return result > 0;
     }
 
@@ -292,5 +304,26 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         // 输出 region
         return region;
 
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean upToVipUser(String userId) {
+        int update = userInfoMapper.update(null, new UpdateWrapper<UserInfo>()
+                .eq("uid", userId)
+                .eq("status", 0)
+                .set("level", 1));
+        return update > 0;
+    }
+
+    @Override
+    public boolean isVipUser(String uid) {
+        Long count = userInfoMapper.selectCount(new QueryWrapper<UserInfo>()
+                .eq("uid", uid)
+                .eq("status", 0)
+                .eq("level", 1));
+        // todo 将其名下的商店店铺都升级为vip店铺
+//        shopInfoMapper.update()
+        return count.intValue() == 1;
     }
 }

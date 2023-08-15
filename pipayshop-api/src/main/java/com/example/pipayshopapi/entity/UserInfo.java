@@ -37,6 +37,11 @@ public class UserInfo implements Serializable {
     private String uid;
 
     /**
+     * Pi 的用户名
+     */
+    private String piName;
+
+    /**
      * 用户名
      */
     private String userName;

@@ -199,4 +199,39 @@ public class UserInfoController {
 
         }
     }
+
+    /**
+     * 当一个用户绑定的店铺数 >= 10 的时候，可以升级为商家用户
+     */
+    @PostMapping("upToVipUser/{userId}")
+    @ApiOperation("升级为商家用户")
+    public ResponseVO upToVipUser(@PathVariable String userId){
+        try {
+            boolean result = userInfoService.upToVipUser(userId);
+            if (!result){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("升级为商家用户成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("升级为商家用户失败，请联系后台人员");
+        }
+    }
+
+    /**
+     * 查看一个用户是否是VIP用户
+     */
+    @GetMapping("isVipUser/{uid}")
+    @ApiOperation("查看一个用户是否是VIP用户")
+    public ResponseVO<Boolean> isVipUser(@PathVariable String uid){
+        try {
+            boolean flag = userInfoService.isVipUser(uid);
+            return ResponseVO.getSuccessResponseVo(flag);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("失败");
+
+        }
+    }
+
 }

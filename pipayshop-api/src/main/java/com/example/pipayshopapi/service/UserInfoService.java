@@ -56,4 +56,8 @@ public interface UserInfoService extends IService<UserInfo> {
      * 用户登录注册
      */
     UserInfo login(LoginDTO loginDTO);
+
+    boolean upToVipUser(String userId);
+
+    boolean isVipUser(String uid);
 }

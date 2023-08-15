@@ -247,9 +247,14 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
                     .eq(UserInfo::getStatus, 0)
                     .gt(UserInfo::getShopBalance, 0)
                     .setSql("shop_balance=shop_balance-1"));
-            if (update > 0) {
-                return shopInfoMapper.insert(shopInfo) > 0;
+            if (update < 1) {
+                return false;
             }
+            // 新增实体店
+            int insert = shopInfoMapper.insert(shopInfo);
+            if (insert < 1){return false;}
+            // TODO 如果是第一次绑定实体店的话要给他分配一个B端账号
+
             return false;
         } catch (Exception e) {
             throw new RuntimeException(e);

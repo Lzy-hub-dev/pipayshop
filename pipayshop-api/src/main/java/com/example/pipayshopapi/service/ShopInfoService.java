@@ -66,17 +66,11 @@ public interface ShopInfoService extends IService<ShopInfo> {
 
     /**
      * 申请实体店
-     * @param applyShopDTO
-     * @return
      */
     boolean applyShop(ApplyShopDTO applyShopDTO );
 
     /**
      * 根据一级分类-获取所有实体店列表
-     * @param limit
-     * @param pages
-     * @param categoryId
-     * @return
      */
     PageDataVO getSecShopInfoListByCondition(Integer limit, Integer pages, String categoryId);
 
