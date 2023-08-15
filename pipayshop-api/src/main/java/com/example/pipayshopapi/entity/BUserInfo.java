@@ -30,9 +30,9 @@ public class BUserInfo implements Serializable {
 
 
     /**
-     * 实体店商家用户的id
+     * 实体店商家用户的piName
      */
-    private String userId;
+    private String piName;
 
     /**
      * 登录密码
@@ -58,7 +58,7 @@ public class BUserInfo implements Serializable {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date uodateTine;
+    private Date updateTime;
 
     /**
      * 0:正常1：警禁用

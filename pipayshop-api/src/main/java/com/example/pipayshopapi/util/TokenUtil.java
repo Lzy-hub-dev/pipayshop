@@ -14,13 +14,13 @@ public class TokenUtil {
     /**
      * 获取token，将传递的数据封装进JWT的荷载中
      */
-    public static String getToken(String userId){
-        if (userId == null){return null;}
+    public static String getToken(String piName){
+        if (piName == null){return null;}
         JwtBuilder jwtBuilder = Jwts.builder();
         return jwtBuilder
                 .setHeaderParam("typ", "JWT")
                 .setHeaderParam("alg", "HS256")
-                .claim("userId", userId)
+                .claim("pi_name", piName)
                 .setExpiration(new Date(System.currentTimeMillis() + Constants.USER_ACTIVE_TIME))
                 .signWith(SignatureAlgorithm.HS256, Constants.TOKEN_SECRET)
                 .compact();

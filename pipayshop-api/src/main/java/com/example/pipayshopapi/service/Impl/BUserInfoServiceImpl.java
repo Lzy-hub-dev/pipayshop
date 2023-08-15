@@ -31,11 +31,11 @@ public class BUserInfoServiceImpl extends ServiceImpl<BUserInfoMapper, BUserInfo
 
     @Override
     public String login(BUserLoginVO bUserLoginVO) {
-        String userId = bUserLoginVO.getUserId();
+        String piName = bUserLoginVO.getPiName();
         String passWord = bUserLoginVO.getPassWord();
         // 校验操作
         BUserInfo bUserInfo = bUserInfoMapper.selectOne(new QueryWrapper<BUserInfo>()
-                .eq("user_id", userId)
+                .eq("pi_name", piName)
                 .eq("passWord", passWord)
                 .eq("status", 0));
         if (bUserInfo == null) {
@@ -44,11 +44,10 @@ public class BUserInfoServiceImpl extends ServiceImpl<BUserInfoMapper, BUserInfo
         // 登录成功
         // 记录登录时间
         bUserInfoMapper.update(null, new UpdateWrapper<BUserInfo>()
-                .eq("user_id", userId)
+                .eq("pi_name", piName)
                 .set("last_login_time", new Date()));
         // 封装token
-        String token = TokenUtil.getToken(userId);
-        return token;
+        return TokenUtil.getToken(piName);
     }
 
 
@@ -56,10 +55,10 @@ public class BUserInfoServiceImpl extends ServiceImpl<BUserInfoMapper, BUserInfo
     @Transactional(rollbackFor = Exception.class)
     public boolean updatePassWord(BUserLoginVO bUserLoginVO) {
         int update = bUserInfoMapper.update(null, new UpdateWrapper<BUserInfo>()
-                .eq("user_id", bUserLoginVO.getUserId())
+                .eq("pi_name", bUserLoginVO.getPiName())
                 .eq("status", 0)
                 .set("password", bUserLoginVO.getPassWord())
-                .set("uodate_tine", new Date()));
+                .set("update_time", new Date()));
         return update > 0;
     }
 }

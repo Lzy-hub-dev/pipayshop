@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BUserLoginVO {
 
-    private String userId;
+    private String piName;
 
     private String passWord;
 }

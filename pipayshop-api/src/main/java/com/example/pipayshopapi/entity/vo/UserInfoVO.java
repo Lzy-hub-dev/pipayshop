@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * @author Hellow
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,6 +16,11 @@ public class UserInfoVO {
      * 用户id
      */
     private String uid;
+
+    /**
+     * pi的name
+     */
+    private String piName;
 
     /**
      * 用户名

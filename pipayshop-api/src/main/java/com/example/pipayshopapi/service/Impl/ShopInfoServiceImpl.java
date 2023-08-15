@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.pipayshopapi.entity.BUserInfo;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.ShopTags;
 import com.example.pipayshopapi.entity.UserInfo;
@@ -13,6 +14,7 @@ import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
 import com.example.pipayshopapi.entity.dto.ShopDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
+import com.example.pipayshopapi.mapper.BUserInfoMapper;
 import com.example.pipayshopapi.mapper.ShopInfoMapper;
 import com.example.pipayshopapi.mapper.ShopTagsMapper;
 import com.example.pipayshopapi.mapper.UserInfoMapper;
@@ -27,10 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * <p>
@@ -52,6 +51,9 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     private UserInfoMapper userInfoMapper;
 
     private final static Set<String> USER_ID_LIST = Sets.newConcurrentHashSet();
+
+    @Resource
+    private BUserInfoMapper bUserInfoMapper;
 
     /**
      * 根据二级分类-获取所有实体店列表
@@ -239,7 +241,9 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
             UserInfo userInfo = userInfoMapper.selectOne(new QueryWrapper<UserInfo>()
                     .eq("uid", uid)
                     .eq("status", 0));
-            if (userInfo == null){return false;}
+            if (userInfo == null){
+                throw new BusinessException("申请实体店失败");
+            }
             Integer membership = userInfo.getLevel();
             // 属性转移
             ShopInfo shopInfo = new ShopInfo(null,StringUtil.generateShortId(),applyShopDTO.getShopName(),
@@ -255,13 +259,26 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
                     .gt(UserInfo::getShopBalance, 0)
                     .setSql("shop_balance=shop_balance-1"));
             if (update < 1) {
-                return false;
+                throw new BusinessException("申请实体店失败");
+            }
+            // 如果是第一次绑定实体店的话要给他分配一个B端账号
+            int shopSum = shopInfoMapper.selectCount(new QueryWrapper<ShopInfo>()
+                    .eq("uid", uid)).intValue();
+            if (shopSum == 0) {
+                // 注册一个B端账号
+                Date date = new Date();
+                BUserInfo bUserInfo = new BUserInfo(null, userInfo.getPiName(), userInfo.getPiName()
+                        , date, date, date, 0);
+                int insert = bUserInfoMapper.insert(bUserInfo);
+                if (insert < 1){
+                    throw new BusinessException("申请实体店失败");
+                }
             }
             // 新增实体店
             int insert = shopInfoMapper.insert(shopInfo);
-            if (insert < 1){return false;}
-            // todo 如果是第一次绑定实体店的话要给他分配一个B端账号
-
+            if (insert < 1){
+                throw new BusinessException("申请实体店失败");
+            }
             return false;
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -277,7 +294,6 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         Integer n = shopInfoMapper.getAllIndexShopInfoVO(categoryId);
         // stata==1,按评分从低到高；stata==2,按评分从高到低
         List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVOById(categoryId, (pages - 1) * limit, limit);
-        // TODO
         for (IndexShopInfoVO shopInfoVO : indexShopInfoVO) {
             List<String> list1 = new ArrayList<>();
             List<String> list = JSON.parseArray(shopInfoVO.getTagList(), String.class);

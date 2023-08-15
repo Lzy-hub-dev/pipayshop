@@ -69,12 +69,13 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     public UserInfo login(LoginDTO loginDTO) {
         String userId = loginDTO.getUserId();
         // 根据pi_name查询数据库
-        UserInfo userInfo = userInfoMapper.selectOne(new QueryWrapper<UserInfo>().eq("pi_name", loginDTO.getUserName()));
+        String userName = loginDTO.getUserName();
+        UserInfo userInfo = userInfoMapper.selectOne(new QueryWrapper<UserInfo>().eq("pi_name", userName));
         // 根据是否为空选择是否进行注册登录
         if (userInfo != null) {
             // 刷新记录当前登录的时间f
             userInfoMapper.update(null, new UpdateWrapper<UserInfo>()
-                    .eq("pi_name", userId).set("last_login", new Date()));
+                    .eq("pi_name", userName).set("last_login", new Date()));
             //更新token
             if (!userInfo.getAccessToken().equals(loginDTO.getAccessToken())) {
                 userInfo.setAccessToken(loginDTO.getAccessToken());
@@ -100,14 +101,13 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             String string = response.body().string();
             JSONObject jsonObject1 = JSON.parseObject(string);
 
-            if (!jsonObject1.getString("username").equals(loginDTO.getUserName())) {
+            if (!jsonObject1.getString("username").equals(userName)) {
                 return null;
             }
 
             //新用户
             UserInfo newUser = new UserInfo();
             // 属性转移
-            String userName = loginDTO.getUserName();
             newUser.setPiName(userName);
             newUser.setUserName(userName);
             newUser.setAccessToken(loginDTO.getAccessToken());
@@ -116,7 +116,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             // 插入数据
             int insert = userInfoMapper.insert(newUser);
             //创建用户账号
-            insert += accountInfoMapper.createAccount(loginDTO.getUserId());
+            insert += accountInfoMapper.createAccount(userId);
             // 记录登录
             String ip = getIp();
             String region = getIp2Region(ip);
