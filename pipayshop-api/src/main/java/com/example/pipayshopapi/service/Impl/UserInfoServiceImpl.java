@@ -100,7 +100,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             String string = response.body().string();
             JSONObject jsonObject1 = JSON.parseObject(string);
 
-            if (!jsonObject1.getString("uid").equals(loginDTO.getUserId())) {
+            if (!jsonObject1.getString("username").equals(loginDTO.getUserName())) {
                 return null;
             }
 
@@ -108,6 +108,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             UserInfo newUser = new UserInfo();
             // 属性转移
             String userName = loginDTO.getUserName();
+            newUser.setPiName(userName);
             newUser.setUserName(userName);
             newUser.setAccessToken(loginDTO.getAccessToken());
             newUser.setUid(userId);
