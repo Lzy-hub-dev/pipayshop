@@ -12,7 +12,6 @@ import com.example.pipayshopapi.entity.ShopTags;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
-import com.example.pipayshopapi.mapper.ShopCommodityEvaluateMapper;
 import com.example.pipayshopapi.mapper.ShopCommodityInfoMapper;
 import com.example.pipayshopapi.mapper.ShopInfoMapper;
 import com.example.pipayshopapi.mapper.ShopTagsMapper;
@@ -41,8 +40,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
 
     @Resource
     private ShopCommodityInfoMapper shopCommodityInfoMapper;
-    @Resource
-    private ShopCommodityEvaluateMapper shopCommodityEvaluateMapper;
+
     @Resource
     private ShopTagsMapper shopTagsMapper;
     @Resource
@@ -62,7 +60,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
                 applyShopCommodityDTO.getCommodityDetail(), applyShopCommodityDTO.getPrice(),
                 null, applyShopCommodityDTO.getShopId(), null, null,
                 applyShopCommodityDTO.getValidityTime(), applyShopCommodityDTO.getResidue(),
-                applyShopCommodityDTO.getReservationInformation(), 2,
+                applyShopCommodityDTO.getReservationInformation(), 0,
                 null, null);
         //shop-1剩余数量
         int shopId = shopInfoMapper.update(null, new UpdateWrapper<ShopInfo>()
