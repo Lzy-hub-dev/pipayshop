@@ -32,6 +32,10 @@ public class FileUploadUtil {
     //酒店头像图片储存位置
     public static final String ROOM_TOP_IMG="room_top_img";
 
+    // 网店首页的分类栏的图片
+    public static final String ITEM_TOP_CATEGORY_IMG="item_category_top";
+
+
     //实体店分类图片储存位置
     public static String CATEGORY_IMG="shop_category_img";
     //酒店轮播图储存位置

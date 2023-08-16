@@ -8,10 +8,12 @@ import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.ItemInfoMapper;
 import com.example.pipayshopapi.service.ItemCommodityInfoService;
 import com.example.pipayshopapi.service.ItemInfoService;
+import com.example.pipayshopapi.util.FileUploadUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -182,9 +184,17 @@ public class ItemInfoController {
     }
 
     /**
-     * TODO
+     * 网店首页的分类栏上传图片
      */
-
-
-
+    @PostMapping("itemTopCategoryImags")
+    @ApiOperation("网店首页的分类栏上传图片")
+    public ResponseVO<String> itemTopCategoryImags(MultipartFile multipartFile){
+        try {
+            String path = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.ITEM_TOP_CATEGORY_IMG);
+            return ResponseVO.getSuccessResponseVo(path);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("网店首页的分类栏上传图片失败，请联系后台人员");
+        }
+    }
 }
