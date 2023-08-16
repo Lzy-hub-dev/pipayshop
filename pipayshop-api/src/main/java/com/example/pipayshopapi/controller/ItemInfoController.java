@@ -189,8 +189,9 @@ public class ItemInfoController {
     @PostMapping("itemTopCategoryImags")
     @ApiOperation("网店首页的分类栏上传图片")
     @CrossOrigin
-    public ResponseVO<String> itemTopCategoryImags(MultipartFile multipartFile){
+    public ResponseVO<String> itemTopCategoryImags(@RequestParam("file")MultipartFile multipartFile){
         try {
+            log.error("file-----------------------------------"+multipartFile);
             String path = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.ITEM_TOP_CATEGORY_IMG);
             return ResponseVO.getSuccessResponseVo(path);
         }catch (Exception e){
