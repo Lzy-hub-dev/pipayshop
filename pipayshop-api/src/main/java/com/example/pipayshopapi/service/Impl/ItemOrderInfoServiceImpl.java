@@ -124,7 +124,7 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
         String uid = dataFromToken.get("uid", String.class);
         String itemId = dataFromToken.get("itemId", String.class);
         String buyerDataId = dataFromToken.get("buyerDataId", String.class);
-        BigDecimal transactionAmount = BigDecimal.valueOf(dataFromToken.get("transactionAmount", Double.class));
+        BigDecimal transactionAmount = BigDecimal.valueOf(Double.parseDouble(dataFromToken.get("transactionAmount", String.class)));
         String commodityId = dataFromToken.get("commodityId", String.class);
         Integer number = dataFromToken.get("number", Integer.class);
         String commoditySpecification = dataFromToken.get("commoditySpecification", String.class);
@@ -155,7 +155,7 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
         Claims dataFromToken = TokenUtil.getDataFromToken(token);
         String orderId = dataFromToken.get("orderId", String.class);
         String uid1 = dataFromToken.get("uid", String.class);
-        BigDecimal transactionAmount = BigDecimal.valueOf(dataFromToken.get("transactionAmount", Double.class));
+        BigDecimal transactionAmount = BigDecimal.valueOf(Double.parseDouble(dataFromToken.get("transactionAmount", String.class)));
         String commodityId = dataFromToken.get("commodityId", String.class);
         Integer number = dataFromToken.get("number", Integer.class);
         // 校验订单id是否已经存在，保证接口的幂等性，避免重复下单
@@ -204,7 +204,7 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
     public int changePrice(String token) {
         Claims dataFromToken = TokenUtil.getDataFromToken(token);
         String orderId = dataFromToken.get("orderId", String.class);
-        BigDecimal price = BigDecimal.valueOf(dataFromToken.get("price", Double.class));
+        BigDecimal price = BigDecimal.valueOf(Double.parseDouble(dataFromToken.get("price", String.class)));
         if (price.doubleValue() < 0) {
             throw new BusinessException("输入的金额不合法");
         }

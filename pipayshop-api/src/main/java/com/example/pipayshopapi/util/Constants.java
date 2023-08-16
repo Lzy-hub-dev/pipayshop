@@ -6,9 +6,9 @@ package com.example.pipayshopapi.util;
 public class Constants {
 
     /**
-     用户登录的失效期限是3小时
+     用户登录的失效期限是8小时
      */
-    public static final Integer USER_ACTIVE_TIME = 180 * 60;
+    public static final Integer USER_ACTIVE_TIME = 60 * 1000;
 
     /**
      * JWT密钥

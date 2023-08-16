@@ -75,7 +75,6 @@ public class FileUploadUtil {
             return "文件名不能为空";
         }
 
-
         String postStr = fileName.substring(fileName.lastIndexOf("."));
         String preStr = StringUtil.generateShortId();
         fileName = preStr +  postStr;
@@ -96,6 +95,8 @@ public class FileUploadUtil {
 
         return SEPARATOR+PRE+path+SEPARATOR+fileName;
     }
+
+
     /**
      *删除文件
      * @param fileName 这是图片的路径
