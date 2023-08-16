@@ -71,17 +71,17 @@ public class ShopCommodityLiveInfoController {
 
 
     @PostMapping("insertShopLiveInfo")
-    @ApiOperation("增加房型的详细信息")
-    public ResponseVO<String> insertShopLiveInfo(@RequestBody ShopCommodityLiveInfo shopCommodityLiveInfo){
+    @ApiOperation("发布实体店酒店的服务")
+    public ResponseVO<String> insertShopLiveInfo(@RequestBody ShopCommodityLiveInfoVO1 shopCommodityLiveInfo){
         try {
             boolean result = shopCommodityLiveInfoService.insertShopLiveInfo(shopCommodityLiveInfo);
             if (!result){
                 throw new Exception();
             }
-            return ResponseVO.getSuccessResponseVo("增加房型的详细信息成功");
+            return ResponseVO.getSuccessResponseVo("发布实体店酒店的服务成功");
         }catch (Exception e){
             e.printStackTrace();
-            throw new BusinessException("增加房型的详细信息失败，请联系后台人员");
+            throw new BusinessException("发布实体店酒店的服务信息失败，请联系后台人员");
         }
     }
 
@@ -168,20 +168,20 @@ public class ShopCommodityLiveInfoController {
         }
     }
 
-    @PostMapping("insertShopLive")
-    @ApiOperation("发布实体店酒店的服务")
-    public ResponseVO insertShopLive(@RequestBody ShopCommodityLiveInfo shopCommodityLiveInfo){
-        try {
-            boolean result = shopCommodityLiveInfoService.insertShopLive(shopCommodityLiveInfo);
-            if (!result){
-                throw new Exception();
-            }
-            return ResponseVO.getSuccessResponseVo("发布实体店酒店的服务成功");
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new BusinessException("发布实体店酒店的服务失败，请联系后台人员");
-        }
-    }
+//    @PostMapping("insertShopLive")
+//    @ApiOperation("发布实体店酒店的服务")
+//    public ResponseVO insertShopLive(@RequestBody ShopCommodityLiveInfo shopCommodityLiveInfo){
+//        try {
+//            boolean result = shopCommodityLiveInfoService.insertShopLive(shopCommodityLiveInfo);
+//            if (!result){
+//                throw new Exception();
+//            }
+//            return ResponseVO.getSuccessResponseVo("发布实体店酒店的服务成功");
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            throw new BusinessException("发布实体店酒店的服务失败，请联系后台人员");
+//        }
+//    }
 
     @PostMapping("updateShopLive")
     @ApiOperation("根据房型id更改房型信息")

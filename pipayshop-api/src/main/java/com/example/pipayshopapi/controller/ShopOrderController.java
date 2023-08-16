@@ -186,6 +186,21 @@ public class ShopOrderController {
         }
     }
 
+    /**
+     * 生成酒店未支付订单
+     */
+    @PostMapping("generateUnpaidLiveOrder")
+    @ApiOperation("生成酒店未支付订单")
+    public ResponseVO<String> generateUnpaidLiveOrder(String token) {
+        try {
+            String orderId = shopOrderInfoService.generateUnpaidLiveOrder(token);
+            return ResponseVO.getSuccessResponseVo(orderId);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new BusinessException("生成酒店未支付订单失败，请联系后台人员");
+        }
+    }
+
 
     /**
      支付下单接口
@@ -205,6 +220,23 @@ public class ShopOrderController {
         }
     }
 
+    /**
+     支付酒店下单接口
+     */
+    @PostMapping("payLiveOrder")
+    @ApiOperation("支付酒店下单接口")
+    public ResponseVO<String> payLiveOrder(String token) {
+        try {
+            boolean flag = shopOrderInfoService.payLiveOrder(token);
+            if (!flag) {
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("支付酒店下单成功!");
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new BusinessException("支付酒店下单失败，请联系后台人员");
+        }
+    }
 
 
     /**

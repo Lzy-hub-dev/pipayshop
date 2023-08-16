@@ -1,17 +1,16 @@
 package com.example.pipayshopapi.service.Impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopCommodityLiveInfo;
 import com.example.pipayshopapi.entity.ShopHotelRecord;
+import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.ShopOrderInfo;
 import com.example.pipayshopapi.entity.dto.ShopHotelRecordDTO;
 import com.example.pipayshopapi.entity.vo.*;
-import com.example.pipayshopapi.mapper.ShopCommodityLiveInfoMapper;
-import com.example.pipayshopapi.mapper.ShopEvaluateMapper;
-import com.example.pipayshopapi.mapper.ShopHotelRecordMapper;
-import com.example.pipayshopapi.mapper.ShopOrderInfoMapper;
+import com.example.pipayshopapi.mapper.*;
 import com.example.pipayshopapi.service.ShopCommodityLiveInfoService;
 import com.example.pipayshopapi.service.ShopHotelRecordService;
 import com.example.pipayshopapi.util.StringUtil;
@@ -54,6 +53,8 @@ public class ShopCommodityLiveInfoServiceImpl extends ServiceImpl<ShopCommodityL
     @Resource
     private ShopHotelRecordMapper shopHotelRecordMapper;
 
+    @Resource ShopInfoMapper shopInfoMapper;
+
     /**
      * 根据房型id查找房型的详细信息
      */
@@ -93,8 +94,30 @@ public class ShopCommodityLiveInfoServiceImpl extends ServiceImpl<ShopCommodityL
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean insertShopLiveInfo(ShopCommodityLiveInfo shopCommodityLiveInfo) {
-        shopCommodityLiveInfo.setRoomId(StringUtil.generateShortId());
+    public boolean insertShopLiveInfo(ShopCommodityLiveInfoVO1 shopCommodityLiveInfoVO1) {
+        //判断用户是否是vip
+        int count = shopInfoMapper.selectCount(new QueryWrapper<ShopInfo>()
+                .eq("shop_id", shopCommodityLiveInfoVO1.getShopId())
+                .eq("status", 0)
+                .eq("membership", 1)).intValue();
+
+        //shop-1剩余数量
+        int shopId = shopInfoMapper.update(null, new UpdateWrapper<ShopInfo>()
+                .eq("shop_id", shopCommodityLiveInfoVO1.getShopId())
+                .setSql("upload_commodity_balance= upload_commodity_balance -1"));
+        if (shopId < 1){throw new RuntimeException();}
+
+        ShopCommodityLiveInfo shopCommodityLiveInfo = new ShopCommodityLiveInfo(null,StringUtil.generateShortId(),
+                shopCommodityLiveInfoVO1.getRoomTypeName(),shopCommodityLiveInfoVO1.getShopId(),
+                shopCommodityLiveInfoVO1.getInventory(),shopCommodityLiveInfoVO1.getDetail(),
+                JSON.toJSONString(shopCommodityLiveInfoVO1.getTagList()), JSON.toJSONString(shopCommodityLiveInfoVO1.getImageList()),
+                shopCommodityLiveInfoVO1.getLand(),shopCommodityLiveInfoVO1.getRoom(),
+                shopCommodityLiveInfoVO1.getRestRoom(),shopCommodityLiveInfoVO1.getBed(),
+                shopCommodityLiveInfoVO1.getAdult(),shopCommodityLiveInfoVO1.getChildren(),
+                shopCommodityLiveInfoVO1.getRestricted(),JSON.toJSONString(shopCommodityLiveInfoVO1.getBasics()),
+                JSON.toJSONString(shopCommodityLiveInfoVO1.getBath()),JSON.toJSONString(shopCommodityLiveInfoVO1.getAppliance()),
+                shopCommodityLiveInfoVO1.getPrice(),0,(count==1)?1:0,shopCommodityLiveInfoVO1.getImageList().get(0),
+                2,shopCommodityLiveInfoVO1.getBedType(),shopCommodityLiveInfoVO1.getFloor(),shopCommodityLiveInfoVO1.getIsAdd(),0);
         int result = shopCommodityLiveInfoMapper.insert(shopCommodityLiveInfo);
         return result>0;
     }
@@ -205,7 +228,7 @@ public class ShopCommodityLiveInfoServiceImpl extends ServiceImpl<ShopCommodityL
                 shopCommodityLiveInfoUpVO.getBasics(), shopCommodityLiveInfoUpVO.getBath(),
                 shopCommodityLiveInfoUpVO.getAppliance(), shopCommodityLiveInfoUpVO.getPrice(),
                 null, null, shopCommodityLiveInfoUpVO.getAvatarImag(), null, shopCommodityLiveInfoUpVO.getBedType(),
-                shopCommodityLiveInfoUpVO.getFloor(), shopCommodityLiveInfoUpVO.getIsAdd());
+                shopCommodityLiveInfoUpVO.getFloor(), shopCommodityLiveInfoUpVO.getIsAdd(),null);
         int result = shopCommodityLiveInfoMapper.update(shopCommodityLiveInfo, new UpdateWrapper<ShopCommodityLiveInfo>()
                 .eq("room_id", shopCommodityLiveInfoUpVO.getRoomId()));
         return result > 0;

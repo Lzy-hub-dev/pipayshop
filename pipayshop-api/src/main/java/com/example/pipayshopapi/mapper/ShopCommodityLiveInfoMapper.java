@@ -39,4 +39,12 @@ public interface ShopCommodityLiveInfoMapper extends BaseMapper<ShopCommodityLiv
     List<ShopCommodityLiveVO> selectShopCommodityLiveVO(@Param("limit")Integer limit, @Param("pages")Integer pages);
 
     Integer selectAllShopCommodityLiveVO();
+
+    int reduceLiveStock(@Param("num")Integer num,@Param("commodityId")String commodityId);
+
+    /**
+     * 根据购买数量、商品id =》商品库存复原
+     * @return
+     */
+    int addLiveStock(@Param("num")Integer num,@Param("commodityId")String commodityId);
 }

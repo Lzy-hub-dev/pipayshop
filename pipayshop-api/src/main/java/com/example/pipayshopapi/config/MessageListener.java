@@ -41,6 +41,8 @@ public class MessageListener {
             shopOrderInfoService.failOrder(split[1]);
         } else if (split[0].equals("hotel")) {
 
+        }else if (split[0].equals("shopLive")){
+            shopOrderInfoService.failLiveOrder(split[1]);
         }
     }
 

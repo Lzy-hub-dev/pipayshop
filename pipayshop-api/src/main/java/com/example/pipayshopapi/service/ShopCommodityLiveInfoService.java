@@ -26,7 +26,7 @@ public interface ShopCommodityLiveInfoService extends IService<ShopCommodityLive
     /**
      * 增加房型的详细信息
      */
-    boolean insertShopLiveInfo(ShopCommodityLiveInfo shopCommodityLiveInfo);
+    boolean insertShopLiveInfo(ShopCommodityLiveInfoVO1 shopCommodityLiveInfo);
 
     /**
      * 根据房型id更改房型的详细信息

@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.pipayshopapi.mapper.ShopCommodityLiveInfoMapper">
+    <insert id="addLiveStock">
+        UPDATE
+            shop_commodity_live_info
+        SET
+            inventory = inventory+#{num}
+        WHERE
+            room_id=#{commodityId}
+    </insert>
 
     <select id="selectShopCommodityLiveInfoList" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoListVO">
         select room_id,room_type_name,tag_list,land,price,avatar_imag,bed_type
@@ -33,4 +41,15 @@
                               GROUP BY e.commodity_id
                               ORDER BY e.create_time DESC) p
     </select>
+
+    <update id="reduceLiveStock">
+        UPDATE
+            shop_commodity_live_info
+        SET
+            inventory = inventory-#{num}
+        WHERE
+            room_id=#{commodityId}
+          AND
+            inventory>=#{num}
+    </update>
 </mapper>

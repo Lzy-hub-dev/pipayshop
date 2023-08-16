@@ -26,6 +26,8 @@ public interface ShopOrderInfoService extends IService<ShopOrderInfo> {
 
     int failOrder(String orderId);
 
+    int failLiveOrder(String orderId);
+
     void deleteFailOrders();
 
     String generateUnpaidOrder(String token);
@@ -43,4 +45,8 @@ public interface ShopOrderInfoService extends IService<ShopOrderInfo> {
     PageDataVO getOrderLiveListByShopId(GetOrderDataVO getOrderDataVO);
 
     ShopLiveOrderDetailVO getLiveOrderDetail(String orderId);
+
+    String generateUnpaidLiveOrder(String token);
+
+    boolean payLiveOrder(String token);
 }
