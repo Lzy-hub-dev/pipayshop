@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 
 
-//@Component
-//@RabbitListener(queues = QueueConfig.QUEUE_MESSAGE)
+@Component
+@RabbitListener(queues = QueueConfig.QUEUE_MESSAGE)
 public class MessageListener {
 
 

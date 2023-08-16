@@ -183,7 +183,7 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
     public String generateUnpaidLiveOrder(String token) {
         // 解析令牌
         Claims dataFromToken = TokenUtil.getDataFromToken(token);
-        BigDecimal transactionAmount = BigDecimal.valueOf(dataFromToken.get("transactionAmount", Double.class));
+        BigDecimal transactionAmount = BigDecimal.valueOf(Double.parseDouble(dataFromToken.get("transactionAmount", String.class)));
         String commodityId = dataFromToken.get("commodityId", String.class);
         String uid = dataFromToken.get("uid", String.class);
         String shopId = dataFromToken.get("shopId", String.class);
@@ -253,7 +253,7 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
         Claims dataFromToken = TokenUtil.getDataFromToken(token);
         String orderId = dataFromToken.get("orderId", String.class);
         String uid1 = dataFromToken.get("uid", String.class);
-        BigDecimal transactionAmount = BigDecimal.valueOf(dataFromToken.get("transactionAmount", Double.class));
+        BigDecimal transactionAmount = BigDecimal.valueOf(Double.parseDouble(dataFromToken.get("transactionAmount", String.class)));
         String commodityId = dataFromToken.get("commodityId", String.class);
         Integer number = dataFromToken.get("number", Integer.class);
 
