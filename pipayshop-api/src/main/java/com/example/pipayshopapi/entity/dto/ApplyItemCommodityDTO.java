@@ -3,9 +3,9 @@ package com.example.pipayshopapi.entity.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.List;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author ThinkPad
@@ -29,15 +29,6 @@ public class ApplyItemCommodityDTO {
      */
     private String itemCommodityName;
 
-    /**
-     *  商品颜色集合
-     */
-    private List<String> colorList;
-
-    /**
-     * 商品尺寸集合
-     */
-    private List<String> sizeList;
     /**
      * 发货地
      */

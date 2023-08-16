@@ -279,9 +279,9 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
             if (insert < 1){
                 throw new BusinessException("申请实体店失败");
             }
-            return false;
+            return true;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new BusinessException("申请实体店失败");
         } finally {
             USER_ID_LIST.remove(applyShopDTO.getUid());
         }

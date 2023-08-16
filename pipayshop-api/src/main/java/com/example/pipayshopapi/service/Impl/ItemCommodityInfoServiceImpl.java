@@ -98,12 +98,8 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
             itemCommodityInfo.setFreeShippingNum(applyItemCommodityDTO.getFreeShippingNum());
             itemCommodityInfo.setCategoryId(applyItemCommodityDTO.getCategoryId());
             itemCommodityInfo.setInventory(applyItemCommodityDTO.getInventory());
-            // 颜色集合
-            itemCommodityInfo.setColorList(JSON.toJSONString(applyItemCommodityDTO.getColorList()));
             // 收货人地址集合
             itemCommodityInfo.setAcceptAddressList(JSON.toJSONString(applyItemCommodityDTO.getAcceptAddressList()));
-            // 尺码集合
-            itemCommodityInfo.setSizeList(JSON.toJSONString(applyItemCommodityDTO.getSizeList()));
             // 商品图片的地址集合
             itemCommodityInfo.setImagsList(JSON.toJSONString(applyItemCommodityDTO.getImagsList()));
             itemCommodityInfo.setAvatarImag(applyItemCommodityDTO.getImagsList().get(0));
@@ -208,15 +204,6 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
                 , itemId, itemCommodityInfo.getPrice(), itemCommodityInfo.getDetails(), null,
                 itemCommodityInfo.getInventory(), itemCommodityInfo.getFreeShippingNum(), itemCommodityInfo.getCategoryId(),
                 null, null, itemCommodityInfo.getDegreeLoss(), null, null, null);
-        // 序列化json的数据存入结果封装类中
-        String colorListString = itemCommodityInfo.getColorList();
-        if (colorListString != null) {
-            typeMap.put("colorList", JSON.parseArray(colorListString, String.class));
-        }
-        String sizeListString = itemCommodityInfo.getSizeList();
-        if (sizeListString != null) {
-            typeMap.put("sizeList", JSON.parseArray(sizeListString, String.class));
-        }
         String acceptAddressListString = itemCommodityInfo.getAcceptAddressList();
         if (acceptAddressListString != null) {
             commodityDetailVO.setAcceptAddressList(JSON.parseArray(acceptAddressListString, String.class));

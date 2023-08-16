@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -63,15 +62,6 @@ public class ItemCartVO {
      */
     private String sumCount;
 
-    /**
-     * 商品的颜色集合
-     */
-    private String colorList;
-
-    /**
-     * 商品的尺寸集合
-     */
-    private String sizeList;
     /**
      * 商品规格
      */

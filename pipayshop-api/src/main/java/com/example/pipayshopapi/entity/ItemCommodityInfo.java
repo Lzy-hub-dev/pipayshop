@@ -75,16 +75,6 @@ public class ItemCommodityInfo implements Serializable {
     private LocalDateTime deleteTime;
 
     /**
-     * 商品颜色集合
-     */
-    private String colorList;
-
-    /**
-     * 商品尺寸集合
-     */
-    private String sizeList;
-
-    /**
      * 发货地
      */
     private String originAddress;

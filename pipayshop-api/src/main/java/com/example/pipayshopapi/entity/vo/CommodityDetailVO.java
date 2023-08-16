@@ -26,10 +26,6 @@ public class CommodityDetailVO {
 
     private Map<String, List<String>> typeMap;
 
-//    private List<String> colorList;
-
-//    private List<String> sizeList;
-
     private String originAddress;
 
     private List<String> acceptAddressList;
