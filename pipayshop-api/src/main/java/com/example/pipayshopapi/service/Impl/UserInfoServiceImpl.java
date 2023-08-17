@@ -158,11 +158,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         String uid = userInfoVO.getUid();
         int result = userInfoMapper.update(null, new UpdateWrapper<UserInfo>()
                                                             .eq("uid", uid)
-                                                            .set(!"".equals(userName) && userInfoVO.getUserName() != null,"user_name", userInfoVO.getUserName())
-                                                            .set(!"".equals(userInfoVO.getPersonalProfile() ) && userInfoVO.getPersonalProfile() != null,"personal_profile", userInfoVO.getPersonalProfile())
+                                                            .set(!"".equals(userInfoVO.getCountry()),"country",userInfoVO.getCountry())
                                                             .set(userInfoVO.getLanguage() != null ,"language", userInfoVO.getLanguage())
-                                                            .set(!"".equals(userInfoVO.getEmail()) && userInfoVO.getEmail() != null,"email", userInfoVO.getEmail())
-                                                            .set(userInfoVO.getAge() != null,"age", userInfoVO.getAge()));
+                                                            .set(!"".equals(userInfoVO.getEmail()) && userInfoVO.getEmail() != null,"email", userInfoVO.getEmail()));
         // 要求网店名和用户名保持一致，如果修改了用户名要求同步网店名
         if (userName != null && !"".equals(userName)){
             int update = itemInfoMapper.update(null, new UpdateWrapper<ItemInfo>()

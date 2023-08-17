@@ -18,18 +18,9 @@ public class UserInfoVO {
     private String uid;
 
     /**
-     * pi的name
-     */
-    private String piName;
-
-    /**
      * 用户名
      */
     private String userName;
-    /**
-     * 个人简介
-     */
-    private String personalProfile;
     /**
      * 语言标识
      */
@@ -38,21 +29,6 @@ public class UserInfoVO {
      * 邮箱
      */
     private String email;
-    /**
-     * 年龄
-     */
-    private Integer age;
-
-    /**
-     * 性別
-     */
-    private Integer gender;
-
-    /**
-     * 用户头像
-     */
-    private String userImage;
-
     /**
      * 國家
      */
