@@ -34,6 +34,10 @@ public class LoginRecord implements Serializable {
      * 用户id
      */
     private String userId;
+    /**
+     * 用户名
+     */
+    private String userName;
 
     /**
      * 用户ip
@@ -50,11 +54,12 @@ public class LoginRecord implements Serializable {
      */
     private Date loginTime;
 
-    public LoginRecord(String userId, String ip, String region, Date loginTime){
+    public LoginRecord(String userId, String ip, String region, Date loginTime,String userName){
         this.userId=userId;
         this.ip=ip;
         this.region=region;
         this.loginTime=loginTime;
+        this.userName=userName;
     }
 
 }

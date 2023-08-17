@@ -167,7 +167,12 @@ public class ShopCommodityInfoController {
 
     @PostMapping("shopCommodityImageUp")
     @ApiOperation("实体店商品轮播图上传")
-    public ResponseVO<String> shopCommodityImageUp(MultipartFile multipartFile){
+    @CrossOrigin(origins = {"http://111.230.16.231:7126/"},
+            methods = {RequestMethod.GET, RequestMethod.POST},
+            allowCredentials = "true",
+            maxAge = 3600
+    )
+    public ResponseVO<String> shopCommodityImageUp(@RequestParam("file") MultipartFile multipartFile){
         try {
             String shopCommodityImageUp = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.SHOP_COMMODITY_IMAGE_UP);
             return ResponseVO.getSuccessResponseVo(shopCommodityImageUp);

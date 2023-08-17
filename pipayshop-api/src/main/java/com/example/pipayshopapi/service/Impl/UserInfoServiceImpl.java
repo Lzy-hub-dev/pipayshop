@@ -84,7 +84,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             // 记录登录
             String ip = getIp();
             String region = getIp2Region(ip);
-            LoginRecord loginRecord = new LoginRecord(userId, ip, region, new Date());
+            LoginRecord loginRecord = new LoginRecord(userId, ip, region, new Date(),userName);
             loginRecordMapper.insert(loginRecord);
             // 已注册
             return userInfo;
@@ -120,7 +120,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             // 记录登录
             String ip = getIp();
             String region = getIp2Region(ip);
-            LoginRecord loginRecord = new LoginRecord(userId, ip, region, new Date());
+            LoginRecord loginRecord = new LoginRecord(userId, ip, region, new Date(),userName);
             loginRecordMapper.insert(loginRecord);
 
             if (insert < 2){throw new BusinessException(REGISTER_FALSE);}
