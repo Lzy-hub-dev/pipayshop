@@ -1,6 +1,5 @@
 package com.example.pipayshopapi.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.example.pipayshopapi.entity.UserInfo;
 import com.example.pipayshopapi.entity.dto.LoginDTO;
 import com.example.pipayshopapi.entity.vo.ItemMinInfoVo;
@@ -15,7 +14,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>
@@ -36,40 +34,12 @@ public class UserInfoController {
     @Resource
     private RestTemplate restTemplate;
 
+
+
     @GetMapping("test")
     @ApiOperation("test")
-    public String test(HttpServletRequest  request){
-        String ip = request.getHeader("x-forwarded-for");
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_CLIENT_IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        System.out.println(ip);
-        String URL = "https://api.beijinxuetang.com/api/common/ip";
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("ip",ip);
-        JSONObject json = restTemplate.postForObject(URL,jsonObject, JSONObject.class);
-        if (json.getInteger("code") == 0) {
-            json = json.getJSONObject("data");
-            // 国家
-            String nation = json.getString("nation");
-            // 省份
-            String province = json.getString("province");
-            // 市
-            String city = json.getString("city");
-        }
-        System.out.println(json);
+    public String test(){
+
         return "ok";
     }
 
