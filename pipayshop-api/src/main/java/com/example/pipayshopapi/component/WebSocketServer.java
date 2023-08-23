@@ -1,14 +1,13 @@
 package com.example.pipayshopapi.component;
 
 
-import com.example.pipayshopapi.service.UserInfoService;
+import cn.hutool.core.collection.ConcurrentHashSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
@@ -30,7 +29,9 @@ public class WebSocketServer {
     /**
      * 记录当前在线连接数
      */
-    public static final Map<String, Session> dailyActiveCount = new ConcurrentHashMap<>();
+
+   public static final   ConcurrentHashSet<String> dailyActiveCount = new ConcurrentHashSet<>();
+
 
 
     public static final String dailyActiveName="dailyActiveName";
@@ -50,7 +51,7 @@ public class WebSocketServer {
     public void onOpen(Session session, @PathParam("userId") String userId) {
         log.error(userId+"----------------------------------------------进入");
         // 保存当前用户session
-        dailyActiveCount.put(userId, session);
+        dailyActiveCount.add(userId);
         // 存入redis中去
         stringRedisTemplate.opsForValue().set(dailyActiveName,String.valueOf(dailyActiveCount.size()));
     }
