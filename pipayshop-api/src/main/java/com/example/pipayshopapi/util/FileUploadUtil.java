@@ -1,6 +1,7 @@
 package com.example.pipayshopapi.util;
 
 import com.example.pipayshopapi.exception.BusinessException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,6 +14,7 @@ import java.io.IOException;
  * @ClassName FileUploadUtil
  * @Description 文件上传工具类
  */
+@Slf4j
 public class FileUploadUtil {
     private static final String SEPARATOR = "/";
     private static final String PRE="images/";
@@ -84,7 +86,6 @@ public class FileUploadUtil {
         }
         //将文件复制到指定路径
         File destFile = new File(readPath.getAbsolutePath()+SEPARATOR + fileName);
-
 
         try {
             FileCopyUtils.copy(multipartFile.getBytes(), destFile);

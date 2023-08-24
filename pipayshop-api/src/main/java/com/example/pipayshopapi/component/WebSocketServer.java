@@ -4,6 +4,7 @@ package com.example.pipayshopapi.component;
 import cn.hutool.core.collection.ConcurrentHashSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
@@ -39,11 +40,17 @@ public class WebSocketServer {
 
     private static StringRedisTemplate stringRedisTemplate;
 
+    private static RabbitTemplate rabbitTemplate;
+
     @Autowired
     public void setChatService(StringRedisTemplate stringRedisTemplate) {
         WebSocketServer.stringRedisTemplate = stringRedisTemplate;
     }
 
+    @Autowired
+    public void setRabbitService(RabbitTemplate rabbitTemplate) {
+        WebSocketServer.rabbitTemplate = rabbitTemplate;
+    }
     /**
      * 连接建立成功调用的方法
      */
@@ -54,6 +61,8 @@ public class WebSocketServer {
         dailyActiveCount.add(userId);
         // 存入redis中去
         stringRedisTemplate.opsForValue().set(dailyActiveName,String.valueOf(dailyActiveCount.size()));
+        // 返送到消息队列去
+        rabbitTemplate.convertAndSend("DailyActive","DailyActive",String.valueOf(dailyActiveCount.size()));
     }
 
 
@@ -67,6 +76,8 @@ public class WebSocketServer {
         dailyActiveCount.remove(userId);
         // 存入redis中去
         stringRedisTemplate.opsForValue().set(dailyActiveName,String.valueOf(dailyActiveCount.size()));
+        // 返送到消息队列去
+        rabbitTemplate.convertAndSend("DailyActive","DailyActive",String.valueOf(dailyActiveCount.size()));
     }
 
 
@@ -89,9 +100,4 @@ public class WebSocketServer {
         error.printStackTrace();
     }
 
-
- 
-
- 
- 
 }

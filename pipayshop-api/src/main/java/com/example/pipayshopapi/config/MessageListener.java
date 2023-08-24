@@ -9,6 +9,10 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 @Component
@@ -27,6 +31,8 @@ public class MessageListener {
      */
     @RabbitHandler
     public void msg(@Payload Object msg) {
+        Map<Object, Object> objectObjectMap = Collections.synchronizedMap(new HashMap<>());
+        ConcurrentHashMap<Object, Object> objectObjectConcurrentHashMap = new ConcurrentHashMap<>();
         Message msg1 = (Message) msg;
         byte[] bodyBytes = msg1.getBody();
         String bodyString = new String(bodyBytes);
