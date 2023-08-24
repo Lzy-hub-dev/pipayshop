@@ -2,6 +2,7 @@ package com.example.pipayshopapi.controller;
 
 import com.example.pipayshopapi.entity.ChatRecordInfo;
 import com.example.pipayshopapi.entity.vo.ChatDataVO;
+import com.example.pipayshopapi.entity.vo.ChatListVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -71,6 +72,36 @@ public class ChatController {
         } catch (Exception e) {
             log.error("获取聊天记录失败,报错如下：{}", e.getMessage());
             throw new BusinessException("获取聊天记录失败"+e.getLocalizedMessage()+e +e.getCause().toString());
+        }
+    }
+
+    /**
+     * 获取用户的聊天列表数据（我作为用户而言）
+     */
+    @GetMapping("getChatRecordAsUser/{userId}")
+    @ApiOperation("获取用户的聊天列表数据（我作为用户而言）")
+    public ResponseVO<List<ChatListVO>> getChatRecordAsUser(@PathVariable String userId) {
+        try {
+            List<ChatListVO> list = chatRecordInfoService.getChatRecordAsUser(userId);
+            return ResponseVO.getSuccessResponseVo(list);
+        } catch (Exception e) {
+            log.error("获取用户的聊天列表数据（我作为用户而言）失败,报错如下：{}", e.getMessage());
+            throw new BusinessException("获取用户的聊天列表数据（我作为用户而言）"+e.getLocalizedMessage()+e +e.getCause().toString());
+        }
+    }
+
+    /**
+     * 获取用户的聊天列表数据（我作为商家而言）
+     */
+    @GetMapping("getChatRecordAsItem/{itemId}")
+    @ApiOperation("获取用户的聊天列表数据（我作为商家而言）")
+    public ResponseVO<List<ChatListVO>> getChatRecordAsItem(@PathVariable String itemId) {
+        try {
+            List<ChatListVO> list = chatRecordInfoService.getChatRecordAsItem(itemId);
+            return ResponseVO.getSuccessResponseVo(list);
+        } catch (Exception e) {
+            log.error("获取用户的聊天列表数据（我作为商家而言）失败,报错如下：{}", e.getMessage());
+            throw new BusinessException("获取用户的聊天列表数据（我作为商家而言）"+e.getLocalizedMessage()+e +e.getCause().toString());
         }
     }
 }

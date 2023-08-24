@@ -3,6 +3,7 @@ package com.example.pipayshopapi.service.Impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ChatRecordInfo;
 import com.example.pipayshopapi.entity.vo.ChatDataVO;
+import com.example.pipayshopapi.entity.vo.ChatListVO;
 import com.example.pipayshopapi.entity.vo.ChatVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.mapper.ChatRecordInfoMapper;
@@ -60,5 +61,15 @@ public class ChatRecordInfoServiceImpl extends ServiceImpl<ChatRecordInfoMapper,
         List<ChatVO> chatRecord = chatRecordInfoMapper.getChatRecord(chatDataVO);
         Integer count = chatRecordInfoMapper.getChatRecordSum(chatDataVO);
         return new PageDataVO(count, chatRecord);
+    }
+
+    @Override
+    public List<ChatListVO> getChatRecordAsUser(String userId) {
+        return chatRecordInfoMapper.getChatRecordAsUser(userId);
+    }
+
+    @Override
+    public List<ChatListVO> getChatRecordAsItem(String itemId) {
+        return chatRecordInfoMapper.getChatRecordAsItem(itemId);
     }
 }
