@@ -55,7 +55,7 @@ public interface UserInfoService extends IService<UserInfo> {
 
 
 
-    ResponseResultVO logout();
+    ResponseResultVO logout(String userId);
 
     /**
      * 用户登录注册

@@ -2,6 +2,7 @@ package com.example.pipayshopapi.component;
 
 
 import cn.hutool.core.collection.ConcurrentHashSet;
+import com.example.pipayshopapi.service.UserInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -42,6 +43,13 @@ public class WebSocketServer {
 
     private static RabbitTemplate rabbitTemplate;
 
+    private static UserInfoService userInfoService;
+
+    @Autowired
+    public void setUserInfoService(UserInfoService userInfoService) {
+        WebSocketServer.userInfoService = userInfoService;
+    }
+
     @Autowired
     public void setChatService(StringRedisTemplate stringRedisTemplate) {
         WebSocketServer.stringRedisTemplate = stringRedisTemplate;
@@ -78,7 +86,8 @@ public class WebSocketServer {
         stringRedisTemplate.opsForValue().set(dailyActiveName,String.valueOf(dailyActiveCount.size()));
         // 返送到消息队列去
         rabbitTemplate.convertAndSend("DailyActive","DailyActive",String.valueOf(dailyActiveCount.size()));
-
+        // 自动退出登录
+        userInfoService.logout(userId);
     }
 
 

@@ -200,11 +200,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     }
 
     @Override
-    public ResponseResultVO logout() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
-        Long userid = loginUser.getUserInfo().getId();
-        redisCache.deleteObject("login:"+userid);
+    public ResponseResultVO logout(String userId) {
+
+        redisCache.deleteObject("login:"+userId);
+        log.error("退出登录成功---------------------------------------------"+userId);
         return new ResponseResultVO(200,"退出成功",null);
     }
 

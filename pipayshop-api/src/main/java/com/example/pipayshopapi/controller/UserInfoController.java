@@ -62,21 +62,6 @@ public class UserInfoController {
         }
     }
 
-    @PostMapping("logout")
-    @ApiOperation("退出登录")
-    public ResponseResultVO logout() {
-        try {
-            ResponseResultVO logout = userInfoService.logout();
-            if (logout == null) {
-                throw new Exception();
-            }
-            log.error("退出登录成功---------------------------------");
-            return logout;
-        } catch (Exception e) {
-
-            throw new BusinessException("退出失败，请联系后台人员 + "+e.getLocalizedMessage()+e+e.getCause().toString());
-        }
-    }
     @GetMapping("selectUserInfoByUid/{uid}")
     @ApiOperation("根据用户Id查找用户数据表的基本信息")
     public ResponseVO selectUserInfoByUid(@PathVariable String uid){
