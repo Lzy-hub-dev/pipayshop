@@ -18,6 +18,11 @@ public class UserInfoVO {
     private String uid;
 
     /**
+     * 用户头像
+     */
+    private String userImage;
+
+    /**
      * 用户名
      */
     private String userName;
