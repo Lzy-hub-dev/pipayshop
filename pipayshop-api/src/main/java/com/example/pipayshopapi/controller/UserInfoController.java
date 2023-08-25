@@ -10,6 +10,7 @@ import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +28,7 @@ import javax.annotation.Resource;
 @Api(value = "用户数据接口",tags = "用户数据接口")
 @RestController
 @RequestMapping("/pipayshopapi/user-info")
+@Slf4j
 public class UserInfoController {
 
     @Resource
@@ -60,6 +62,21 @@ public class UserInfoController {
         }
     }
 
+    @PostMapping("logout")
+    @ApiOperation("退出登录")
+    public ResponseResultVO logout() {
+        try {
+            ResponseResultVO logout = userInfoService.logout();
+            if (logout == null) {
+                throw new Exception();
+            }
+            log.error("退出登录成功---------------------------------");
+            return logout;
+        } catch (Exception e) {
+
+            throw new BusinessException("退出失败，请联系后台人员 + "+e.getLocalizedMessage()+e+e.getCause().toString());
+        }
+    }
     @GetMapping("selectUserInfoByUid/{uid}")
     @ApiOperation("根据用户Id查找用户数据表的基本信息")
     public ResponseVO selectUserInfoByUid(@PathVariable String uid){
