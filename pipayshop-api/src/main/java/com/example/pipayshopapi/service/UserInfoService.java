@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.UserInfo;
 import com.example.pipayshopapi.entity.dto.LoginDTO;
 import com.example.pipayshopapi.entity.vo.ItemMinInfoVo;
+import com.example.pipayshopapi.entity.vo.ResponseResultVO;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,10 +53,14 @@ public interface UserInfoService extends IService<UserInfo> {
      * */
     Integer releaseShopIsNotById(String uid);
 
+    ResponseResultVO login(UserInfo user);
+
+    ResponseResultVO logout();
+
     /**
      * 用户登录注册
      */
-    UserInfo login(LoginDTO loginDTO);
+    ResponseResultVO login(LoginDTO loginDTO);
 
     boolean upToVipUser(String userId);
 
