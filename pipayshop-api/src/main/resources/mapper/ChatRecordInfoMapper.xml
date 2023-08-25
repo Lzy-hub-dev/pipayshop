@@ -22,7 +22,7 @@
                     sender_id = #{chatDataVO.receiverId} and receiver_id = #{chatDataVO.senderId} and del_flag = 0
         ) AS chat
         ORDER BY
-            send_time DESC
+            send_time ASC
         LIMIT ${chatDataVO.page}, ${chatDataVO.limit}
     </select>
 
@@ -43,5 +43,80 @@
             WHERE
                 sender_id = #{chatDataVO.receiverId} and receiver_id = #{chatDataVO.senderId} and del_flag = 0
         ) AS chat
+    </select>
+
+
+    <select id="getChatRecordAsUser" resultType="com.example.pipayshopapi.entity.vo.ChatListVO">
+        SELECT
+            i.item_id AS chatObjectId, i.item_name AS chatObjectName,
+            i.user_image, c.newMessage, c.newMessageTime
+        FROM
+            item_info i
+        JOIN
+        (
+            SELECT
+                CASE
+            WHEN c1.sender_id = #{userId} THEN c1.receiver_id
+            ELSE c1.sender_id
+            END AS partner_id,
+            c1.message AS newMessage,
+            c1.send_time AS newMessageTime
+            FROM
+            chat_record_info c1
+            WHERE
+            c1.del_flag = 0
+            AND (c1.sender_id = #{userId} OR c1.receiver_id = #{userId})
+            AND c1.send_time = (
+            SELECT MAX(c2.send_time)
+            FROM chat_record_info c2
+            WHERE c2.del_flag = 0
+            AND (c2.sender_id = #{userId} OR c2.receiver_id = #{userId})
+            AND (
+            (c2.sender_id = c1.sender_id AND c2.receiver_id = c1.receiver_id)
+            OR (c2.sender_id = c1.receiver_id AND c2.receiver_id = c1.sender_id)
+            )
+            )
+        ) AS c
+        ON
+            c.partner_id = i.item_id
+        ORDER BY
+            c.newMessageTime DESC
+    </select>
+
+    <select id="getChatRecordAsItem" resultType="com.example.pipayshopapi.entity.vo.ChatListVO">
+        SELECT
+            u.uid AS chatObjectId, u.pi_name AS chatObjectName,
+            u.user_image, c.newMessage, c.newMessageTime
+        FROM
+        user_info u
+        JOIN
+        (
+        SELECT
+        CASE
+        WHEN c1.sender_id = #{itemId} THEN c1.receiver_id
+        ELSE c1.sender_id
+        END AS partner_id,
+        c1.message AS newMessage,
+        c1.send_time AS newMessageTime
+        FROM
+        chat_record_info c1
+        WHERE
+        c1.del_flag = 0
+        AND (c1.sender_id = #{itemId} OR c1.receiver_id = #{itemId})
+        AND c1.send_time = (
+        SELECT MAX(c2.send_time)
+        FROM chat_record_info c2
+        WHERE c2.del_flag = 0
+        AND (c2.sender_id = #{itemId} OR c2.receiver_id = #{itemId})
+        AND (
+        (c2.sender_id = c1.sender_id AND c2.receiver_id = c1.receiver_id)
+        OR (c2.sender_id = c1.receiver_id AND c2.receiver_id = c1.sender_id)
+        )
+        )
+        ) AS c
+        ON
+        c.partner_id = u.uid
+        ORDER BY
+        c.newMessageTime DESC
     </select>
 </mapper>

@@ -3,6 +3,7 @@ package com.example.pipayshopapi.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.pipayshopapi.entity.ChatRecordInfo;
 import com.example.pipayshopapi.entity.vo.ChatDataVO;
+import com.example.pipayshopapi.entity.vo.ChatListVO;
 import com.example.pipayshopapi.entity.vo.ChatVO;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
@@ -31,4 +32,8 @@ public interface ChatRecordInfoMapper extends BaseMapper<ChatRecordInfo> {
     List<ChatVO> getChatRecord(@Param("chatDataVO") ChatDataVO chatDataVO);
 
     Integer getChatRecordSum(@Param("chatDataVO") ChatDataVO chatDataVO);
+
+    List<ChatListVO> getChatRecordAsUser(@Param("userId") String userId);
+
+    List<ChatListVO> getChatRecordAsItem(@Param("itemId")String itemId);
 }
