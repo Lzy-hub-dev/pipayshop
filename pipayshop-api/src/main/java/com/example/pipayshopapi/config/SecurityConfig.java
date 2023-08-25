@@ -34,6 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 对于登录接口 允许匿名访问
                 .antMatchers("/pipayshopapi/user-info/login").anonymous()
                 .antMatchers("/images/**").permitAll()
+                .antMatchers("/dailyActive/**").permitAll()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
         //把token校验过滤器添加到过滤器链中
