@@ -78,6 +78,7 @@ public class WebSocketServer {
         stringRedisTemplate.opsForValue().set(dailyActiveName,String.valueOf(dailyActiveCount.size()));
         // 返送到消息队列去
         rabbitTemplate.convertAndSend("DailyActive","DailyActive",String.valueOf(dailyActiveCount.size()));
+
     }
 
 

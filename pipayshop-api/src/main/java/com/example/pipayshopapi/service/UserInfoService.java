@@ -53,7 +53,7 @@ public interface UserInfoService extends IService<UserInfo> {
      * */
     Integer releaseShopIsNotById(String uid);
 
-    ResponseResultVO login(UserInfo user);
+
 
     ResponseResultVO logout();
 

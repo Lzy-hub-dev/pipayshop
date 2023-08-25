@@ -79,18 +79,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Resource
     private RedisCache redisCache;
 
-    @Override
-    public ResponseResultVO logout() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
-        Long userid = loginUser.getUserInfo().getId();
-        redisCache.deleteObject("login:"+userid);
-        return new ResponseResultVO(200,"退出成功",null);
-    }
 
-
-
-
+    /**
+     *  验证登录
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -165,20 +157,21 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         // 记录登录
         String ip = getIp();
         String region = getIp2Region(ip);
-        LoginRecord loginRecord = new LoginRecord(userId, ip, region, new Date(),userName);
+        LoginRecord loginRecord = new LoginRecord(user.getUid(), ip, region, new Date(),userName);
         loginRecordMapper.insert(loginRecord);
-
 
         //封装成UserDetails对象返回
         return new LoginUser(user);
     }
 
+    /**
+     * 登录接口
+     */
     private LoginDTO loginDTOTmp;
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResponseResultVO login(LoginDTO loginDTO) {
         loginDTOTmp=loginDTO;
-        String userId = loginDTO.getUserId();
         // 根据pi_name查询数据库
         String userName = loginDTO.getUserName();
         // 将用户信息发给authentication
@@ -193,7 +186,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         // 获取用户
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
         UserInfo userInfo = loginUser.getUserInfo();
-
+        String userId=userInfo.getUid();
 
         // 生产jwt
         String jwt = JwtUtil.createJWT(userId);
@@ -204,6 +197,15 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         map.put("token",jwt);
         map.put("user",userInfo);
         return new ResponseResultVO(200,"登陆成功",map);
+    }
+
+    @Override
+    public ResponseResultVO logout() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+        Long userid = loginUser.getUserInfo().getId();
+        redisCache.deleteObject("login:"+userid);
+        return new ResponseResultVO(200,"退出成功",null);
     }
 
     /**
@@ -286,10 +288,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         return userInfoMapper.selectShopNumber(uid);
     }
 
-    @Override
-    public ResponseResultVO login(UserInfo user) {
-        return null;
-    }
+
 
 
     /**
