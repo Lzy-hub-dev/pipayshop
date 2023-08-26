@@ -405,4 +405,9 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
                 livePageVO.getChildren());
         return new PageDataVO(num,indexShopInfoVOS);
     }
+
+    @Override
+    public String getShopCodeByShopId(String shopId) {
+        return shopInfoMapper.getShopCodeByShopId(shopId);
+    }
 }
