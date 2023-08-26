@@ -187,5 +187,13 @@
             AND status = 0
         )
     </select>
+    <select id="getShopCodeByShopId" resultType="java.lang.String">
+        select
+            qrcode
+        from
+            shop_info
+        where
+            shop_id = #{shopId} and status = 0
+    </select>
 
 </mapper>

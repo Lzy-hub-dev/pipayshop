@@ -55,6 +55,11 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     @Resource
     private BUserInfoMapper bUserInfoMapper;
 
+    @Override
+    public String getShopCodeByShopId(String shopId) {
+        return shopInfoMapper.getShopCodeByShopId(shopId);
+    }
+
     /**
      * 根据二级分类-获取所有实体店列表
      */

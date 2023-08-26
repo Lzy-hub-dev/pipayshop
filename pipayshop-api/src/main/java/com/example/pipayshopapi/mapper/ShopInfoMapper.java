@@ -100,4 +100,6 @@ public interface ShopInfoMapper extends BaseMapper<ShopInfo> {
                             @Param("departureTime")Date departureTime,
                             @Param("adult")Integer adult,
                             @Param("children")Integer children);
+
+    String getShopCodeByShopId(String shopId);
 }

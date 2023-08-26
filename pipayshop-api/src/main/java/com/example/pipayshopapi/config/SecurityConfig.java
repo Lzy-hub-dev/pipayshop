@@ -33,8 +33,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 // 对于登录接口 允许匿名访问
                 .antMatchers("/pipayshopapi/user-info/login").anonymous()
+                // 开放b端
+                .antMatchers("/pipayshopapi/shop-info/getShopCodeByShopId/**","/pipayshopapi/b-user-info/**").anonymous()
+                // 放行图片
                 .antMatchers("/images/**").permitAll()
+                // 放行websocker
                 .antMatchers("/dailyActive/**").permitAll()
+                // 放行swagger
+                .antMatchers("/swagger-ui.html/**","/webjars/**","/swagger-resources/**","/v2/**").permitAll()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
         //把token校验过滤器添加到过滤器链中
