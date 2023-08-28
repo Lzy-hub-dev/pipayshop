@@ -29,4 +29,6 @@ public interface AccountInfoMapper extends BaseMapper<AccountInfo> {
 
     int createAccount(String userId);
     int updatePointBalanceByShopId(@Param("shopId") String shopId, @Param("transactionAmount")BigDecimal transactionAmount);
+
+    BigDecimal selectAccountBalance(String uid);
 }

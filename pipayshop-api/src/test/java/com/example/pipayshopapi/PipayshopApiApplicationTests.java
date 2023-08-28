@@ -1,6 +1,7 @@
 package com.example.pipayshopapi;
 import com.example.pipayshopapi.config.QueueConfig;
 import com.example.pipayshopapi.mapper.*;
+import com.example.pipayshopapi.service.BUserInfoService;
 import com.example.pipayshopapi.service.ItemOrderInfoService;
 import com.example.pipayshopapi.service.ShopCommodityLiveInfoService;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -48,9 +50,11 @@ class PipayshopApiApplicationTests {
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 
+    @Resource
+    private BUserInfoService bUserInfoService;
     @Test
     void contextLoads() {
-
+        System.out.println(bUserInfoService.userWithDraw("wzx", new BigDecimal(1)));
     }
     /***
      * 发送消息
