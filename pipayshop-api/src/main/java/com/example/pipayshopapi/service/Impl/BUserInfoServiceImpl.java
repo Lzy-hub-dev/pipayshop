@@ -114,7 +114,9 @@ public class BUserInfoServiceImpl extends ServiceImpl<BUserInfoMapper, BUserInfo
 
         // 查询分页数据封装到page中
         bUserWithdrawalRecordInfoMapper.selectPage(pageRecord, new QueryWrapper<BUserWithdrawalRecordInfo>()
-                                                                    .eq("uid",uid));
+                                                                    .eq("uid",uid)
+                                                                    .orderByDesc("create_time")
+        );
         // 封装数据
         return new PageDataVO((int)pageRecord.getTotal(), pageRecord.getRecords());
 
