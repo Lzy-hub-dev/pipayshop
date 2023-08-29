@@ -31,10 +31,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                // 放行全部接口
+                .antMatchers("/pipayshopapi/**").anonymous()
                 // 对于登录接口 允许匿名访问
-                .antMatchers("/pipayshopapi/user-info/login").anonymous()
+//                .antMatchers("/pipayshopapi/user-info/login").anonymous()
                 // 开放b端
-                .antMatchers("/pipayshopapi/shop-info/getShopCodeByShopId/**","/pipayshopapi/b-user-info/**","/pipayshopapi/transaction-record/getRecordTransaction/**","/pipayshopapi/shop-info/getShopList/**").anonymous()
+//                .antMatchers("/pipayshopapi/shop-info/getShopCodeByShopId/**","/pipayshopapi/b-user-info/**","/pipayshopapi/transaction-record/getRecordTransaction/**","/pipayshopapi/shop-info/getShopList/**").anonymous()
                 // 放行图片
                 .antMatchers("/images/**").permitAll()
                 // 放行websocker
