@@ -6,6 +6,8 @@ import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.BUserInfoService;
+import com.example.pipayshopapi.util.TokenUtil;
+import io.jsonwebtoken.Claims;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -84,13 +86,16 @@ public class BUserInfoController {
 
 
     /**
-     * 修改密码
+     * b端商户提现
      */
-    @PostMapping("userWithDraw/{uid}/{balance}")
+    @PostMapping("userWithDraw/{token}")
     @ApiOperation("b端商户提现")
-    public ResponseVO<String> userWithDraw(@PathVariable String uid,@PathVariable BigDecimal balance) {
+    public ResponseVO<String> userWithDraw(@PathVariable String token) {
         try {
-            boolean userWithDraw = bUserInfoService.userWithDraw(uid, balance);
+            Claims dataFromToken = TokenUtil.getDataFromToken(token);
+            String uid = (String) dataFromToken.get("uid");
+            String balance = (String) dataFromToken.get("balance");
+            boolean userWithDraw = bUserInfoService.userWithDraw(uid, new BigDecimal(balance));
             if ( !userWithDraw){
                 return ResponseVO.getFalseResponseVo("提现失败");
             }
