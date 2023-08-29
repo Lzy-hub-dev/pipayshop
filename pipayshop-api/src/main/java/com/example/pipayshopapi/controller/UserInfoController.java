@@ -1,21 +1,24 @@
 package com.example.pipayshopapi.controller;
 
+import com.example.pipayshopapi.entity.Country;
 import com.example.pipayshopapi.entity.UserInfo;
 import com.example.pipayshopapi.entity.dto.LoginDTO;
+import com.example.pipayshopapi.entity.vo.CountryVO;
 import com.example.pipayshopapi.entity.vo.ItemMinInfoVo;
 import com.example.pipayshopapi.entity.vo.ResponseResultVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
 import com.example.pipayshopapi.exception.BusinessException;
+import com.example.pipayshopapi.service.CountryService;
 import com.example.pipayshopapi.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -35,9 +38,7 @@ public class UserInfoController {
     private UserInfoService userInfoService;
 
     @Resource
-    private RestTemplate restTemplate;
-
-
+    private CountryService countryService;
 
     @GetMapping("test")
     @ApiOperation("test")
@@ -207,4 +208,19 @@ public class UserInfoController {
         }
     }
 
+    /**
+     * 获取国家列表数据
+     */
+    @GetMapping("getCountryList")
+    @ApiOperation("获取国家列表数据")
+    public ResponseVO<List<CountryVO>> getCountryList(){
+        try {
+            List<CountryVO> list = countryService.getCountryList();
+            return ResponseVO.getSuccessResponseVo(list);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("获取国家列表数据失败");
+
+        }
+    }
 }

@@ -16,6 +16,9 @@ import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.*;
 import com.example.pipayshopapi.service.ItemCommodityInfoService;
 import com.example.pipayshopapi.util.StringUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,10 +37,8 @@ import java.util.stream.Collectors;
  * @since 2023-07-25
  */
 @Service
+@Slf4j
 public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoMapper, ItemCommodityInfo> implements ItemCommodityInfoService {
-
-    private static ConcurrentHashSet concurrentHashSet = new ConcurrentHashSet();
-
     @Resource
     private ItemCommodityInfoMapper commodityInfoMapper;
     @Resource
@@ -54,19 +55,20 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     @Resource
     private ItemCommodityInfoMapper itemCommodityInfoMapper;
 
+    @Resource
+    private CountryCommodityMapper countryCommodityMapper;
+
+
     /**
      * 某一二级分类下的商品列表分页展示
      */
     @Override
     public PageDataVO commodityOfCateList(CommodityPageVO commodityPageVO) {
-
-        Integer page = commodityPageVO.getPage();
         Integer limit = commodityPageVO.getLimit();
-        int startIndex = (page - 1) * limit;
-
-        List<CommodityVO> commodityList = commodityInfoMapper.commodityOfCateList(commodityPageVO.getSecondCategoryId(), startIndex, limit);
-
-        return new PageDataVO(commodityInfoMapper.listCount(commodityPageVO.getSecondCategoryId()), commodityList);
+        int startIndex = (commodityPageVO.getPage() - 1) * limit;
+        List<CommodityVO> commodityList = commodityInfoMapper.commodityOfCateList(commodityPageVO.getSecondCategoryId(),commodityPageVO.getCountryCode(), startIndex, limit);
+        Integer count = commodityInfoMapper.listCount(commodityPageVO.getSecondCategoryId());
+        return new PageDataVO(count, commodityList);
 
     }
 
@@ -77,111 +79,54 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean issueItemCommodity(ApplyItemCommodityDTO applyItemCommodityDTO) {
-        boolean add = concurrentHashSet.add(applyItemCommodityDTO.getItemId());
-        if (!add) {
-            return false;
+        ItemCommodityInfo itemCommodityInfo = new ItemCommodityInfo();
+        // 属性转移
+        BeanUtils.copyProperties(applyItemCommodityDTO, itemCommodityInfo);
+        // 补全其他字段数据
+        String commodityId = StringUtil.generateShortId();
+        itemCommodityInfo.setCommodityId(commodityId);
+        // 收货人地址集合
+        itemCommodityInfo.setAcceptAddressList(JSON.toJSONString(applyItemCommodityDTO.getAcceptAddressList()));
+        // 商品图片的地址集合
+        itemCommodityInfo.setImagsList(JSON.toJSONString(applyItemCommodityDTO.getImagsList()));
+        itemCommodityInfo.setAvatarImag(applyItemCommodityDTO.getImagsList().get(0));
+        itemCommodityInfo.setDetailImagList(JSON.toJSONString(applyItemCommodityDTO.getDetailImags()));
+        // 商品状态为上架状态
+        itemCommodityInfo.setStatus(0);
+        // 插入新增商品数据
+        int result = commodityInfoMapper.insert(itemCommodityInfo);
+        if (result < 1) {
+            log.error("插入新增商品数据失败");
+            throw new RuntimeException();
         }
-        try {
-            // 属性转移
-            ItemCommodityInfo itemCommodityInfo = new ItemCommodityInfo();
-            itemCommodityInfo.setCommodityId(StringUtil.generateShortId());
-            itemCommodityInfo.setUpdateTime(null);
-            itemCommodityInfo.setCreateTime(null);
-            itemCommodityInfo.setDeleteTime(null);
-            itemCommodityInfo.setBrandId(applyItemCommodityDTO.getBrandId());
-            itemCommodityInfo.setOriginPrice(null);
-            itemCommodityInfo.setPrice(applyItemCommodityDTO.getPrice());
-            itemCommodityInfo.setDegreeLoss(applyItemCommodityDTO.getDegreeLoss());
-            itemCommodityInfo.setItemCommodityName(applyItemCommodityDTO.getItemCommodityName());
-            itemCommodityInfo.setOriginAddress(applyItemCommodityDTO.getOriginAddress());
-            itemCommodityInfo.setDetails(applyItemCommodityDTO.getDetails());
-            itemCommodityInfo.setFreeShippingNum(applyItemCommodityDTO.getFreeShippingNum());
-            itemCommodityInfo.setCategoryId(applyItemCommodityDTO.getCategoryId());
-            itemCommodityInfo.setInventory(applyItemCommodityDTO.getInventory());
-            // 收货人地址集合
-            itemCommodityInfo.setAcceptAddressList(JSON.toJSONString(applyItemCommodityDTO.getAcceptAddressList()));
-            // 商品图片的地址集合
-            itemCommodityInfo.setImagsList(JSON.toJSONString(applyItemCommodityDTO.getImagsList()));
-            itemCommodityInfo.setAvatarImag(applyItemCommodityDTO.getImagsList().get(0));
-            itemCommodityInfo.setOriginName(applyItemCommodityDTO.getOriginName());
-            itemCommodityInfo.setOriginPhone(applyItemCommodityDTO.getOriginPhone());
-            itemCommodityInfo.setItemId(applyItemCommodityDTO.getItemId());
-            itemCommodityInfo.setDetailImagList(JSON.toJSONString(applyItemCommodityDTO.getDetailImags()));
-            itemCommodityInfo.setInventory(applyItemCommodityDTO.getInventory());
-            // 商品状态为上架状态
-            itemCommodityInfo.setStatus(0);
-            // 网店商品上架剩余数-1
-            int update = itemInfoMapper.update(null, new UpdateWrapper<ItemInfo>()
-                    .eq("item_id", applyItemCommodityDTO.getItemId())
-                    .gt("upload_balance", 0)
-                    .setSql("upload_balance = upload_balance - 1"));
-            if (update < 1) {
-                throw new RuntimeException();
-            }
-            int result = commodityInfoMapper.insert(itemCommodityInfo);
-            return result > 0;
-        } finally {
-            ThreadUtil.execAsync(() -> {
-                try {
-                    Thread.sleep(5000);
-                    concurrentHashSet.remove(applyItemCommodityDTO.getItemId());
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-
-            });
-
+        // 网店商品上架剩余数-1
+        int update = itemInfoMapper.update(null, new UpdateWrapper<ItemInfo>()
+                .eq("item_id", applyItemCommodityDTO.getItemId())
+                .gt("upload_balance", 0)
+                .setSql("upload_balance = upload_balance - 1"));
+        if (update < 1) {
+            log.error("网店商品上架剩余数扣减失败");
+            throw new RuntimeException();
         }
+
+        // 将商品数据记录到发布表上
+        CountryCommodity countryCommodity = new CountryCommodity(null, applyItemCommodityDTO.getCountryCode(), commodityId, null, null);
+        int insert = countryCommodityMapper.insert(countryCommodity);
+        return insert > 0;
     }
 
     /**
-     * 下面的搜索商品接口
+     * 网店首页条件过滤列表展示
      */
     @Override
     public PageDataVO itemSearchCommodity(ItemSearchConditionDTO dto) {
-        LambdaQueryWrapper<ItemCommodityInfo> wrapper = new LambdaQueryWrapper<ItemCommodityInfo>()
-                .eq(dto.getBrandId() != null, ItemCommodityInfo::getBrandId, dto.getBrandId())
-                .eq(dto.getDegreeLoss() != null, ItemCommodityInfo::getDegreeLoss, dto.getDegreeLoss());
-
-        // 模糊查询-商品名称
-        if (dto.getCommodityName() != null) {
-            wrapper.like(ItemCommodityInfo::getItemCommodityName, dto.getCommodityName());
-        }
-        // 是否免运费
-        if (dto.getFreeShippingNum() != null) {
-            if (dto.getFreeShippingNum() == 0) {
-                wrapper.eq(ItemCommodityInfo::getFreeShippingNum, 0);
-            }
-        }
-
-        // 发布时间升序排列
-        if (dto.getCreateTime() != null) {
-            wrapper.orderByDesc(ItemCommodityInfo::getCreateTime);
-        }
-
-        // 价格排序
-        if (dto.getPriceOrder() != null) {
-            if (dto.getPriceOrder() == 0) {
-                wrapper.orderByAsc(ItemCommodityInfo::getPrice);
-            } else if (dto.getPriceOrder() == 1) {
-                wrapper.orderByDesc(ItemCommodityInfo::getPrice);
-            }
-        }
-        // 设置分页参数
-        Page<ItemCommodityInfo> page = new Page<>(dto.getPage(), dto.getLimit());
-        wrapper.eq(ItemCommodityInfo::getStatus, 0);
-        // 查询分页数据封装到page中
-        commodityInfoMapper.selectPage(page, wrapper.select(ItemCommodityInfo::getCommodityId));
-
-        // 将每个商品的membership属性赋值
-        List<ItemCommodityInfo> records = page.getRecords();
-        if (records == null || records.size() == 0) {
-            return null;
-        }
-        List<String> commodityIdList = records.stream().parallel().map(ItemCommodityInfo::getCommodityId).collect(Collectors.toList());
-        List<itemCommoditiesVO> resultList = commodityInfoMapper.selectMembershipByCommodityIdList(commodityIdList, dto.getPriceOrder());
+        // 为分页操作的相关数据赋予正确offset
+        int starIndex = (dto.getPage() - 1) * dto.getLimit();
+        dto.setPage(starIndex);
+        List<ItemCommoditiesVO> resultList= commodityInfoMapper.itemSearchCommodity(dto);
+        int count = commodityInfoMapper.itemSearchCommodityCount(dto);
         // 封装数据
-        return new PageDataVO((int) page.getTotal(), resultList);
+        return new PageDataVO(count, resultList);
     }
 
     @Override

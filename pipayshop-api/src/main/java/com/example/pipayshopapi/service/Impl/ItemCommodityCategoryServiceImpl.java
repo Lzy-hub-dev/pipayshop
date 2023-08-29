@@ -2,9 +2,8 @@ package com.example.pipayshopapi.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.pipayshopapi.entity.ItemCommodityCategory;
-import com.example.pipayshopapi.entity.vo.ItemCommodityVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
-import com.example.pipayshopapi.entity.vo.itemCommoditiesVO;
+import com.example.pipayshopapi.entity.vo.ItemCommoditiesVO;
 import com.example.pipayshopapi.mapper.ItemCommodityCategoryMapper;
 import com.example.pipayshopapi.service.ItemCommodityCategoryService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -56,7 +55,7 @@ public class ItemCommodityCategoryServiceImpl extends ServiceImpl<ItemCommodityC
      */
     @Override
     public PageDataVO getSecShopInfoListByCondition(Integer limit, Integer pages, String categoryId) {
-        List<itemCommoditiesVO> list  = categoryMapper.getSecShopInfoListByTopCateId(limit, pages, categoryId);
+        List<ItemCommoditiesVO> list  = categoryMapper.getSecShopInfoListByTopCateId(limit, pages, categoryId);
         return new PageDataVO(list.size(), list);
     }
 }

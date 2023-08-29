@@ -97,4 +97,6 @@ public interface ShopInfoService extends IService<ShopInfo> {
      * @return
      */
     PageDataVO getHotelInfoByCondition(LivePageVO livePageVO);
+
+    String getShopCodeByShopId(String shopId);
 }

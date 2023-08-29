@@ -101,5 +101,5 @@ public interface ShopInfoMapper extends BaseMapper<ShopInfo> {
                             @Param("adult")Integer adult,
                             @Param("children")Integer children);
 
-    String getShopCodeByShopId(String shopId);
+    String getShopCodeByShopId(@Param("shopId") String shopId);
 }

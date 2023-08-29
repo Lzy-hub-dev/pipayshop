@@ -2,8 +2,7 @@ package com.example.pipayshopapi.mapper;
 
 import com.example.pipayshopapi.entity.ItemCommodityCategory;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.pipayshopapi.entity.vo.ItemCommodityVO;
-import com.example.pipayshopapi.entity.vo.itemCommoditiesVO;
+import com.example.pipayshopapi.entity.vo.ItemCommoditiesVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -20,7 +19,7 @@ import java.util.List;
 @Mapper
 public interface ItemCommodityCategoryMapper extends BaseMapper<ItemCommodityCategory> {
 
-    List<itemCommoditiesVO> getSecShopInfoListByTopCateId(@Param("limit") Integer limit,
+    List<ItemCommoditiesVO> getSecShopInfoListByTopCateId(@Param("limit") Integer limit,
                                                           @Param("page")Integer page,
                                                           @Param("categoryId")String categoryId);
 }

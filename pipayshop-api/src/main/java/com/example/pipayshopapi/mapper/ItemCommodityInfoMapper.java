@@ -2,6 +2,8 @@ package com.example.pipayshopapi.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.pipayshopapi.entity.ItemCommodityInfo;
+import com.example.pipayshopapi.entity.dto.ApplyItemCommodityDTO;
+import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -19,7 +21,7 @@ import java.util.List;
 @Mapper
 public interface ItemCommodityInfoMapper extends BaseMapper<ItemCommodityInfo> {
 
-    List<CommodityVO> commodityOfCateList(@Param("secondCategoryId") Integer secondCategoryId, @Param("startIndex")Integer startIndex, @Param("number")Integer number);
+    List<CommodityVO> commodityOfCateList(@Param("secondCategoryId") Integer secondCategoryId,@Param("countryCode") String countryCode, @Param("startIndex")Integer startIndex, @Param("number")Integer number);
 
     Integer  listCount(@Param("secondCategoryId") Integer secondCategoryId);
 
@@ -42,7 +44,7 @@ public interface ItemCommodityInfoMapper extends BaseMapper<ItemCommodityInfo> {
                                              @Param("price")Boolean price);
 
 
-    List<itemCommoditiesVO> selectMembershipByCommodityIdList(@Param("list") List<String> commodityIdList,@Param("priceOrder")Integer priceOrder);
+    List<ItemCommoditiesVO> selectMembershipByCommodityIdList(@Param("list") List<String> commodityIdList, @Param("priceOrder")Integer priceOrder);
 
 
     Integer getInfoSize(String itemId);
@@ -50,15 +52,16 @@ public interface ItemCommodityInfoMapper extends BaseMapper<ItemCommodityInfo> {
     String getItemIdByOrderId(@Param("orderId") String orderId);
     /**
      * 根据购买数量、商品id
-     * @param num
-     * @param commodityId
-     * @return
      */
     int reduceStock(@Param("num")Integer num,@Param("commodityId")String commodityId);
 
     /**
      * 根据购买数量、商品id =》商品库存复原
-     * @return
      */
     int addStock(@Param("num")Integer num,@Param("commodityId")String commodityId);
+
+    List<ItemCommoditiesVO> itemSearchCommodity(@Param("dto") ItemSearchConditionDTO dto);
+
+    int itemSearchCommodityCount(@Param("dto") ItemSearchConditionDTO dto);
+
 }

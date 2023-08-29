@@ -35,7 +35,7 @@ public class ItemSearchConditionDTO {
     /**
      * 是否免运费(0:是,1:否)
      */
-    @ApiModelProperty("是否免运费(0:是,1:否)")
+    @ApiModelProperty("是否免运费(0:是  null为默认)")
     private Integer freeShippingNum;
     /**
      * 一页多少条数据
@@ -46,9 +46,11 @@ public class ItemSearchConditionDTO {
      */
     @ApiModelProperty("价格升降序(0:升序,1:降序)")
     private Integer priceOrder;
+
     /**
-     * 发布时间
+     * 用户所在的国家编码
      */
-    private Boolean createTime;
+    private String countryCode;
+
 
 }
