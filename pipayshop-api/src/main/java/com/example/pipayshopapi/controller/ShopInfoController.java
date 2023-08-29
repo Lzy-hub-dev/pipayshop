@@ -288,17 +288,4 @@ public class ShopInfoController {
             throw new BusinessException("pi_Id_Image上传失败，请联系后台人员");
         }
     }
-
-    @PostMapping("getShopCodeByShopId/{shopId}")
-    @ApiOperation("获取商铺的付款码链接")
-    public ResponseVO<String> getShopCodeByShopId(@PathVariable String shopId){
-        try {
-            String result = infoService.getShopCodeByShopId(shopId);
-            return ResponseVO.getSuccessResponseVo(result);
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new BusinessException("获取商铺的付款码链接失败，请联系后台人员");
-        }
-    }
-
 }

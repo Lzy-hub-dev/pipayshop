@@ -2,9 +2,7 @@ package com.example.pipayshopapi.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.pipayshopapi.entity.ShopInfo;
-import com.example.pipayshopapi.entity.vo.HotelInfoVO;
 import com.example.pipayshopapi.entity.vo.IndexShopInfoVO;
-import com.example.pipayshopapi.entity.vo.ShopInfoVO;
 import com.example.pipayshopapi.entity.vo.ShopInfoVO1;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

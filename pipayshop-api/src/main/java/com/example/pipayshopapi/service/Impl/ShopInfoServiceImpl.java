@@ -411,8 +411,4 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         return new PageDataVO(num,indexShopInfoVOS);
     }
 
-    @Override
-    public String getShopCodeByShopId(String shopId) {
-        return shopInfoMapper.getShopCodeByShopId(shopId);
-    }
 }
