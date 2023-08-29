@@ -2,28 +2,34 @@ package com.example.pipayshopapi.service.Impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.pipayshopapi.entity.ItemInfo;
-import com.example.pipayshopapi.entity.LoginRecord;
-import com.example.pipayshopapi.entity.ShopInfo;
-import com.example.pipayshopapi.entity.UserInfo;
+import com.example.pipayshopapi.entity.*;
 import com.example.pipayshopapi.entity.dto.LoginDTO;
 import com.example.pipayshopapi.entity.vo.ItemMinInfoVo;
+import com.example.pipayshopapi.entity.vo.ResponseResultVO;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.*;
 import com.example.pipayshopapi.service.UserInfoService;
-import com.example.pipayshopapi.util.Constants;
-import com.example.pipayshopapi.util.FileUploadUtil;
-import com.example.pipayshopapi.util.StringUtil;
+import com.example.pipayshopapi.util.*;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.lionsoul.ip2region.xdb.Searcher;
+
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -35,6 +41,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * <p>
@@ -45,7 +53,7 @@ import java.util.Date;
  * @since 2023-07-25
  */
 @Service
-public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> implements UserInfoService {
+public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> implements UserInfoService, UserDetailsService {
 
     private static final String REGISTER_FALSE = "注册失败，请联系后台";
     @Resource
@@ -64,80 +72,139 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Resource
     private ShopInfoMapper shopInfoMapper;
+
+    @Resource
+    private AuthenticationManager authenticationManager;
+
+    @Resource
+    private RedisCache redisCache;
+
+
+    /**
+     *  验证登录
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public UserInfo login(LoginDTO loginDTO) {
-        String userId = loginDTO.getUserId();
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        String userId = loginDTOTmp.getUserId();
+        String userName=loginDTOTmp.getUserName();
+        //根据用户名查询用户信息
+        LambdaQueryWrapper<UserInfo> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(UserInfo::getPiName,username);
+        UserInfo user = userInfoMapper.selectOne(wrapper);
+        //如果查询不到数据就通过抛出异常来给出提示
+        if(Objects.isNull(user)){
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url("https://api.minepi.com/v2/me")
+                    .addHeader("Authorization", "Bearer " + loginDTOTmp.getAccessToken())
+                    .build();
+            try (Response response = client.newCall(request).execute()) {
+                if (!response.isSuccessful()) {
+                    return null;
+                }
+                String string = response.body().string();
+                JSONObject jsonObject1 = JSON.parseObject(string);
+
+                if (!jsonObject1.getString("username").equals(userName)) {
+                    return null;
+                }
+
+                //新用户
+                UserInfo newUser = new UserInfo();
+                // 属性转移
+                newUser.setPiName(userName);
+                newUser.setUserName(userName);
+                newUser.setAccessToken(loginDTOTmp.getAccessToken());
+                newUser.setUid(userId);
+                newUser.setUserImage(Constants.AVATAR_IMAG);
+                // 插入数据
+                int insert = userInfoMapper.insert(newUser);
+                // 创建用户账号
+                insert += accountInfoMapper.createAccount(userId);
+                // 记录登录
+                String ip = getIp();
+                String region = getIp2Region(ip);
+                LoginRecord loginRecord = new LoginRecord(userId, ip, region, new Date(),userName);
+                loginRecordMapper.insert(loginRecord);
+
+                if (insert < 2){throw new BusinessException(REGISTER_FALSE);}
+                // 给新用户开一家网店
+                ItemInfo itemInfo = new ItemInfo(null, StringUtil.generateShortId(), userName, false, null, 0.0, null, null,
+                        null, userId, 0, Constants.AVATAR_IMAG, 1);
+                int insert1 = itemInfoMapper.insert(itemInfo);
+                if (insert1 < 1) {
+                    log.error("给新用户开一家网店失败");
+                    throw new RuntimeException();
+                }
+
+                return new LoginUser(newUser);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        //TODO 根据用户查询权限信息 添加到LoginUser中
+        // 获取用户
+
+        // 刷新记录当前登录的时间f
+        userInfoMapper.update(null, new UpdateWrapper<UserInfo>()
+                .eq("pi_name", userName).set("last_login", new Date()));
+        //更新token
+        if (!user.getAccessToken().equals(loginDTOTmp.getAccessToken())) {
+            user.setAccessToken(loginDTOTmp.getAccessToken());
+            userInfoMapper.updateById(user);
+        }
+        // 记录登录
+        String ip = getIp();
+        String region = getIp2Region(ip);
+        LoginRecord loginRecord = new LoginRecord(user.getUid(), ip, region, new Date(),userName);
+        loginRecordMapper.insert(loginRecord);
+
+        //封装成UserDetails对象返回
+        return new LoginUser(user);
+    }
+
+    /**
+     * 登录接口
+     */
+    private LoginDTO loginDTOTmp;
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseResultVO login(LoginDTO loginDTO) {
+        loginDTOTmp=loginDTO;
         // 根据pi_name查询数据库
         String userName = loginDTO.getUserName();
-        UserInfo userInfo = userInfoMapper.selectOne(new QueryWrapper<UserInfo>().eq("pi_name", userName));
-        // 根据是否为空选择是否进行注册登录
-        if (userInfo != null) {
-            // 刷新记录当前登录的时间f
-            userInfoMapper.update(null, new UpdateWrapper<UserInfo>()
-                    .eq("pi_name", userName).set("last_login", new Date()));
-            //更新token
-            if (!userInfo.getAccessToken().equals(loginDTO.getAccessToken())) {
-                userInfo.setAccessToken(loginDTO.getAccessToken());
-                userInfoMapper.updateById(userInfo);
-            }
-            // 记录登录
-            String ip = getIp();
-            String region = getIp2Region(ip);
-            LoginRecord loginRecord = new LoginRecord(userId, ip, region, new Date(),userName);
-            loginRecordMapper.insert(loginRecord);
-            // 已注册
-            return userInfo;
+        // 将用户信息发给authentication
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDTO.getUserName(),loginDTO.getUserName());
+        // 调用mapper层的UserDetailService方法，校验信息
+        Authentication authenticate = authenticationManager.authenticate(authenticationToken);
+
+        // 验证不通过
+        if (Objects.isNull(authenticate)) {
+            throw new RuntimeException("发生异常");
         }
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url("https://api.minepi.com/v2/me")
-                .addHeader("Authorization", "Bearer " + loginDTO.getAccessToken())
-                .build();
-        try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                return null;
-            }
-            String string = response.body().string();
-            JSONObject jsonObject1 = JSON.parseObject(string);
+        // 获取用户
+        LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
+        UserInfo userInfo = loginUser.getUserInfo();
+        String userId=userInfo.getUid();
 
-            if (!jsonObject1.getString("username").equals(userName)) {
-                return null;
-            }
+        // 生产jwt
+        String jwt = JwtUtil.createJWT(userId);
+        //authenticate存入redis
+        redisCache.setCacheObject("login:"+userId,loginUser);
+        //把token响应给前端
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("token",jwt);
+        map.put("user",userInfo);
+        return new ResponseResultVO(200,"登陆成功",map);
+    }
 
-            //新用户
-            UserInfo newUser = new UserInfo();
-            // 属性转移
-            newUser.setPiName(userName);
-            newUser.setUserName(userName);
-            newUser.setAccessToken(loginDTO.getAccessToken());
-            newUser.setUid(userId);
-            newUser.setUserImage(Constants.AVATAR_IMAG);
-            // 插入数据
-            int insert = userInfoMapper.insert(newUser);
-            //创建用户账号
-            insert += accountInfoMapper.createAccount(userId);
-            // 记录登录
-            String ip = getIp();
-            String region = getIp2Region(ip);
-            LoginRecord loginRecord = new LoginRecord(userId, ip, region, new Date(),userName);
-            loginRecordMapper.insert(loginRecord);
+    @Override
+    public ResponseResultVO logout(String userId) {
 
-            if (insert < 2){throw new BusinessException(REGISTER_FALSE);}
-            // 给新用户开一家网店
-            ItemInfo itemInfo = new ItemInfo(null, StringUtil.generateShortId(), userName, false, null, 0.0, null, null,
-                    null, userId, 0, Constants.AVATAR_IMAG, 1);
-            int insert1 = itemInfoMapper.insert(itemInfo);
-            if (insert1 < 1) {
-                log.error("给新用户开一家网店失败");
-                throw new RuntimeException();
-            }
-            // 获取最新的注册后的用户数据（包含默认值）
-            return userInfoMapper.selectOne(new QueryWrapper<UserInfo>().eq("uid", userId));
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        redisCache.deleteObject("login:"+userId);
+        log.error("退出登录成功---------------------------------------------"+userId);
+        return new ResponseResultVO(200,"退出成功",null);
     }
 
     /**

@@ -5,6 +5,7 @@ import com.example.pipayshopapi.entity.UserInfo;
 import com.example.pipayshopapi.entity.dto.LoginDTO;
 import com.example.pipayshopapi.entity.vo.CountryVO;
 import com.example.pipayshopapi.entity.vo.ItemMinInfoVo;
+import com.example.pipayshopapi.entity.vo.ResponseResultVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -12,6 +13,7 @@ import com.example.pipayshopapi.service.CountryService;
 import com.example.pipayshopapi.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +31,7 @@ import java.util.List;
 @Api(value = "用户数据接口",tags = "用户数据接口")
 @RestController
 @RequestMapping("/pipayshopapi/user-info")
+@Slf4j
 public class UserInfoController {
 
     @Resource
@@ -46,14 +49,14 @@ public class UserInfoController {
 
     @PostMapping("login")
     @ApiOperation("登录")
-    public ResponseVO<UserInfo> login(@RequestBody LoginDTO loginDTO) {
+    public ResponseResultVO login(@RequestBody LoginDTO loginDTO) {
         try {
-            UserInfo userInfo = userInfoService.login(loginDTO);
-            if (userInfo == null) {
+            ResponseResultVO responseResultVO = userInfoService.login(loginDTO);
+            if (responseResultVO == null) {
                 throw new Exception();
             }
 
-            return ResponseVO.getSuccessResponseVo(userInfo);
+            return responseResultVO;
         } catch (Exception e) {
 
             throw new BusinessException("登录注册失败，请联系后台人员 + "+e.getLocalizedMessage()+e+e.getCause().toString());

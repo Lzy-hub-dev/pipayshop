@@ -18,6 +18,8 @@ import java.util.List;
 public interface ShopInfoService extends IService<ShopInfo> {
 
 
+    String getShopCodeByShopId(String shopId);
+
     /**
      * 根据二级分类-获取所有实体店列表
      *

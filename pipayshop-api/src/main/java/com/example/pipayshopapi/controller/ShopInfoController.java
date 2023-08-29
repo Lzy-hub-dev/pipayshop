@@ -33,6 +33,8 @@ public class ShopInfoController {
     private ShopInfoService infoService;
     private static final Logger log = LoggerFactory.getLogger(ShopTagsController.class);
 
+
+
     @PostMapping("getHotelInfoByCondition")
     @ApiOperation("根据条件筛选酒店信息")
     public ResponseVO<PageDataVO> getHotelInfoByCondition(@RequestBody LivePageVO livePageVO){
@@ -45,6 +47,18 @@ public class ShopInfoController {
         } catch (Exception e) {
             e.printStackTrace();
             throw new BusinessException("评论评分设置失败，请联系后台人员");
+        }
+    }
+
+    @PostMapping("getShopCodeByShopId/{shopId}")
+    @ApiOperation("获取商铺的付款码链接")
+    public ResponseVO<String> getShopCodeByShopId(@PathVariable String shopId){
+        try {
+            String result = infoService.getShopCodeByShopId(shopId);
+            return ResponseVO.getSuccessResponseVo(result);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("获取商铺的付款码链接失败，请联系后台人员");
         }
     }
 

@@ -16,7 +16,7 @@ public class CorsConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-//         添加B端拦截器，并指定拦截的路径
+    // 添加B端拦截器，并指定拦截的路径
         registry.addInterceptor(new TokenInterceptor())
                 .addPathPatterns("/pipayshopapi/transaction-record/getRecordTransaction/**", "/pipayshopapi/transaction-record/recordTransaction/**");
     }

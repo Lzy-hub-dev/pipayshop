@@ -20,4 +20,7 @@
     <select id="selectAccountInfo" resultType="com.example.pipayshopapi.entity.vo.AccountInfoVO">
         select point_balance,pi_balance FROM account_info where uid=#{uid};
     </select>
+    <select id="selectAccountBalance" resultType="java.math.BigDecimal">
+        select point_balance from account_info where  uid=#{uid};
+    </select>
 </mapper>

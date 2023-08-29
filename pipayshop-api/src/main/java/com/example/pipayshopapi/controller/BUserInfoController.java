@@ -2,17 +2,19 @@ package com.example.pipayshopapi.controller;
 
 
 import com.example.pipayshopapi.entity.vo.BUserLoginVO;
+import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.BUserInfoService;
+import com.example.pipayshopapi.util.TokenUtil;
+import io.jsonwebtoken.Claims;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * <p>
@@ -66,4 +68,53 @@ public class BUserInfoController {
         }
     }
 
+    /**
+     * 修改密码
+     */
+    @GetMapping("selectAccountBalance/{uid}")
+    @ApiOperation("b端获取商户账户积分")
+    public ResponseVO<BigDecimal> selectAccountBalance(@PathVariable String uid){
+        try {
+            BigDecimal bigDecimal = bUserInfoService.selectAccountBalance(uid);
+
+            return ResponseVO.getSuccessResponseVo(bigDecimal);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("b端获取商户账户积分失败");
+        }
+    }
+
+
+    /**
+     * b端商户提现
+     */
+    @PostMapping("userWithDraw/{token}")
+    @ApiOperation("b端商户提现")
+    public ResponseVO<String> userWithDraw(@PathVariable String token) {
+        try {
+            Claims dataFromToken = TokenUtil.getDataFromToken(token);
+            String uid = (String) dataFromToken.get("uid");
+            String balance = (String) dataFromToken.get("balance");
+            boolean userWithDraw = bUserInfoService.userWithDraw(uid, new BigDecimal(balance));
+            if ( !userWithDraw){
+                return ResponseVO.getFalseResponseVo("提现失败");
+            }
+            return ResponseVO.getSuccessResponseVo("提现成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("b端获取商户提现失败");
+        }
+    }
+
+    @GetMapping("selectUserWithdrawalRecord")
+    @ApiOperation("b端获取提现记录列表")
+    public ResponseVO<PageDataVO> selectUserWithdrawalRecord(String uid,Integer page,Integer limit) {
+        try {
+            PageDataVO pageDataVO = bUserInfoService.selectUserWithdrawalRecord(uid, page, limit);
+            if (pageDataVO == null){throw new Exception();}
+            return ResponseVO.getSuccessResponseVo(pageDataVO);
+        } catch (Exception e) {
+            throw new BusinessException("b端获取提现记录列表失败，请联系后台人员");
+        }
+    }
 }
