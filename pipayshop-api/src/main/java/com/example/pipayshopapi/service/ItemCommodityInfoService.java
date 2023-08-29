@@ -100,5 +100,4 @@ public interface ItemCommodityInfoService extends IService<ItemCommodityInfo> {
 
     String getOriginAddressById(String commodityId);
 
-
 }

@@ -17,6 +17,7 @@ import com.example.pipayshopapi.util.StringUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -106,7 +107,7 @@ public class ShopCommodityLiveInfoServiceImpl extends ServiceImpl<ShopCommodityL
                 .eq("shop_id", shopCommodityLiveInfoVO1.getShopId())
                 .setSql("upload_commodity_balance= upload_commodity_balance -1"));
         if (shopId < 1){throw new RuntimeException();}
-
+        // 属性转移
         ShopCommodityLiveInfo shopCommodityLiveInfo = new ShopCommodityLiveInfo(null,StringUtil.generateShortId(),
                 shopCommodityLiveInfoVO1.getRoomTypeName(),shopCommodityLiveInfoVO1.getShopId(),
                 shopCommodityLiveInfoVO1.getInventory(),shopCommodityLiveInfoVO1.getDetail(),

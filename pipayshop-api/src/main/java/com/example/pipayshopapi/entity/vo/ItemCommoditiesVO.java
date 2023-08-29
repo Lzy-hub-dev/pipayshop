@@ -4,12 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
+/**
+ * @author wzx
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class itemCommoditiesVO {
+public class ItemCommoditiesVO{
     /**
      * 商品现价
      */

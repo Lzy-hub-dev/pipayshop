@@ -14,6 +14,7 @@ import com.example.pipayshopapi.mapper.ShopCommodityInfoMapper;
 import com.example.pipayshopapi.mapper.ShopOrderInfoMapper;
 import com.example.pipayshopapi.service.ShopCommodityEvaluateService;
 import com.example.pipayshopapi.util.StringUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -58,11 +59,8 @@ public class ShopCommodityEvaluateServiceImpl extends ServiceImpl<ShopCommodityE
         // 查询当前实体店商品所在的网店id
         String shopId = shopCommodityInfoMapper.selectShopIdByCommodityId(dto.getCommodityId());
         ShopCommodityEvaluate evaluate = new ShopCommodityEvaluate();
-        evaluate.setEvaluate(dto.getEvaluate());
-        evaluate.setUserId(dto.getUserId());
+        BeanUtils.copyProperties(dto, evaluate);
         evaluate.setItemId(shopId);
-        evaluate.setScore(dto.getScore());
-        evaluate.setCommodityId(dto.getCommodityId());
         evaluate.setEvaluateId(StringUtil.generateShortId());
         evaluate.setStatus(false);
         int update = shopOrderInfoMapper.update(null, new UpdateWrapper<ShopOrderInfo>()

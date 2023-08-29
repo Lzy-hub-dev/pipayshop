@@ -1,6 +1,5 @@
 package com.example.pipayshopapi.entity.vo;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,13 +10,16 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommodityPageVO {
+public class CountryVO {
 
-    private Integer limit;
-    private Integer page;
-    private Integer secondCategoryId;
     /**
-     * 用户所在的国家编码
+     * 国家代码
      */
     private String countryCode;
+
+    /**
+     * 国家名字
+     */
+    private String countryName;
+
 }

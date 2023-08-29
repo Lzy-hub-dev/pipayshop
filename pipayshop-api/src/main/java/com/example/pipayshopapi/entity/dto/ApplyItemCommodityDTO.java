@@ -77,6 +77,10 @@ public class ApplyItemCommodityDTO {
      *  商品详情图片的地址集合
      */
     private List<String> detailImags;
+    /**
+     * 用户所在的国家编码
+     */
+    private String countryCode;
 
 
 }

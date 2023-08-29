@@ -39,7 +39,6 @@ public class ItemCommodityInfoController {
     @Resource
     private ItemCommodityHistoryService itemCommodityHistoryService;
 
-
     @GetMapping("commodityOfCateList")
     @ApiOperation("查找二级分类下对应的商品列表-分页展示")
     public ResponseVO<PageDataVO> commodityOfCateList(@ModelAttribute CommodityPageVO commodityPageVO) {
@@ -128,7 +127,7 @@ public class ItemCommodityInfoController {
             return ResponseVO.getSuccessResponseVo(collectList);
         } catch (Exception e) {
             log.error(e.getMessage());
-            throw new BusinessException("查询失败，请联系后台人" + "、员");
+            throw new BusinessException("查询失败，请联系后台人员");
         }
     }
 

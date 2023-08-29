@@ -21,16 +21,28 @@
     </update>
 
     <select id="commodityOfCateList" resultType="com.example.pipayshopapi.entity.vo.CommodityVO">
-
-        SELECT i.commodity_id, i.item_commodity_name, i.origin_price, i.price, i.details, i.avatar_imag, it.membership
-        FROM item_commodity_info as i
-                 join item_info it on it.item_id = i.item_id
-                 JOIN item_commodity_category as c on i.category_id = c.category_id
-        where c.category_id = #{secondCategoryId}
-                and i.status = 0
-         limit ${startIndex}
-            , ${number}
-
+        SELECT
+            i.commodity_id, i.item_commodity_name, i.origin_price, i.price, i.details, i.avatar_imag, it.membership
+        FROM
+            item_commodity_info i
+        JOIN
+            item_info it
+        ON
+            it.item_id = i.item_id
+        JOIN
+            item_commodity_category c
+        ON
+            i.category_id = c.category_id
+        JOIN
+            country_commodity cc
+        ON
+            cc.commodity_id = I.commodity_id
+        WHERE
+            c.category_id = #{secondCategoryId} AND i.status = 0 AND cc.country_code = #{countryCode}
+        ORDER BY
+            i.create_time DESC
+        LIMIT
+            ${startIndex} , ${number}
     </select>
 
     <select id="listCount" resultType="java.lang.Integer">
@@ -151,7 +163,7 @@
         limit #{page},#{limit}
     </select>
     <select id="selectMembershipByCommodityIdList"
-            resultType="com.example.pipayshopapi.entity.vo.itemCommoditiesVO">
+            resultType="com.example.pipayshopapi.entity.vo.ItemCommoditiesVO">
         SELECT
             DISTINCT
         c.commodity_id,
@@ -215,5 +227,56 @@
 	WHERE order_id = #{orderId}
     )
     </select>
+
+<!--    首页商品的多条件过滤查询-->
+    <select id="itemSearchCommodity" resultType="com.example.pipayshopapi.entity.vo.ItemCommoditiesVO">
+        SELECT
+            ici.price, ici.origin_price, ici.item_commodity_name, ici.avatar_imag, ici.commodity_id, ici.details ,ii.membership
+        <include refid="itemSearchCommoditySql"/>
+            <choose>
+                <when test="dto.priceOrder == 0">
+                     ORDER BY ici.price ASC, ici.create_time DESC
+                </when>
+                <when test="dto.priceOrder == 1">
+                     ORDER BY ici.price DESC, ici.create_time DESC
+                </when>
+                <otherwise>
+                    ORDER BY ici.create_time DESC
+                </otherwise>
+            </choose>
+            LIMIT
+                #{dto.page}, #{dto.limit}
+    </select>
+    <select id="itemSearchCommodityCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        <include refid="itemSearchCommoditySql"/>
+    </select>
+
+    <sql id="itemSearchCommoditySql">
+        FROM
+            item_commodity_info ici
+        JOIN
+            item_info ii
+        ON
+            ici.item_id = ii.item_id
+        JOIN
+            country_commodity cc
+        ON
+            cc.commodity_id = ici.commodity_id
+        WHERE
+            ici.status = 0 AND cc.country_code = #{dto.countryCode}
+        <if test="dto.brandId != null">
+            and ici.brand_id = #{dto.brandId}
+        </if>
+        <if test="dto.degreeLoss != null">
+            and ici.degree_loss = #{dto.degreeLoss}
+        </if>
+        <if test="dto.commodityName != null">
+            and ici.item_commodity_name LIKE concat('%',#{dto.commodityName},'%')
+        </if>
+        <if test="dto.freeShippingNum != null ">
+            and ici.free_shipping_num = 0
+        </if>
+    </sql>
 
 </mapper>
