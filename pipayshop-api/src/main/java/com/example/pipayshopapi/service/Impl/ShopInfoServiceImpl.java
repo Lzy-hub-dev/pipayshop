@@ -342,8 +342,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
                             .eq("shop_id", shopId)
                             .eq("status", 0)
                             .set("membership", 1));
-                })
-                .count();
+                }).count();
         return true;
     }
 

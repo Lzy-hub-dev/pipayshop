@@ -19,4 +19,9 @@ public class Constants {
      * 用户和网店的默认头像
      */
     public static final String AVATAR_IMAG = "/images/avatar/avatar.jpg";
+
+    /**
+     * 全局统一的图片格式
+     */
+    public static final String IMAGE_TYPE = "png";
 }

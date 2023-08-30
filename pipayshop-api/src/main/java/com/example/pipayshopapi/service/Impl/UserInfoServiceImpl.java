@@ -21,6 +21,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.tomcat.util.http.fileupload.FileUpload;
 import org.lionsoul.ip2region.xdb.Searcher;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -40,9 +41,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * <p>
@@ -258,20 +257,30 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
      * 更改头像
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean uploadUserImage(String userId, MultipartFile file) {
-
         String uploadFile = FileUploadUtil.uploadFile(file, FileUploadUtil.AVATAR);
-        if (StringUtils.isEmpty(uploadFile)) {
-            throw new BusinessException("文件上传失败");
-        }
-        int update = userInfoMapper.update(null, new LambdaUpdateWrapper<UserInfo>()
-                .eq(UserInfo::getUid, userId)
-                .set(UserInfo::getUserImage, uploadFile));
-        if (update <= 0) {
+        try {
+            if (StringUtils.isEmpty(uploadFile)) {
+                throw new BusinessException("文件上传失败");
+            }
+            int update = userInfoMapper.update(null, new LambdaUpdateWrapper<UserInfo>()
+                    .eq(UserInfo::getUid, userId)
+                    .set(UserInfo::getUserImage, uploadFile));
+            if (update <= 0) {
+                FileUploadUtil.deleteFile(uploadFile);
+                return false;
+            }
+            // 异步裁剪压缩
+            List<String> list = new ArrayList<>();
+            list.add(ImageConstants.USER_IMAGE_SIZE_SMALL);
+            list.add(ImageConstants.USER_IMAGE_SIZE_BIG);
+            FileUploadUtil.asyCropping(uploadFile, list);
+            return true;
+        } catch (BusinessException e) {
             FileUploadUtil.deleteFile(uploadFile);
-            return false;
+            throw new RuntimeException(e);
         }
-        return true;
     }
 
     @Override

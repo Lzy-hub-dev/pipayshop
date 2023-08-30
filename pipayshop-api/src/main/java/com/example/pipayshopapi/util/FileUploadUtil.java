@@ -2,11 +2,14 @@ package com.example.pipayshopapi.util;
 
 import com.example.pipayshopapi.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 
 /**
@@ -63,10 +66,8 @@ public class FileUploadUtil {
 
     /**
      * 文件上传
-     * @param multipartFile
-     * @return 文件路径+文件名
      */
-    public static String uploadFile(MultipartFile multipartFile,String path) {
+    public static String uploadFile(MultipartFile multipartFile, String path) {
         if (multipartFile.isEmpty()) {
             throw new BusinessException("文件不能为空") ;
         }
@@ -100,8 +101,6 @@ public class FileUploadUtil {
 
     /**
      *删除文件
-     * @param fileName 这是图片的路径
-     * @return
      */
     public static boolean deleteFile(String fileName){
         File file = new File(UPLOAD_PRE+fileName);
@@ -115,5 +114,31 @@ public class FileUploadUtil {
             }
         }
         return false;
+    }
+
+    /**
+     * 将一张图片异步裁剪压缩为多张小规格图片
+     */
+    public static void  asyCropping(String path, List<String> sizeList){
+        // 对图片进行批量压缩存储
+        sizeList.stream()
+                .parallel()
+                    .peek(size -> {
+                        String[] sizeArray = size.split(",");
+                        int length = Integer.parseInt(sizeArray[0]);
+                    int wide = Integer.parseInt(sizeArray[1]);
+                    try {
+                        File file = ResourceUtils.getFile("classpath:static" + path);
+                        String newFileName = file.getAbsolutePath()
+                                .replace("target\\classes", "src\\main\\resources")
+                                .replaceFirst("\\.([a-z]+)", "_" + length +"_" + wide + ".png");
+                        Thumbnails.of(file)
+                                .size(length, wide)
+                                .outputFormat(Constants.IMAGE_TYPE)
+                                .toFile(newFileName);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }).count();
     }
 }
