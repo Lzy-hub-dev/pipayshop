@@ -38,19 +38,24 @@
                                WHERE c.category_id = #{categorySecId});
     </select>
     <select id="getShopInfoVO" resultType="com.example.pipayshopapi.entity.vo.ShopInfoVO1">
-        SELECT shop_id,shop_name,score,user_image, (
+        SELECT s.shop_id,s.shop_name,s.score,i.origin_path as userImage, (
             SELECT COUNT(*) FROM shop_follow_focus
             where `status`=0 and shop_id=#{shopId}
         ) as follows
-        from shop_info
+        from shop_info s
+        JOIN
+             image i
+        on
+            i.image_id = s.user_image
         WHERE shop_id=#{shopId}
     </select>
     <select id="getShopList" resultType="com.example.pipayshopapi.entity.vo.ShopInfoVO1">
-        SELECT shop_id,shop_name,score,user_image, (
+        SELECT s.shop_id,s.shop_name,s.score,i.origin_path as userImage, (
             SELECT COUNT(*) FROM shop_follow_focus
-            where `status`=0 and shop_id=shop_info.shop_id
+            where `status`=0 and shop_id= s.shop_id
         ) as follows
-        from shop_info
+        from shop_info s
+        join image i on i.image_id = s.user_image
         WHERE uid=#{uid}
         and status = 0
             LIMIT #{page},#{limit}
@@ -63,24 +68,25 @@
     <select id="getIndexShopInfoVOCount" resultType="java.lang.Integer">
         select count(*)
         from shop_info
-        <if test="categoryId != null and categoryId != -1">
-            WHERE category_id = #{categoryId} AND status=0
+        WHERE status=0
+        <if test="categoryId != null and categoryId != '-1'">
+        and category_id = #{categoryId}
         </if>
     </select>
 
 
 
     <select id="getIndexShopInfoVO" resultType="com.example.pipayshopapi.entity.vo.IndexShopInfoVO">
-        select shop_id,shop_name,score,localhost_latitude,localhost_longitude,user_image, shop_introduce,tag_list,address,membership
-        from shop_info
+        select
+            s.shop_id, s.shop_name, s.score, s.localhost_latitude, s.localhost_longitude, i.origin_path as userImage, s.shop_introduce, s.tag_list, s.address, s.membership
+        from shop_info s
+        JOIN
+            image i
+        ON
+            i.image_id = s.user_image
             <where>
-
-                <if test="categoryId != null and categoryId != '-1' ">shop_info.category_id IN( SELECT
-                    s.category_id
-                    FROM
-                    shop_category s
-                    WHERE
-                    s.category_pid = #{categoryId})
+                <if test="categoryId != null and categoryId != '-1' ">
+                s.category_id  = #{categoryId}
                  </if>
             </where>
         <choose>
@@ -96,15 +102,10 @@
 
     <select id="getAllIndexShopInfoVO" resultType="java.lang.Integer">
         select COUNT(*)
-        from shop_info
-        WHERE category_id
-                  IN
-              (SELECT
-                   sc.category_id
-               FROM
-                   shop_category sc
-               WHERE
-                   sc.category_pid=#{categoryId})
+        from shop_info s
+        WHERE
+       s.category_id in
+            (select category_id from shop_category where category_pid = #{categoryId}) AND status=0
     </select>
 
     <select id="getShopInfoVOCount" resultType="java.lang.Integer">
@@ -122,16 +123,15 @@
     </select>
 
     <select id="getIndexShopInfoVOById" resultType="com.example.pipayshopapi.entity.vo.IndexShopInfoVO">
-        select shop_id,shop_name,score,localhost_latitude,localhost_longitude,user_image,
-               shop_introduce,tag_list,address,membership
-        from shop_info
-        WHERE category_id IN
-              (SELECT
-                   sc.category_id
-               FROM
-                   shop_category sc
-               WHERE
-                   sc.category_pid=#{categoryId}) AND status=0
+        select s.shop_id,s.shop_name,s.score,s.localhost_latitude,s.localhost_longitude,i.origin_path as userImage,
+               s.shop_introduce, s.tag_list,s.address,s.membership
+        from shop_info s
+        JOIN
+             image i
+        ON
+            i.image_id = s.user_image
+        WHERE category_id in
+              (select category_id from shop_category where category_pid = #{categoryId}) AND status=0
         LIMIT ${page},${limit}
     </select>
 
@@ -195,5 +195,20 @@
             where
                 shop_id = #{shopId} and status = 0
         </select>
+
+
+
+
+    <select id="getShopInfoMinListByCondition" resultType="com.example.pipayshopapi.entity.vo.IndexShopInfoVO">
+        select
+        s.shop_id, s.shop_name, s.score, s.localhost_latitude, s.localhost_longitude, i.origin_path as userImage, s.shop_introduce, s.tag_list, s.address, s.membership
+        from shop_info s
+        JOIN
+        image i
+        ON
+        i.image_id = s.user_image
+        where s.category_id  = #{categoryId} and s.status = 0
+        LIMIT ${page},${limit}
+    </select>
 
 </mapper>

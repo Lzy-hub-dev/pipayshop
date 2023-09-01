@@ -39,7 +39,7 @@ public class ShopCategoryMinServiceImpl extends ServiceImpl<ShopCategoryMinMappe
     public PageDataVO getShopInfoMinListByCondition(Integer limit, Integer pages, String categoryId) {
         // 获取总条数
         Integer indexShopInfoVOCount = shopInfoMapper.getIndexShopInfoVOCount(categoryId);
-        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVOById(categoryId, (pages - 1) * limit, limit);
+        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getShopInfoMinListByCondition(categoryId, (pages - 1) * limit, limit);
         return new PageDataVO(indexShopInfoVOCount,indexShopInfoVO);
     }
 

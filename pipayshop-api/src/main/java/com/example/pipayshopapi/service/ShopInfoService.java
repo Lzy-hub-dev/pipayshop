@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
 import com.example.pipayshopapi.entity.vo.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,11 +23,6 @@ public interface ShopInfoService extends IService<ShopInfo> {
 
     /**
      * 根据二级分类-获取所有实体店列表
-     *
-     * @param limit
-     * @param pages
-     * @param categoryId
-     * @return
      */
     PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId,Boolean score);
 
@@ -98,4 +94,13 @@ public interface ShopInfoService extends IService<ShopInfo> {
      */
     PageDataVO getHotelInfoByCondition(LivePageVO livePageVO);
 
+    /**
+     * 实体店展示图上传
+     */
+    String shopTopImageUp(MultipartFile multipartFile);
+
+    /**
+     * 实体店轮播图上传
+     */
+    String shopImageUp(MultipartFile multipartFile);
 }

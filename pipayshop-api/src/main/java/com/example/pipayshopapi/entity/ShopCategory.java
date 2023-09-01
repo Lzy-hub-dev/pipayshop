@@ -1,5 +1,7 @@
 package com.example.pipayshopapi.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -27,10 +29,14 @@ public class ShopCategory implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
+
     /**
      * 所有实体店二级分类id
      */
-    private Integer categoryId;
+    private String categoryId;
 
     /**
      * 所有实体店二级分类内容
@@ -47,7 +53,7 @@ public class ShopCategory implements Serializable {
     /**
      * 该分类的父级分类id
      */
-    private Integer categoryPid;
+    private String categoryPid;
 
     /**
      * 0:启用1:禁用

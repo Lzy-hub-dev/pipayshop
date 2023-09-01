@@ -1,14 +1,24 @@
 package com.example.pipayshopapi.util;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.example.pipayshopapi.config.CommonConfig;
+import com.example.pipayshopapi.entity.Image;
 import com.example.pipayshopapi.exception.BusinessException;
+import com.example.pipayshopapi.mapper.ImageMapper;
 import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnails;
+import org.springframework.stereotype.Component;
+import org.springframework.util.DigestUtils;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 
@@ -18,6 +28,7 @@ import java.util.List;
  * @Description 文件上传工具类
  */
 @Slf4j
+@Component
 public class FileUploadUtil {
     private static final String SEPARATOR = "/";
     private static final String PRE="images/";
@@ -63,6 +74,14 @@ public class FileUploadUtil {
     //PI ID 图上传
     public static String PI_ID_IMAGE = "pi_id_image";
 
+    @Resource
+    private  CommonConfig commonConfig;
+    private static FileUploadUtil fileUploadUtil;
+    @PostConstruct
+    public void init(){
+        fileUploadUtil = this;
+        fileUploadUtil.commonConfig= commonConfig;
+    }
 
     /**
      * 文件上传
@@ -81,12 +100,15 @@ public class FileUploadUtil {
         String postStr = fileName.substring(fileName.lastIndexOf("."));
         String preStr = StringUtil.generateShortId();
         fileName = preStr +  postStr;
-        File readPath = new File(UPLOAD_PRE+PRE+path);
+
+        String imagePath = fileUploadUtil.commonConfig.getImagePath();
+        File readPath = new File(imagePath + File.separator + path);
         if (!readPath.isDirectory()) {
             readPath.mkdirs();
         }
         //将文件复制到指定路径
-        File destFile = new File(readPath.getAbsolutePath()+SEPARATOR + fileName);
+        String separator = File.separator;
+        File destFile = new File(readPath.getAbsolutePath()+ separator + fileName);
 
         try {
             FileCopyUtils.copy(multipartFile.getBytes(), destFile);
@@ -95,7 +117,7 @@ public class FileUploadUtil {
             e.printStackTrace();
         }
 
-        return SEPARATOR+PRE+path+SEPARATOR+fileName;
+        return SEPARATOR + PRE + path + SEPARATOR  + fileName;
     }
 
 
@@ -141,4 +163,50 @@ public class FileUploadUtil {
                     }
                 }).count();
     }
+
+    /**
+     * 文件MD5值获取
+     */
+    public static String calculateMD5(MultipartFile file) throws IOException, NoSuchAlgorithmException {
+        MessageDigest md5Digest = MessageDigest.getInstance("MD5");
+        byte[] fileBytes = file.getBytes();
+        byte[] digest = md5Digest.digest(fileBytes);
+        return DigestUtils.md5DigestAsHex(digest);
+    }
+
+    /**
+     * 完整上传图片操作
+     */
+    public static String allUploadImageData(MultipartFile file, ImageMapper imageMapper, String smallPath){
+        String path = null;
+        try {
+            // 校验MD
+            String md5 = FileUploadUtil.calculateMD5(file);
+            Image image = imageMapper.selectOne(new QueryWrapper<Image>().eq("md5", md5).select("image_id"));
+            if (image != null) {
+                // 存在就直接返回目标图片id,不需要保存
+                return image.getImageId();
+            }
+            // 相同图片不存在
+            // 1.存储图片
+            path = uploadFile(file, smallPath);
+            // 2.记录图片数据
+            String imageId = StringUtil.generateShortId();
+            Image img = new Image(null, imageId, md5, path, null, null, null, null);
+            int insert = imageMapper.insert(img);
+            if (insert < 1) {
+                log.error("记录图片数据失败");
+                throw new BusinessException("文件上传失败");
+            }
+            return imageId;
+        } catch (IOException | NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }finally {
+            if (path != null) {
+                // 上传失败,释放内存
+                FileUploadUtil.deleteFile(path);
+            }
+        }
+    }
+
 }

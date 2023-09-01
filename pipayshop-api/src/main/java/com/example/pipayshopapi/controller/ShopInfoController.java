@@ -78,7 +78,7 @@ public class ShopInfoController {
     }
 
     @GetMapping("getShopInfoListByCondition/{limit}/{pages}/{categoryId}/{score}")
-    @ApiOperation("根据条件获取所有实体店列表")
+    @ApiOperation("首页根据条件获取所有实体店列表")
     public ResponseVO<PageDataVO> getShopInfoListByCondition(@PathVariable Integer limit,@PathVariable Integer pages,@PathVariable String categoryId,@PathVariable Boolean score){
         try {
             PageDataVO shopInfoListByCondition = infoService.getShopInfoListByCondition(limit, pages, categoryId,score);
@@ -241,8 +241,8 @@ public class ShopInfoController {
     @ApiOperation("实体店展示图上传")
     public ResponseVO<String> shopTopImageUp(MultipartFile multipartFile){
         try {
-            String shopTopImageUp = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.SHOP_TOP_IMAGE_UP);
-            return ResponseVO.getSuccessResponseVo(shopTopImageUp);
+            String imageId = infoService.shopTopImageUp(multipartFile);
+            return ResponseVO.getSuccessResponseVo(imageId);
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("实体店展示图上传失败，请联系后台人员");
@@ -253,8 +253,8 @@ public class ShopInfoController {
     @ApiOperation("实体店轮播图上传")
     public ResponseVO<String> shopImageUp(MultipartFile multipartFile){
         try {
-            String shopImageUp = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.SHOP_IMAGE_UP);
-            return ResponseVO.getSuccessResponseVo(shopImageUp);
+            String imageId = infoService.shopImageUp(multipartFile);
+            return ResponseVO.getSuccessResponseVo(imageId);
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("实体店轮播图上传失败，请联系后台人员");
@@ -276,6 +276,7 @@ public class ShopInfoController {
         }
     }
 
+/*
 
     @PostMapping("piIdImageUp")
     @ApiOperation("pi_Id_Image上传")
@@ -287,5 +288,5 @@ public class ShopInfoController {
             e.printStackTrace();
             throw new BusinessException("pi_Id_Image上传失败，请联系后台人员");
         }
-    }
+    }*/
 }

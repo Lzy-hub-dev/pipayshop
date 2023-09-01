@@ -6,30 +6,29 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.pipayshopapi.entity.BUserInfo;
-import com.example.pipayshopapi.entity.ShopInfo;
-import com.example.pipayshopapi.entity.ShopTags;
-import com.example.pipayshopapi.entity.UserInfo;
+import com.example.pipayshopapi.entity.*;
 import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
 import com.example.pipayshopapi.entity.dto.ShopDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
-import com.example.pipayshopapi.mapper.BUserInfoMapper;
-import com.example.pipayshopapi.mapper.ShopInfoMapper;
-import com.example.pipayshopapi.mapper.ShopTagsMapper;
-import com.example.pipayshopapi.mapper.UserInfoMapper;
+import com.example.pipayshopapi.mapper.*;
 import com.example.pipayshopapi.service.ShopInfoService;
+import com.example.pipayshopapi.util.FileUploadUtil;
 import com.example.pipayshopapi.util.StringUtil;
 import com.google.common.collect.Sets;
 import com.javadocmd.simplelatlng.LatLng;
 import com.javadocmd.simplelatlng.LatLngTool;
 import com.javadocmd.simplelatlng.util.LengthUnit;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -55,13 +54,16 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     @Resource
     private BUserInfoMapper bUserInfoMapper;
 
+    @Resource
+    ImageMapper imageMapper;
+
     @Override
     public String getShopCodeByShopId(String shopId) {
         return shopInfoMapper.getShopCodeByShopId(shopId);
     }
 
     /**
-     * 根据二级分类-获取所有实体店列表
+     * 首页获取所有实体店列表
      */
     @Override
     public PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId,Boolean score) {
@@ -143,28 +145,20 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     @Override
     public ShopInfoVO getShopInfoById(String shopId) {
         ShopInfoVO shopInfoVO = new ShopInfoVO();
-        List<ShopTags> list1=new ArrayList<>();
-
         ShopInfo shopInfo = shopInfoMapper.selectOne(new QueryWrapper<ShopInfo>()
                 .eq("status", 0)
                 .eq("shop_id",shopId));
 
-        List<String> taglist = JSON.parseArray(shopInfo.getTagList(), String.class);
-        List<String> imagelist = JSON.parseArray(shopInfo.getShopImagList(), String.class);
-        for (String s : taglist) {
-            ShopTags tagId = tagMapper.selectOne(new QueryWrapper<ShopTags>().eq("tag_id", s));
-            list1.add(tagId);
-        }
-        shopInfoVO.setShopId(shopInfo.getShopId());
-        shopInfoVO.setShopName(shopInfo.getShopName());
-        shopInfoVO.setLocalhostLatitude(shopInfo.getLocalhostLatitude());
-        shopInfoVO.setLocalhostLongitude(shopInfo.getLocalhostLongitude());
-        shopInfoVO.setAddress(shopInfo.getAddress());
-        shopInfoVO.setScore(shopInfo.getScore());
-        shopInfoVO.setShopIntroduce(shopInfo.getShopIntroduce());
-        shopInfoVO.setShopTagsList(list1);
-        shopInfoVO.setShopImagList(imagelist);
-        shopInfoVO.setUserImage(shopInfo.getUserImage());
+        BeanUtils.copyProperties(shopInfo, shopInfoVO);
+        // 解析imageList数据
+        List<String> imageList = JSON.parseArray(shopInfo.getShopImagList(), String.class);
+        List<String> images = imageList.stream()
+                                     .parallel()
+                .map(imageId -> imageMapper.selectPath(imageId))
+                .collect(Collectors.toList());
+        // 解析userImage数据
+        shopInfoVO.setShopImagList(images);
+        shopInfoVO.setUserImage(imageMapper.selectPath(shopInfoVO.getUserImage()));
         return shopInfoVO;
 
     }
@@ -241,7 +235,6 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
             throw new BusinessException("请勿重复提交!");
         }
         try {
-            // 看该用户是否是vip用户，如果是就将他绑定的这家实体店直接升级为vip店铺
             String uid = applyShopDTO.getUid();
             UserInfo userInfo = userInfoMapper.selectOne(new QueryWrapper<UserInfo>()
                     .eq("uid", uid)
@@ -249,15 +242,23 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
             if (userInfo == null){
                 throw new BusinessException("申请实体店失败");
             }
+            // 看该用户是否是vip用户，如果是就将他绑定的这家实体店直接升级为vip店铺
             Integer membership = userInfo.getLevel();
             // 属性转移
-            ShopInfo shopInfo = new ShopInfo(null,StringUtil.generateShortId(),applyShopDTO.getShopName(),
-                    applyShopDTO.getLocalhostLatitude(),applyShopDTO.getLocalhostLongitude(),
-                    null,applyShopDTO.getPhone(),applyShopDTO.getAddress(),null,
-                    applyShopDTO.getShopIntroduce(),JSON.toJSONString(applyShopDTO.getShopImagList()),
-                    applyShopDTO.getShopImagList().get(0),applyShopDTO.getCategoryId(),
-                    uid,null,null,membership, applyShopDTO.getUploadCommodityBalance(), applyShopDTO.getQrcode());
-        //用户剩余数量减一
+            ShopInfo shopInfo = new ShopInfo();
+            BeanUtils.copyProperties(applyShopDTO, shopInfo);
+            shopInfo.setShopId(StringUtil.generateShortId());
+            List<String> shopImagList = applyShopDTO.getShopImagList();
+            shopInfo.setShopImagList(JSON.toJSONString(shopImagList.subList(1, shopImagList.size())));
+            shopInfo.setUserImage(shopImagList.get(0));
+            shopInfo.setUid(uid);
+            shopInfo.setMembership(membership);
+            // 新增实体店
+            int insert = shopInfoMapper.insert(shopInfo);
+            if (insert < 1){
+                throw new BusinessException("申请实体店失败");
+            }
+            // 用户可绑定实体店剩余数量减一
             int update = userInfoMapper.update(null, new LambdaUpdateWrapper<UserInfo>()
                     .eq(UserInfo::getUid, applyShopDTO.getUid())
                     .eq(UserInfo::getStatus, 0)
@@ -274,15 +275,10 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
                 Date date = new Date();
                 BUserInfo bUserInfo = new BUserInfo(null, userInfo.getPiName(), userInfo.getPiName()
                         , date, date, date, 0);
-                int insert = bUserInfoMapper.insert(bUserInfo);
-                if (insert < 1){
+                int insert2 = bUserInfoMapper.insert(bUserInfo);
+                if (insert2 < 1){
                     throw new BusinessException("申请实体店失败");
                 }
-            }
-            // 新增实体店
-            int insert = shopInfoMapper.insert(shopInfo);
-            if (insert < 1){
-                throw new BusinessException("申请实体店失败");
             }
             return true;
         } catch (Exception e) {
@@ -410,4 +406,16 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         return new PageDataVO(num,indexShopInfoVOS);
     }
 
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String shopTopImageUp(MultipartFile multipartFile) {
+        return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.SHOP_TOP_IMAGE_UP);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String shopImageUp(MultipartFile multipartFile) {
+        return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.SHOP_IMAGE_UP);
+    }
 }

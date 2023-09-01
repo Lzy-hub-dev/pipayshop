@@ -49,8 +49,8 @@ public class ShopCommodityLiveInfoController {
     @ApiOperation("酒店头像图片上传")
     public ResponseVO<String> roomTopImageUp(MultipartFile multipartFile){
         try {
-            String room_top_img = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.ROOM_TOP_IMG);
-            return ResponseVO.getSuccessResponseVo(room_top_img);
+            String imageId = shopCommodityLiveInfoService.roomTopImageUp(multipartFile);
+            return ResponseVO.getSuccessResponseVo(imageId);
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("酒店头像图片上传失败，请联系后台人员");
@@ -61,8 +61,8 @@ public class ShopCommodityLiveInfoController {
     @ApiOperation("酒店轮播图上传")
     public ResponseVO<String> roomImageUp(MultipartFile multipartFile){
         try {
-            String uploadFile = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.ROOM_IMAGE_LIST);
-            return ResponseVO.getSuccessResponseVo(uploadFile);
+            String imageId = shopCommodityLiveInfoService.roomImageUp(multipartFile);
+            return ResponseVO.getSuccessResponseVo(imageId);
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("酒店轮播图上传失败，请联系后台人员");

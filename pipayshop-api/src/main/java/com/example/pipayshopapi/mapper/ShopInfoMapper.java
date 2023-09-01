@@ -6,6 +6,7 @@ import com.example.pipayshopapi.entity.vo.IndexShopInfoVO;
 import com.example.pipayshopapi.entity.vo.ShopInfoVO1;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.security.core.parameters.P;
 
 import java.util.Date;
 import java.util.List;
@@ -96,4 +97,6 @@ public interface ShopInfoMapper extends BaseMapper<ShopInfo> {
                             @Param("children")Integer children);
 
     String getShopCodeByShopId(@Param("shopId") String shopId);
+
+    List<IndexShopInfoVO> getShopInfoMinListByCondition(@Param("categoryId") String categoryId, @Param("page") int page, @Param("limit") Integer limit);
 }

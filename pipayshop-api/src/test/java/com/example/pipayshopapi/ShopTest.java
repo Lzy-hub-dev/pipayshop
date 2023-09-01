@@ -1,20 +1,27 @@
 package com.example.pipayshopapi;
 
+import com.example.pipayshopapi.config.CommonConfig;
 import com.example.pipayshopapi.util.Constants;
 import com.example.pipayshopapi.util.FileUploadUtil;
 import net.coobird.thumbnailator.Thumbnails;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ShopTest {
+
+    CommonConfig commonConfig = new CommonConfig();
 
     @Test
     public void imageTest(){
@@ -45,5 +52,12 @@ public class ShopTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Test
+    public void testss2() {
+            File readPath = new File("pipayshop-api/src/main/resources/static/images/avatar");
+            System.out.println(readPath.getAbsolutePath());
+
     }
 }

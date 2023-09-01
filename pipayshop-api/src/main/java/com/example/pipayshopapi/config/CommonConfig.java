@@ -14,4 +14,8 @@ public class CommonConfig {
 
     @Value("${sdk.serverAccessKey}")
     private String serverAccessKey;
+
+    @Value("${image.path}")
+    private String imagePath;
+
 }

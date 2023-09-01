@@ -2,7 +2,6 @@ package com.example.pipayshopapi.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,48 +14,57 @@ import java.util.Date;
 
 /**
  * <p>
- * 实体店一级分类表
+ * 
  * </p>
  *
- * @author nws
- * @since 2023-07-25
+ * @author zxb
+ * @since 2023-08-31
  */
-@TableName("shop_category_top")
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class ShopCategoryTop implements Serializable {
+@NoArgsConstructor
+public class Image implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
 
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
-     * 所有实体店首级分类id
+     * 图片id
      */
-    private String categoryId;
+    private String imageId;
 
     /**
-     * 所有实体店首级分类内容
+     * 图片文件的md5值
      */
-    private String content;
+    private String md5;
 
     /**
-     * 创建时间
+     * 原图存储路径
+     */
+    private String originPath;
+
+    /**
+     * 压缩图的路径
+     */
+    private String decoratePath;
+
+    /**
+     * 0:没有修饰图  1:有修饰图
+     */
+    private Integer isDecorate;
+
+    /**
+     * 上传时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /**
-     * 0:启用1:禁用
+     * 0:正常 1：逻辑删除
      */
-    private Boolean delFlag;
-    /**
-     * 分类图片
-     */
-    private String categoryImg;
+    private Integer delFlag;
 
 }

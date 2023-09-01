@@ -91,7 +91,7 @@ public class ShopInfo implements Serializable {
     /**
      * 店铺类别
      */
-    private Integer categoryId;
+    private String categoryId;
 
     /**
      * 店铺的所有者的用户id

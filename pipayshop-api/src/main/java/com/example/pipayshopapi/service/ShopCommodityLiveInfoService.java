@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ShopCommodityLiveInfo;
 import com.example.pipayshopapi.entity.dto.ShopHotelRecordDTO;
 import com.example.pipayshopapi.entity.vo.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
@@ -58,4 +59,8 @@ public interface ShopCommodityLiveInfoService extends IService<ShopCommodityLive
     boolean insertShopLive(ShopCommodityLiveInfo shopCommodityLiveInfo);
 
     boolean updateShopLive(ShopCommodityLiveInfoUpVO shopCommodityLiveInfoUpVO);
+
+    String roomTopImageUp(MultipartFile multipartFile);
+
+    String roomImageUp(MultipartFile multipartFile);
 }

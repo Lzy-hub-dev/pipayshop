@@ -6,10 +6,12 @@
         SELECT s.create_time
         ,u.uid
         ,u.user_name
-        ,u.user_image
+        ,i.origin_path as userImage
         FROM shop_follow_focus s
-            LEFT JOIN user_info u
+        JOIN user_info u
         ON u.uid = s.follow_id
+        JOIN image i
+        ON i.image_id = u.user_image
         WHERE u.uid in
             (
             SELECT follow_id
@@ -25,15 +27,17 @@
             i.shop_id,
             i.shop_name,
             i.score,
-            i.user_image,
+            pc.origin_path as userImage,
            (
                 SELECT COUNT(*) FROM shop_follow_focus
                 where `status`=0 and shop_id=i.shop_id
             ) as follows
         FROM shop_follow_focus f
-                 INNER JOIN
+                 JOIN
              shop_info i
              ON f.shop_id = i.shop_id
+        JOIN image pc
+        on pc.image_id = i.user_image
         WHERE f.follow_id = #{userId}
           and f.`status` = 0
           and i.`status` = 0

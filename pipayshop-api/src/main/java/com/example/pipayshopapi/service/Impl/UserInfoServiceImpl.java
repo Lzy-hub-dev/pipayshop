@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.pipayshopapi.config.CommonConfig;
 import com.example.pipayshopapi.entity.*;
 import com.example.pipayshopapi.entity.dto.LoginDTO;
 import com.example.pipayshopapi.entity.vo.ItemMinInfoVo;
@@ -41,6 +42,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 /**
@@ -77,6 +79,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Resource
     private RedisCache redisCache;
+
+    @Resource
+    ImageMapper imageMapper;
 
 
     /**
@@ -259,28 +264,16 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean uploadUserImage(String userId, MultipartFile file) {
-        String uploadFile = FileUploadUtil.uploadFile(file, FileUploadUtil.AVATAR);
-        try {
-            if (StringUtils.isEmpty(uploadFile)) {
-                throw new BusinessException("文件上传失败");
-            }
-            int update = userInfoMapper.update(null, new LambdaUpdateWrapper<UserInfo>()
-                    .eq(UserInfo::getUid, userId)
-                    .set(UserInfo::getUserImage, uploadFile));
-            if (update <= 0) {
-                FileUploadUtil.deleteFile(uploadFile);
-                return false;
-            }
-            // 异步裁剪压缩
-            List<String> list = new ArrayList<>();
-            list.add(ImageConstants.USER_IMAGE_SIZE_SMALL);
-            list.add(ImageConstants.USER_IMAGE_SIZE_BIG);
-            FileUploadUtil.asyCropping(uploadFile, list);
-            return true;
-        } catch (BusinessException e) {
-            FileUploadUtil.deleteFile(uploadFile);
-            throw new RuntimeException(e);
+        String imageId = FileUploadUtil.allUploadImageData(file, imageMapper, FileUploadUtil.AVATAR);
+        // 外键关联目标图片数据
+        int update = userInfoMapper.update(null, new LambdaUpdateWrapper<UserInfo>()
+                .eq(UserInfo::getUid, userId)
+                .set(UserInfo::getUserImage, imageId));
+        if (update < 1) {
+            log.error("外键关联目标图片数据");
+            return false;
         }
+        return true;
     }
 
     @Override

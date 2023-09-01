@@ -13,6 +13,7 @@ import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.mapper.*;
 import com.example.pipayshopapi.service.ShopCommodityLiveInfoService;
 import com.example.pipayshopapi.service.ShopHotelRecordService;
+import com.example.pipayshopapi.util.FileUploadUtil;
 import com.example.pipayshopapi.util.StringUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -20,10 +21,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -54,8 +57,11 @@ public class ShopCommodityLiveInfoServiceImpl extends ServiceImpl<ShopCommodityL
     @Resource
     private ShopHotelRecordMapper shopHotelRecordMapper;
 
-    @Resource ShopInfoMapper shopInfoMapper;
+    @Resource
+    ShopInfoMapper shopInfoMapper;
 
+    @Resource
+    ImageMapper imageMapper;
     /**
      * 根据房型id查找房型的详细信息
      */
@@ -66,8 +72,8 @@ public class ShopCommodityLiveInfoServiceImpl extends ServiceImpl<ShopCommodityL
         String bath = shopCommodityLiveInfoMapper.getBath(roomId);
         String appliance = shopCommodityLiveInfoMapper.getAppliance(roomId);
         List<HotelFacilityVO> basicList = null;
-        List<HotelFacilityVO> bathList = null;
-        List<HotelFacilityVO> applianceList = null;
+        List<HotelFacilityVO> bathList;
+        List<HotelFacilityVO> applianceList;
 
         try {
             if(basic != null){
@@ -108,17 +114,22 @@ public class ShopCommodityLiveInfoServiceImpl extends ServiceImpl<ShopCommodityL
                 .setSql("upload_commodity_balance= upload_commodity_balance -1"));
         if (shopId < 1){throw new RuntimeException();}
         // 属性转移
-        ShopCommodityLiveInfo shopCommodityLiveInfo = new ShopCommodityLiveInfo(null,StringUtil.generateShortId(),
-                shopCommodityLiveInfoVO1.getRoomTypeName(),shopCommodityLiveInfoVO1.getShopId(),
-                shopCommodityLiveInfoVO1.getInventory(),shopCommodityLiveInfoVO1.getDetail(),
-                JSON.toJSONString(shopCommodityLiveInfoVO1.getTagList()), JSON.toJSONString(shopCommodityLiveInfoVO1.getImageList()),
-                shopCommodityLiveInfoVO1.getLand(),shopCommodityLiveInfoVO1.getRoom(),
-                shopCommodityLiveInfoVO1.getRestRoom(),shopCommodityLiveInfoVO1.getBed(),
-                shopCommodityLiveInfoVO1.getAdult(),shopCommodityLiveInfoVO1.getChildren(),
-                shopCommodityLiveInfoVO1.getRestricted(),JSON.toJSONString(shopCommodityLiveInfoVO1.getBasics()),
-                JSON.toJSONString(shopCommodityLiveInfoVO1.getBath()),JSON.toJSONString(shopCommodityLiveInfoVO1.getAppliance()),
-                shopCommodityLiveInfoVO1.getPrice(),0,(count==1)?1:0,shopCommodityLiveInfoVO1.getImageList().get(0),
-                2,shopCommodityLiveInfoVO1.getBedType(),shopCommodityLiveInfoVO1.getFloor(),shopCommodityLiveInfoVO1.getIsAdd(),0);
+        ShopCommodityLiveInfo shopCommodityLiveInfo = new ShopCommodityLiveInfo();
+        BeanUtils.copyProperties(shopCommodityLiveInfoVO1, shopCommodityLiveInfo);
+        String roomId = StringUtil.generateShortId();
+        shopCommodityLiveInfo.setRoomId(roomId);
+        shopCommodityLiveInfo.setTagList(JSON.toJSONString(shopCommodityLiveInfoVO1.getTagList()));
+        List<String> imageList = shopCommodityLiveInfoVO1.getImageList();
+        List<String> images = imageList.stream()
+                .parallel()
+                .map(imageId -> imageMapper.selectPath(imageId))
+                .collect(Collectors.toList());
+        shopCommodityLiveInfo.setImageList(JSON.toJSONString(images));
+        shopCommodityLiveInfo.setBasics(JSON.toJSONString(shopCommodityLiveInfoVO1.getBasics()));
+        shopCommodityLiveInfo.setBath(JSON.toJSONString(shopCommodityLiveInfoVO1.getBath()));
+        shopCommodityLiveInfo.setAppliance(JSON.toJSONString(shopCommodityLiveInfoVO1.getAppliance()));
+        shopCommodityLiveInfo.setRecommended((count==1)?1:0);
+        shopCommodityLiveInfo.setAvatarImag(images.get(0));
         int result = shopCommodityLiveInfoMapper.insert(shopCommodityLiveInfo);
         return result>0;
     }
@@ -235,5 +246,15 @@ public class ShopCommodityLiveInfoServiceImpl extends ServiceImpl<ShopCommodityL
         return result > 0;
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String roomTopImageUp(MultipartFile multipartFile) {
+        return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.ROOM_TOP_IMG);
+    }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String roomImageUp(MultipartFile multipartFile) {
+        return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.ROOM_IMAGE_LIST);
+    }
 }
