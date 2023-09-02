@@ -222,8 +222,8 @@ public class ItemCommodityInfoController {
     @ApiOperation("网店头像图片上传")
     public ResponseVO<String> itemTopImagsUp(MultipartFile multipartFile){
         try {
-            String itemTopImags = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.ROOM_TOP_IMG);
-            return ResponseVO.getSuccessResponseVo(itemTopImags);
+            String imageId = commodityInfoService.itemTopImagsUp(multipartFile);
+            return ResponseVO.getSuccessResponseVo(imageId);
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("网店头像图片上传失败，请联系后台人员");
@@ -234,8 +234,8 @@ public class ItemCommodityInfoController {
     @ApiOperation("商品图片的地址集合上传")
     public ResponseVO<String> itemImagsListUp(MultipartFile multipartFile){
         try {
-            String itemImagsList = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.ROOM_TOP_IMG);
-            return ResponseVO.getSuccessResponseVo(itemImagsList);
+            String imageId = commodityInfoService.itemTopImagsUp(multipartFile);
+            return ResponseVO.getSuccessResponseVo(imageId);
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("商品图片的地址集合上传失败，请联系后台人员");
@@ -246,8 +246,8 @@ public class ItemCommodityInfoController {
     @ApiOperation("商品详情图片上传")
     public ResponseVO<String> roomTopImageUp(MultipartFile multipartFile){
         try {
-            String itemDetailImags = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.ROOM_TOP_IMG);
-            return ResponseVO.getSuccessResponseVo(itemDetailImags);
+            String imageId = commodityInfoService.itemTopImagsUp(multipartFile);
+            return ResponseVO.getSuccessResponseVo(imageId);
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("商品详情图片上传失败，请联系后台人员");

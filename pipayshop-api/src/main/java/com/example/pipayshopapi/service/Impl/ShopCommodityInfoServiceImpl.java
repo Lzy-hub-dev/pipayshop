@@ -12,13 +12,16 @@ import com.example.pipayshopapi.entity.ShopTags;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
+import com.example.pipayshopapi.mapper.ImageMapper;
 import com.example.pipayshopapi.mapper.ShopCommodityInfoMapper;
 import com.example.pipayshopapi.mapper.ShopInfoMapper;
 import com.example.pipayshopapi.mapper.ShopTagsMapper;
 import com.example.pipayshopapi.service.ShopCommodityInfoService;
+import com.example.pipayshopapi.util.FileUploadUtil;
 import com.example.pipayshopapi.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -45,6 +48,9 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
     private ShopTagsMapper shopTagsMapper;
     @Resource
     private ShopInfoMapper shopInfoMapper;
+
+    @Resource
+    private ImageMapper imageMapper;
     /**
      * 发布实体店商品
      */
@@ -221,6 +227,15 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
         return shopCommodityInfoMapper.selectShopInfoByCommodityId(commodityId);
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String shopCommodityTopImageUp(MultipartFile multipartFile) {
+        return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.SHOP_COMMODITY_TOP_IMAGE_UP);
+    }
 
-
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String shopCommodityImageUp(MultipartFile multipartFile) {
+        return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.SHOP_COMMODITY_IMAGE_UP);
+    }
 }

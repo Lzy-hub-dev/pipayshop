@@ -192,8 +192,8 @@ public class ItemInfoController {
     public ResponseVO<String> itemTopCategoryImags(@RequestParam("file")MultipartFile multipartFile){
         try {
             log.error("file-----------------------------------"+multipartFile);
-            String path = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.ITEM_TOP_CATEGORY_IMG);
-            return ResponseVO.getSuccessResponseVo(path);
+            String imageId = itemInfoService.itemTopCategoryImags(multipartFile);
+            return ResponseVO.getSuccessResponseVo(imageId);
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("网店首页的分类栏上传图片失败，请联系后台人员");

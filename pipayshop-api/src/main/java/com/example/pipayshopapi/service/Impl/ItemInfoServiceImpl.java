@@ -5,12 +5,15 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ItemInfo;
 import com.example.pipayshopapi.entity.vo.*;
+import com.example.pipayshopapi.mapper.ImageMapper;
 import com.example.pipayshopapi.mapper.ItemCommodityEvaluateMapper;
 import com.example.pipayshopapi.mapper.ItemCommodityInfoMapper;
 import com.example.pipayshopapi.mapper.ItemInfoMapper;
 import com.example.pipayshopapi.service.ItemInfoService;
+import com.example.pipayshopapi.util.FileUploadUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -34,6 +37,9 @@ public class ItemInfoServiceImpl extends ServiceImpl<ItemInfoMapper, ItemInfo> i
 
     @Resource
     private ItemCommodityEvaluateMapper itemCommodityEvaluateMapper;
+
+    @Resource
+    private ImageMapper imageMapper;
 
     /**
      * 获取网店商品详情的网店信息接口
@@ -125,5 +131,11 @@ public class ItemInfoServiceImpl extends ServiceImpl<ItemInfoMapper, ItemInfo> i
     public Boolean setItemScore() {
         Integer update = itemInfoMapper.setItemScore();
         return update >0;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String itemTopCategoryImags(MultipartFile multipartFile) {
+        return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.ITEM_TOP_CATEGORY_IMG);
     }
 }

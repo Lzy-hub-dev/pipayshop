@@ -15,12 +15,14 @@ import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.*;
 import com.example.pipayshopapi.service.ItemCommodityInfoService;
+import com.example.pipayshopapi.util.FileUploadUtil;
 import com.example.pipayshopapi.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -57,6 +59,9 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
 
     @Resource
     private CountryCommodityMapper countryCommodityMapper;
+
+    @Resource
+    private ImageMapper imageMapper;
 
 
     /**
@@ -301,6 +306,12 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     @Override
     public List<AuditItemVO> examineCommodityList(String itemId) {
         return commodityInfoMapper.examineCommodityList(itemId);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String itemTopImagsUp(MultipartFile multipartFile) {
+        return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.ROOM_TOP_IMG);
     }
 
 

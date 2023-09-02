@@ -6,6 +6,7 @@ import com.example.pipayshopapi.entity.BgImg;
 import com.example.pipayshopapi.entity.dto.BgImgDTO;
 import com.example.pipayshopapi.entity.vo.BgImgVO;
 import com.example.pipayshopapi.mapper.BgImgMapper;
+import com.example.pipayshopapi.mapper.ImageMapper;
 import com.example.pipayshopapi.service.BgImgService;
 import com.example.pipayshopapi.util.FileUploadUtil;
 import com.example.pipayshopapi.util.StringUtil;
@@ -30,6 +31,9 @@ public class BgImgServiceImpl extends ServiceImpl<BgImgMapper, BgImg> implements
     @Resource
     private BgImgMapper bgImgMapper;
 
+    @Resource
+    private ImageMapper imageMapper;
+
     /**
      * 新增首页背景轮播图
      *
@@ -47,7 +51,7 @@ public class BgImgServiceImpl extends ServiceImpl<BgImgMapper, BgImg> implements
             log.error("参数列表为空！");
             return false;
         }
-        String picPath = FileUploadUtil.uploadFile(file, FileUploadUtil.BG_IMG);
+        String picPath = FileUploadUtil.allUploadImageData(file, imageMapper, FileUploadUtil.BG_IMG);
         return bgImgMapper.insert(new BgImg(StringUtil.generateShortId(),picPath,bgImgDTO.getCategory(),bgImgDTO.getContentId())) > 0;
     }
 

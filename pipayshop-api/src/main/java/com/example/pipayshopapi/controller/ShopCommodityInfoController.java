@@ -157,8 +157,8 @@ public class ShopCommodityInfoController {
     @ApiOperation("实体店商品展示图上传")
     public ResponseVO<String> shopCommodityTopImageUp(MultipartFile multipartFile){
         try {
-            String shopCommodityTopImageUp = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.SHOP_COMMODITY_TOP_IMAGE_UP);
-            return ResponseVO.getSuccessResponseVo(shopCommodityTopImageUp);
+            String imageId = shopCommodityService.shopCommodityTopImageUp(multipartFile);
+            return ResponseVO.getSuccessResponseVo(imageId);
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("实体店商品展示图上传失败，请联系后台人员");
@@ -174,8 +174,8 @@ public class ShopCommodityInfoController {
     )
     public ResponseVO<String> shopCommodityImageUp(@RequestParam("file") MultipartFile multipartFile){
         try {
-            String shopCommodityImageUp = FileUploadUtil.uploadFile(multipartFile, FileUploadUtil.SHOP_COMMODITY_IMAGE_UP);
-            return ResponseVO.getSuccessResponseVo(shopCommodityImageUp);
+            String imageId = shopCommodityService.shopCommodityImageUp(multipartFile);
+            return ResponseVO.getSuccessResponseVo(imageId);
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("实体店商品轮播图上传失败，请联系后台人员");

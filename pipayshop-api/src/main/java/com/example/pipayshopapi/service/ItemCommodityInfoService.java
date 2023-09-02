@@ -5,6 +5,7 @@ import com.example.pipayshopapi.entity.ItemCommodityInfo;
 import com.example.pipayshopapi.entity.dto.ApplyItemCommodityDTO;
 import com.example.pipayshopapi.entity.dto.ItemSearchConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -99,5 +100,7 @@ public interface ItemCommodityInfoService extends IService<ItemCommodityInfo> {
     Integer getInventoryByCommodityId(String commodityId);
 
     String getOriginAddressById(String commodityId);
+
+    String itemTopImagsUp(MultipartFile multipartFile);
 
 }

@@ -168,20 +168,20 @@ public class ShopCommodityLiveInfoController {
         }
     }
 
-//    @PostMapping("insertShopLive")
-//    @ApiOperation("发布实体店酒店的服务")
-//    public ResponseVO insertShopLive(@RequestBody ShopCommodityLiveInfo shopCommodityLiveInfo){
-//        try {
-//            boolean result = shopCommodityLiveInfoService.insertShopLive(shopCommodityLiveInfo);
-//            if (!result){
-//                throw new Exception();
-//            }
-//            return ResponseVO.getSuccessResponseVo("发布实体店酒店的服务成功");
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            throw new BusinessException("发布实体店酒店的服务失败，请联系后台人员");
-//        }
-//    }
+    @PostMapping("insertShopLive")
+    @ApiOperation("发布实体店酒店的服务")
+    public ResponseVO insertShopLive(@RequestBody ShopCommodityLiveInfo shopCommodityLiveInfo){
+        try {
+            boolean result = shopCommodityLiveInfoService.insertShopLive(shopCommodityLiveInfo);
+            if (!result){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("发布实体店酒店的服务成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("发布实体店酒店的服务失败，请联系后台人员");
+        }
+    }
 
     @PostMapping("updateShopLive")
     @ApiOperation("根据房型id更改房型信息")

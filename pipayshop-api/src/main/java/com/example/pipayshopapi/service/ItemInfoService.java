@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ItemInfo;
 import com.example.pipayshopapi.entity.vo.ItemInfoVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -65,4 +66,6 @@ public interface ItemInfoService extends IService<ItemInfo> {
     PageDataVO getItemEvaluate(String itemId,Integer page,Integer limit);
 
     Boolean setItemScore();
+
+    String itemTopCategoryImags(MultipartFile multipartFile);
 }
