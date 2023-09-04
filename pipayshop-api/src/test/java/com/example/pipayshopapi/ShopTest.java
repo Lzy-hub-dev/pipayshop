@@ -39,18 +39,24 @@ public class ShopTest {
     @Test
     public void testss(){
         try {
-            File file = ResourceUtils.getFile("classpath:static/images/avatar/59ebedfefb3.jpg");
-            System.out.println(file.getAbsolutePath().replace("target\\classes", "src\\main\\resources"));
-            String newFileName = file.getAbsolutePath().replace("target\\classes", "src\\main\\resources").replaceFirst("\\.([a-z]+)", "_" + 66 +"_" + 66 + ".jpeg");
+            // 原始图片路径
+            File originalImage = new File("C:\\Users\\Hellow\\Desktop\\pi-pay-shop-api\\pipayshop-api\\src\\main\\resources\\static\\images\\avatar\\avatar.jpg");
 
-            Thumbnails.of(file)
-                    .size(80, 80)
-                    .outputFormat(Constants.IMAGE_TYPE)
-                    .toFile(newFileName);
-            System.out.println(newFileName);
-            System.out.println(new File(newFileName).exists());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            // 压缩后图片路径
+            File compressedImage = new File("C:\\Users\\Hellow\\Desktop\\pi-pay-shop-api\\pipayshop-api\\src\\main\\resources\\static\\images\\avatar\\avatar2.jpg");
+
+            // 设置压缩后的图片大小
+            int targetWidth = 100;
+            int targetHeight = 100;
+
+            Thumbnails.of(originalImage)
+                    .size(targetWidth, targetHeight)
+                    .outputQuality(1.0) // 保持原始图片质量
+                    .toFile(compressedImage);
+
+            System.out.println("图片压缩完成！");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
