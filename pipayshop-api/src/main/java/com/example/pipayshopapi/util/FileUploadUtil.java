@@ -109,10 +109,9 @@ public class FileUploadUtil {
         //将文件复制到指定路径
         String separator = File.separator;
         File destFile = new File(readPath.getAbsolutePath()+ separator + fileName);
-
+        log.error("destFile==================================="+destFile);
         try {
             FileCopyUtils.copy(multipartFile.getBytes(), destFile);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -145,23 +144,22 @@ public class FileUploadUtil {
         // 对图片进行批量压缩存储
         sizeList.stream()
                 .parallel()
-                    .peek(size -> {
-                        String[] sizeArray = size.split(",");
-                        int length = Integer.parseInt(sizeArray[0]);
+                .peek(size -> {
+                    String[] sizeArray = size.split(",");
+                    int length = Integer.parseInt(sizeArray[0]);
                     int wide = Integer.parseInt(sizeArray[1]);
-                    try {
-                        File file = ResourceUtils.getFile("classpath:static" + path);
-                        String newFileName = file.getAbsolutePath()
-                                .replace("target\\classes", "src\\main\\resources")
-                                .replaceFirst("\\.([a-z]+)", "_" + length +"_" + wide + ".png");
-                        Thumbnails.of(file)
-                                .size(length, wide)
-                                .outputFormat(Constants.IMAGE_TYPE)
-                                .toFile(newFileName);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }).count();
+                try {
+                    File file = new File("pipayshop-api/src/main/resources/static/" + path);
+                    String newFileName = file.getAbsolutePath()
+                            .replaceFirst("\\.([a-z]+)", "_" + length +"_" + wide + ".png");
+                    Thumbnails.of(file)
+                            .size(length, wide)
+                            .outputFormat(Constants.IMAGE_TYPE)
+                            .toFile(newFileName);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }).count();
     }
 
     /**
@@ -177,7 +175,7 @@ public class FileUploadUtil {
     /**
      * 完整上传图片操作
      */
-    public static String allUploadImageData(MultipartFile file, ImageMapper imageMapper, String smallPath){
+    public static String allUploadImageData(MultipartFile file, ImageMapper imageMapper, String smallPath,List<String> sizeList){
         String path = null;
         try {
             // 校验MD
@@ -198,14 +196,18 @@ public class FileUploadUtil {
                 log.error("记录图片数据失败");
                 throw new BusinessException("文件上传失败");
             }
+            // 3.压缩图片
+            if (sizeList != null){
+                asyCropping(path,sizeList);
+            }
             return imageId;
         } catch (IOException | NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }finally {
             if (path != null) {
                 // 上传失败,释放内存
                 FileUploadUtil.deleteFile(path);
             }
+            throw new RuntimeException(e);
+
         }
     }
 

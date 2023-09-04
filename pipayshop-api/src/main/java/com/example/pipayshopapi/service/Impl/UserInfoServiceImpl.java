@@ -264,7 +264,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean uploadUserImage(String userId, MultipartFile file) {
-        String imageId = FileUploadUtil.allUploadImageData(file, imageMapper, FileUploadUtil.AVATAR);
+        List<String> sizeList = new ArrayList<>();
+        sizeList.add(ImageConstants.USER_IMAGE_SIZE_SMALL);
+        String imageId = FileUploadUtil.allUploadImageData(file, imageMapper, FileUploadUtil.AVATAR,sizeList);
         // 外键关联目标图片数据
         int update = userInfoMapper.update(null, new LambdaUpdateWrapper<UserInfo>()
                 .eq(UserInfo::getUid, userId)

@@ -51,7 +51,7 @@ public class BgImgServiceImpl extends ServiceImpl<BgImgMapper, BgImg> implements
             log.error("参数列表为空！");
             return false;
         }
-        String picPath = FileUploadUtil.allUploadImageData(file, imageMapper, FileUploadUtil.BG_IMG);
+        String picPath = FileUploadUtil.allUploadImageData(file, imageMapper, FileUploadUtil.BG_IMG,null);
         return bgImgMapper.insert(new BgImg(StringUtil.generateShortId(),picPath,bgImgDTO.getCategory(),bgImgDTO.getContentId())) > 0;
     }
 
