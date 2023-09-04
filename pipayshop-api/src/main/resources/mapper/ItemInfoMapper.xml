@@ -40,10 +40,11 @@
     </select>
 
     <select id="selectItemInfoByItemIdOrUserId" resultType="com.example.pipayshopapi.entity.vo.ItemInfoVO">
-        select i.item_id,i.item_name,i.score,i.item_imag_list,i.user_image,i.membership,
+        select i.item_id,i.item_name,i.score,i.item_imag_list,g.origin_path as user_image,i.membership,
                (select count(*) from item_commodity_info c2 where i.item_id=c2.item_id  ) as itemSum,
                (select count(*) from item_follow_focus f where i.item_id=f.item_id) as fanSum
         from item_info i
+        join image g on g.image_id=i.user_image
         <where>
             <if test="itemId!=null and itemId!=''">and i.item_id=#{itemId}</if>
             <if test="userId!=null and userId!=''">and i.uid=#{userId}</if>
@@ -51,11 +52,13 @@
     </select>
 
     <select id="selectFollowItemByUserId" resultType="com.example.pipayshopapi.entity.vo.ItemListVO">
-        SELECT i.item_id, i.item_name, i.membership, i.score, i.user_image
+        SELECT i.item_id, i.item_name, i.membership, i.score, g.origin_path as user_image
         FROM item_follow_focus f
                  INNER JOIN
              item_info i
              ON f.item_id = i.item_id
+        join image g
+        on g.image_id=i.user_image
         WHERE f.follow_id = #{userId}
           and f.`status` = 0
           and i.`status` = 0
@@ -75,9 +78,11 @@
     </select>
     <select id="selectBasicData" resultType="com.example.pipayshopapi.entity.vo.ItemVO">
         select
-            item_name, score, user_image
+            i.item_name, i.score,g.origin_path as userImage
         from
-            item_info
+            item_info i
+        join image g
+        on g.image_id=i.user_image
         where
             item_id = #{itemId} and status = 0
     </select>

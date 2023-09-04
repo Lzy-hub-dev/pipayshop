@@ -5,8 +5,12 @@
     <select id="selectBgImgList" resultType="com.example.pipayshopapi.entity.vo.BgImgVO">
         select b.content_id,
                b.category,
-               b.img_url
+               img.origin_path as imgUrl
         FROM bg_img b
+        JOIN
+        image img
+        ON
+        b.img_url = img.image_id
         where b.del_flag = 0 and category = #{category}
     </select>
 </mapper>

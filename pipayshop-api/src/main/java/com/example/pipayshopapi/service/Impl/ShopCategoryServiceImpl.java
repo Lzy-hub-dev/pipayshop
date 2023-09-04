@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopCategory;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.mapper.ImageMapper;
 import com.example.pipayshopapi.mapper.ShopCategoryMapper;
 import com.example.pipayshopapi.mapper.ShopInfoMapper;
 import com.example.pipayshopapi.service.ShopCategoryService;
@@ -30,6 +31,8 @@ public class ShopCategoryServiceImpl extends ServiceImpl<ShopCategoryMapper, Sho
     @Resource
     private ShopInfoMapper shopInfoMapper;
 
+    @Resource
+    private ImageMapper imageMapper;
     /**
      * 查询一级分类对应的二级分列表
      */
@@ -69,8 +72,12 @@ public class ShopCategoryServiceImpl extends ServiceImpl<ShopCategoryMapper, Sho
      */
     @Override
     public List<ShopCategory> getShopCategorySecList(String categoryPid) {
-        return shopCategoryMapper.selectList(new QueryWrapper<ShopCategory>().
+        List<ShopCategory> shopCategories = shopCategoryMapper.selectList(new QueryWrapper<ShopCategory>().
                 eq("del_flag", 0).eq("category_pid", categoryPid));
+        for (ShopCategory shopCategory : shopCategories) {
+            shopCategory.setCategoryImg(imageMapper.selectPath(shopCategory.getCategoryImg()));
+        }
+        return shopCategories;
     }
 
 }

@@ -149,18 +149,21 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         String itemId = itemCommodityInfo.getItemId();
         Map<String, List<String>> typeMap = new HashMap<>();
         // 转移部分非json型的数据
-        CommodityDetailVO commodityDetailVO = new CommodityDetailVO(itemCommodityInfo.getCommodityId(), null, itemCommodityInfo.getItemCommodityName()
-                , itemCommodityInfo.getOriginPrice(), null, itemCommodityInfo.getOriginAddress(), null
-                , itemId, itemCommodityInfo.getPrice(), itemCommodityInfo.getDetails(), null,
-                itemCommodityInfo.getInventory(), itemCommodityInfo.getFreeShippingNum(), itemCommodityInfo.getCategoryId(),
-                null, null, itemCommodityInfo.getDegreeLoss(), null, null, null);
+        CommodityDetailVO commodityDetailVO = new CommodityDetailVO();
+        // 属性转移
+        BeanUtils.copyProperties(itemCommodityInfo, commodityDetailVO);
         String acceptAddressListString = itemCommodityInfo.getAcceptAddressList();
         if (acceptAddressListString != null) {
             commodityDetailVO.setAcceptAddressList(JSON.parseArray(acceptAddressListString, String.class));
+
         }
         String imagsListString = itemCommodityInfo.getImagsList();
         if (imagsListString != null) {
-            commodityDetailVO.setImagsList(JSON.parseArray(imagsListString, String.class));
+            List<String> imageIdList= JSON.parseArray(imagsListString, String.class);
+            List<String> images = imageIdList.stream().parallel()
+                    .map(imageId -> imageMapper.selectPath(imageId))
+                    .collect(Collectors.toList());
+            commodityDetailVO.setImagsList(images);
         }
         String couponsListString = itemCommodityInfo.getCouponsList();
         if (couponsListString != null) {
@@ -172,7 +175,12 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         }
         String detailImagList = itemCommodityInfo.getDetailImagList();
         if (detailImagList != null) {
-            commodityDetailVO.setDetailImagList(JSON.parseArray(detailImagList, String.class));
+            List<String> imageIdList = JSON.parseArray(detailImagList, String.class);
+            List<String> imageList = imageIdList.stream()
+                                                .parallel()
+                                                .map(imageId -> imageMapper.selectPath(imageId))
+                                                .collect(Collectors.toList());
+            commodityDetailVO.setDetailImagList(imageList);
         }
         if (typeMap.size() != 0) {
             commodityDetailVO.setTypeMap(typeMap);
@@ -294,6 +302,12 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         List<ItemInfoVO> itemInfoVO = itemInfoMapper.selectItemInfoByItemIdOrUserId(null, itemId);
         if (itemInfoVO != null) {
             ItemInfoVO vo = itemInfoVO.get(0);
+            List<String> imageIds = JSON.parseArray(vo.getItemImagList(), String.class);
+            List<String> imageList = imageIds.stream()
+                                            .parallel()
+                                            .map(imageId -> imageMapper.selectPath(imageId))
+                                            .collect(Collectors.toList());
+            vo.setItemImagList(imageList.toString());
             vo.setCommodityInfoList(voList);
             return vo;
         }

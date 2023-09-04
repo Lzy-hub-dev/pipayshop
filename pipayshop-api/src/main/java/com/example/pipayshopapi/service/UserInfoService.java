@@ -1,6 +1,7 @@
 package com.example.pipayshopapi.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.pipayshopapi.entity.Country;
 import com.example.pipayshopapi.entity.UserInfo;
 import com.example.pipayshopapi.entity.dto.LoginDTO;
 import com.example.pipayshopapi.entity.vo.ItemMinInfoVo;

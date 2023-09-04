@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 // 放行全部接口
-                .antMatchers("/pipayshopapi/**").anonymous()
+                .antMatchers("/pipayshopapi/**","/chat/**").anonymous()
                 // 对于登录接口 允许匿名访问
 //                .antMatchers("/pipayshopapi/user-info/login").anonymous()
                 // 开放b端

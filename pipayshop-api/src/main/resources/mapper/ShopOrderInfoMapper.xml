@@ -64,13 +64,15 @@
     <select id="getOrderList" resultMap="orderListResultMap">
         select
         o.order_id, o.order_status, o.commodity_id, o.transaction_amount,
-        u.user_image, u.shop_name, i.avatar_imag, i.commodity_detail
+        e.origin_path as user_image, u.shop_name,g.origin_path as avatar_imag, i.commodity_detail
         from
         shop_order_info o
         JOIN
         shop_info u
         JOIN
         shop_commodity_info i
+        join image g on g.image_id=i.avatar_imag
+        join image e on e.image_id=u.user_image
         where
         o.uid = #{userId}
                 and o.order_status != 3
@@ -83,13 +85,15 @@
     <select id="getOrderListByShopId" resultMap="orderListResultMap">
         select
         o.order_id, o.order_status, o.commodity_id, o.transaction_amount,
-        u.user_image, u.shop_name, i.avatar_imag, i.commodity_detail
+        g.origin_path as user_image, u.shop_name,e.origin_path as avatar_imag, i.commodity_detail
         from
         shop_order_info o
         JOIN
         shop_info u
         JOIN
         shop_commodity_info i
+        join image g on g.image_id=u.user_image
+        join image e on e.image_id=i.avatar_imag
         where
         o.shop_id = #{getOrderDataVO.shopId}
         <choose>
@@ -181,7 +185,7 @@
     </select>
     <select id="getOrderLiveList" resultType="com.example.pipayshopapi.entity.vo.OrderLiveListVO">
         select o.order_id,o.order_status,o.commodity_id,o.transaction_amount,
-               l.avatar_imag,l.room_type_name,  s.address,s.user_image,s.shop_name,s.shop_introduce
+               e.origin_path as avatar_imag,l.room_type_name,  s.address,g.origin_path as user_image,s.shop_name,s.shop_introduce
                 ,r.start_time,r.end_time
         FROM shop_order_info as o
                  join shop_commodity_live_info as l
@@ -190,6 +194,8 @@
                       ON s.shop_id = o.shop_id
         JOIN shop_hotel_record as r
         on o.order_id=r.order_id
+        join image g on g.image_id=s.user_image
+        join image e on e.image_id=l.avatar_imag
         WHERE
             o.uid=#{getOrderDataVO.userId}
         <if test="getOrderDataVO.orderStatus != -1">
@@ -219,7 +225,7 @@
     </select>
     <select id="getOrderLiveListByShopId" resultType="com.example.pipayshopapi.entity.vo.OrderLiveListVO">
         select o.order_id,o.order_status,o.commodity_id,o.transaction_amount,
-               l.avatar_imag,l.room_type_name,  s.address,s.user_image,s.shop_name,s.shop_introduce
+              g.origin_path as avatar_imag,l.room_type_name,  s.address,e.origin_path as user_image,s.shop_name,s.shop_introduce
                 ,r.start_time,r.end_time
         FROM shop_order_info as o
         join shop_commodity_live_info as l
@@ -228,6 +234,8 @@
         ON s.shop_id = o.shop_id
         JOIN shop_hotel_record as r
         on o.order_id=r.order_id
+        join image g on g.image_id=l.avatar_imag
+        join image e on e.image_id=s.user_image
         WHERE
         s.uid=#{getOrderDataVO.userId}
         <if test="getOrderDataVO.orderStatus != -1">

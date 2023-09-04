@@ -383,6 +383,9 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
                 livePageVO.getDepartureTime(),
                 livePageVO.getAdult(),
                 livePageVO.getChildren());
+        for (IndexShopInfoVO indexShopInfoVO : indexShopInfoVOS) {
+            indexShopInfoVO.setUserImage(imageMapper.selectPath(indexShopInfoVO.getUserImage()));
+        }
         for (IndexShopInfoVO shopInfoVO : indexShopInfoVOS) {
             List<String> list1 = new ArrayList<>();
             List<String> list = JSON.parseArray(shopInfoVO.getTagList(), String.class);

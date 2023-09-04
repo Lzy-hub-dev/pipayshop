@@ -1,5 +1,6 @@
 package com.example.pipayshopapi.service.Impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -61,7 +63,16 @@ public class ItemInfoServiceImpl extends ServiceImpl<ItemInfoMapper, ItemInfo> i
      */
     @Override
     public List<ItemInfoVO> getItemInfoByUid(String userId) {
-        return itemInfoMapper.selectItemInfoByItemIdOrUserId(userId,null);
+        List<ItemInfoVO> itemInfoVOS = itemInfoMapper.selectItemInfoByItemIdOrUserId(userId, null);
+        for (ItemInfoVO itemInfoVO : itemInfoVOS) {
+            List<String> imageList = JSON.parseArray(itemInfoVO.getItemImagList(), String.class)
+                                        .stream()
+                                        .parallel()
+                                        .map(imageId -> imageMapper.selectPath(imageId))
+                                        .collect(Collectors.toList());
+            itemInfoVO.setItemImagList(imageList.toString());
+        }
+        return itemInfoVOS;
     }
     /**
      * 根据用户id查询 对应的 网店关注列表

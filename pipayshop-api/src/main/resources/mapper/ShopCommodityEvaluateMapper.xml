@@ -10,11 +10,12 @@
         , e.evaluate_id
         , e.user_id
         , u.user_name
-        , u.user_image
+        ,i.origin_path as user_image
         , e.score
         from shop_commodity_evaluate e
             left join user_info u
         on u.uid = e.user_id
+        join image i on i.image_id=u.user_image
         where e.commodity_id = #{commodityId}
         and e.status = 0
         and u.status = 0
