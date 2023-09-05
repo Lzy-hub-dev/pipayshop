@@ -1,13 +1,18 @@
 package com.example.pipayshopapi;
 
 import com.example.pipayshopapi.config.CommonConfig;
+import com.example.pipayshopapi.entity.dto.ItemOrderDetailDTO;
 import com.example.pipayshopapi.util.Constants;
 import com.example.pipayshopapi.util.FileUploadUtil;
+import com.example.pipayshopapi.util.TokenUtil;
+import io.jsonwebtoken.*;
 import net.coobird.thumbnailator.Thumbnails;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.ResourceUtils;
 
 import java.io.*;
+import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class ShopTest {
@@ -67,6 +72,31 @@ public class ShopTest {
     public void testss2() {
             File readPath = new File("pipayshop-api/src/main/resources/static/images/avatar");
             System.out.println(readPath.getAbsolutePath());
+
+    }
+
+    @Test
+    public void test3(){
+        JwtBuilder jwtBuilder = Jwts.builder();
+/*        List<ItemOrderDetailDTO> itemOrderDetailDTOS = new ArrayList<>();
+        ItemOrderDetailDTO itemOrderDetailDTO = new ItemOrderDetailDTO("Vvfmf3xGhw", new BigDecimal(11.2), 2, "蓝色xl");
+        ItemOrderDetailDTO itemOrderDetailDTO2 = new ItemOrderDetailDTO("Vvfmf3xGhw", new BigDecimal(11.2), 2, "蓝色xl");
+        itemOrderDetailDTOS.add(itemOrderDetailDTO2);
+        itemOrderDetailDTOS.add(itemOrderDetailDTO);*/
+        String compact = jwtBuilder
+                .setHeaderParam("typ", "JWT")
+                .setHeaderParam("alg", "HS256")
+                .claim("uid", "wzx")
+                .claim("transactionAmount", "66.6")
+                .claim("orderId", "dd1f190787a")
+                .setExpiration(new Date(System.currentTimeMillis() + Constants.USER_ACTIVE_TIME))
+                .signWith(SignatureAlgorithm.HS256, Constants.TOKEN_SECRET)
+                .compact();
+        System.out.println(compact);
+       /* JwtParser jwtParser = Jwts.parser();
+        // 通过签名对Token进行解析，得到的结果是一个类似集合的封装类
+        Jws<Claims> claimsJws = jwtParser.setSigningKey(Constants.TOKEN_SECRET).parseClaimsJws(compact);
+        System.out.println(claimsJws.getBody());*/
 
     }
 }

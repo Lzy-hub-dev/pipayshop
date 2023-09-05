@@ -17,4 +17,7 @@ public interface ImageMapper extends BaseMapper<Image> {
 
     @Select("select origin_path from image where image_id = #{imageId}")
     String selectPath(@Param("imageId") String imageId);
+
+    @Select("select image_id from image where origin_path = #{avatarImag}")
+    String selectImageIdByPath(@Param("avatarImag") String avatarImag);
 }

@@ -1,14 +1,25 @@
 package com.example.pipayshopapi.entity.vo;
 
+import com.example.pipayshopapi.entity.dto.ItemOrderDetailDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
+
+/**
+ * @author wzx
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class MyItemOrderInfoVO {
+    /**
+     * 订单id
+     */
+    private String orderId;
+
     /**
      * 网店id
      */
@@ -19,49 +30,28 @@ public class MyItemOrderInfoVO {
      */
     private String itemName;
     /**
-     * 用户头像
+     * 网店头像
      */
     private String userImage;
 
+    /**
+     * 商品数据
+     */
+    private List<ItemOrderDetailDTO> commodityList;
 
     /**
-     * 商品id
-     */
-    private String commodityId;
-    /**
-     * 商品名字
-     */
-    private String itemCommodityName;
-    /**
-     * 商品介绍
-     */
-    private String details;
-    /**
-     * 商品的展示图路径
-     */
-    private String avatarImag;
-
-
-    /**
-     * 订单id
-     */
-    private String orderId;
-
-    /**
-     * 交易金额
+     * 交易总金额
      */
     private BigDecimal transactionAmount;
+
     /**
-     * 下单用户id
+     * 优惠后的总价
      */
-    private String uid;
+     private BigDecimal discount;
+
     /**
      * 0:待支付1:已支付2：已完成3：无效订单
      */
     private Integer orderStatus;
 
-    /**
-     *商品的规格
-     */
-    private String commoditySpecification;
 }
