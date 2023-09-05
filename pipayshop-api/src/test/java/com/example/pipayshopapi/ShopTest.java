@@ -5,19 +5,10 @@ import com.example.pipayshopapi.util.Constants;
 import com.example.pipayshopapi.util.FileUploadUtil;
 import net.coobird.thumbnailator.Thumbnails;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.util.ResourceUtils;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 public class ShopTest {
 
@@ -35,6 +26,18 @@ public class ShopTest {
         }
     }
 
+
+
+
+
+
+
+    @Test
+    public void test01(){
+
+
+
+    }
 
     @Test
     public void testss(){

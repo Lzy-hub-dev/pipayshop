@@ -27,6 +27,8 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * <p>
@@ -214,8 +216,17 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
                                 .eq("status",1);
                     }
                 }));
-
-        return new PageDataVO((int) page.getTotal(),page.getRecords());
+        List<ShopCommodityInfo> shopCommodityInfos = page.getRecords();
+        for (ShopCommodityInfo shopCommodityInfo : shopCommodityInfos) {
+            shopCommodityInfo.setAvatarImag(imageMapper.selectPath(shopCommodityInfo.getAvatarImag()));
+            List<String> imageIdlist = JSON.parseArray(shopCommodityInfo.getCommodityImgList(), String.class);
+            List<String> imageList = imageIdlist.stream()
+                                                .parallel()
+                                                .map(imageId -> imageMapper.selectPath(imageId))
+                                                .collect(Collectors.toList());
+            shopCommodityInfo.setCommodityImgList(imageList.toString());
+        }
+        return new PageDataVO((int) page.getTotal(),shopCommodityInfos);
     }
 
     /**
@@ -224,18 +235,25 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
     @Override
     public ShopDetailInfoVO selectShopInfoByCommodityId(String commodityId) {
         //获取商品基本信息
-        return shopCommodityInfoMapper.selectShopInfoByCommodityId(commodityId);
+        ShopDetailInfoVO shopDetailInfoVO = shopCommodityInfoMapper.selectShopInfoByCommodityId(commodityId);
+        List<String> imageIdList = JSON.parseArray(shopDetailInfoVO.getCommodityImgList(), String.class);
+        List<String> imageList = imageIdList.stream()
+                                            .parallel()
+                                            .map(imageId -> imageMapper.selectPath(imageId))
+                                            .collect(Collectors.toList());
+        shopDetailInfoVO.setCommodityImgList(imageList.toString());
+        return shopDetailInfoVO ;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String shopCommodityTopImageUp(MultipartFile multipartFile) {
-        return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.SHOP_COMMODITY_TOP_IMAGE_UP);
+        return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.SHOP_COMMODITY_TOP_IMAGE_UP,null);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String shopCommodityImageUp(MultipartFile multipartFile) {
-        return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.SHOP_COMMODITY_IMAGE_UP);
+        return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.SHOP_COMMODITY_IMAGE_UP,null);
     }
 }

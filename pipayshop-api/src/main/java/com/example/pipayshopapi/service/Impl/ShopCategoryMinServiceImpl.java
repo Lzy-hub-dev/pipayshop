@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopCategoryMin;
 import com.example.pipayshopapi.entity.vo.IndexShopInfoVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.mapper.ImageMapper;
 import com.example.pipayshopapi.mapper.ShopCategoryMinMapper;
 import com.example.pipayshopapi.mapper.ShopInfoMapper;
 import com.example.pipayshopapi.service.ShopCategoryMinService;
@@ -25,11 +26,17 @@ public class ShopCategoryMinServiceImpl extends ServiceImpl<ShopCategoryMinMappe
     @Resource
     private ShopInfoMapper shopInfoMapper;
 
+    @Resource
+    private ImageMapper imageMapper;
 
     @Override
     public List<ShopCategoryMin> getShopCategoryMinList(String categoryPid) {
-        return shopCategoryMinMapper.selectList(new QueryWrapper<ShopCategoryMin>().
+        List<ShopCategoryMin> shopCategoryMins = shopCategoryMinMapper.selectList(new QueryWrapper<ShopCategoryMin>().
                 eq("del_flag", 0).eq("category_pid", categoryPid));
+        for (ShopCategoryMin shopCategoryMin : shopCategoryMins) {
+            shopCategoryMin.setCategoryImg(imageMapper.selectPath(shopCategoryMin.getCategoryImg()));
+        }
+        return shopCategoryMins;
     }
 
     /**

@@ -22,7 +22,7 @@
 
     <select id="commodityOfCateList" resultType="com.example.pipayshopapi.entity.vo.CommodityVO">
         SELECT
-            i.commodity_id, i.item_commodity_name, i.origin_price, i.price, i.details, i.avatar_imag, it.membership
+            i.commodity_id, i.item_commodity_name, i.origin_price, i.price, i.details,g.origin_path as avatarImag, it.membership
         FROM
             item_commodity_info i
         JOIN
@@ -37,6 +37,10 @@
             country_commodity cc
         ON
             cc.commodity_id = I.commodity_id
+        join
+            image g
+        on
+            g.image_id=i.avatar_imag
         WHERE
             c.category_id = #{secondCategoryId} AND i.status = 0 AND cc.country_code = #{countryCode}
         ORDER BY
@@ -53,10 +57,12 @@
           and i.status = 0
     </select>
     <select id="itemCommodityChoose" resultType="com.example.pipayshopapi.entity.vo.CommodityVO">
-        select i.commodity_id,i.item_commodity_name,i.origin_price,i.price,i.details,i.imags_list,it.membership
+        select i.commodity_id,i.item_commodity_name,i.origin_price,i.price,i.details,g.origin_path as avatar_imag,it.membership
         FROM item_commodity_info i
         join item_info it
         on it.item_id=i.item_id
+        join image g
+        on g.image_id=i.avatar_imag
         where i.item_id=#{itemId}
         <if test="brandId">
             and i.brand_id=#{brandId}
@@ -72,12 +78,12 @@
     </select>
 
     <select id="selectCollectProductByUserId" resultType="com.example.pipayshopapi.entity.vo.ItemCollectionVO">
-        select avatar_imag     as commodity_pic,
+        select e.origin_path    as commodity_pic,
                i.item_commodity_name,
                i.price,
                i.commodity_id,
                info.item_name,
-               info.user_image as sellerPic,
+               g.origin_path as sellerPic,
                info.membership
         FROM item_collection ic
                  INNER JOIN
@@ -86,7 +92,10 @@
                  ic.commodity_id = i.commodity_id
                  inner join item_info info
                             on info.item_id = i.item_id
-
+        join image g
+        on g.image_id=info.user_image
+        join image e
+        on e.image_id=i.avatar_imag
         WHERE ic.user_id = #{userId}
           AND i.`status` = 0
           AND ic.`status` = 0
@@ -96,12 +105,12 @@
     </select>
 
     <select id="selectHistoryProductByUserId" resultType="com.example.pipayshopapi.entity.vo.ItemCollectionVO">
-        SELECT avatar_imag     as commodity_pic,
+        select e.origin_path    as commodity_pic,
                i.item_commodity_name,
                i.price,
                i.commodity_id,
                info.item_name,
-               info.user_image as sellerPic,
+               g.origin_path as sellerPic,
                info.membership
         FROM item_commodity_history h
                  INNER JOIN
@@ -110,6 +119,10 @@
                  h.commodity_id = i.commodity_id
                  inner join item_info info
                             on info.item_id = i.item_id
+         join image g
+              on g.image_id=info.user_image
+         join image e
+              on e.image_id=i.avatar_imag
         WHERE h.user_id = #{userId}
         order by h.create_time DESC
             LIMIT #{page},#{limit}
@@ -117,24 +130,26 @@
     </select>
 
     <select id="examineCommodityList" resultType="com.example.pipayshopapi.entity.vo.AuditItemVO">
-        SELECT commodity_id,
-        `status`,
-        avatar_imag,
-        item_commodity_name,
-        price
-        FROM item_commodity_info
-        WHERE item_id = #{itemId}
+        SELECT i.commodity_id,
+        i.status,
+        g.origin_path as avatar_imag,
+        i.item_commodity_name,
+        i.price
+        FROM item_commodity_info i
+        join image g
+        on g.image_id=i.avatar_imag
+        WHERE i.commodity_id = #{itemId}
         and
-            status in (0,1)
-        order by update_time DESC
+            i.status in (0,1)
+        order by i.update_time DESC
     </select>
 
     <select id="commodityList" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityVO">
         SELECT c.commodity_id,
                i.item_name,
-               i.user_image  AS seller_pic,
+               g.origin_path  AS seller_pic,
                c.`status`,
-               c.avatar_imag AS commodity_pic,
+               e.origin_path AS commodity_pic,
                c.item_commodity_name,
                c.price,
                iu.membership
@@ -142,20 +157,24 @@
                  INNER JOIN user_info u ON i.uid = u.uid
                  INNER JOIN item_info iu on i.uid = iu.uid
                  INNER JOIN item_commodity_info c ON i.item_id = c.item_id
+                 join image g on g.image_id=i.user_image
+                 join image e on e.image_id=c.avatar_imag
         WHERE i.item_id = #{itemId}
           AND c.`status` != 2
     </select>
 
     <select id="getInfoByItemId" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityMinVO">
-        select commodity_id,price,item_commodity_name,avatar_imag,create_time,details
-        from item_commodity_info
-        where item_id = #{itemId} and status = 0
+        select i.commodity_id,i.price,i.item_commodity_name,g.origin_path as avatar_imag,i.create_time,i.details
+        from item_commodity_info i
+        join image g
+        on g.image_id=i.avatar_imag
+        where i.item_id = #{itemId} and i.status = 0
         <choose>
             <when test="price">
-                order By price
+                order By i.price
             </when>
             <when test="!price">
-                order By price desc
+                order By i.price desc
             </when>
             <otherwise>
             </otherwise>
@@ -231,7 +250,8 @@
 <!--    首页商品的多条件过滤查询-->
     <select id="itemSearchCommodity" resultType="com.example.pipayshopapi.entity.vo.ItemCommoditiesVO">
         SELECT
-            ici.price, ici.origin_price, ici.item_commodity_name, ici.avatar_imag, ici.commodity_id, ici.details ,ii.membership
+            ici.price, ici.origin_price, ici.item_commodity_name,g.origin_path as avatarImag, ici.commodity_id, ici.details ,ii.membership
+
         <include refid="itemSearchCommoditySql"/>
             <choose>
                 <when test="dto.priceOrder == 0">
@@ -263,6 +283,10 @@
             country_commodity cc
         ON
             cc.commodity_id = ici.commodity_id
+        join
+            image g
+        on
+            g.image_id=ici.avatar_imag
         WHERE
             ici.status = 0 AND cc.country_code = #{dto.countryCode}
         <if test="dto.brandId != null">

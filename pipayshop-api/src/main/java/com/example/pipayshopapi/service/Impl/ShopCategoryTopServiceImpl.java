@@ -7,11 +7,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopCategoryTop;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.mapper.ImageMapper;
 import com.example.pipayshopapi.mapper.ShopCategoryTopMapper;
 import com.example.pipayshopapi.service.ShopCategoryTopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -28,6 +30,8 @@ public class ShopCategoryTopServiceImpl extends ServiceImpl<ShopCategoryTopMappe
     @Autowired
     private ShopCategoryTopMapper shopCategoryTopMapper;
 
+    @Resource
+    private ImageMapper imageMapper;
     /**
      * 查询一级分类列表
      *
@@ -37,7 +41,11 @@ public class ShopCategoryTopServiceImpl extends ServiceImpl<ShopCategoryTopMappe
     public List<ShopCategoryTop> getShopCategoryTopList() {
         LambdaQueryWrapper<ShopCategoryTop> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(ShopCategoryTop::getDelFlag, 0);
-        return shopCategoryTopMapper.selectList(wrapper);
+        List<ShopCategoryTop> shopCategoryTops = shopCategoryTopMapper.selectList(wrapper);
+        for (ShopCategoryTop shopCategoryTop : shopCategoryTops) {
+            shopCategoryTop.setCategoryImg(imageMapper.selectPath(shopCategoryTop.getCategoryImg()));
+        }
+        return shopCategoryTops;
     }
 
 

@@ -383,6 +383,9 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
                 livePageVO.getDepartureTime(),
                 livePageVO.getAdult(),
                 livePageVO.getChildren());
+        for (IndexShopInfoVO indexShopInfoVO : indexShopInfoVOS) {
+            indexShopInfoVO.setUserImage(imageMapper.selectPath(indexShopInfoVO.getUserImage()));
+        }
         for (IndexShopInfoVO shopInfoVO : indexShopInfoVOS) {
             List<String> list1 = new ArrayList<>();
             List<String> list = JSON.parseArray(shopInfoVO.getTagList(), String.class);
@@ -410,12 +413,12 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String shopTopImageUp(MultipartFile multipartFile) {
-        return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.SHOP_TOP_IMAGE_UP);
+        return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.SHOP_TOP_IMAGE_UP,null);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String shopImageUp(MultipartFile multipartFile) {
-        return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.SHOP_IMAGE_UP);
+        return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.SHOP_IMAGE_UP,null);
     }
 }

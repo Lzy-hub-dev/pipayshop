@@ -49,7 +49,7 @@
     <select id="getChatRecordAsUser" resultType="com.example.pipayshopapi.entity.vo.ChatListVO">
         SELECT
             i.item_id AS chatObjectId, i.item_name AS chatObjectName,
-            i.user_image, c.newMessage, c.newMessageTime
+            g.origin_path as userImage, c.newMessage, c.newMessageTime
         FROM
             item_info i
         JOIN
@@ -79,6 +79,8 @@
         ) AS c
         ON
             c.partner_id = i.item_id
+        JOIN image g
+        on g.image_id=i.user_image
         ORDER BY
             c.newMessageTime DESC
     </select>
@@ -86,7 +88,7 @@
     <select id="getChatRecordAsItem" resultType="com.example.pipayshopapi.entity.vo.ChatListVO">
         SELECT
             u.uid AS chatObjectId, u.pi_name AS chatObjectName,
-            u.user_image, c.newMessage, c.newMessageTime
+            g.origin_path as userImage, c.newMessage, c.newMessageTime
         FROM
         user_info u
         JOIN
@@ -116,6 +118,8 @@
         ) AS c
         ON
         c.partner_id = u.uid
+        JOIN image g
+        on g.image_id=u.user_image
         ORDER BY
         c.newMessageTime DESC
     </select>

@@ -10,9 +10,10 @@
 
     <select id="getItemCommodityEvaluates" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityEvaluateVO">
         select   e.evaluate ,e.create_time,e.evaluate_id
-        , e.user_id,u.user_name,u.user_image,e.score
+        , e.user_id,u.user_name,i.origin_path as user_image,e.score
         from item_commodity_evaluate e
         left join user_info u on u.uid=e.user_id
+        join image i on i.image_id=u.user_image
         where commodity_id=#{commodityId} and e.status = 0 and u.status = 0
         LIMIT #{page}, #{limit}
 
@@ -22,8 +23,11 @@
     </select>
 
     <select id="getItemCommodityEvaluate" resultType="com.example.pipayshopapi.entity.vo.EvaluateVO">
-        SELECT u.user_image,u.user_name,u.uid,e.evaluate,e.evaluate_id,e.create_time
-        FROM user_info u JOIN item_commodity_evaluate e ON u.uid = e.user_id
+        SELECT i.origin_path as user_image,u.user_name,u.uid,e.evaluate,e.evaluate_id,e.create_time
+        FROM user_info u
+        JOIN item_commodity_evaluate e ON u.uid = e.user_id
+        join image i
+        on i.image_id=u.user_image
         WHERE uid IN (
 	        SELECT user_id
 	        FROM item_commodity_evaluate

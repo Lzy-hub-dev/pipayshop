@@ -35,12 +35,12 @@
 
     </select>
     <select id="selectCollectProductByUserId" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityInfoVO">
-        select avatar_imag,
+        select g.origin_path as avatar_imag,
                i.commodity_name as shop_commodity_name,
                i.price,
                i.commodity_id,
                info.shop_name,
-               info.user_image
+               e.origin_path as user_image
         FROM shop_collection sc
                  INNER JOIN
              shop_commodity_info i
@@ -48,6 +48,8 @@
                  sc.commodity_id = i.commodity_id
                  inner join shop_info info
                             on info.shop_id = i.shop_id
+        join image g on g.image_id=i.avatar_imag
+        join image e on e.image_id=info.user_image
         WHERE sc.user_id = #{userId}
           AND i.`status` = 0
           AND sc.`status` = 0
@@ -57,11 +59,11 @@
     <select id="getCollectionList" resultType="java.util.List"></select>
 
     <select id="selectHistoryProductByUserId" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityListVO">
-        SELECT i.avatar_imag, i.commodity_name , i.price,
+        SELECT g.origin_path as avatar_imag, i.commodity_name , i.price,
                h.create_time as accessTime,
                i.commodity_id,
                s.shop_name,
-               s.user_image
+               e.origin_path as user_image
         FROM shop_commodity_history h
                  INNER JOIN
              shop_commodity_info i
@@ -69,6 +71,8 @@
                  h.commodity_id = i.commodity_id
         inner join shop_info s
         on  s.shop_id=i.shop_id
+        join image g on g.image_id=i.avatar_imag
+        join image e on e.image_id=s.user_image
         WHERE h.user_id = #{userId}
           AND i.`status` = 0
             LIMIT #{page},#{limit}
@@ -99,9 +103,10 @@
           and sci.status = #{status}
     </select>
     <select id="selectCommodityByShopId" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityInfo1VO">
-        SELECT commodity_id, commodity_name, avatar_imag, price, monthly_sales, tag_list
-        from shop_commodity_info
-        WHERE shop_id = #{shopId} LIMIT #{page}
+        SELECT s.commodity_id, s.commodity_name,i.origin_path as avatar_imag, s.price, s.monthly_sales, s.tag_list
+        from shop_commodity_info s
+        join image i on i.image_id=s.avatar_imag
+        WHERE s.shop_id = #{shopId} LIMIT #{page}
             , #{limit}
     </select>
     <select id="selectAllCommodityByShopId" resultType="java.lang.Integer">
@@ -151,11 +156,12 @@
         select
                i.commodity_id,
                i.commodity_name,
-               i.avatar_imag,
+              g.origin_path as avatar_imag,
                i.status,
                i.price
         FROM
             shop_commodity_info i
+        join image g on g.image_id=i.avatar_imag
         WHERE
             i.shop_id=#{shopId}
             and

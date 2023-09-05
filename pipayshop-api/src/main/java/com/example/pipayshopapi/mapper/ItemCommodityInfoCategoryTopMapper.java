@@ -4,6 +4,8 @@ import com.example.pipayshopapi.entity.ItemCommodityInfoCategoryTop;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * <p>
  * 网店商品的一级分类表 Mapper 接口
@@ -15,4 +17,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ItemCommodityInfoCategoryTopMapper extends BaseMapper<ItemCommodityInfoCategoryTop> {
 
+    List<ItemCommodityInfoCategoryTop> selectCateTopList();
 }

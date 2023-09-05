@@ -122,13 +122,15 @@
     <select id="getOrderList" resultMap="orderListResultMap">
         select
             o.order_id, o.order_status, o.commodity_id, o.transaction_amount,o.number,o.commodity_specification,
-            u.user_image, u.item_name, i.avatar_imag, i.details
+            g.origin_path as user_image, u.item_name, i.avatar_imag, i.details
         from
             item_order_info o
         JOIN
             item_info u
         JOIN
             item_commodity_info i
+        join image g
+        on g.image_id=u.user_image
         where
             o.uid = #{userId}
                 and o.order_status != 3
@@ -141,10 +143,12 @@
 
 
     <select id="getMyOrderByUid" resultType="com.example.pipayshopapi.entity.vo.MyItemOrderInfoVO">
-        SELECT ioi.order_id,ioi.transaction_amount,ioi.uid,ioi.order_status,  ii.item_id,ii.item_name,ii.user_image,  ici.commodity_id,ici.item_commodity_name,ici.details,avatar_imag,ioi.commodity_specification
+        SELECT ioi.order_id,ioi.transaction_amount,ioi.uid,ioi.order_status,  ii.item_id,ii.item_name,g.origin_path as user_image,  ici.commodity_id,ici.item_commodity_name,ici.details,e.origin_path as avatar_imag,ioi.commodity_specification
         from item_order_info as ioi
                  JOIN item_commodity_info as ici	on ici.commodity_id=ioi.commodity_id
                  JOIN item_info as ii	on ii.item_id=ici.item_id
+                 join image g on g.image_id=ii.user_image
+                 join image e on e.image_id=ici.avatar_imag
         WHERE ii.uid=#{Uid}
         <choose>
             <when test="status == -1">
