@@ -66,6 +66,7 @@ public class ItemOrderController {
 
 
     /**
+     * TODO
      订单的详情接口
      */
     @GetMapping("getOrderDetail/{orderId}")
@@ -110,14 +111,11 @@ public class ItemOrderController {
     @ApiOperation("订单超时未支付的失效操作接口")
     public ResponseVO<String> failOrder(@PathVariable String orderId) {
         try {
-            int update = itemOrderInfoService.failOrder(orderId);
-            if (update < 1){
-                throw new Exception();
-            }
-            return ResponseVO.getSuccessResponseVo("订单超时未支付导致失效成功");
+            itemOrderInfoService.failOrder(orderId);
+            return ResponseVO.getSuccessResponseVo("校验订单超时未支付导致失效成功");
         } catch (Exception e) {
             log.error(e.getMessage());
-            throw new BusinessException("订单超时未支付导致失效失败，请联系后台人员");
+            throw new BusinessException("校验订单超时未支付导致失效失败，请联系后台人员");
         }
     }
     /**

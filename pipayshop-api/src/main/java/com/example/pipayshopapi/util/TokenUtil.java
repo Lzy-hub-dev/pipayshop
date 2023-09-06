@@ -36,6 +36,15 @@ public class TokenUtil {
         return claimsJws.getBody();
     }
 
+    /**
+     * 解密Token，拿到内部封装的userId数据，不同字节数组进行匹配
+     */
+    public static Claims getDataFromToken2(String token){
+        JwtParser jwtParser = Jwts.parser();
+        // 通过签名对Token进行解析，得到的结果是一个类似集合的封装类
+        Jws<Claims> claimsJws = jwtParser.setSigningKey(Constants.TOKEN_SECRET).parseClaimsJws(token);
+        return claimsJws.getBody();
+    }
 
 
 }

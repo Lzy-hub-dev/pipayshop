@@ -139,8 +139,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     @Override
     public List<CommodityVO> itemCommodityChoose(String itemId, String brandId) {
         // 获取同一网店同一品牌的商品的vo
-        List<CommodityVO> commodityVOS = commodityInfoMapper.itemCommodityChoose(itemId, brandId);
-        return commodityVOS;
+        return commodityInfoMapper.itemCommodityChoose(itemId, brandId);
     }
 
     @Override

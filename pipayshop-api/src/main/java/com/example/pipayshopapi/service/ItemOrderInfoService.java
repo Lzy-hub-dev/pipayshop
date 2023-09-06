@@ -27,7 +27,7 @@ public interface ItemOrderInfoService extends IService<ItemOrderInfo> {
 
     int completedOrder(String orderId);
 
-    int failOrder(String orderId);
+    void failOrder(String orderId);
 
     void deleteFailOrders();
 
