@@ -68,10 +68,6 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
 
     private static final String ERROR_MAG = "生成未支付订单失败";
 
-    @Override
-    public List<OrderListVO> getOrderList(String userId) {
-        return itemOrderInfoMapper.getOrderList(userId);
-    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -79,16 +75,23 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
         if (orderId == null || "".equals(orderId)){
             return 0;
         }
-        return itemOrderInfoMapper.update(null, new UpdateWrapper<ItemOrderInfo>()
+        // 删除订单表数据
+        int update = itemOrderMapper.update(null, new UpdateWrapper<ItemOrder>()
                 .eq("order_id", orderId)
                 .set("del_flag", 1)
                 .set("update_time", new Date()));
+        if (update < 1) {
+            throw new BusinessException("删除订单失败");
+        }
+        // 删除订单详情表数据
+        // 获取订单关联的商品数据
+        return itemOrderDetailMapper.delete(new UpdateWrapper<ItemOrderDetail>().eq("order_id", orderId).set("del_flag", 1));
     }
 
 
     @Override
     public ItemOrderDetailVO getOrderDetail(String orderId) {
-        return itemOrderInfoMapper.getOrderDetail(orderId);
+        return itemOrderMapper.getOrderDetail(orderId);
     }
 
     @Override
@@ -231,6 +234,12 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
         Integer allMyOrderByUid = itemOrderMapper.getAllMyOrderByUid(uid,status);
         // 获取非商品数据
         List<MyItemOrderInfoVO> list = itemOrderMapper.getMyOrderByUid((page - 1) * limit, limit, uid,status);
+        // 获取订单内商品数据
+        getOrderCommodityList(list);
+        return new PageDataVO(allMyOrderByUid,list);
+    }
+
+    private void getOrderCommodityList(List<MyItemOrderInfoVO> list) {
         // 获取订单内的商品数据
         list.stream()
                 .parallel()
@@ -238,7 +247,15 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
                     List<ItemOrderDetailDTO> commodityList = itemOrderDetailMapper.selectCommodityList(myItemOrderInfoVO.getOrderId());
                     myItemOrderInfoVO.setCommodityList(commodityList);
                 });
-        return new PageDataVO(allMyOrderByUid,list);
+    }
+
+    @Override
+    public List<MyItemOrderInfoVO> getOrderList(String userId) {
+        // 获取非商品数据
+        List<MyItemOrderInfoVO> list = itemOrderMapper.getBuyerOrderList(userId);
+        // 获取订单内商品数据
+        getOrderCommodityList(list);
+        return list;
     }
 
     /**

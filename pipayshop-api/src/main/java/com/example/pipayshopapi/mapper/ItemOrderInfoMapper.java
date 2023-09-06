@@ -44,16 +44,4 @@ public interface ItemOrderInfoMapper extends BaseMapper<ItemOrderInfo> {
      * @return
      */
     List<ItemOrderInfoVO> selectItemOrdersBySellerId(@Param("userId") String userId, @Param("orderStatus") Integer orderStatus);
-
-    /**
-     * 订单详情数据
-     */
-    ItemOrderDetailVO getOrderDetail(@Param("orderId") String orderId);
-
-
-    List<OrderListVO> getOrderList(@Param("userId") String userId);
-
-
-
-
 }

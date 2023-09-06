@@ -2,7 +2,9 @@ package com.example.pipayshopapi.mapper;
 
 import com.example.pipayshopapi.entity.ItemOrder;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.pipayshopapi.entity.vo.ItemOrderDetailVO;
 import com.example.pipayshopapi.entity.vo.MyItemOrderInfoVO;
+import com.example.pipayshopapi.entity.vo.OrderListVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -24,4 +26,13 @@ public interface ItemOrderMapper extends BaseMapper<ItemOrder> {
             , @Param("status") Integer status);
 
     Integer getAllMyOrderByUid(@Param("uid") String uid,@Param("status") Integer status);
+
+    /**
+     * 订单详情数据
+     */
+    ItemOrderDetailVO getOrderDetail(@Param("orderId") String orderId);
+
+    List<OrderListVO> getOrderList(@Param("userId") String userId);
+
+    List<MyItemOrderInfoVO> getBuyerOrderList(@Param("userId") String userId);
 }

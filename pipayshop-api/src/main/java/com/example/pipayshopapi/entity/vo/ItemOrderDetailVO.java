@@ -29,7 +29,4 @@ public class ItemOrderDetailVO {
     private String phone;
 
     private String buyerName;
-
-    private Integer number;
-
 }

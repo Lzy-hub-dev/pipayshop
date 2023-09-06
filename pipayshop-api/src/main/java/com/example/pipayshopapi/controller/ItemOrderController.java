@@ -1,9 +1,6 @@
 package com.example.pipayshopapi.controller;
 
-import com.example.pipayshopapi.entity.vo.ItemOrderDetailVO;
-import com.example.pipayshopapi.entity.vo.OrderListVO;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
-import com.example.pipayshopapi.entity.vo.ResponseVO;
+import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ItemOrderInfoService;
 import io.swagger.annotations.Api;
@@ -32,9 +29,9 @@ public class ItemOrderController {
      */
     @GetMapping("getOrderList/{userId}")
     @ApiOperation("（买家）用户的全部网店订单列表分页展示标识id -1：所有订单   0：未支付订单    1：已支付订单   2：已完成（已经收货）订单")
-    public ResponseVO<List<OrderListVO>> getOrderList(@PathVariable String userId) {
+    public ResponseVO<List<MyItemOrderInfoVO>> getOrderList(@PathVariable String userId) {
         try {
-            List<OrderListVO> list = itemOrderInfoService.getOrderList(userId);
+            List<MyItemOrderInfoVO> list = itemOrderInfoService.getOrderList(userId);
             if (list == null){
                 throw new Exception();
             }
@@ -66,7 +63,6 @@ public class ItemOrderController {
 
 
     /**
-     * TODO
      订单的详情接口
      */
     @GetMapping("getOrderDetail/{orderId}")
