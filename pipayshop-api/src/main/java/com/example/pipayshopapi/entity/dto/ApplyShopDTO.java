@@ -23,7 +23,7 @@ public class ApplyShopDTO {
 
     private List<String> shopImagList;
 
-    private Integer categoryId;
+    private String categoryId;
     private String uid;
 
     private Integer uploadCommodityBalance;

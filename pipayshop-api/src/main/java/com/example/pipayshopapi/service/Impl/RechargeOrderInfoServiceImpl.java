@@ -76,11 +76,7 @@ public class RechargeOrderInfoServiceImpl extends ServiceImpl<RechargeOrderInfoM
             // 先处理未完成的订单
             String oldPaymentId = incompleteDTO.getIdentifier();
             TransactionDTO transaction = incompleteDTO.getTransaction();
-            log.error("?transation--------------------"+transaction);
-            log.error("?oldpaymentId------------------"+oldPaymentId);
             if (null != transaction) {
-                log.error("transation--------------------"+transaction);
-                log.error("oldpaymentId------------------"+oldPaymentId);
                 String txid = transaction.getTxid();
                 String txURL = transaction.get_link();
                 RechargeOrderInfo  rechargeOrderInfo = rechargeOrderInfoMapper.selectOne(new QueryWrapper<RechargeOrderInfo>()
@@ -136,7 +132,6 @@ public class RechargeOrderInfoServiceImpl extends ServiceImpl<RechargeOrderInfoM
 
     @Override
     public ResponseVO approve(PaymentDTO paymentDTO) {
-        log.error("approve-------------------------------------------------------------");
         String rechargeOrderId = paymentDTO.getRechargeOrderId();
         RechargeOrderInfo rechargeOrderInfo = rechargeOrderInfoMapper.selectOne(new QueryWrapper<RechargeOrderInfo>()
                 .eq("order_id", rechargeOrderId));

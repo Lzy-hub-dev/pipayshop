@@ -25,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -145,6 +147,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         // 获取网店的数据
         ItemCommodityInfo itemCommodityInfo = commodityInfoMapper.selectOne(new QueryWrapper<ItemCommodityInfo>()
                 .eq("commodity_id", commodityId));
+        log.error(String.valueOf(itemCommodityInfo)+"==========================");
         String itemId = itemCommodityInfo.getItemId();
         Map<String, List<String>> typeMap = new HashMap<>();
         // 转移部分非json型的数据
@@ -324,7 +327,10 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String itemTopImagsUp(MultipartFile multipartFile) {
-        return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.ROOM_TOP_IMG,null);
+        List<String> imageSizeList = new ArrayList<>();
+        imageSizeList.add("320,180");
+        imageSizeList.add("640,360");
+        return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.ROOM_TOP_IMG,imageSizeList);
     }
 
 
