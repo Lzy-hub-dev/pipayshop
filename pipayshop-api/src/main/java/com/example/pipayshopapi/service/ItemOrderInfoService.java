@@ -32,7 +32,7 @@ public interface ItemOrderInfoService extends IService<ItemOrderInfo> {
 
     void deleteFailOrders();
 
-    String generateUnpaidOrder(String token);
+    List<String> generateUnpaidOrder(String token);
 
     boolean payOrder(String token);
 

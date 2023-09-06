@@ -78,17 +78,20 @@ public class ShopTest {
     @Test
     public void test3(){
         JwtBuilder jwtBuilder = Jwts.builder();
-/*        List<ItemOrderDetailDTO> itemOrderDetailDTOS = new ArrayList<>();
-        ItemOrderDetailDTO itemOrderDetailDTO = new ItemOrderDetailDTO("Vvfmf3xGhw", new BigDecimal(11.2), 2, "蓝色xl");
-        ItemOrderDetailDTO itemOrderDetailDTO2 = new ItemOrderDetailDTO("Vvfmf3xGhw", new BigDecimal(11.2), 2, "蓝色xl");
+        List<ItemOrderDetailDTO> itemOrderDetailDTOS = new ArrayList<>();
+        ItemOrderDetailDTO itemOrderDetailDTO = new ItemOrderDetailDTO("CADKMnRHaE","Vvfmf3xGhw", new BigDecimal(11.2), new BigDecimal(11.2), 2, "蓝色xl", "/images/avatar/174abc6ebd0.png");
+        ItemOrderDetailDTO itemOrderDetailDTO2 = new ItemOrderDetailDTO("biaMlrE5xh","Vvfmf3xGhw", new BigDecimal(11.2), new BigDecimal(11.2), 2, "蓝色xl", "/images/avatar/174abc6ebd0.png");
+        ItemOrderDetailDTO itemOrderDetailDTO3 = new ItemOrderDetailDTO("CADKMnRHaE","Vvfmf3xGhw", new BigDecimal(11.2), new BigDecimal(11.2), 2, "蓝色xl", "/images/avatar/174abc6ebd0.png");
         itemOrderDetailDTOS.add(itemOrderDetailDTO2);
-        itemOrderDetailDTOS.add(itemOrderDetailDTO);*/
+        itemOrderDetailDTOS.add(itemOrderDetailDTO);
+        itemOrderDetailDTOS.add(itemOrderDetailDTO3);
+
         String compact = jwtBuilder
                 .setHeaderParam("typ", "JWT")
                 .setHeaderParam("alg", "HS256")
                 .claim("uid", "wzx")
-                .claim("transactionAmount", "66.6")
-                .claim("orderId", "dd1f190787a")
+                .claim("buyerDataId", "4SElECIpJb")
+                .claim("itemOrderDetailDTOList", itemOrderDetailDTOS)
                 .setExpiration(new Date(System.currentTimeMillis() + Constants.USER_ACTIVE_TIME))
                 .signWith(SignatureAlgorithm.HS256, Constants.TOKEN_SECRET)
                 .compact();

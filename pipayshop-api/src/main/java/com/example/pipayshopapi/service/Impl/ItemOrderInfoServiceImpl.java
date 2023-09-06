@@ -26,9 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -140,19 +138,15 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public String generateUnpaidOrder(String token) {
-        // 生成orderId
-        String orderId = StringUtil.generateShortId();
+    public List<String> generateUnpaidOrder(String token) {
         // 解析token
         Claims dataFromToken = TokenUtil.getDataFromToken2(token);
         String uid = dataFromToken.get("uid", String.class);
-        String itemId = dataFromToken.get("itemId", String.class);
         String buyerDataId = dataFromToken.get("buyerDataId", String.class);
-        // 总价
-        BigDecimal transactionAmount = BigDecimal.valueOf(Double.parseDouble(dataFromToken.get("transactionAmount", String.class)));
-        // 打折后的总价
-        BigDecimal discount = BigDecimal.valueOf(Double.parseDouble(dataFromToken.get("discount", String.class)));
+        // 订单中的商品集合
         List<Object> itemOrderDetailDTOList = dataFromToken.get("itemOrderDetailDTOList", List.class);
+        // 生成的订单id集合
+        List<String> orderIdList = new ArrayList<>();
          /*由于Map中的参数get出来，并强转成其他类型时，它会先转换成LinkedHashMap，再尝试强转成其他的类。但是基本不会强转成功，
          所以会报 java.util.LinkedHashMap cannot be cast to*******这个错误。
          解决思路：从list中取出来的数据需要进行转化成json格式字符串，然后再将该json格式字符串转换成对象，这样就不会再出现报错情况，能成功遍历该list列表。
@@ -163,60 +157,93 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
             // 将json转成需要的对象
             return JSONObject.parseObject(jsonObject, ItemOrderDetailDTO.class);
         }).collect(Collectors.toList());
-        // 插入订单主题表数据
-        ItemOrder itemOrder = new ItemOrder(null, orderId, transactionAmount, discount, itemId, uid, buyerDataId, 0, null, null, null, null);
-        int insert = itemOrderMapper.insert(itemOrder);
-        if (insert < 1){throw new BusinessException(ERROR_MAG);}
-
-        // 插入订单详情表数据
-        detailList
-                .forEach(itemOrderDetailDTO -> {
-                    ItemOrderDetail itemOrderDetail = new ItemOrderDetail();
-                    // 属性转移
-                    BeanUtils.copyProperties(itemOrderDetailDTO, itemOrderDetail);
-                    // 补全属性
-                    itemOrderDetail.setOrderId(orderId);
-                    // 修改商品展示图数据指向image表的id
-                    String imageId = imageMapper.selectImageIdByPath(itemOrderDetailDTO.getAvatarImag());
-                    itemOrderDetail.setAvatarImag(imageId);
-                    // 插入数据库
-                    int insertItemOrderDetail = itemOrderDetailMapper.insert(itemOrderDetail);
-                    if (insertItemOrderDetail < 1){throw new BusinessException(ERROR_MAG);}
-                    // 扣减商品的剩余库存余额
-                    int update = itemCommodityInfoMapper.reduceStock(itemOrderDetailDTO.getNumber(), itemOrderDetailDTO.getCommodityId());
-                    if (update < 1){throw new BusinessException(ERROR_MAG);}
-                });
-        // 订单十分钟未支付的失效处理
-        rabbitTemplate.convertAndSend(QueueConfig.QUEUE_MESSAGE_DELAY, "item_"+orderId, message1 -> {
-            message1.getMessageProperties().setExpiration("1000 * 60 * 10");
-            return message1;
+        // 这里将传递过来的商品集合根据itemId来划分订单范围，一个订单存储的数据要是同一个item才行，这样子才能保证物流数据的正确性
+        // detailMap用于存储itemId和对应的子集合
+        Map<String, List<ItemOrderDetailDTO>> detailMap = new HashMap<>(detailList.size());
+        detailList.stream().parallel().forEach(detail -> {
+            String itemId = detail.getItemId();
+            List<ItemOrderDetailDTO> sublist = detailMap.computeIfAbsent(itemId, k -> new ArrayList<>());
+            sublist.add(detail);
         });
-        return orderId;
+        // Map中的每一位元素都对应一个订单
+        detailMap.forEach((key, commodityList) -> {
+            // 获取一个订单的商品数据列表
+            // 计算原总价
+            BigDecimal originSum = commodityList.stream().map(ItemOrderDetailDTO::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+            // 计算打折后的总价
+            BigDecimal discountSum = commodityList.stream().map(ItemOrderDetailDTO::getDiscount).reduce(BigDecimal.ZERO, BigDecimal::add);
+            // 生成订单id
+            String orderId = StringUtil.generateShortId();
+            // 记录订单id
+            orderIdList.add(orderId);
+            // 插入订单主题表数据
+            ItemOrder itemOrder = new ItemOrder(null, orderId, originSum, discountSum, key, uid, buyerDataId
+                    , 0, null, null, null, null);
+            int insert = itemOrderMapper.insert(itemOrder);
+            if (insert < 1) {
+                throw new BusinessException(ERROR_MAG);
+            }
+            // 插入订单详情表数据
+            commodityList
+                    .forEach(itemOrderDetailDTO -> {
+                        ItemOrderDetail itemOrderDetail = new ItemOrderDetail();
+                        // 属性转移
+                        BeanUtils.copyProperties(itemOrderDetailDTO, itemOrderDetail);
+                        // 补全属性
+                        itemOrderDetail.setOrderId(orderId);
+                        // 修改商品展示图数据指向image表的id
+                        String imageId = imageMapper.selectImageIdByPath(itemOrderDetailDTO.getAvatarImag());
+                        itemOrderDetail.setAvatarImag(imageId);
+                        // 插入数据库
+                        int insertItemOrderDetail = itemOrderDetailMapper.insert(itemOrderDetail);
+                        if (insertItemOrderDetail < 1) {
+                            throw new BusinessException(ERROR_MAG);
+                        }
+                        // 扣减商品的剩余库存余额
+                        int update = itemCommodityInfoMapper.reduceStock(itemOrderDetailDTO.getNumber(), itemOrderDetailDTO.getCommodityId());
+                        if (update < 1) {
+                            throw new BusinessException(ERROR_MAG);
+                        }
+                    });
+            // 订单十分钟未支付的失效处理
+            rabbitTemplate.convertAndSend(QueueConfig.QUEUE_MESSAGE_DELAY, "item_" + orderId, message1 -> {
+                message1.getMessageProperties().setExpiration("1000 * 60 * 10");
+                return message1;
+            });
+        });
+        return orderIdList;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean payOrder(String token) {
         Claims dataFromToken = TokenUtil.getDataFromToken2(token);
-        String orderId = dataFromToken.get("orderId", String.class);
+        // 这里接收的是orderId的数组（正对同时下单多件不同商铺的商品情况），orderId元素间用“，”分隔
+        String orderIdArray = dataFromToken.get("orderIdArray", String.class);
         String uid1 = dataFromToken.get("uid", String.class);
-        // 校验订单id是否已经存在，保证接口的幂等性，避免重复下单
-        ItemOrder itemOrder = itemOrderMapper.selectOne(new QueryWrapper<ItemOrder>()
-                .eq("order_id", orderId)
-                .eq("order_status", 0));
-        if (itemOrder == null){throw new BusinessException(PAY_ERROR);}
-        // 订单状态、修改时间更新
         Date date = new Date();
-        int update1 = itemOrderMapper.update(null, new UpdateWrapper<ItemOrder>()
-                .eq("order_id", orderId)
-                .set("order_status", 1)
-                .set("order_time", date)
-                .set("update_time", date));
-        if (update1 < 1){throw new BusinessException(PAY_ERROR);}
+        // 最终要支付的积分值
+        BigDecimal payPointSum = BigDecimal.valueOf(Double.parseDouble(dataFromToken.get("payPointSum", String.class)));
+        // 拆解出orderId集合
+        String[] orderIds = orderIdArray.split(",");
+        Arrays.stream(orderIds).forEach(orderId -> {
+            // 校验订单id是否已经存在，保证接口的幂等性，避免重复下单
+            ItemOrder itemOrder = itemOrderMapper.selectOne(new QueryWrapper<ItemOrder>()
+                    .eq("order_id", orderId)
+                    .eq("order_status", 0));
+            if (itemOrder == null){throw new BusinessException(PAY_ERROR);}
+            // 订单状态、修改时间更新
+            int update1 = itemOrderMapper.update(null, new UpdateWrapper<ItemOrder>()
+                    .eq("order_id", orderId)
+                    .set("order_status", 1)
+                    .set("order_time", date)
+                    .set("update_time", date));
+            if (update1 < 1){throw new BusinessException(PAY_ERROR);}
+        });
         // 用户余额更新
         int uid = accountInfoMapper.update(null, new UpdateWrapper<AccountInfo>()
                 .eq("uid", uid1)
-                .setSql("point_balance = point_balance - " + itemOrder.getDiscount())
+                .setSql("point_balance = point_balance - " + payPointSum)
                 .set("update_time", date));
         if (uid < 1){throw new BusinessException(PAY_ERROR);}
         return true;

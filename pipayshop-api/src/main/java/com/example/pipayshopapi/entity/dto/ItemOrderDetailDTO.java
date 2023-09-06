@@ -15,6 +15,11 @@ import java.math.BigDecimal;
 public class ItemOrderDetailDTO {
 
     /**
+     * 商品的itemId
+     */
+    private String itemId;
+
+    /**
      * 商品id
      */
     private String commodityId;

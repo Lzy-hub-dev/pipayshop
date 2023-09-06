@@ -147,9 +147,9 @@ public class ItemOrderController {
      */
     @PostMapping("generateUnpaidOrder")
     @ApiOperation("生成未支付订单")
-    public ResponseVO<String> generateUnpaidOrder(String token) {
+    public ResponseVO<List<String>> generateUnpaidOrder(String token) {
         try {
-            String orderId = itemOrderInfoService.generateUnpaidOrder(token);
+            List<String> orderId = itemOrderInfoService.generateUnpaidOrder(token);
             return ResponseVO.getSuccessResponseVo(orderId);
         } catch (Exception e) {
             log.error(e.getMessage());
