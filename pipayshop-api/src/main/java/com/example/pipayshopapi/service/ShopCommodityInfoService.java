@@ -7,6 +7,7 @@ import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
 import com.example.pipayshopapi.entity.vo.ApplicationRecordVO;
 import com.example.pipayshopapi.entity.vo.CommodityStatusPageVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
+import com.example.pipayshopapi.entity.vo.ShopCommodityInfo1VO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -37,10 +38,11 @@ public interface ShopCommodityInfoService extends IService<ShopCommodityInfo> {
 
     /**
      * 根据店铺id查找实体店商品的详情信息列表
+     *
      * @param shopId
      * @return
      */
-    PageDataVO selectShopInfoListByShopId(Integer limit, Integer pages, String shopId);
+    List<ShopCommodityInfo1VO> selectShopInfoListByShopId(String shopId);
 
     /**
      * 根据店铺id查找实体店商品的上架和下架列表

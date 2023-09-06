@@ -144,7 +144,7 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
         // 生成orderId
         String orderId = StringUtil.generateShortId();
         // 解析token
-        Claims dataFromToken = TokenUtil.getDataFromToken2(token);
+        Claims dataFromToken = TokenUtil.getDataFromToken(token);
         String uid = dataFromToken.get("uid", String.class);
         String itemId = dataFromToken.get("itemId", String.class);
         String buyerDataId = dataFromToken.get("buyerDataId", String.class);
@@ -153,9 +153,10 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
         // 打折后的总价
         BigDecimal discount = BigDecimal.valueOf(Double.parseDouble(dataFromToken.get("discount", String.class)));
         List<Object> itemOrderDetailDTOList = dataFromToken.get("itemOrderDetailDTOList", List.class);
-         /*由于Map中的参数get出来，并强转成其他类型时，它会先转换成LinkedHashMap，再尝试强转成其他的类。但是基本不会强转成功，
-         所以会报 java.util.LinkedHashMap cannot be cast to*******这个错误。
-         解决思路：从list中取出来的数据需要进行转化成json格式字符串，然后再将该json格式字符串转换成对象，这样就不会再出现报错情况，能成功遍历该list列表。
+         /*
+             由于Map中的参数get出来，并强转成其他类型时，它会先转换成LinkedHashMap，再尝试强转成其他的类。但是基本不会强转成功，
+             所以会报 java.util.LinkedHashMap cannot be cast to*******这个错误。
+             解决思路：从list中取出来的数据需要进行转化成json格式字符串，然后再将该json格式字符串转换成对象，这样就不会再出现报错情况，能成功遍历该list列表。
          */
         List<ItemOrderDetailDTO> detailList = itemOrderDetailDTOList.stream().map(itemOrderDetailDTO -> {
             // 将list中的数据转成json字符串

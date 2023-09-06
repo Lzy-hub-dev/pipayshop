@@ -60,10 +60,9 @@ public interface ShopCommodityInfoMapper extends BaseMapper<ShopCommodityInfo> {
     /**
      * 根据店铺id查询，实体店的商品列表
      *
-     * @param page
      * @return
      */
-    List<ShopCommodityInfo1VO>selectCommodityByShopId(@Param("page") Integer page, @Param("limit") Integer limit,@Param("shopId") String shopId);
+    List<ShopCommodityInfo1VO>selectCommodityByShopId(@Param("shopId") String shopId);
 
     /**
      * 根据店铺id查询，实体店的商品列表总数

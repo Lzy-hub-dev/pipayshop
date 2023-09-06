@@ -180,10 +180,9 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
      * 根据店铺id查找实体店商品的详情信息列表
      */
     @Override
-    public PageDataVO selectShopInfoListByShopId(Integer limit, Integer pages, String shopId) {
-        Integer count = shopCommodityInfoMapper.selectAllCommodityByShopId(shopId);
-        int page = (pages - 1) * limit;
-        List<ShopCommodityInfo1VO> shopCommodityInfo1VOS = shopCommodityInfoMapper.selectCommodityByShopId(page, limit, shopId);
+    public List<ShopCommodityInfo1VO> selectShopInfoListByShopId(String shopId) {
+
+        List<ShopCommodityInfo1VO> shopCommodityInfo1VOS = shopCommodityInfoMapper.selectCommodityByShopId(shopId);
         List<ShopTags> list1 = new ArrayList<>();
         for (ShopCommodityInfo1VO shopCommodityInfo1VO : shopCommodityInfo1VOS) {
             List<String> list = JSON.parseArray(shopCommodityInfo1VO.getTagList(), String.class);
@@ -196,7 +195,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
             }
             shopCommodityInfo1VO.setShopTagsList(list1);
         }
-        return new PageDataVO(count,shopCommodityInfo1VOS);
+        return shopCommodityInfo1VOS;
     }
 
     /**
@@ -240,7 +239,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
                                             .parallel()
                                             .map(imageId -> imageMapper.selectPath(imageId))
                                             .collect(Collectors.toList());
-        shopDetailInfoVO.setCommodityImgList(imageList.toString());
+        shopDetailInfoVO.setCommodityImgList1(imageList);
         return shopDetailInfoVO ;
     }
 
