@@ -106,8 +106,7 @@
         SELECT s.commodity_id, s.commodity_name,i.origin_path as avatar_imag, s.price, s.monthly_sales, s.tag_list
         from shop_commodity_info s
         join image i on i.image_id=s.avatar_imag
-        WHERE s.shop_id = #{shopId} LIMIT #{page}
-            , #{limit}
+        WHERE s.shop_id = #{shopId}
     </select>
     <select id="selectAllCommodityByShopId" resultType="java.lang.Integer">
         SELECT COUNT(*)

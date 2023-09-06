@@ -3,10 +3,7 @@ package com.example.pipayshopapi.controller;
 
 import com.example.pipayshopapi.entity.ShopDetailInfoVO;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
-import com.example.pipayshopapi.entity.vo.ApplicationRecordVO;
-import com.example.pipayshopapi.entity.vo.CommodityStatusPageVO;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
-import com.example.pipayshopapi.entity.vo.ResponseVO;
+import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopCommodityInfoService;
 import com.example.pipayshopapi.util.FileUploadUtil;
@@ -66,11 +63,11 @@ public class ShopCommodityInfoController {
         }
     }
 
-    @GetMapping("selectShopInfoListByShopId/{pages}/{limit}/{shopId}")
+    @GetMapping("selectShopInfoListByShopId/{shopId}")
     @ApiOperation("根据店铺id查找实体店商品的列表(商品帶标签)")
-    public ResponseVO<PageDataVO> selectShopInfoListByShopId(@PathVariable Integer pages, @PathVariable Integer limit, @PathVariable String shopId) {
+    public ResponseVO<List<ShopCommodityInfo1VO>> selectShopInfoListByShopId( @PathVariable String shopId) {
         try {
-            PageDataVO pageDataVO = shopCommodityService.selectShopInfoListByShopId(limit, pages, shopId);
+            List<ShopCommodityInfo1VO> pageDataVO = shopCommodityService.selectShopInfoListByShopId(shopId);
             return ResponseVO.getSuccessResponseVo(pageDataVO);
         } catch (Exception e) {
             e.printStackTrace();
