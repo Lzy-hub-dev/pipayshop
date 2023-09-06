@@ -167,15 +167,10 @@ public class ShopCommodityInfoController {
 
     @PostMapping("shopCommodityImageUp")
     @ApiOperation("实体店商品轮播图上传")
-    @CrossOrigin(origins = {"http://111.230.16.231:7126/"},
-            methods = {RequestMethod.GET, RequestMethod.POST},
-            allowCredentials = "true",
-            maxAge = 3600
-    )
-    public ResponseVO<String> shopCommodityImageUp(@RequestParam("file") MultipartFile multipartFile){
+    public ResponseVO<List<String>> shopCommodityImageUp(@RequestBody MultipartFile[] file){
         try {
-            String imageId = shopCommodityService.shopCommodityImageUp(multipartFile);
-            return ResponseVO.getSuccessResponseVo(imageId);
+            List<String> imageIdList = shopCommodityService.shopCommodityImageUp(file);
+            return ResponseVO.getSuccessResponseVo(imageIdList);
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("实体店商品轮播图上传失败，请联系后台人员");

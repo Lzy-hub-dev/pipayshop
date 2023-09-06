@@ -413,12 +413,16 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String shopTopImageUp(MultipartFile multipartFile) {
-        return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.SHOP_TOP_IMAGE_UP,null);
+        List<String> imageSizeList = new ArrayList<>();
+        imageSizeList.add("90,100");
+        return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.SHOP_TOP_IMAGE_UP,imageSizeList);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String shopImageUp(MultipartFile multipartFile) {
-        return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.SHOP_IMAGE_UP,null);
+        List<String> imageSizeList = new ArrayList<>();
+        imageSizeList.add("640,360");
+        return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.SHOP_IMAGE_UP,imageSizeList);
     }
 }

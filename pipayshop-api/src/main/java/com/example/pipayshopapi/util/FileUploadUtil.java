@@ -109,7 +109,6 @@ public class FileUploadUtil {
         //将文件复制到指定路径
         String separator = File.separator;
         File destFile = new File(readPath.getAbsolutePath()+ separator + fileName);
-        log.error("destFile==================================="+destFile);
         try {
             FileCopyUtils.copy(multipartFile.getBytes(), destFile);
         } catch (IOException e) {
@@ -150,11 +149,18 @@ public class FileUploadUtil {
                     int wide = Integer.parseInt(sizeArray[1]);
                 try {
                     File file = new File("pipayshop-api/src/main/resources/static/" + path);
+                    String fileName = file.getName();
+                    String fileExtension = "";
+                    int dotIndex = fileName.lastIndexOf(".");
+                    if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
+                        fileExtension = fileName.substring(dotIndex + 1);
+                    }
                     String newFileName = file.getAbsolutePath()
-                            .replaceFirst("\\.([a-z]+)", "_" + length +"_" + wide + ".png");
+                            .replaceFirst("\\.([a-z]+)", "_" + length +"_" + wide + "."+fileExtension);
+                    System.out.println(newFileName);
                     Thumbnails.of(file)
                             .size(length, wide)
-                            .outputFormat(Constants.IMAGE_TYPE)
+                            .outputFormat(fileExtension)
                             .toFile(newFileName);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -180,8 +186,12 @@ public class FileUploadUtil {
         try {
             // 校验MD
             String md5 = FileUploadUtil.calculateMD5(file);
-            Image image = imageMapper.selectOne(new QueryWrapper<Image>().eq("md5", md5).select("image_id"));
+            Image image = imageMapper.selectOne(new QueryWrapper<Image>().eq("md5", md5).select("image_id","origin_path"));
             if (image != null) {
+                // 获取缩略图
+                if (sizeList != null){
+                    asyCropping(image.getOriginPath(),sizeList);
+                }
                 // 存在就直接返回目标图片id,不需要保存
                 return image.getImageId();
             }

@@ -147,8 +147,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                 throw new RuntimeException(e);
             }
         }
-        //TODO 根据用户查询权限信息 添加到LoginUser中
-        // 获取用户
 
         // 刷新记录当前登录的时间f
         userInfoMapper.update(null, new UpdateWrapper<UserInfo>()
@@ -163,7 +161,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         String region = getIp2Region(ip);
         LoginRecord loginRecord = new LoginRecord(user.getUid(), ip, region, new Date(),userName);
         loginRecordMapper.insert(loginRecord);
-
         //封装成UserDetails对象返回
         return new LoginUser(user);
     }
@@ -207,7 +204,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     public ResponseResultVO logout(String userId) {
 
         redisCache.deleteObject("login:"+userId);
-        log.error("退出登录成功---------------------------------------------"+userId);
         return new ResponseResultVO(200,"退出成功",null);
     }
 
@@ -232,6 +228,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                                                             .set(!"".equals(userInfoVO.getCountry()),"country",userInfoVO.getCountry())
                                                             .set(userInfoVO.getLanguage() != null ,"language", userInfoVO.getLanguage())
                                                             .set(!"".equals(userInfoVO.getEmail()) && userInfoVO.getEmail() != null,"email", userInfoVO.getEmail()));
+
         // 要求网店名和用户名保持一致，如果修改了用户名要求同步网店名
         if (userName != null && !"".equals(userName)){
             int update = itemInfoMapper.update(null, new UpdateWrapper<ItemInfo>()

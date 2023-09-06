@@ -276,8 +276,7 @@ public class ShopInfoController {
         }
     }
 
-/*
-
+    /*
     @PostMapping("piIdImageUp")
     @ApiOperation("pi_Id_Image上传")
     public ResponseVO<String> piIdImageUp(MultipartFile multipartFile){

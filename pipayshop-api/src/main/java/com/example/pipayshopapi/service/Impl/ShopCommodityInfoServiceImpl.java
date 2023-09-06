@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * <p>
@@ -248,12 +247,30 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String shopCommodityTopImageUp(MultipartFile multipartFile) {
+        List<String> imageSizeList = new ArrayList<>();
+//        imageSizeList.add("")
         return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.SHOP_COMMODITY_TOP_IMAGE_UP,null);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public String shopCommodityImageUp(MultipartFile multipartFile) {
-        return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.SHOP_COMMODITY_IMAGE_UP,null);
+    public List<String> shopCommodityImageUp(MultipartFile[] multipartFile) {
+        List<String> imageSizeList_1 = new ArrayList<>();
+        List<String> imageSizeList_2 = new ArrayList<>();
+        List<String> imageIdList = new ArrayList<>();
+        imageSizeList_1.add("90,100");
+        imageSizeList_1.add("640,360");
+        imageSizeList_2.add("640,360");
+        System.out.println(multipartFile);
+        for (int i = 0; i < multipartFile.length; i++) {
+            if (i==0){
+
+                imageIdList.add(FileUploadUtil.allUploadImageData(multipartFile[i], imageMapper, FileUploadUtil.SHOP_COMMODITY_IMAGE_UP,imageSizeList_1));
+            }else {
+
+                imageIdList.add(FileUploadUtil.allUploadImageData(multipartFile[i], imageMapper, FileUploadUtil.SHOP_COMMODITY_IMAGE_UP,imageSizeList_2));
+            }
+        }
+        return imageIdList;
     }
 }

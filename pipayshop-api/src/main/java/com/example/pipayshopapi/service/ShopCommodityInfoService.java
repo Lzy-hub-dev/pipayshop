@@ -97,5 +97,5 @@ public interface ShopCommodityInfoService extends IService<ShopCommodityInfo> {
 
     String shopCommodityTopImageUp(MultipartFile multipartFile);
 
-    String shopCommodityImageUp(MultipartFile multipartFile);
+    List<String> shopCommodityImageUp(MultipartFile[] multipartFile);
 }

@@ -288,7 +288,7 @@
         on
             g.image_id=ici.avatar_imag
         WHERE
-            ici.status = 0 AND cc.country_code = #{dto.countryCode}
+            ici.status = 0 AND cc.country_code = #{dto.countryCode} AND ii.status = 0
         <if test="dto.brandId != null">
             and ici.brand_id = #{dto.brandId}
         </if>
