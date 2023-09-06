@@ -218,25 +218,32 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
     @Transactional(rollbackFor = Exception.class)
     public boolean payOrder(String token) {
         Claims dataFromToken = TokenUtil.getDataFromToken2(token);
-        String orderId = dataFromToken.get("orderId", String.class);
+        // 这里获取的是orderId的数组，因为多个不同店铺的商品一起下单的话会产生多个orderId，用“，”分隔
+        String orderIdArray = dataFromToken.get("orderIdArray", String.class);
         String uid1 = dataFromToken.get("uid", String.class);
-        // 校验订单id是否已经存在，保证接口的幂等性，避免重复下单
-        ItemOrder itemOrder = itemOrderMapper.selectOne(new QueryWrapper<ItemOrder>()
-                .eq("order_id", orderId)
-                .eq("order_status", 0));
-        if (itemOrder == null){throw new BusinessException(PAY_ERROR);}
-        // 订单状态、修改时间更新
+        // 所有商品的总积分价格
+        BigDecimal payPointSum = BigDecimal.valueOf(Double.parseDouble(dataFromToken.get("payPointSum", String.class)));
         Date date = new Date();
-        int update1 = itemOrderMapper.update(null, new UpdateWrapper<ItemOrder>()
-                .eq("order_id", orderId)
-                .set("order_status", 1)
-                .set("order_time", date)
-                .set("update_time", date));
-        if (update1 < 1){throw new BusinessException(PAY_ERROR);}
+        // 获取orderId
+        String[] orderIds = orderIdArray.split(",");
+        Arrays.stream(orderIds).forEach(orderId -> {
+            // 校验订单id是否已经存在，保证接口的幂等性，避免重复下单
+            ItemOrder itemOrder = itemOrderMapper.selectOne(new QueryWrapper<ItemOrder>()
+                    .eq("order_id", orderId)
+                    .eq("order_status", 0));
+            if (itemOrder == null){throw new BusinessException(PAY_ERROR);}
+            // 订单状态、修改时间更新
+            int update1 = itemOrderMapper.update(null, new UpdateWrapper<ItemOrder>()
+                    .eq("order_id", orderId)
+                    .set("order_status", 1)
+                    .set("order_time", date)
+                    .set("update_time", date));
+            if (update1 < 1){throw new BusinessException(PAY_ERROR);}
+        });
         // 用户余额更新
         int uid = accountInfoMapper.update(null, new UpdateWrapper<AccountInfo>()
                 .eq("uid", uid1)
-                .setSql("point_balance = point_balance - " + itemOrder.getDiscount())
+                .setSql("point_balance = point_balance - " + payPointSum)
                 .set("update_time", date));
         if (uid < 1){throw new BusinessException(PAY_ERROR);}
         return true;
