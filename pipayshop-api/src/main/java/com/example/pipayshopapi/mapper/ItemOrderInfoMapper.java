@@ -22,26 +22,5 @@ import java.util.List;
 @Mapper
 public interface ItemOrderInfoMapper extends BaseMapper<ItemOrderInfo> {
 
-    /**
-     * 通过用户id去查找网店订单
-     * @param userId
-     * @return
-     */
-    List<ItemOrderInfoVO> selectItemOrders(@Param("userId")String userId);
 
-    /**
-     * 通过用户id去查找网店订单详情（关联网店+订单+商品）
-     * @param userId
-     * @return
-     */
-    List<ItemOrderInfoVO> selectOrderByUerId(@Param("userId")String userId);
-
-    /**
-     * 根据卖家id查询网店关联的订单
-     *
-     * @param userId      卖家id
-     * @param orderStatus 0:待支付;2:已完成;3:查询所有
-     * @return
-     */
-    List<ItemOrderInfoVO> selectItemOrdersBySellerId(@Param("userId") String userId, @Param("orderStatus") Integer orderStatus);
 }

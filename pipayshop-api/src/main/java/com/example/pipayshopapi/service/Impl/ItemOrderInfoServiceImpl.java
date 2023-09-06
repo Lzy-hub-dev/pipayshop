@@ -44,9 +44,6 @@ import java.util.stream.Collectors;
 public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, ItemOrderInfo> implements ItemOrderInfoService {
 
     @Resource
-    ItemOrderInfoMapper itemOrderInfoMapper;
-
-    @Resource
     AccountInfoMapper accountInfoMapper;
 
     @Resource
@@ -135,7 +132,7 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteFailOrders() {
-        itemOrderInfoMapper.update(null, new UpdateWrapper<ItemOrderInfo>()
+        itemOrderMapper.update(null, new UpdateWrapper<ItemOrder>()
                 .eq("order_status", 3)
                 .set("del_flag", 1)
                 .set("update_time", new Date()));
