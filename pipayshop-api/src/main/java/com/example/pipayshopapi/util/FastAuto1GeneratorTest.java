@@ -22,7 +22,7 @@ public class FastAuto1GeneratorTest {
 // 设置mapperXml生成路径
                 })
                 .strategyConfig(builder -> {
-                    builder.addInclude("item_order","item_order_detail") // 设置需要生成的表名
+                    builder.addInclude("country_second") // 设置需要生成的表名
                             .addTablePrefix("t_", "c_"); // 设置过滤表前缀
                 })
                 .templateEngine(new FreemarkerTemplateEngine()) // 使用Freemarker

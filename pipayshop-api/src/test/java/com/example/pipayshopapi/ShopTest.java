@@ -1,7 +1,11 @@
 package com.example.pipayshopapi;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.pipayshopapi.config.CommonConfig;
+import com.example.pipayshopapi.entity.ItemOrder;
 import com.example.pipayshopapi.entity.dto.ItemOrderDetailDTO;
+import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.util.Constants;
 import com.example.pipayshopapi.util.FileUploadUtil;
 import com.example.pipayshopapi.util.TokenUtil;
@@ -29,6 +33,22 @@ public class ShopTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+    @Test
+    public void Test01(){
+        Claims dataFromToken = TokenUtil.getDataFromToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ3engiLCJvcmRlcklkQXJyYXkiOlsiYTg5OTdiMjM4MWEiXSwicGF5UG9pbnRTdW0iOjIwOX0.IJRTL1-uqlyk4DkbP5aeesNZj_RdOgUBTNBmDDFnyRo");
+        String uid = dataFromToken.get("uid", String.class);
+        List<String> list = dataFromToken.get("orderIdArray", ArrayList.class);
+        System.out.println(list);
+//        BigDecimal payPointSum = BigDecimal.valueOf(Double.parseDouble(dataFromToken.get("payPointSum", String.class)));
+        BigDecimal payPointSum = BigDecimal.valueOf(dataFromToken.get("payPointSum", Integer.class));
+        System.out.println(payPointSum);
+        list.stream().forEach(orderId -> {
+            // 校验订单id是否已经存在，保证接口的幂等性，避免重复下单
+            System.out.println(orderId);
+            // 订单状态、修改时间更新
+
+        });
     }
 
 

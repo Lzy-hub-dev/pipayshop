@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 
 
@@ -139,8 +140,9 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
     @Override
     @Transactional(rollbackFor = Exception.class)
     public List<String> generateUnpaidOrder(String token) {
+        log.error(token);
         // 解析token
-        Claims dataFromToken = TokenUtil.getDataFromToken2(token);
+        Claims dataFromToken = TokenUtil.getDataFromToken(token);
         String uid = dataFromToken.get("uid", String.class);
         String buyerDataId = dataFromToken.get("buyerDataId", String.class);
         // 订单中的商品集合
@@ -194,6 +196,7 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
                         // 修改商品展示图数据指向image表的id
                         String imageId = imageMapper.selectImageIdByPath(itemOrderDetailDTO.getAvatarImag());
                         itemOrderDetail.setAvatarImag(imageId);
+                        log.error("detail======================="+itemOrderDetail);
                         // 插入数据库
                         int insertItemOrderDetail = itemOrderDetailMapper.insert(itemOrderDetail);
                         if (insertItemOrderDetail < 1) {
@@ -217,16 +220,17 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean payOrder(String token) {
-        Claims dataFromToken = TokenUtil.getDataFromToken2(token);
+
+        Claims dataFromToken = TokenUtil.getDataFromToken(token);
         // 这里获取的是orderId的数组，因为多个不同店铺的商品一起下单的话会产生多个orderId，用“，”分隔
-        String orderIdArray = dataFromToken.get("orderIdArray", String.class);
+        List<String> orderIdArray = dataFromToken.get("orderIdArray", ArrayList.class);
         String uid1 = dataFromToken.get("uid", String.class);
         // 所有商品的总积分价格
         BigDecimal payPointSum = BigDecimal.valueOf(Double.parseDouble(dataFromToken.get("payPointSum", String.class)));
+//        BigDecimal payPointSum = BigDecimal.valueOf(dataFromToken.get("payPointSum", Integer.class));
         Date date = new Date();
-        // 获取orderId
-        String[] orderIds = orderIdArray.split(",");
-        Arrays.stream(orderIds).forEach(orderId -> {
+
+        orderIdArray.stream().forEach(orderId -> {
             // 校验订单id是否已经存在，保证接口的幂等性，避免重复下单
             ItemOrder itemOrder = itemOrderMapper.selectOne(new QueryWrapper<ItemOrder>()
                     .eq("order_id", orderId)
