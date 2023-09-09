@@ -18,22 +18,18 @@ public class ItemOrderDetailDTO {
      * 商品的itemId
      */
     private String itemId;
-
     /**
      * 商品id
      */
     private String commodityId;
-
     /**
      * 下单时的单价
      */
     private BigDecimal price;
-
     /**
      * 优惠后的单价
      */
     private BigDecimal discount;
-
     /**
      * 该商品的下单数量
      */
