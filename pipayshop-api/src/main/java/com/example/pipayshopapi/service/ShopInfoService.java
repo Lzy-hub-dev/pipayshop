@@ -103,4 +103,8 @@ public interface ShopInfoService extends IService<ShopInfo> {
      * 实体店轮播图上传
      */
     String shopImageUp(MultipartFile multipartFile);
+
+    List<CountryMinVO> getSecondDistrictList(String countryCode);
+
+    List<CountryMinVO> getThirdDistrictList(String countrySecondId);
 }

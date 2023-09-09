@@ -19,7 +19,6 @@ import com.google.common.collect.Sets;
 import com.javadocmd.simplelatlng.LatLng;
 import com.javadocmd.simplelatlng.LatLngTool;
 import com.javadocmd.simplelatlng.util.LengthUnit;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,7 +54,13 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     private BUserInfoMapper bUserInfoMapper;
 
     @Resource
-    ImageMapper imageMapper;
+    private ImageMapper imageMapper;
+
+    @Resource
+    private CountrySecondMapper countrySecondMapper;
+
+    @Resource
+    private CountryThirdMapper countryThirdMapper;
 
     @Override
     public String getShopCodeByShopId(String shopId) {
@@ -424,5 +429,15 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         List<String> imageSizeList = new ArrayList<>();
         imageSizeList.add("640,360");
         return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.SHOP_IMAGE_UP,imageSizeList);
+    }
+
+    @Override
+    public List<CountryMinVO> getSecondDistrictList(String countryCode) {
+        return countrySecondMapper.getSecondDistrictList(countryCode);
+    }
+
+    @Override
+    public List<CountryMinVO> getThirdDistrictList(String countrySecondId) {
+        return countryThirdMapper.getThirdDistrictList(countrySecondId);
     }
 }

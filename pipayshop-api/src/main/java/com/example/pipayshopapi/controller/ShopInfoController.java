@@ -6,7 +6,6 @@ import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopInfoService;
-import com.example.pipayshopapi.util.FileUploadUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -275,6 +274,43 @@ public class ShopInfoController {
             throw new BusinessException("失败");
         }
     }
+
+    /**
+     * 获取二级行政区域列表
+     */
+    @GetMapping("getSecondDistrictList/{countryCode}")
+    @ApiOperation("获取二级行政区域列表")
+    public ResponseVO<List<CountryMinVO>> getSecondDistrictList(@PathVariable String countryCode){
+        try {
+            List<CountryMinVO> list = infoService.getSecondDistrictList(countryCode);
+            if (list == null){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo(list);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("获取二级行政区域列表失败");
+        }
+    }
+
+    /**
+     * 获取三级行政区域列表
+     */
+    @GetMapping("getThirdDistrictList/{countrySecondId}")
+    @ApiOperation("获取三级行政区域列表")
+    public ResponseVO<List<CountryMinVO>> getThirdDistrictList(@PathVariable String countrySecondId){
+        try {
+            List<CountryMinVO> list = infoService.getThirdDistrictList(countrySecondId);
+            if (list == null){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo(list);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("获取三级行政区域列表失败");
+        }
+    }
+
 
     /*
     @PostMapping("piIdImageUp")
