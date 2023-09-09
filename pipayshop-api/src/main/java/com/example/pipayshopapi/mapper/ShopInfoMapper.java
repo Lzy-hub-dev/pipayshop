@@ -44,19 +44,23 @@ public interface ShopInfoMapper extends BaseMapper<ShopInfo> {
     /**
      * 首页获取商家信息列表总条数
      */
-    Integer getIndexShopInfoVOCount(@Param("categoryId") String categoryId);
+    Integer getIndexShopInfoVOCount(@Param("categoryId") String categoryId, @Param("areaDivide") String areaDivide);
 
     /**
      * 首页获取商家信息列表
      */
-    List<IndexShopInfoVO> getIndexShopInfoVO(@Param("categoryId") String categoryId,@Param("page") Integer page,@Param("limit") Integer limit,@Param("score") Boolean score);
+    List<IndexShopInfoVO> getIndexShopInfoVO(@Param("categoryId") String categoryId
+            ,@Param("page") Integer page
+            ,@Param("limit") Integer limit
+            ,@Param("score") Boolean score
+            ,@Param("areaDivide") String areaDivide);
 
-    Integer getAllIndexShopInfoVO(@Param("categoryId") String categoryId);
+    Integer getAllIndexShopInfoVO(@Param("categoryId") String categoryId, @Param("areaDivide") String areaDivide);
 
 
     List<String> getShopIdListByUid(@Param("uid") String uid);
 
-    List<IndexShopInfoVO> getIndexShopInfoVOById(@Param("categoryId") String categoryId,@Param("page") Integer page,@Param("limit") Integer limit);
+    List<IndexShopInfoVO> getIndexShopInfoVOById(@Param("categoryId") String categoryId,@Param("page") Integer page,@Param("limit") Integer limit, @Param("areaDivide") String areaDivide);
 
     /**
      * 实体店可以上传的总数
@@ -88,15 +92,17 @@ public interface ShopInfoMapper extends BaseMapper<ShopInfo> {
                                               @Param("checkInTime")Date checkInTime,
                                               @Param("departureTime")Date departureTime,
                                               @Param("adult")Integer adult,
-                                              @Param("children")Integer children);
+                                              @Param("children")Integer children,
+                                                @Param("areaDivide") String areaDivide);
 
     Integer getHotelInfoNum(@Param("shopName")String shopName,
                             @Param("checkInTime") Date checkInTime,
                             @Param("departureTime")Date departureTime,
                             @Param("adult")Integer adult,
-                            @Param("children")Integer children);
+                            @Param("children")Integer children,
+                            @Param("areaDivide") String areaDivide);
 
     String getShopCodeByShopId(@Param("shopId") String shopId);
 
-    List<IndexShopInfoVO> getShopInfoMinListByCondition(@Param("categoryId") String categoryId, @Param("page") int page, @Param("limit") Integer limit);
+    List<IndexShopInfoVO> getShopInfoMinListByCondition(@Param("categoryId") String categoryId, @Param("page") int page, @Param("limit") Integer limit, @Param("areaDivide") String areaDivide);
 }

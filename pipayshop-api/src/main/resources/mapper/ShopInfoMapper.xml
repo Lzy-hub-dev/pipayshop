@@ -69,6 +69,9 @@
         select count(*)
         from shop_info
         WHERE status=0
+        and
+        area_divide = #{areaDivide}
+
         <if test="categoryId != null and categoryId != '-1'">
         and category_id = #{categoryId}
         </if>
@@ -85,8 +88,9 @@
         ON
             i.image_id = s.user_image
             <where>
+                s.area_divide = #{areaDivide}
                 <if test="categoryId != null and categoryId != '-1' ">
-                s.category_id  = #{categoryId}
+                    and s.category_id  = #{categoryId}
                  </if>
             </where>
         <choose>
@@ -106,6 +110,7 @@
         WHERE
        s.category_id in
             (select category_id from shop_category where category_pid = #{categoryId}) AND status=0
+and area_divide = #{areaDivide}
     </select>
 
     <select id="getShopInfoVOCount" resultType="java.lang.Integer">
@@ -132,6 +137,7 @@
             i.image_id = s.user_image
         WHERE category_id in
               (select category_id from shop_category where category_pid = #{categoryId}) AND status=0
+              and area_divide = #{areaDivide}
         LIMIT ${page},${limit}
     </select>
 
@@ -156,7 +162,7 @@
         select shop_id,shop_name,tag_list,address,score,shop_introduce,user_image,localhost_latitude,localhost_longitude,membership
         from shop_info
         where
-        status = 0
+        status = 0 and area_divide = #{areaDivide}
         <if test="shopName != null">
             and shop_name like concat('%',#{shopName},'%')
         </if>
@@ -174,7 +180,7 @@
     <select id="getHotelInfoNum" resultType="java.lang.Integer">
         select count(*)
         from shop_info
-        where status = 0
+        where status = 0 and area_divide = #{areaDivide}
         <if test="shopName != null">
             and shop_name like concat('%',#{shopName},'%')
         </if>
@@ -207,7 +213,7 @@
         image i
         ON
         i.image_id = s.user_image
-        where s.category_id  = #{categoryId} and s.status = 0
+        where s.category_id  = #{categoryId} and s.status = 0 and s.area_divide = #{areaDivide}
         LIMIT ${page},${limit}
     </select>
 

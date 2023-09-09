@@ -26,4 +26,9 @@ public class LivePageVO {
     private String shopName;
     private Integer adult;
     private Integer children;
+
+    /**
+     * 划分的三级区域的id
+     */
+    private String areaDivide;
 }

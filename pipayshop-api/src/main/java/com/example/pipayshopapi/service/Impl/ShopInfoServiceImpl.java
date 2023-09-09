@@ -71,24 +71,25 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
      * 首页获取所有实体店列表
      */
     @Override
-    public PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId,Boolean score) {
+    public PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId,Boolean score, String areaDivide) {
 
         // 获取总条数
-        Integer indexShopInfoVOCount = shopInfoMapper.getIndexShopInfoVOCount(categoryId);
-        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(categoryId, (pages - 1) * limit, limit,score);
-        for (IndexShopInfoVO shopInfoVO : indexShopInfoVO) {
-            List<String> list1 = new ArrayList<>();
-            List<String> list = JSON.parseArray(shopInfoVO.getTagList(), String.class);
-            if (list==null || list.isEmpty()){
-                continue;
-            }
-            for (String tagId : list) {
-                String tagContent = tagMapper.selectOneContent(tagId);
-                list1.add(tagContent);
-            }
-            shopInfoVO.setShopTagsList(list1);
-        }
-        return new PageDataVO(indexShopInfoVOCount,indexShopInfoVO);
+        Integer count = shopInfoMapper.getIndexShopInfoVOCount(categoryId, areaDivide);
+        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(categoryId, (pages - 1) * limit, limit,score, areaDivide);
+        indexShopInfoVO.stream().parallel()
+                .forEach(shopInfoVO -> {
+                    List<String> list1 = new ArrayList<>();
+                    List<String> list = JSON.parseArray(shopInfoVO.getTagList(), String.class);
+                    if (list==null || list.isEmpty()){
+                        return;
+                    }
+                    for (String tagId : list) {
+                        String tagContent = tagMapper.selectOneContent(tagId);
+                        list1.add(tagContent);
+                    }
+                    shopInfoVO.setShopTagsList(list1);
+                });
+        return new PageDataVO(count, indexShopInfoVO);
     }
 
     /**
@@ -296,10 +297,10 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
      * 根据一级分类-获取所有实体店列表
      */
     @Override
-    public PageDataVO getSecShopInfoListByCondition(Integer limit, Integer pages, String categoryId) {
-        Integer n = shopInfoMapper.getAllIndexShopInfoVO(categoryId);
+    public PageDataVO getSecShopInfoListByCondition(Integer limit, Integer pages, String categoryId, String areaDivide) {
+        Integer n = shopInfoMapper.getAllIndexShopInfoVO(categoryId, areaDivide);
         // stata==1,按评分从低到高；stata==2,按评分从高到低
-        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVOById(categoryId, (pages - 1) * limit, limit);
+        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVOById(categoryId, (pages - 1) * limit, limit, areaDivide);
         for (IndexShopInfoVO shopInfoVO : indexShopInfoVO) {
             List<String> list1 = new ArrayList<>();
             List<String> list = JSON.parseArray(shopInfoVO.getTagList(), String.class);
@@ -387,7 +388,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
                 livePageVO.getCheckInTime(),
                 livePageVO.getDepartureTime(),
                 livePageVO.getAdult(),
-                livePageVO.getChildren());
+                livePageVO.getChildren(),livePageVO.getAreaDivide());
         for (IndexShopInfoVO indexShopInfoVO : indexShopInfoVOS) {
             indexShopInfoVO.setUserImage(imageMapper.selectPath(indexShopInfoVO.getUserImage()));
         }
@@ -410,7 +411,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
                 livePageVO.getCheckInTime(),
                 livePageVO.getDepartureTime(),
                 livePageVO.getAdult(),
-                livePageVO.getChildren());
+                livePageVO.getChildren(),livePageVO.getAreaDivide());
         return new PageDataVO(num,indexShopInfoVOS);
     }
 

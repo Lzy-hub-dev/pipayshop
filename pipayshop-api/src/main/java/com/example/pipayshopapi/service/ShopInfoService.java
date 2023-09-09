@@ -24,7 +24,7 @@ public interface ShopInfoService extends IService<ShopInfo> {
     /**
      * 根据二级分类-获取所有实体店列表
      */
-    PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId,Boolean score);
+    PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId,Boolean score, String areaDivide);
 
     /**
      * 根据实体店id查询实体店信息
@@ -70,7 +70,7 @@ public interface ShopInfoService extends IService<ShopInfo> {
     /**
      * 根据一级分类-获取所有实体店列表
      */
-    PageDataVO getSecShopInfoListByCondition(Integer limit, Integer pages, String categoryId);
+    PageDataVO getSecShopInfoListByCondition(Integer limit, Integer pages, String categoryId, String areaDivide);
 
     boolean isVipShop(String shopId);
 

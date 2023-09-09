@@ -43,10 +43,10 @@ public class ShopCategoryMinServiceImpl extends ServiceImpl<ShopCategoryMinMappe
      * 实体店二级分类标签列表对应的店铺列表条件分页展示
      */
     @Override
-    public PageDataVO getShopInfoMinListByCondition(Integer limit, Integer pages, String categoryId) {
+    public PageDataVO getShopInfoMinListByCondition(Integer limit, Integer pages, String categoryId, String areaDivide) {
         // 获取总条数
-        Integer indexShopInfoVOCount = shopInfoMapper.getIndexShopInfoVOCount(categoryId);
-        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getShopInfoMinListByCondition(categoryId, (pages - 1) * limit, limit);
+        Integer indexShopInfoVOCount = shopInfoMapper.getIndexShopInfoVOCount(categoryId, areaDivide);
+        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getShopInfoMinListByCondition(categoryId, (pages - 1) * limit, limit, areaDivide);
         return new PageDataVO(indexShopInfoVOCount,indexShopInfoVO);
     }
 

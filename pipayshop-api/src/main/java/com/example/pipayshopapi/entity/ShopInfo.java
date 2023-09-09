@@ -87,7 +87,10 @@ public class ShopInfo implements Serializable {
      * 实体店的头像
      */
     private String userImage;
-
+    /**
+     * 划分的三级区域的id
+     */
+    private String areaDivide;
     /**
      * 店铺类别
      */

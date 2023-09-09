@@ -32,11 +32,9 @@ public class ShopInfoController {
     private ShopInfoService infoService;
     private static final Logger log = LoggerFactory.getLogger(ShopTagsController.class);
 
-
-
-    @PostMapping("getHotelInfoByCondition")
+    @GetMapping("getHotelInfoByCondition")
     @ApiOperation("根据条件筛选酒店信息")
-    public ResponseVO<PageDataVO> getHotelInfoByCondition(@RequestBody LivePageVO livePageVO){
+    public ResponseVO<PageDataVO> getHotelInfoByCondition(LivePageVO livePageVO){
         try {
             PageDataVO pageDataVO = infoService.getHotelInfoByCondition(livePageVO);
             if (pageDataVO == null) {
@@ -76,11 +74,15 @@ public class ShopInfoController {
         }
     }
 
-    @GetMapping("getShopInfoListByCondition/{limit}/{pages}/{categoryId}/{score}")
+    @GetMapping("getShopInfoListByCondition/{limit}/{pages}/{categoryId}/{score}/{areaDivide}")
     @ApiOperation("首页根据条件获取所有实体店列表")
-    public ResponseVO<PageDataVO> getShopInfoListByCondition(@PathVariable Integer limit,@PathVariable Integer pages,@PathVariable String categoryId,@PathVariable Boolean score){
+    public ResponseVO<PageDataVO> getShopInfoListByCondition(@PathVariable Integer limit
+            ,@PathVariable Integer pages
+            ,@PathVariable String categoryId
+            ,@PathVariable Boolean score
+            ,@PathVariable String areaDivide){
         try {
-            PageDataVO shopInfoListByCondition = infoService.getShopInfoListByCondition(limit, pages, categoryId,score);
+            PageDataVO shopInfoListByCondition = infoService.getShopInfoListByCondition(limit, pages, categoryId,score, areaDivide);
             if (shopInfoListByCondition==null){
                 throw new Exception();
             }
