@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -31,13 +32,14 @@ public class RedisUtil<T> {
     public void savaDataListToRedisList(String key, List<T> list) {
         // 设置Key的String序列化
         redis.setKeySerializer(RedisSerializer.string());
+        redis.expire(key, Constants.REGION_VALID_TIME, TimeUnit.SECONDS);
         redis.opsForList().leftPushAll(key, list);
     }
 
     /**
      * 将对象的列表数据从redis中的双向列表中获取出来，通过分页进行获取
      */
-    public List<T> getDataListFromRedisList(String key, Class<T> clazz) {
+    public List<T> getDataListFromRedisList(String key) {
         // 设置Key的String序列化
         redis.setKeySerializer(RedisSerializer.string());
         return redis.opsForList().range(key, 0, -1);

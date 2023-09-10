@@ -24,7 +24,7 @@ public interface ShopInfoService extends IService<ShopInfo> {
     /**
      * 根据二级分类-获取所有实体店列表
      */
-    PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId,Boolean score, String areaDivide);
+    PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId,Boolean score, String regionId);
 
     /**
      * 根据实体店id查询实体店信息

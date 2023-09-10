@@ -67,13 +67,16 @@
 
     <select id="getIndexShopInfoVOCount" resultType="java.lang.Integer">
         select count(*)
-        from shop_info
-        WHERE status=0
-        and
-        area_divide = #{areaDivide}
+        from shop_info si
+        join
+            shop_region sr
+        on
+            sr.shop_id = si.shop_id
+        WHERE si.status=0 and sr.region_id = #{regionId} and sr.del_flag = 0
+
 
         <if test="categoryId != null and categoryId != '-1'">
-        and category_id = #{categoryId}
+        and si.category_id = #{categoryId}
         </if>
     </select>
 
@@ -87,8 +90,12 @@
             image i
         ON
             i.image_id = s.user_image
+        join
+            shop_region sr
+        on
+             sr.shop_id = s.shop_id
             <where>
-                s.area_divide = #{areaDivide}
+                sr.region_id = #{regionId} and sr.del_flag = 0
                 <if test="categoryId != null and categoryId != '-1' ">
                     and s.category_id  = #{categoryId}
                  </if>
@@ -107,10 +114,14 @@
     <select id="getAllIndexShopInfoVO" resultType="java.lang.Integer">
         select COUNT(*)
         from shop_info s
+                 join
+             shop_region sr
+             on
+                 sr.shop_id = s.shop_id
         WHERE
        s.category_id in
-            (select category_id from shop_category where category_pid = #{categoryId}) AND status=0
-and area_divide = #{areaDivide}
+            (select category_id from shop_category where category_pid = #{categoryId}) AND s.status=0
+and sr.region_id = #{regionId} and sr.del_flag = 0
     </select>
 
     <select id="getShopInfoVOCount" resultType="java.lang.Integer">
@@ -135,9 +146,13 @@ and area_divide = #{areaDivide}
              image i
         ON
             i.image_id = s.user_image
+        join
+             shop_region sr
+             on
+                 sr.shop_id = s.shop_id
         WHERE category_id in
               (select category_id from shop_category where category_pid = #{categoryId}) AND status=0
-              and area_divide = #{areaDivide}
+              and sr.del_flag = 0 and sr.region_id = #{regionId}
         LIMIT ${page},${limit}
     </select>
 
@@ -159,14 +174,18 @@ and area_divide = #{areaDivide}
 
 
     <select id="getHotelInfoByCondition" resultType="com.example.pipayshopapi.entity.vo.IndexShopInfoVO">
-        select shop_id,shop_name,tag_list,address,score,shop_introduce,user_image,localhost_latitude,localhost_longitude,membership
-        from shop_info
+        select si.shop_id,si.shop_name,si.tag_list,si.address,si.score,si.shop_introduce,si.user_image,si.localhost_latitude,si.localhost_longitude,si.membership
+        from shop_info si
+        join
+            shop_region sr
+        on
+            sr.shop_id = si.shop_id
         where
-        status = 0 and area_divide = #{areaDivide}
+        si.status = 0 and sr.del_flag = 0 and sr.region_id = #{regionId}
         <if test="shopName != null">
-            and shop_name like concat('%',#{shopName},'%')
+            and si.shop_name like concat('%',#{shopName},'%')
         </if>
-        and shop_id in(
+        and si.shop_id in(
             select shop_id
             from shop_commodity_live_info
             where  adult >= #{adult}
@@ -179,12 +198,16 @@ and area_divide = #{areaDivide}
 
     <select id="getHotelInfoNum" resultType="java.lang.Integer">
         select count(*)
-        from shop_info
-        where status = 0 and area_divide = #{areaDivide}
+        from shop_info si
+        join
+        shop_region sr
+        on
+        sr.shop_id = si.shop_id
+        where si.status = 0 and sr.del_flag = 0 and sr.region_id = #{regionId}
         <if test="shopName != null">
             and shop_name like concat('%',#{shopName},'%')
         </if>
-        and shop_id in(
+        and si.shop_id in(
             select shop_id
             from shop_commodity_live_info
             where  adult >= #{adult}
@@ -213,7 +236,11 @@ and area_divide = #{areaDivide}
         image i
         ON
         i.image_id = s.user_image
-        where s.category_id  = #{categoryId} and s.status = 0 and s.area_divide = #{areaDivide}
+        join
+             shop_region sr
+             on
+                 sr.shop_id = s.shop_id
+        where s.category_id  = #{categoryId} and s.status = 0 and sr.del_flag = 0 and sr.region_id = #{regionId}
         LIMIT ${page},${limit}
     </select>
 

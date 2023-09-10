@@ -43,11 +43,11 @@ public class ShopCategoryMinController {
         }
     }
 
-    @GetMapping("getShopInfoMinListByCondition/{limit}/{pages}/{categoryId}/{areaDivide}")
+    @GetMapping("getShopInfoMinListByCondition/{limit}/{pages}/{categoryId}/{regionId}")
     @ApiOperation("二级分类标签列表对应的店铺列表条件分页展示")
-    public ResponseVO<PageDataVO> getShopInfoMinListByCondition(@PathVariable Integer limit, @PathVariable Integer pages, @PathVariable String categoryId, @PathVariable String areaDivide){
+    public ResponseVO<PageDataVO> getShopInfoMinListByCondition(@PathVariable Integer limit, @PathVariable Integer pages, @PathVariable String categoryId, @PathVariable String regionId){
         try {
-            PageDataVO shopInfoMinListByCondition = shopCategoryMinService.getShopInfoMinListByCondition(limit, pages, categoryId, areaDivide);
+            PageDataVO shopInfoMinListByCondition = shopCategoryMinService.getShopInfoMinListByCondition(limit, pages, categoryId, regionId);
             if (shopInfoMinListByCondition==null){
                 throw new Exception();
             }

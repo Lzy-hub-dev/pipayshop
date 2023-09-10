@@ -34,7 +34,7 @@ public class ShopCategoryController {
     @Resource
     private ShopInfoService shopInfoService;
     @GetMapping("getShopCategorySecList/{categoryPid}")
-    @ApiOperation("查询二级分类列表")
+    @ApiOperation("查询二级分类标签列表")
     public ResponseVO<List<ShopCategory>> getShopCategorySecList(@PathVariable String categoryPid) {
         try {
             List<ShopCategory> list = shopCategoryService.getShopCategorySecList(categoryPid);
@@ -44,13 +44,13 @@ public class ShopCategoryController {
         }
 
     }
-    @GetMapping("getSecShopInfoListByCondition/{limit}/{pages}/{categoryId}/{areaDivide}")
+    @GetMapping("getSecShopInfoListByCondition/{limit}/{pages}/{categoryId}/{regionId}")
     @ApiOperation("根据一级分类-获取所有实体店列表")
     public ResponseVO<PageDataVO> getSecShopInfoListByCondition(@PathVariable Integer limit, @PathVariable Integer pages
             , @PathVariable String categoryId
-            , @PathVariable String areaDivide){
+            , @PathVariable String regionId){
         try {
-            PageDataVO secShopInfoListByCondition = shopInfoService.getSecShopInfoListByCondition(limit, pages, categoryId, areaDivide);
+            PageDataVO secShopInfoListByCondition = shopInfoService.getSecShopInfoListByCondition(limit, pages, categoryId, regionId);
 
             return ResponseVO.getSuccessResponseVo(secShopInfoListByCondition);
         }catch (Exception e){

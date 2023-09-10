@@ -28,7 +28,7 @@ public class LivePageVO {
     private Integer children;
 
     /**
-     * 划分的三级区域的id
+     * 区域划分的id
      */
-    private String areaDivide;
+    private String regionId;
 }

@@ -25,12 +25,12 @@ public class ApplyShopDTO {
 
     private String categoryId;
     private String uid;
-
-    /**
-     * 划分的三级区域的id
-     */
-    private String areaDivide;
     private Integer uploadCommodityBalance;
 
     private String qrcode;
+
+    /**
+     * 外键关联的区域id
+     */
+    private String regionId;
 }

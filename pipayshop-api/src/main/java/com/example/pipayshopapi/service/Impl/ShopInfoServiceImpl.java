@@ -13,7 +13,9 @@ import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.*;
 import com.example.pipayshopapi.service.ShopInfoService;
+import com.example.pipayshopapi.util.Constants;
 import com.example.pipayshopapi.util.FileUploadUtil;
+import com.example.pipayshopapi.util.RedisUtil;
 import com.example.pipayshopapi.util.StringUtil;
 import com.google.common.collect.Sets;
 import com.javadocmd.simplelatlng.LatLng;
@@ -62,6 +64,11 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     @Resource
     private CountryThirdMapper countryThirdMapper;
 
+    @Resource
+    private ShopRegionMapper shopRegionMapper;
+
+    private final RedisUtil<CountryMinVO> redisUtil = new RedisUtil<>();
+
     @Override
     public String getShopCodeByShopId(String shopId) {
         return shopInfoMapper.getShopCodeByShopId(shopId);
@@ -71,11 +78,11 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
      * 首页获取所有实体店列表
      */
     @Override
-    public PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId,Boolean score, String areaDivide) {
+    public PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId,Boolean score, String regionId) {
 
         // 获取总条数
-        Integer count = shopInfoMapper.getIndexShopInfoVOCount(categoryId, areaDivide);
-        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(categoryId, (pages - 1) * limit, limit,score, areaDivide);
+        Integer count = shopInfoMapper.getIndexShopInfoVOCount(categoryId, regionId);
+        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(categoryId, (pages - 1) * limit, limit,score, regionId);
         indexShopInfoVO.stream().parallel()
                 .forEach(shopInfoVO -> {
                     List<String> list1 = new ArrayList<>();
@@ -253,7 +260,8 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
             // 属性转移
             ShopInfo shopInfo = new ShopInfo();
             BeanUtils.copyProperties(applyShopDTO, shopInfo);
-            shopInfo.setShopId(StringUtil.generateShortId());
+            String shopId = StringUtil.generateShortId();
+            shopInfo.setShopId(shopId);
             List<String> shopImagList = applyShopDTO.getShopImagList();
             shopInfo.setShopImagList(JSON.toJSONString(shopImagList.subList(1, shopImagList.size())));
             shopInfo.setUserImage(shopImagList.get(0));
@@ -271,6 +279,12 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
                     .gt(UserInfo::getShopBalance, 0)
                     .setSql("shop_balance=shop_balance-1"));
             if (update < 1) {
+                throw new BusinessException("申请实体店失败");
+            }
+            // 将当前店铺根据市级id来进行划分，存入实体店分区表
+            ShopRegion shopRegion = new ShopRegion(null, applyShopDTO.getRegionId(), shopId, null, null);
+            int insert1 = shopRegionMapper.insert(shopRegion);
+            if (insert1 < 1) {
                 throw new BusinessException("申请实体店失败");
             }
             // 如果是第一次绑定实体店的话要给他分配一个B端账号
@@ -297,10 +311,10 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
      * 根据一级分类-获取所有实体店列表
      */
     @Override
-    public PageDataVO getSecShopInfoListByCondition(Integer limit, Integer pages, String categoryId, String areaDivide) {
-        Integer n = shopInfoMapper.getAllIndexShopInfoVO(categoryId, areaDivide);
+    public PageDataVO getSecShopInfoListByCondition(Integer limit, Integer pages, String categoryId, String regionId) {
+        Integer count = shopInfoMapper.getAllIndexShopInfoVO(categoryId, regionId);
         // stata==1,按评分从低到高；stata==2,按评分从高到低
-        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVOById(categoryId, (pages - 1) * limit, limit, areaDivide);
+        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVOById(categoryId, (pages - 1) * limit, limit, regionId);
         for (IndexShopInfoVO shopInfoVO : indexShopInfoVO) {
             List<String> list1 = new ArrayList<>();
             List<String> list = JSON.parseArray(shopInfoVO.getTagList(), String.class);
@@ -314,7 +328,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
 
             shopInfoVO.setShopTagsList(list1);
         }
-        return new PageDataVO(n,indexShopInfoVO);
+        return new PageDataVO(count,indexShopInfoVO);
     }
 
 
@@ -388,7 +402,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
                 livePageVO.getCheckInTime(),
                 livePageVO.getDepartureTime(),
                 livePageVO.getAdult(),
-                livePageVO.getChildren(),livePageVO.getAreaDivide());
+                livePageVO.getChildren(),livePageVO.getRegionId());
         for (IndexShopInfoVO indexShopInfoVO : indexShopInfoVOS) {
             indexShopInfoVO.setUserImage(imageMapper.selectPath(indexShopInfoVO.getUserImage()));
         }
@@ -411,7 +425,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
                 livePageVO.getCheckInTime(),
                 livePageVO.getDepartureTime(),
                 livePageVO.getAdult(),
-                livePageVO.getChildren(),livePageVO.getAreaDivide());
+                livePageVO.getChildren(),livePageVO.getRegionId());
         return new PageDataVO(num,indexShopInfoVOS);
     }
 
@@ -434,11 +448,29 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
 
     @Override
     public List<CountryMinVO> getSecondDistrictList(String countryCode) {
-        return countrySecondMapper.getSecondDistrictList(countryCode);
+        // 直接走缓存拿
+        List<CountryMinVO> dataListFromRedisList = redisUtil.getDataListFromRedisList(Constants.COUNTRY_SECOND_REGION + "_" + countryCode);
+        // 校验缓存结果
+        if (dataListFromRedisList == null || dataListFromRedisList.size() == 0) {
+            // 刷新缓存
+            dataListFromRedisList = countrySecondMapper.getSecondDistrictList(countryCode);
+            if (dataListFromRedisList == null){return null;}
+            redisUtil.savaDataListToRedisList(Constants.COUNTRY_SECOND_REGION + "_" + countryCode, dataListFromRedisList);
+        }
+        return dataListFromRedisList;
     }
 
     @Override
     public List<CountryMinVO> getThirdDistrictList(String countrySecondId) {
-        return countryThirdMapper.getThirdDistrictList(countrySecondId);
+        // 直接走缓存拿
+        List<CountryMinVO> dataListFromRedisList = redisUtil.getDataListFromRedisList(Constants.COUNTRY_THIRD_REGION + "_" + countrySecondId);
+        // 校验缓存结果
+        if (dataListFromRedisList == null || dataListFromRedisList.size() == 0) {
+            // 刷新缓存
+            dataListFromRedisList = countryThirdMapper.getThirdDistrictList(countrySecondId);
+            if (dataListFromRedisList == null){return null;}
+            redisUtil.savaDataListToRedisList(Constants.COUNTRY_THIRD_REGION + "_" + countrySecondId, dataListFromRedisList);
+        }
+        return dataListFromRedisList;
     }
 }

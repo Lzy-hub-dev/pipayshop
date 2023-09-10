@@ -74,15 +74,15 @@ public class ShopInfoController {
         }
     }
 
-    @GetMapping("getShopInfoListByCondition/{limit}/{pages}/{categoryId}/{score}/{areaDivide}")
+    @GetMapping("getShopInfoListByCondition/{limit}/{pages}/{categoryId}/{score}/{regionId}")
     @ApiOperation("首页根据条件获取所有实体店列表")
     public ResponseVO<PageDataVO> getShopInfoListByCondition(@PathVariable Integer limit
             ,@PathVariable Integer pages
             ,@PathVariable String categoryId
             ,@PathVariable Boolean score
-            ,@PathVariable String areaDivide){
+            ,@PathVariable String regionId){
         try {
-            PageDataVO shopInfoListByCondition = infoService.getShopInfoListByCondition(limit, pages, categoryId,score, areaDivide);
+            PageDataVO shopInfoListByCondition = infoService.getShopInfoListByCondition(limit, pages, categoryId,score, regionId);
             if (shopInfoListByCondition==null){
                 throw new Exception();
             }

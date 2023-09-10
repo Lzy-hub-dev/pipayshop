@@ -4,18 +4,20 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * @author wzx
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CountryMinVO {
+public class CountryMinVO implements Serializable {
 
     /**
      * 低级行政区域的标识id
      */
-    private String countrySecondId;
+    private String countryId;
 
     /**
      * 低级行政区域的名字

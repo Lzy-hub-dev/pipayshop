@@ -19,6 +19,6 @@ import java.util.List;
 public interface CountrySecondMapper extends BaseMapper<CountrySecond> {
 
 
-    @Select("select country_second_id, name from country_second where pid_id = #{countryCode} and del_flag = 0")
+    @Select("select country_second_id as countryId, name from country_second where pid_id = #{countryCode} and del_flag = 0")
     List<CountryMinVO> getSecondDistrictList(@Param("countryCode") String countryCode);
 }

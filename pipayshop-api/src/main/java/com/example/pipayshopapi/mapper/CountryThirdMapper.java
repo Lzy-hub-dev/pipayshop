@@ -18,6 +18,6 @@ import java.util.List;
  */
 public interface CountryThirdMapper extends BaseMapper<CountryThird> {
 
-    @Select("select country_third_id, name from country_third where pid_id = #{countrySecondId} and del_flag = 0")
+    @Select("select country_third_id as countryId, name from country_third where pid_id = #{countrySecondId} and del_flag = 0")
     List<CountryMinVO> getThirdDistrictList(@Param("countrySecondId") String countrySecondId);
 }
