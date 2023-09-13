@@ -18,6 +18,7 @@ import com.example.pipayshopapi.mapper.ShopInfoMapper;
 import com.example.pipayshopapi.mapper.ShopTagsMapper;
 import com.example.pipayshopapi.service.ShopCommodityInfoService;
 import com.example.pipayshopapi.util.FileUploadUtil;
+import com.example.pipayshopapi.util.ImageConstants;
 import com.example.pipayshopapi.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -246,8 +247,6 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String shopCommodityTopImageUp(MultipartFile multipartFile) {
-        List<String> imageSizeList = new ArrayList<>();
-//        imageSizeList.add("")
         return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.SHOP_COMMODITY_TOP_IMAGE_UP,null);
     }
 
@@ -257,9 +256,9 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
         List<String> imageSizeList_1 = new ArrayList<>();
         List<String> imageSizeList_2 = new ArrayList<>();
         List<String> imageIdList = new ArrayList<>();
-        imageSizeList_1.add("90,100");
-        imageSizeList_1.add("640,360");
-        imageSizeList_2.add("640,360");
+        imageSizeList_1.add(ImageConstants.SHOP_COMMODITY_IMAGE_UP_SMALL);
+        imageSizeList_1.add(ImageConstants.SHOP_COMMODITY_IMAGE_UP_BIG);
+        imageSizeList_2.add(ImageConstants.SHOP_COMMODITY_IMAGE_UP_BIG);
         System.out.println(multipartFile);
         for (int i = 0; i < multipartFile.length; i++) {
             if (i==0){

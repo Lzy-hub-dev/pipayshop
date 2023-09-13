@@ -16,6 +16,7 @@ import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.*;
 import com.example.pipayshopapi.service.ItemCommodityInfoService;
 import com.example.pipayshopapi.util.FileUploadUtil;
+import com.example.pipayshopapi.util.ImageConstants;
 import com.example.pipayshopapi.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -328,8 +329,8 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     @Transactional(rollbackFor = Exception.class)
     public String itemTopImagsUp(MultipartFile multipartFile) {
         List<String> imageSizeList = new ArrayList<>();
-        imageSizeList.add("320,180");
-        imageSizeList.add("640,360");
+        imageSizeList.add(ImageConstants.ITEM_TOP_IMAGS_UP_SMALL);
+        imageSizeList.add(ImageConstants.ITEM_TOP_IMAGS_UP_BIG);
         return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.ROOM_TOP_IMG,imageSizeList);
     }
 

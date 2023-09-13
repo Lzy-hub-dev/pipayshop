@@ -4,16 +4,23 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.pipayshopapi.config.CommonConfig;
 import com.example.pipayshopapi.entity.ItemOrder;
+import com.example.pipayshopapi.entity.TradinPost;
 import com.example.pipayshopapi.entity.dto.ItemOrderDetailDTO;
 import com.example.pipayshopapi.exception.BusinessException;
+import com.example.pipayshopapi.mapper.TradinPostMapper;
 import com.example.pipayshopapi.util.Constants;
 import com.example.pipayshopapi.util.FileUploadUtil;
 import com.example.pipayshopapi.util.TokenUtil;
 import io.jsonwebtoken.*;
 import net.coobird.thumbnailator.Thumbnails;
+import org.junit.After;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.ResourceUtils;
 
+import javax.annotation.Resource;
 import java.io.*;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
@@ -22,6 +29,9 @@ import java.util.*;
 public class ShopTest {
 
     CommonConfig commonConfig = new CommonConfig();
+
+
+
 
     @Test
     public void imageTest(){
@@ -34,6 +44,29 @@ public class ShopTest {
             throw new RuntimeException(e);
         }
     }
+
+
+
+    private static TradinPostMapper tradinPostMapper;
+
+    @Resource
+    public void setChatService(TradinPostMapper tradinPostMapper) {
+        ShopTest.tradinPostMapper = tradinPostMapper;
+    }
+
+
+
+//    @AfterEach
+//    void tearDown() throws IOException {
+//        this.client.close();
+//    }
+
+    // .selectOne(new QueryWrapper<TradinPost>().eq("tradin_id", "test").select("status"))
+    @Test
+    public void test02(){
+        System.out.println(tradinPostMapper);
+    }
+
     @Test
     public void Test01(){
         Claims dataFromToken = TokenUtil.getDataFromToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ3engiLCJvcmRlcklkQXJyYXkiOlsiYTg5OTdiMjM4MWEiXSwicGF5UG9pbnRTdW0iOjIwOX0.IJRTL1-uqlyk4DkbP5aeesNZj_RdOgUBTNBmDDFnyRo");

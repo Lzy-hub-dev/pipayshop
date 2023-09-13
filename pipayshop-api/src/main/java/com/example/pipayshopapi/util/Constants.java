@@ -44,4 +44,9 @@ public class Constants {
      * 国家行政分区的redis存储时间（也是定期更新缓存的时间）,默认为一天
      */
     public static final Integer REGION_VALID_TIME = 60 * 60 * 24;
+
+    /**
+     * 保存交易所图片凭证路径
+     */
+    public static final String CERTIFICATE_IMAG_PATH = "pipayshop-api/src/main/resources/static/images/tradin_post_certificate";
 }

@@ -78,6 +78,9 @@
         <if test="categoryId != null and categoryId != '-1'">
         and si.category_id = #{categoryId}
         </if>
+        <if test="shopName != null ">
+            and si.shop_name like CONCAT('%', #{shopName}, '%')
+        </if>
     </select>
 
 
@@ -99,6 +102,9 @@
                 <if test="categoryId != null and categoryId != '-1' ">
                     and s.category_id  = #{categoryId}
                  </if>
+                <if test="shopName != null ">
+                    and s.shop_name  like CONCAT('%', #{shopName}, '%')
+                </if>
             </where>
         <choose>
             <when test="score">
@@ -122,6 +128,9 @@
        s.category_id in
             (select category_id from shop_category where category_pid = #{categoryId}) AND s.status=0
 and sr.region_id = #{regionId} and sr.del_flag = 0
+        <if test="shopName != null ">
+            and s.shop_name  like CONCAT('%', #{shopName}, '%')
+        </if>
     </select>
 
     <select id="getShopInfoVOCount" resultType="java.lang.Integer">
@@ -153,6 +162,9 @@ and sr.region_id = #{regionId} and sr.del_flag = 0
         WHERE category_id in
               (select category_id from shop_category where category_pid = #{categoryId}) AND status=0
               and sr.del_flag = 0 and sr.region_id = #{regionId}
+        <if test="shopName != null">
+            and s.shop_name like concat('%',#{shopName},'%')
+        </if>
         LIMIT ${page},${limit}
     </select>
 
@@ -241,6 +253,9 @@ and sr.region_id = #{regionId} and sr.del_flag = 0
              on
                  sr.shop_id = s.shop_id
         where s.category_id  = #{categoryId} and s.status = 0 and sr.del_flag = 0 and sr.region_id = #{regionId}
+        <if test="shopName != null">
+            and s.shop_name like concat('%',#{shopName},'%')
+        </if>
         LIMIT ${page},${limit}
     </select>
 

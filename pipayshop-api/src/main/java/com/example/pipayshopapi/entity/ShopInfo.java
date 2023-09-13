@@ -63,8 +63,10 @@ public class ShopInfo implements Serializable {
      * 联系电话
      */
     private String phone;
+
+
     /**
-     * 店铺地址
+     * 店铺地址详情
      */
     private String address;
 

@@ -29,6 +29,4 @@ public class PipayshopApiApplication {
         System.out.println("PiPayShop启动成功！");
     }
 
-
-
 }
