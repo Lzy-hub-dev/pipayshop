@@ -107,4 +107,6 @@ public interface ShopInfoService extends IService<ShopInfo> {
     List<CountryMinVO> getSecondDistrictList(String countryCode);
 
     List<CountryMinVO> getThirdDistrictList(String countrySecondId);
+
+    List<CountryMinVO> getFourthDistrictList(String countryThirdId);
 }

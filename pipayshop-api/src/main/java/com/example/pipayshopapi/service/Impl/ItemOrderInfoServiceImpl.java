@@ -11,7 +11,6 @@ import com.example.pipayshopapi.entity.*;
 import com.example.pipayshopapi.entity.dto.ItemOrderDetailDTO;
 import com.example.pipayshopapi.entity.vo.ItemOrderDetailVO;
 import com.example.pipayshopapi.entity.vo.MyItemOrderInfoVO;
-import com.example.pipayshopapi.entity.vo.OrderListVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.*;
@@ -27,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 
 

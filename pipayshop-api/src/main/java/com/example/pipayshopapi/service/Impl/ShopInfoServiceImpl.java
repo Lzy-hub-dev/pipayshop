@@ -473,4 +473,9 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         }
         return dataListFromRedisList;
     }
+
+    @Override
+    public List<CountryMinVO> getFourthDistrictList(String countryThirdId) {
+        return null;
+    }
 }
