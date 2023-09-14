@@ -310,7 +310,7 @@ public class ShopInfoController {
     /**
      * 获取四级行政区域列表（针对中国出发）
      */
-    @GetMapping("getThirdDistrictList/{countryThirdId}")
+    @GetMapping("getFourthDistrictList/{countryThirdId}")
     @ApiOperation("获取四级行政区域列表（针对中国出发）")
     public ResponseVO<List<CountryMinVO>> getFourthDistrictList(@PathVariable String countryThirdId){
         try {

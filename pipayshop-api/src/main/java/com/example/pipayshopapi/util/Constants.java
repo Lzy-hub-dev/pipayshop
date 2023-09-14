@@ -41,6 +41,11 @@ public class Constants {
     public static final String COUNTRY_THIRD_REGION = "country_third_region";
 
     /**
+     * 四级国家行政分区的redis存储Key
+     */
+    public static final String  COUNTRY_FOURTH_REGION = "country_fourth_region";
+
+    /**
      * 国家行政分区的redis存储时间（也是定期更新缓存的时间）,默认为一天
      */
     public static final Integer REGION_VALID_TIME = 60 * 60 * 24;

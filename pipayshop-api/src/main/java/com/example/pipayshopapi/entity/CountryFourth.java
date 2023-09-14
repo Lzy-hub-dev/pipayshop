@@ -3,6 +3,10 @@ package com.example.pipayshopapi.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 
 /**
@@ -14,6 +18,9 @@ import java.io.Serializable;
  * @since 2023-09-13
  */
 @TableName("country_fourth")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CountryFourth implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,52 +46,7 @@ public class CountryFourth implements Serializable {
     /**
      * 0:正常1：逻辑删除
      */
-    private Boolean delFlag;
+    private Integer delFlag;
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getCountryFourthId() {
-        return countryFourthId;
-    }
-
-    public void setCountryFourthId(String countryFourthId) {
-        this.countryFourthId = countryFourthId;
-    }
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-    public String getPidId() {
-        return pidId;
-    }
-
-    public void setPidId(String pidId) {
-        this.pidId = pidId;
-    }
-    public Boolean getDelFlag() {
-        return delFlag;
-    }
-
-    public void setDelFlag(Boolean delFlag) {
-        this.delFlag = delFlag;
-    }
-
-    @Override
-    public String toString() {
-        return "CountryFourth{" +
-            "id=" + id +
-            ", countryFourthId=" + countryFourthId +
-            ", name=" + name +
-            ", pidId=" + pidId +
-            ", delFlag=" + delFlag +
-        "}";
-    }
 }

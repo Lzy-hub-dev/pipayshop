@@ -66,6 +66,8 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     @Resource
     private ShopRegionMapper shopRegionMapper;
 
+    @Resource
+    private CountryFourthMapper countryFourthMapper;
     private final RedisUtil<CountryMinVO> redisUtil = new RedisUtil<>();
 
     @Override
@@ -486,6 +488,14 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
 
     @Override
     public List<CountryMinVO> getFourthDistrictList(String countryThirdId) {
-        return null;
-    }
+        // 直接走缓存拿
+        List<CountryMinVO> dataListFromRedisList = redisUtil.getDataListFromRedisList(Constants.COUNTRY_FOURTH_REGION + "_" + countryThirdId);
+        // 校验缓存结果
+        if (dataListFromRedisList == null || dataListFromRedisList.size() == 0) {
+            // 刷新缓存
+            dataListFromRedisList = countryFourthMapper.getFourthDistrictList(countryThirdId);
+            if (dataListFromRedisList == null){return null;}
+            redisUtil.savaDataListToRedisList(Constants.COUNTRY_THIRD_REGION + "_" + countryThirdId, dataListFromRedisList);
+        }
+        return dataListFromRedisList;    }
 }
