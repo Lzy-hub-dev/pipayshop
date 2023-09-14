@@ -202,21 +202,17 @@ public class RechargeOrderInfoServiceImpl extends ServiceImpl<RechargeOrderInfoM
         //PI钱包支付
         String paymentId = completeDTO.getPaymentId();//PI订单号
         String lockName = "access:lock:complete:" + paymentId;
-        log.error(paymentId+"-----------------"+lockName+"---------------------");
         // 获取锁（可重入），指定锁的名称
         RLock lock = redissonClient.getLock(lockName);
 
         // 尝试获取锁，参数分别是：获取锁的最大等待时间（期间会重试），锁自动释放时间，时间单位
         boolean isLock = lock.tryLock(1, 10, TimeUnit.SECONDS);
-
         // 判断释放获取成功
         if(isLock){
 
             try {
-
                 RechargeOrderInfo rechargeOrderInfo = rechargeOrderInfoMapper.selectOne(new QueryWrapper<RechargeOrderInfo>()
                         .eq("order_id", completeDTO.getRechargeOrderId()));
-                log.error("orderId--------------------------------------------------------------");
                 if (null == rechargeOrderInfo) {
                     // 订单不存在
                     log.error("!orderinfo--------------------------------------------------------不存在");

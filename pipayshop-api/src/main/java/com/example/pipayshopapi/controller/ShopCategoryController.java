@@ -1,6 +1,7 @@
 package com.example.pipayshopapi.controller;
 
 import com.example.pipayshopapi.entity.ShopCategory;
+import com.example.pipayshopapi.entity.dto.SecShopInfoListByConditionDTO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -44,13 +45,11 @@ public class ShopCategoryController {
         }
 
     }
-    @GetMapping("getSecShopInfoListByCondition/{limit}/{pages}/{categoryId}/{regionId}")
+    @GetMapping("getSecShopInfoListByCondition")
     @ApiOperation("根据一级分类-获取所有实体店列表")
-    public ResponseVO<PageDataVO> getSecShopInfoListByCondition(@PathVariable Integer limit, @PathVariable Integer pages
-            , @PathVariable String categoryId
-            , @PathVariable String regionId){
+    public ResponseVO<PageDataVO> getSecShopInfoListByCondition(SecShopInfoListByConditionDTO secShopInfoListByConditionDTO){
         try {
-            PageDataVO secShopInfoListByCondition = shopInfoService.getSecShopInfoListByCondition(limit, pages, categoryId, regionId);
+            PageDataVO secShopInfoListByCondition = shopInfoService.getSecShopInfoListByCondition(secShopInfoListByConditionDTO);
 
             return ResponseVO.getSuccessResponseVo(secShopInfoListByCondition);
         }catch (Exception e){

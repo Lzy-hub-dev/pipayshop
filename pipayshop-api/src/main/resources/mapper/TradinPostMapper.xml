@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.pipayshopapi.mapper.TradinPostMapper">
+
+    <select id="selectTraditionList" resultType="com.example.pipayshopapi.entity.vo.TraditionListVO">
+        select t.tradin_id,t.publisher_uid,t.trader_uid,t.type_id,t.content,t.point_balance,t.pi_balance,u.user_name,u.user_image
+        from tradin_post t
+        join user_info u
+        on u.uid=t.publisher_uid
+        where t.status = 0 and t.type_id = #{typeId}
+    </select>
+    <select id="selectTraditionDetail" resultType="com.example.pipayshopapi.entity.vo.TraditionDetailVO">
+        select t.tradin_id,t.publisher_uid,t.trader_uid,t.type_id,t.content,t.point_balance,t.pi_balance,t.pi_address,u.user_name,u.user_image
+        from tradin_post t
+        join user_info u
+        on u.uid=t.publisher_uid
+        where t.tradin_id=#{tradinId}
+    </select>
+</mapper>

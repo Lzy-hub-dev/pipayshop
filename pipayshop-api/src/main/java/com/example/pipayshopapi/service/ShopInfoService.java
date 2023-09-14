@@ -3,6 +3,8 @@ package com.example.pipayshopapi.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
+import com.example.pipayshopapi.entity.dto.SecShopInfoListByConditionDTO;
+import com.example.pipayshopapi.entity.dto.ShopInfoListByConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,7 +26,7 @@ public interface ShopInfoService extends IService<ShopInfo> {
     /**
      * 根据二级分类-获取所有实体店列表
      */
-    PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId,Boolean score, String regionId);
+    PageDataVO getShopInfoListByCondition(ShopInfoListByConditionDTO shopInfoListByConditionDTO);
 
     /**
      * 根据实体店id查询实体店信息
@@ -70,7 +72,7 @@ public interface ShopInfoService extends IService<ShopInfo> {
     /**
      * 根据一级分类-获取所有实体店列表
      */
-    PageDataVO getSecShopInfoListByCondition(Integer limit, Integer pages, String categoryId, String areaDivide);
+    PageDataVO getSecShopInfoListByCondition(SecShopInfoListByConditionDTO secShopInfoListByConditionDTO);
 
     boolean isVipShop(String shopId);
 

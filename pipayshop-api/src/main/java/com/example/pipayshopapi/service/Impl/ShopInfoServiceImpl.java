@@ -8,15 +8,14 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.*;
 import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
+import com.example.pipayshopapi.entity.dto.SecShopInfoListByConditionDTO;
 import com.example.pipayshopapi.entity.dto.ShopDTO;
+import com.example.pipayshopapi.entity.dto.ShopInfoListByConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.*;
 import com.example.pipayshopapi.service.ShopInfoService;
-import com.example.pipayshopapi.util.Constants;
-import com.example.pipayshopapi.util.FileUploadUtil;
-import com.example.pipayshopapi.util.RedisUtil;
-import com.example.pipayshopapi.util.StringUtil;
+import com.example.pipayshopapi.util.*;
 import com.google.common.collect.Sets;
 import com.javadocmd.simplelatlng.LatLng;
 import com.javadocmd.simplelatlng.LatLngTool;
@@ -78,11 +77,16 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
      * 首页获取所有实体店列表
      */
     @Override
-    public PageDataVO getShopInfoListByCondition(Integer limit, Integer pages, String categoryId,Boolean score, String regionId) {
+    public PageDataVO getShopInfoListByCondition(ShopInfoListByConditionDTO shopInfoListByConditionDTO) {
 
         // 获取总条数
-        Integer count = shopInfoMapper.getIndexShopInfoVOCount(categoryId, regionId);
-        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(categoryId, (pages - 1) * limit, limit,score, regionId);
+        Integer count = shopInfoMapper.getIndexShopInfoVOCount(shopInfoListByConditionDTO.getCategoryId(), shopInfoListByConditionDTO.getRegionId(),shopInfoListByConditionDTO.getShopName());
+        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(shopInfoListByConditionDTO.getCategoryId(),
+                (shopInfoListByConditionDTO.getPages() - 1) * shopInfoListByConditionDTO.getLimit(),
+                                                                shopInfoListByConditionDTO.getLimit(),
+                                                                shopInfoListByConditionDTO.getScore(),
+                                                                shopInfoListByConditionDTO.getRegionId(),
+                                                                shopInfoListByConditionDTO.getShopName());
         indexShopInfoVO.stream().parallel()
                 .forEach(shopInfoVO -> {
                     List<String> list1 = new ArrayList<>();
@@ -267,11 +271,14 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
             shopInfo.setUserImage(shopImagList.get(0));
             shopInfo.setUid(uid);
             shopInfo.setMembership(membership);
+            log.error("shopinfo======================================"+shopInfo);
             // 新增实体店
             int insert = shopInfoMapper.insert(shopInfo);
+            log.error("insert======================================"+insert);
             if (insert < 1){
                 throw new BusinessException("申请实体店失败");
             }
+            log.error("================================================error");
             // 用户可绑定实体店剩余数量减一
             int update = userInfoMapper.update(null, new LambdaUpdateWrapper<UserInfo>()
                     .eq(UserInfo::getUid, applyShopDTO.getUid())
@@ -311,10 +318,13 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
      * 根据一级分类-获取所有实体店列表
      */
     @Override
-    public PageDataVO getSecShopInfoListByCondition(Integer limit, Integer pages, String categoryId, String regionId) {
-        Integer count = shopInfoMapper.getAllIndexShopInfoVO(categoryId, regionId);
+    public PageDataVO getSecShopInfoListByCondition(SecShopInfoListByConditionDTO secShopInfoListByConditionDTO) {
+        Integer count = shopInfoMapper.getAllIndexShopInfoVO(secShopInfoListByConditionDTO.getCategoryId(), secShopInfoListByConditionDTO.getRegionId(),secShopInfoListByConditionDTO.getShopName());
         // stata==1,按评分从低到高；stata==2,按评分从高到低
-        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVOById(categoryId, (pages - 1) * limit, limit, regionId);
+        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVOById(secShopInfoListByConditionDTO.getCategoryId(),
+                             (secShopInfoListByConditionDTO.getPages() - 1) * secShopInfoListByConditionDTO.getLimit(),
+                                secShopInfoListByConditionDTO.getLimit(),
+                                secShopInfoListByConditionDTO.getRegionId(),secShopInfoListByConditionDTO.getShopName());
         for (IndexShopInfoVO shopInfoVO : indexShopInfoVO) {
             List<String> list1 = new ArrayList<>();
             List<String> list = JSON.parseArray(shopInfoVO.getTagList(), String.class);
@@ -434,7 +444,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     @Transactional(rollbackFor = Exception.class)
     public String shopTopImageUp(MultipartFile multipartFile) {
         List<String> imageSizeList = new ArrayList<>();
-        imageSizeList.add("90,100");
+        imageSizeList.add(ImageConstants.SHOP_TOP_IMAGE_UP_SMALL);
         return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.SHOP_TOP_IMAGE_UP,imageSizeList);
     }
 
@@ -442,7 +452,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     @Transactional(rollbackFor = Exception.class)
     public String shopImageUp(MultipartFile multipartFile) {
         List<String> imageSizeList = new ArrayList<>();
-        imageSizeList.add("640,360");
+        imageSizeList.add(ImageConstants.SHOP_IMAGE_UP_BIG);
         return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.SHOP_IMAGE_UP,imageSizeList);
     }
 

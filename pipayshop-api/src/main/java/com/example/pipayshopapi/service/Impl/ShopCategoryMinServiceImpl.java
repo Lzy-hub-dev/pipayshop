@@ -3,6 +3,7 @@ package com.example.pipayshopapi.service.Impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.ShopCategoryMin;
+import com.example.pipayshopapi.entity.dto.ShopInfoMinListByConditionDTO;
 import com.example.pipayshopapi.entity.vo.IndexShopInfoVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.mapper.ImageMapper;
@@ -43,10 +44,10 @@ public class ShopCategoryMinServiceImpl extends ServiceImpl<ShopCategoryMinMappe
      * 实体店二级分类标签列表对应的店铺列表条件分页展示
      */
     @Override
-    public PageDataVO getShopInfoMinListByCondition(Integer limit, Integer pages, String categoryId, String regionId) {
+    public PageDataVO getShopInfoMinListByCondition(ShopInfoMinListByConditionDTO shopInfoMinListByConditionDTO) {
         // 获取总条数
-        Integer indexShopInfoVOCount = shopInfoMapper.getIndexShopInfoVOCount(categoryId, regionId);
-        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getShopInfoMinListByCondition(categoryId, (pages - 1) * limit, limit, regionId);
+        Integer indexShopInfoVOCount = shopInfoMapper.getIndexShopInfoVOCount(shopInfoMinListByConditionDTO.getCategoryId(), shopInfoMinListByConditionDTO.getRegionId(),shopInfoMinListByConditionDTO.getShopName());
+        List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getShopInfoMinListByCondition(shopInfoMinListByConditionDTO.getCategoryId(), (shopInfoMinListByConditionDTO.getPages() - 1) * shopInfoMinListByConditionDTO.getLimit(), shopInfoMinListByConditionDTO.getLimit(), shopInfoMinListByConditionDTO.getRegionId(),shopInfoMinListByConditionDTO.getShopName());
         return new PageDataVO(indexShopInfoVOCount,indexShopInfoVO);
     }
 

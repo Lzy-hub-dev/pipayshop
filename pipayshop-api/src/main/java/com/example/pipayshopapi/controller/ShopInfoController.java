@@ -3,6 +3,7 @@ package com.example.pipayshopapi.controller;
 
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
+import com.example.pipayshopapi.entity.dto.ShopInfoListByConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopInfoService;
@@ -74,15 +75,11 @@ public class ShopInfoController {
         }
     }
 
-    @GetMapping("getShopInfoListByCondition/{limit}/{pages}/{categoryId}/{score}/{regionId}")
+    @GetMapping("getShopInfoListByCondition")
     @ApiOperation("首页根据条件获取所有实体店列表")
-    public ResponseVO<PageDataVO> getShopInfoListByCondition(@PathVariable Integer limit
-            ,@PathVariable Integer pages
-            ,@PathVariable String categoryId
-            ,@PathVariable Boolean score
-            ,@PathVariable String regionId){
+    public ResponseVO<PageDataVO> getShopInfoListByCondition(ShopInfoListByConditionDTO shopInfoListByConditionDTO){
         try {
-            PageDataVO shopInfoListByCondition = infoService.getShopInfoListByCondition(limit, pages, categoryId,score, regionId);
+            PageDataVO shopInfoListByCondition = infoService.getShopInfoListByCondition(shopInfoListByConditionDTO);
             if (shopInfoListByCondition==null){
                 throw new Exception();
             }
@@ -285,9 +282,6 @@ public class ShopInfoController {
     public ResponseVO<List<CountryMinVO>> getSecondDistrictList(@PathVariable String countryCode){
         try {
             List<CountryMinVO> list = infoService.getSecondDistrictList(countryCode);
-            if (list == null){
-                throw new Exception();
-            }
             return ResponseVO.getSuccessResponseVo(list);
         }catch (Exception e){
             e.printStackTrace();

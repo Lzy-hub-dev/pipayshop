@@ -1,6 +1,7 @@
 package com.example.pipayshopapi.controller;
 
 import com.example.pipayshopapi.entity.ShopCategoryMin;
+import com.example.pipayshopapi.entity.dto.ShopInfoMinListByConditionDTO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -43,11 +44,11 @@ public class ShopCategoryMinController {
         }
     }
 
-    @GetMapping("getShopInfoMinListByCondition/{limit}/{pages}/{categoryId}/{regionId}")
+    @GetMapping("getShopInfoMinListByCondition")
     @ApiOperation("二级分类标签列表对应的店铺列表条件分页展示")
-    public ResponseVO<PageDataVO> getShopInfoMinListByCondition(@PathVariable Integer limit, @PathVariable Integer pages, @PathVariable String categoryId, @PathVariable String regionId){
+    public ResponseVO<PageDataVO> getShopInfoMinListByCondition(ShopInfoMinListByConditionDTO shopInfoMinListByConditionDTO){
         try {
-            PageDataVO shopInfoMinListByCondition = shopCategoryMinService.getShopInfoMinListByCondition(limit, pages, categoryId, regionId);
+            PageDataVO shopInfoMinListByCondition = shopCategoryMinService.getShopInfoMinListByCondition(shopInfoMinListByConditionDTO);
             if (shopInfoMinListByCondition==null){
                 throw new Exception();
             }
