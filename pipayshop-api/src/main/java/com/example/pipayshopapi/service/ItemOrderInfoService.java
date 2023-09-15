@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.example.pipayshopapi.entity.vo.ItemOrderDetailVO;
 import com.example.pipayshopapi.entity.vo.MyItemOrderInfoVO;
-import com.example.pipayshopapi.entity.vo.OrderListVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 
 import java.util.List;

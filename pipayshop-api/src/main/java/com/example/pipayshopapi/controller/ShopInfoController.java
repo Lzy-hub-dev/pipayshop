@@ -307,6 +307,24 @@ public class ShopInfoController {
         }
     }
 
+    /**
+     * 获取四级行政区域列表（针对中国出发）
+     */
+    @GetMapping("getFourthDistrictList/{countryThirdId}")
+    @ApiOperation("获取四级行政区域列表（针对中国出发）")
+    public ResponseVO<List<CountryMinVO>> getFourthDistrictList(@PathVariable String countryThirdId){
+        try {
+            List<CountryMinVO> list = infoService.getFourthDistrictList(countryThirdId);
+            if (list == null){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo(list);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("获取四级行政区域列表失败");
+        }
+    }
+
 
     /*
     @PostMapping("piIdImageUp")
