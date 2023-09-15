@@ -8,6 +8,8 @@
         join user_info u
         on u.uid=t.publisher_uid
         where t.status = 0 and t.type_id = #{typeId}
+        order by t.create_time desc
+        limit #{page},#{limit}
     </select>
     <select id="selectTraditionDetail" resultType="com.example.pipayshopapi.entity.vo.TraditionDetailVO">
         select t.tradin_id,t.publisher_uid,t.trader_uid,t.type_id,t.content,t.point_balance,t.pi_balance,t.pi_address,u.user_name,u.user_image
@@ -15,5 +17,17 @@
         join user_info u
         on u.uid=t.publisher_uid
         where t.tradin_id=#{tradinId}
+    </select>
+    <select id="selectTradinPostByUid" resultType="com.example.pipayshopapi.entity.vo.TraditionListVO">
+        select t.tradin_id,t.publisher_uid,t.trader_uid,t.type_id,t.content,t.point_balance,t.pi_balance,t.pi_address,u.user_name,u.user_image
+        from tradin_post t
+        join user_info u
+        on u.uid=t.publisher_uid
+        where t.publisher_uid=#{userId} or t.trader_uid=#{userId}
+    </select>
+    <select id="selectTraditionListCount" resultType="java.lang.Integer">
+        select count(*)
+        from tradin_post t
+        where t.status = 0 and t.type_id = #{typeId}
     </select>
 </mapper>

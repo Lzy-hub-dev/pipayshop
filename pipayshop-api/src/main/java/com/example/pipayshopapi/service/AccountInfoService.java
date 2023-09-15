@@ -21,4 +21,9 @@ public interface AccountInfoService extends IService<AccountInfo> {
      * */
     AccountInfoVO selectAccountById(String uid);
 
+
+    Object capturePayment(String orderId);
+
+    Object createOrder();
+
 }

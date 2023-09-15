@@ -32,8 +32,8 @@ public class RedisUtil<T> {
     public void savaDataListToRedisList(String key, List<T> list) {
         // 设置Key的String序列化
         redis.setKeySerializer(RedisSerializer.string());
-        redis.expire(key, Constants.REGION_VALID_TIME, TimeUnit.SECONDS);
         redis.opsForList().leftPushAll(key, list);
+        redis.expire(key, Constants.REGION_VALID_TIME, TimeUnit.SECONDS);
     }
 
     /**

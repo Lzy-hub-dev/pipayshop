@@ -18,4 +18,9 @@ public class CommonConfig {
     @Value("${image.path}")
     private String imagePath;
 
+    @Value("${PAYPAL.CLIENT_ID}")
+    private String PAYPAL_CLIENT_ID;
+
+    @Value("${PAYPAL.APP_SECRET}")
+    private String PAYPAL_APP_SECRET;
 }

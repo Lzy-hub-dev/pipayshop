@@ -49,4 +49,11 @@ public class Constants {
      * 保存交易所图片凭证路径
      */
     public static final String CERTIFICATE_IMAG_PATH = "pipayshop-api/src/main/resources/static/images/tradin_post_certificate";
+
+    /**
+     * PAYPAL接口路径
+     */
+    public static final String PAYPAL_BASE_PATH = "https://api-m.sandbox.paypal.com";
+
+
 }
