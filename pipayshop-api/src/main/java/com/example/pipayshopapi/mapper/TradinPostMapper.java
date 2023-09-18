@@ -19,8 +19,11 @@ import java.util.List;
 @Mapper
 public interface TradinPostMapper extends BaseMapper<TradinPost> {
 
-    List<TraditionListVO> selectTraditionList(Integer typeId);
+    List<TraditionListVO> selectTraditionList(Integer typeId,Integer page,Integer limit);
 
     TraditionDetailVO selectTraditionDetail(String tradinId);
 
+    List<TraditionListVO> selectTradinPostByUid(String userId);
+
+    Integer selectTraditionListCount(Integer typeId);
 }

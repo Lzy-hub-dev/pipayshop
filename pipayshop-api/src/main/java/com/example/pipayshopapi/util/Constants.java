@@ -64,4 +64,11 @@ public class Constants {
      * 校验码的存储时间(三分钟)
      */
     public static final Long CHECK_CODE_VALID_TIME  = 60 * 3L;
+
+    /**
+     * PAYPAL接口路径
+     */
+    public static final String PAYPAL_BASE_PATH = "https://api-m.sandbox.paypal.com";
+
+
 }
