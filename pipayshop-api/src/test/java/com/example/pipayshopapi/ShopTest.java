@@ -8,9 +8,7 @@ import com.example.pipayshopapi.entity.TradinPost;
 import com.example.pipayshopapi.entity.dto.ItemOrderDetailDTO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.TradinPostMapper;
-import com.example.pipayshopapi.util.Constants;
-import com.example.pipayshopapi.util.FileUploadUtil;
-import com.example.pipayshopapi.util.TokenUtil;
+import com.example.pipayshopapi.util.*;
 import io.jsonwebtoken.*;
 import net.coobird.thumbnailator.Thumbnails;
 import org.junit.After;
@@ -35,14 +33,11 @@ public class ShopTest {
 
     @Test
     public void imageTest(){
-        try {
-            String path = "/images/avatar/928aa28a82c.jpg";
-            List<String> list = new ArrayList<>();
-            list.add("200,200");
-            FileUploadUtil.asyCropping(path,list);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        String s = StringUtil.hashPassword("1234567");
+        System.out.println(s);
+
+        boolean FLAG = StringUtil.checkPassword("1234567", "$2a$10$dc3klPXnOZ9spNus8TXPGeUcCXI9CqPs4acjSyobJJCIFNBDQsqGG");
+        System.out.println(FLAG);
     }
 
 

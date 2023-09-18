@@ -10,6 +10,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.config.CommonConfig;
 import com.example.pipayshopapi.entity.*;
 import com.example.pipayshopapi.entity.dto.LoginDTO;
+import com.example.pipayshopapi.entity.dto.RegisterDTO;
+import com.example.pipayshopapi.entity.dto.UserRegisterDTO;
 import com.example.pipayshopapi.entity.vo.ItemMinInfoVo;
 import com.example.pipayshopapi.entity.vo.ResponseResultVO;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
@@ -79,6 +81,12 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Resource
     private RedisCache redisCache;
+
+    @Resource
+    private RedisUtil<String> redisUtil;
+
+    @Resource
+    private UserRegisterMapper userRegisterMapper;
 
     @Resource
     ImageMapper imageMapper;
@@ -396,5 +404,58 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                 .eq("status", 0)
                 .eq("level", 1));
         return count.intValue() == 1;
+    }
+
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean insertRegisterData(UserRegisterDTO userRegisterDTO) {
+        // 将密码进行BCrypt加密再存到数据库中
+        String passWord = userRegisterDTO.getPassword();
+        String hashPassword = StringUtil.hashPassword(passWord);
+        userRegisterDTO.setPassword(hashPassword);
+        // 插入数据
+        int insert = userRegisterMapper.insertRegisterData(userRegisterDTO);
+        return insert > 0;
+    }
+
+    @Override
+    public ResponseResultVO userRegister(String sessionId, RegisterDTO registerDTO) {
+        try {
+            // 校验码匹配
+            if (!registerDTO.getCheckCode().equalsIgnoreCase(redisUtil.get(Constants.CHECK_CODE_PRE + sessionId))){
+                // 验证码不一致
+                throw new BusinessException("图片验证码不正确");
+            }
+            // 根据用户名查询数据
+            UserRegister userRegister = userRegisterMapper.selectOne(new QueryWrapper<UserRegister>()
+                    .eq("pi_name", registerDTO.getPiName())
+                    .eq("del_flag", 0)
+                    .select("pi_name", "password", "uid"));
+            if (userRegister == null){
+                throw new BusinessException("账号或密码不正确");
+            }
+            // 校验密码
+            boolean flag = StringUtil.checkPassword(registerDTO.getPassword(), userRegister.getPassword());
+            if (!flag){
+                throw new BusinessException("密码不正确");
+            }
+            // 获取用户数据
+            String uid = userRegister.getUid();
+            UserInfo userInfo = userInfoMapper.selectOne(new QueryWrapper<UserInfo>().eq("uid", uid).eq("status", 0));
+            if (userInfo == null){
+                throw new BusinessException("用户数据不存在");
+            }
+            // 生成token
+            String jwt = JwtUtil.createJWT(uid);
+            //把token响应给前端
+            HashMap<String,Object> map = new HashMap<>(1);
+            map.put("token",jwt);
+            map.put("user",userInfo);
+            return new ResponseResultVO(200,"登陆成功",map);
+        } finally {
+            // 无论是否成功，都要令上一次的验证码失效
+            redisUtil.del(Constants.CHECK_CODE_PRE + sessionId);
+        }
     }
 }

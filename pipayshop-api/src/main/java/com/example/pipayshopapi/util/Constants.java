@@ -54,4 +54,14 @@ public class Constants {
      * 保存交易所图片凭证路径
      */
     public static final String CERTIFICATE_IMAG_PATH = "pipayshop-api/src/main/resources/static/images/tradin_post_certificate";
+
+    /**
+     * 校验码的存储key前缀
+     */
+    public static final String CHECK_CODE_PRE = "check_";
+
+    /**
+     * 校验码的存储时间(三分钟)
+     */
+    public static final Long CHECK_CODE_VALID_TIME  = 60 * 3L;
 }
