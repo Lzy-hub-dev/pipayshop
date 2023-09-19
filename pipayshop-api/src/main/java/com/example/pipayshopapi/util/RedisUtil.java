@@ -1,7 +1,6 @@
 package com.example.pipayshopapi.util;
 
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author wzx
  */
-
 @Component
 public class RedisUtil<T> {
 
@@ -22,6 +20,9 @@ public class RedisUtil<T> {
     private RedisTemplate redisTemplate;
 
     public static RedisTemplate redis;
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
 
     @PostConstruct
     public void getRedisTemplate() {
@@ -53,16 +54,35 @@ public class RedisUtil<T> {
     /**
      * 设置指定 key 的值
      */
-    public void set(String key, T value) {
-        redisTemplate.opsForValue().set(key, value, Long.parseLong(Constants.CHECK_CODE_VALID_TIME), TimeUnit.SECONDS);
+    public void set(String key, String value) {
+        try {
+            // 设置序列化
+            stringRedisTemplate.opsForValue().set(key, value, Constants.CHECK_CODE_VALID_TIME, TimeUnit.SECONDS);
+        } catch (NumberFormatException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
      * 获取指定 key 的值
      */
-    public T get(String key) {
-        ValueOperations<String, T> operation = redisTemplate.opsForValue();
-        return operation.get(key);
+    public String get(String key) {
+        try {
+            return stringRedisTemplate.opsForValue().get(key);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 删除指定 key 的值
+     */
+    public void del(String key){
+        try {
+            stringRedisTemplate.delete(key);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

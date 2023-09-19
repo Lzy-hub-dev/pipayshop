@@ -3,16 +3,27 @@ package com.example.pipayshopapi.controller;
 import com.example.pipayshopapi.entity.Country;
 import com.example.pipayshopapi.entity.UserInfo;
 import com.example.pipayshopapi.entity.dto.LoginDTO;
+import com.example.pipayshopapi.entity.dto.RegisterDTO;
+import com.example.pipayshopapi.entity.dto.UserRegisterDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.CountryService;
 import com.example.pipayshopapi.service.UserInfoService;
+import com.example.pipayshopapi.util.Constants;
+import com.example.pipayshopapi.util.CreateImageCode;
+import com.example.pipayshopapi.util.RedisUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -33,6 +44,9 @@ public class UserInfoController {
 
     @Resource
     private CountryService countryService;
+
+    @Resource
+    private RedisUtil<String> redisUtil;
 
     @GetMapping("test")
     @ApiOperation("test")
@@ -217,4 +231,76 @@ public class UserInfoController {
 
         }
     }
+
+
+    /**
+     * 首次注册pi账号登录后，强制要求其设置一个账号密码实现普通浏览器登录效果
+     */
+    @PostMapping("insertRegisterData")
+    @ApiOperation("首次注册pi账号登录后，强制要求其设置一个账号密码实现普通浏览器登录效果")
+    public ResponseVO<String> insertRegisterData(UserRegisterDTO userRegisterDTO){
+        try {
+            boolean result = userInfoService.insertRegisterData(userRegisterDTO);
+            if (!result){
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("注册普通浏览器账号成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("注册普通浏览器账号失败，请联系后台人员");
+        }
+    }
+
+    /**
+     * 普通浏览器登录
+     */
+    @GetMapping("userRegister")
+    @ApiOperation("普通浏览器登录")
+    public ResponseVO<ResponseResultVO> userRegister(HttpServletRequest request, RegisterDTO registerDTO){
+        try {
+            ResponseResultVO  responseResultVO  = userInfoService.userRegister(request.getSession().getId(),registerDTO);
+            if (responseResultVO  == null) {
+                throw new BusinessException();
+            }
+            return ResponseVO.getSuccessResponseVo(responseResultVO );
+        } catch (BusinessException e) {
+            throw new BusinessException(e.getMessage());
+        }
+    }
+
+    /**
+     * 生成验证码，并保存值到redis中用于校验
+     */
+    @GetMapping("/checkCode")
+    @ApiOperation("生成验证码，并保存值到redis中用于校验")
+    public void checkCode(HttpServletRequest request, HttpServletResponse response) {
+        OutputStream out = null;
+        try{
+            // 创建验证码对象并生成验证码
+            CreateImageCode code = new CreateImageCode();
+            String verifyCode = code.getCode();
+            // 把随机生成的验证码字符串保存到 redis 中(以sessionId来标识)
+            String sessionId = request.getSession().getId();
+            redisUtil.set(Constants.CHECK_CODE_PRE + sessionId, verifyCode);
+            // 把验证码图片设置为响应正文并输出到客户端
+            response.setContentType("image/jpeg");
+            out = response.getOutputStream();
+            ImageIO.write(code.getBufferedImage(), "jpeg", out);
+        } catch (IOException e) {
+            throw new BusinessException("生成验证码失败");
+        }finally {
+            try {
+                assert out != null;
+                out.close();
+            } catch (IOException e) {
+                throw new BusinessException("生成验证码失败");
+            }
+            try {
+                out.close();
+            } catch (IOException e) {
+                throw new BusinessException("生成验证码失败");
+            }
+        }
+    }
+
 }

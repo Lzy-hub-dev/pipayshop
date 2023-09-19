@@ -1,5 +1,9 @@
 package com.example.pipayshopapi.util;
 
+import org.springframework.security.crypto.bcrypt.BCrypt;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 /**
@@ -27,6 +31,23 @@ public class StringUtil {
     public static void main(String[] args) {
         String s=StringUtil.generateShortId();
         System.out.println(s);
+    }
+
+    /**
+     * BCrypt加密密码
+     */
+    public static String hashPassword(String password) {
+        // 生成随机盐值
+        String salt = BCrypt.gensalt();
+        // 生成哈希密码
+        return BCrypt.hashpw(password, salt);
+    }
+
+    /**
+     * 验证密码
+      */
+    public static boolean checkPassword(String password, String hashedPassword) {
+        return BCrypt.checkpw(password, hashedPassword);
     }
 
 }

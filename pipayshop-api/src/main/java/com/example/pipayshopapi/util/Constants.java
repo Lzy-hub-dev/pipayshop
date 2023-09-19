@@ -57,6 +57,16 @@ public class Constants {
     public static final String CERTIFICATE_IMAG_PATH = "pipayshop-api/src/main/resources/static/images/tradin_post_certificate";
 
     /**
+     * 校验码的存储key前缀
+     */
+    public static final String CHECK_CODE_PRE = "check_";
+
+    /**
+     * 校验码的存储时间(三分钟)
+     */
+    public static final Long CHECK_CODE_VALID_TIME  = 60 * 3L;
+
+    /**
      * PAYPAL接口路径
      */
     public static final String PAYPAL_BASE_PATH = "https://api-m.paypal.com";

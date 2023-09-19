@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.Country;
 import com.example.pipayshopapi.entity.UserInfo;
 import com.example.pipayshopapi.entity.dto.LoginDTO;
+import com.example.pipayshopapi.entity.dto.RegisterDTO;
+import com.example.pipayshopapi.entity.dto.UserRegisterDTO;
 import com.example.pipayshopapi.entity.vo.ItemMinInfoVo;
 import com.example.pipayshopapi.entity.vo.ResponseResultVO;
 import com.example.pipayshopapi.entity.vo.UserInfoVO;
@@ -66,4 +68,14 @@ public interface UserInfoService extends IService<UserInfo> {
     boolean upToVipUser(String userId);
 
     boolean isVipUser(String uid);
+
+    /**
+     * 注册普通浏览器登录账号
+     */
+    boolean insertRegisterData(UserRegisterDTO userRegisterDTO);
+
+    /**
+     * 普通浏览器登录接口
+     */
+    ResponseResultVO userRegister(String sessionId,RegisterDTO registerDTO);
 }
