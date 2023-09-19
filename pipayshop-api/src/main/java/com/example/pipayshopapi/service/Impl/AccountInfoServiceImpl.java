@@ -126,15 +126,17 @@ public class AccountInfoServiceImpl extends ServiceImpl<AccountInfoMapper, Accou
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         //JSON String
-        String requestJson = "{\"intent\":\"CAPTURE\",\"purchase_units\":[{\"amount\":{\"currency_code\":\"USD\",\"value\":\"100.00\"}}]}";
+        String requestJson = "{\"intent\":\"CAPTURE\",\"purchase_units\":[{\"amount\":{\"currency_code\":\"USD\",\"value\":\"1.00\"}}]}";
+        log.error("requestJson===========================================start"+requestJson);
         HttpEntity<String> entity = new HttpEntity<String>(requestJson, headers);
-
+        log.error("entity===========================================start"+entity);
         ResponseEntity<Object> response = restTemplate.exchange(
                 Constants.PAYPAL_BASE_PATH + "/v2/checkout/orders",
                 HttpMethod.POST,
                 entity,
                 Object.class
         );
+        log.error("response===========================================start"+response);
         log.error("createOrder===========================================end");
         log.error("response==============================================="+response.getBody());
         if (response.getStatusCode() == HttpStatus.CREATED) {

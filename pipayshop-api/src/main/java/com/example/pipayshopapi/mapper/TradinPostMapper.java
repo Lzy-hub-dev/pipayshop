@@ -2,6 +2,7 @@ package com.example.pipayshopapi.mapper;
 
 import com.example.pipayshopapi.entity.TradinPost;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.pipayshopapi.entity.vo.DealDetailVO;
 import com.example.pipayshopapi.entity.vo.TraditionDetailVO;
 import com.example.pipayshopapi.entity.vo.TraditionListVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -26,4 +27,6 @@ public interface TradinPostMapper extends BaseMapper<TradinPost> {
     List<TraditionListVO> selectTradinPostByUid(String userId);
 
     Integer selectTraditionListCount(Integer typeId);
+
+    DealDetailVO selectDealDetail(String tradinId);
 }

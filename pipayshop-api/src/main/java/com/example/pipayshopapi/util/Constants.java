@@ -50,6 +50,7 @@ public class Constants {
      */
     public static final Integer REGION_VALID_TIME = 60 * 60 * 24;
 
+
     /**
      * 保存交易所图片凭证路径
      */
@@ -58,7 +59,19 @@ public class Constants {
     /**
      * PAYPAL接口路径
      */
-    public static final String PAYPAL_BASE_PATH = "https://api-m.sandbox.paypal.com";
+    public static final String PAYPAL_BASE_PATH = "https://api-m.paypal.com";
+
+
+    /**
+     * 校验码的存储时间(三分钟)
+     */
+    public static final String CHECK_CODE_VALID_TIME  = "60 * 3";
+
+
+    /**
+     * 校验码的存储key前缀
+     */
+    public static final String CHECK_CODE_PRE = "check_";
 
 
 }

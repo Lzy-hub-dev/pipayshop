@@ -5,11 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.pipayshopapi.entity.AccountInfo;
 import com.example.pipayshopapi.entity.TradinJournal;
 import com.example.pipayshopapi.entity.TradinPost;
-import com.example.pipayshopapi.entity.dto.TradinPostDTO;
-import com.example.pipayshopapi.entity.vo.AccountInfoVO;
-import com.example.pipayshopapi.entity.vo.PageDataVO;
-import com.example.pipayshopapi.entity.vo.TraditionDetailVO;
-import com.example.pipayshopapi.entity.vo.TraditionListVO;
+import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.AccountInfoMapper;
 import com.example.pipayshopapi.mapper.ImageMapper;
@@ -21,6 +17,7 @@ import com.example.pipayshopapi.util.Constants;
 import com.example.pipayshopapi.util.StringUtil;
 import com.example.pipayshopapi.util.TokenUtil;
 import io.jsonwebtoken.Claims;
+import net.coobird.thumbnailator.Thumbnails;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
@@ -30,7 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.File;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -168,7 +164,7 @@ public class TradinPostServiceImpl extends ServiceImpl<TradinPostMapper, TradinP
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean upLoadImg(MultipartFile file, TradinPostDTO tradinPostDTO) {
+    public boolean upLoadImg(MultipartFile file, String token) {
         if (file.isEmpty()) {
             throw new BusinessException("文件不能为空") ;
         }
@@ -176,35 +172,77 @@ public class TradinPostServiceImpl extends ServiceImpl<TradinPostMapper, TradinP
         if ("".equals(fileName)) {
             throw new BusinessException("文件名不能为空") ;
         }
-        String separator = File.separator;
-        String postStr = fileName.substring(fileName.lastIndexOf("."));
-        String preStr = StringUtil.generateShortId();
-        fileName = preStr +  postStr;
 
+        String separator = File.separator;
+        String postStr = fileName.substring(fileName.lastIndexOf(".")+1);
+        String preStr = StringUtil.generateShortId();
+        fileName = "temp-"+preStr + "."+ postStr;
+        String ThumbnailPath=preStr + "."+ postStr;
         File readPath = new File(Constants.CERTIFICATE_IMAG_PATH + separator );
         if (!readPath.isDirectory()) {
             readPath.mkdirs();
         }
         // 将文件复制到指定路径
         File destFile = new File(readPath.getAbsolutePath()+ separator + fileName);
+
+        // 解析token
+        Claims dataFromToken = TokenUtil.getDataFromToken(token);
+        Integer typeId = dataFromToken.get("typeId", Integer.class);
+        String tradinId = dataFromToken.get("tradinId", String.class);
         // 此交易发布者需要换pi币
-        if (tradinPostDTO.getTypeId() == 1){
+        if (typeId == 1){
+            String traderUid = dataFromToken.get("traderUid", String.class);
             // 查询交易
-            TradinPost tradinPost = tradinPostMapper.selectOne(new QueryWrapper<TradinPost>().eq("tradin_id", tradinPostDTO.getTradinId()));
+            TradinPost tradinPost = tradinPostMapper.selectOne(new QueryWrapper<TradinPost>().eq("tradin_id", tradinId));
+            if (typeId != tradinPost.getTypeId()){
+                throw new BusinessException("类型不一样") ;
+            }
+            // 获取交易日志
+            TradinJournal tradinJournal = tradinJournalMapper.selectOne(new QueryWrapper<TradinJournal>()
+                                                    .eq("journal_id", tradinPost.getJournalId()));
 
             // 更改交易状态为交易中
             tradinPost.setStatus(2);
-            tradinPost.setImageUrl("/images/tradin_post_certificate/"+fileName);
-            tradinPost.setTraderUid(tradinPostDTO.getTraderUid());
+            tradinPost.setImageUrl("/images/tradin_post_certificate/"+ThumbnailPath);
+            tradinPost.setTraderUid(traderUid);
+            int update = tradinPostMapper.updateById(tradinPost);
+            // 更新日志
+            tradinJournal.setTraderUid(traderUid);
+            update+=tradinJournalMapper.updateById(tradinJournal);
+            if (update < 2){
+                throw new BusinessException("提交失败") ;
+            }
+
+            // 发布者需要上传交易凭证给交易者检查
+        } else if (typeId== 0) {
+            // 查询交易
+            TradinPost tradinPost = tradinPostMapper.selectOne(new QueryWrapper<TradinPost>().eq("tradin_id", tradinId));
+            if (typeId != tradinPost.getTypeId()){
+                throw new BusinessException("类型不一样") ;
+            }
+            // 上传交易凭证图片
+            tradinPost.setImageUrl("/images/tradin_post_certificate/"+ThumbnailPath);
             int update = tradinPostMapper.updateById(tradinPost);
             if (update < 1){
                 throw new BusinessException("提交失败") ;
             }
-            return true;
+
         }
         try {
+            // 移动temp图片到目标文件夹
             FileCopyUtils.copy(file.getBytes(), destFile);
-        } catch (IOException e) {
+            String absolutePath = new File(Constants.CERTIFICATE_IMAG_PATH+separator + ThumbnailPath).getAbsolutePath();
+            // 压缩图片
+            Thumbnails.of(Constants.CERTIFICATE_IMAG_PATH+separator+fileName)
+                    .size(300, 300)
+                    .outputFormat(postStr)
+                    .toFile(absolutePath);
+            // 删除temp图片
+            if (destFile.exists()){
+                destFile.delete();
+            }
+            return true;
+        } catch (Exception e) {
             if (destFile.exists()){
                 destFile.delete();
             }
@@ -215,15 +253,25 @@ public class TradinPostServiceImpl extends ServiceImpl<TradinPostMapper, TradinP
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean upLoadPointBalance(TradinPostDTO tradinPostDTO) {
+    public boolean upLoadPointBalance(String token) {
+        // 解析token
+        Claims dataFromToken = TokenUtil.getDataFromToken(token);
+        Integer typeId = dataFromToken.get("typeId", Integer.class);
+        String tradinId = dataFromToken.get("tradinId", String.class);
+        String traderUid = dataFromToken.get("traderUid", String.class);
+        String piAddress = dataFromToken.get("piAddress", String.class);
         // 此交易发布者需要积分
-        if (tradinPostDTO.getTypeId() == 0){
+        if (typeId == 0){
             // 查询交易信息
-            TradinPost tradinPost = tradinPostMapper.selectOne(new QueryWrapper<TradinPost>().eq("tradin_id", tradinPostDTO.getTradinId()));
+            TradinPost tradinPost = tradinPostMapper.selectOne(new QueryWrapper<TradinPost>().eq("tradin_id", tradinId));
+
+            if (typeId != tradinPost.getTypeId()){
+                throw new BusinessException("类型不一样") ;
+            }
             // 交易需要的积分
             BigDecimal pointBalance = tradinPost.getPointBalance();
             // 获取交易者账户信息
-            AccountInfoVO traderAccountInfoVO = accountInfoMapper.selectAccountInfo(tradinPostDTO.getTraderUid());
+            AccountInfoVO traderAccountInfoVO = accountInfoMapper.selectAccountInfo(traderUid);
             BigDecimal oldPointBalance = traderAccountInfoVO.getPointBalance();
             if (oldPointBalance.compareTo(pointBalance) < 0){
                 throw new BusinessException("余额不足") ;
@@ -235,12 +283,15 @@ public class TradinPostServiceImpl extends ServiceImpl<TradinPostMapper, TradinP
             // 记录交易者的积分变化
             tradinJournal.setTraderPointBalanceBefore(oldPointBalance);
             tradinJournal.setTraderPointBalanceAfter(newPointBalance);
+            tradinJournal.setTraderUid(traderUid);
             // 改变交易状态
             tradinPost.setStatus(2);
+            tradinPost.setTraderUid(traderUid);
+            tradinPost.setPiAddress(piAddress);
             // 更新日志信息 交易者账户 交易状态
             int update = tradinJournalMapper.updateById(tradinJournal);
             update+=accountInfoMapper.update(null,new UpdateWrapper<AccountInfo>()
-                                                    .eq("uid",tradinPostDTO.getTraderUid())
+                                                    .eq("uid",traderUid)
                                                     .set("point_balance",newPointBalance));
             update += tradinPostMapper.updateById(tradinPost);
             if (update < 3){
@@ -252,7 +303,10 @@ public class TradinPostServiceImpl extends ServiceImpl<TradinPostMapper, TradinP
     }
 
     @Override
-    public List<TraditionListVO> selectTradinPostByUid(String userId) {
+    public List<TraditionListVO> selectTradinPostByUid(String token) {
+        // 解析token
+        Claims dataFromToken = TokenUtil.getDataFromToken(token);
+        String userId = dataFromToken.get("userId", String.class);
         List<TraditionListVO>  traditionListVOS=tradinPostMapper.selectTradinPostByUid(userId);
         for (TraditionListVO traditionVO : traditionListVOS) {
             traditionVO.setUserImage(imageMapper.selectPath(traditionVO.getUserImage()));
@@ -262,9 +316,14 @@ public class TradinPostServiceImpl extends ServiceImpl<TradinPostMapper, TradinP
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean confirmTransaction(String userId, String tradinId) {
+    public boolean confirmTransaction(String token) {
+        // 解析token
+        Claims dataFromToken = TokenUtil.getDataFromToken(token);
+        String userId = dataFromToken.get("userId", String.class);
+        String tradinId = dataFromToken.get("tradinId", String.class);
         // 查询交易
         TradinPost tradinPost = tradinPostMapper.selectOne(new QueryWrapper<TradinPost>().eq("tradin_id", tradinId));
+
         // 交易类型为发布者需要pi币
         if (tradinPost.getTypeId() == 1){
             // 查看userId是否是这次交易的发布者uid
@@ -301,7 +360,7 @@ public class TradinPostServiceImpl extends ServiceImpl<TradinPostMapper, TradinP
             BigDecimal oldPointBalance = accountInfo.getPointBalance();
             BigDecimal newPointBalance = oldPointBalance.add(tradinPost.getPointBalance());
             accountInfo.setPointBalance(newPointBalance);
-            // 更新交易者账户
+            // 更新发布者账户
             int update = accountInfoMapper.updateById(accountInfo);
             // 改变交易状态
             tradinPost.setStatus(3);
@@ -317,5 +376,15 @@ public class TradinPostServiceImpl extends ServiceImpl<TradinPostMapper, TradinP
             return true;
         }
         return false;
+    }
+
+    @Override
+    public DealDetailVO selectDealDetail(String tradinId) {
+        DealDetailVO  dealDetailVO = tradinPostMapper.selectDealDetail(tradinId);
+        dealDetailVO.setPublisherImage(imageMapper.selectPath(dealDetailVO.getPublisherImage()));
+        if (dealDetailVO.getTraderUid() != null){
+            dealDetailVO.setTraderImage(imageMapper.selectPath(dealDetailVO.getTraderImage()));
+        }
+        return dealDetailVO;
     }
 }

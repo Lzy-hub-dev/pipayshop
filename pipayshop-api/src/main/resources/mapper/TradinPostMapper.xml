@@ -19,15 +19,25 @@
         where t.tradin_id=#{tradinId}
     </select>
     <select id="selectTradinPostByUid" resultType="com.example.pipayshopapi.entity.vo.TraditionListVO">
-        select t.tradin_id,t.publisher_uid,t.trader_uid,t.type_id,t.content,t.point_balance,t.pi_balance,t.pi_address,u.user_name,u.user_image
+        select t.tradin_id,t.publisher_uid,t.trader_uid,t.type_id,t.content,t.point_balance,t.pi_balance,t.pi_address,u.user_name,u.user_image,t.status
         from tradin_post t
         join user_info u
         on u.uid=t.publisher_uid
         where t.publisher_uid=#{userId} or t.trader_uid=#{userId}
+        order by t.update_time desc
     </select>
     <select id="selectTraditionListCount" resultType="java.lang.Integer">
         select count(*)
         from tradin_post t
         where t.status = 0 and t.type_id = #{typeId}
+    </select>
+    <select id="selectDealDetail" resultType="com.example.pipayshopapi.entity.vo.DealDetailVO">
+        select t.tradin_id,t.publisher_uid,t.trader_uid,t.type_id,t.content,t.point_balance,t.pi_balance,t.pi_address,t.status,t.image_url,u1.user_name as publisherName,u1.user_image as publisherImage,u2.user_name as traderName,u2.user_image as traderImage
+        from tradin_post t
+        join user_info u1
+        on u1.uid=t.publisher_uid
+        left join user_info u2
+        on u2.uid=t.trader_uid
+        where t.tradin_id=#{tradinId}
     </select>
 </mapper>

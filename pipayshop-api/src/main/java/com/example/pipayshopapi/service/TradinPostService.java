@@ -2,7 +2,7 @@ package com.example.pipayshopapi.service;
 
 import com.example.pipayshopapi.entity.TradinPost;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.pipayshopapi.entity.dto.TradinPostDTO;
+import com.example.pipayshopapi.entity.vo.DealDetailVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.TraditionDetailVO;
 import com.example.pipayshopapi.entity.vo.TraditionListVO;
@@ -28,13 +28,14 @@ public interface TradinPostService extends IService<TradinPost> {
 
     void updateStatusByTradinId(String tradinId);
 
-    boolean upLoadImg(MultipartFile file, TradinPostDTO tradinPostDTO);
+    boolean upLoadImg(MultipartFile file,String token);
 
-    boolean upLoadPointBalance(TradinPostDTO tradinPostDTO);
+    boolean upLoadPointBalance(String token);
 
-    List<TraditionListVO> selectTradinPostByUid(String userId);
+    List<TraditionListVO> selectTradinPostByUid(String token);
 
-    boolean confirmTransaction(String userId, String tradinId);
+    boolean confirmTransaction(String token);
 
 
+    DealDetailVO selectDealDetail(String tradinId);
 }
