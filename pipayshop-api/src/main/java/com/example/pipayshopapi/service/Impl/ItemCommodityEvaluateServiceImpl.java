@@ -71,7 +71,6 @@ public class ItemCommodityEvaluateServiceImpl extends ServiceImpl<ItemCommodityE
      * 根据评价Id删除网店商品自己评价
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean deleteItemEvaluates(String evaluateId, String userId) {
         int result = itemCommodityEvaluateMapper.update(null, new UpdateWrapper<ItemCommodityEvaluate>()
                                                                     .eq("evaluate_id", evaluateId)

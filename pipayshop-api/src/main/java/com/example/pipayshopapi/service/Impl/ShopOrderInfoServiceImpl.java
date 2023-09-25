@@ -67,7 +67,6 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
 
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int delOrderByOrderId(String orderId) {
         if (orderId == null || "".equals(orderId)){
             return 0;
@@ -85,7 +84,6 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
 
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int completedOrder(String orderId) {
         return shopOrderInfoMapper.update(null, new UpdateWrapper<ShopOrderInfo>()
                 .eq("order_id", orderId)
@@ -137,7 +135,6 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void deleteFailOrders() {
         shopOrderInfoMapper.update(null, new UpdateWrapper<ShopOrderInfo>()
                 .eq("order_status", 3)
@@ -313,7 +310,6 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
      *
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int changePrice(String token) {
         Claims dataFromToken = TokenUtil.getDataFromToken(token);
         String orderId = dataFromToken.get("orderId", String.class);

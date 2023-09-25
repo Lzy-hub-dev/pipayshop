@@ -39,7 +39,6 @@ public class ItemCartServiceImpl extends ServiceImpl<ItemCartMapper, ItemCart> i
      * 放进购物车
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean putItemCartById(String userId, String commodityId,Integer sumCount,String commoditySpec) {
         ItemCart itemCart = new ItemCart();
         itemCart.setCartId(StringUtil.generateShortId());
@@ -56,7 +55,6 @@ public class ItemCartServiceImpl extends ServiceImpl<ItemCartMapper, ItemCart> i
      * 批量放出购物车
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean outItemCartById(List<String> commodityId,String cartId) {
         if (commodityId == null || commodityId.size()==0){
             return false;

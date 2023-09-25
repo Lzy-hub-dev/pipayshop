@@ -52,7 +52,6 @@ public class RechargePermissionsOrderServiceImpl extends ServiceImpl<RechargePer
 
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean addShopSum(String orderId) {
         RechargePermissionsOrder data = rechargePermissionsOrderService.rechargeComplete(orderId);
         // 增加实体店绑定数
@@ -65,7 +64,6 @@ public class RechargePermissionsOrderServiceImpl extends ServiceImpl<RechargePer
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean updateUploadBalanceInfo(String orderId) {
         RechargePermissionsOrder data = rechargePermissionsOrderService.rechargeComplete(orderId);
         // 更改可上架商品数值
@@ -82,7 +80,6 @@ public class RechargePermissionsOrderServiceImpl extends ServiceImpl<RechargePer
      * 生成未支付订单
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public String getUploadBalanceNoPayOrder(String token) {
         String orderId = StringUtil.generateShortId();
         Claims dataFromToken = TokenUtil.getDataFromToken(token);

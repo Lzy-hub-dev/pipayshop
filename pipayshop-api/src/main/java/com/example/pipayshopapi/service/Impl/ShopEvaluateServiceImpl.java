@@ -43,7 +43,6 @@ public class ShopEvaluateServiceImpl extends ServiceImpl<ShopEvaluateMapper, Sho
      * 增加实体店评价
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean addShopEvaluate(ShopEvaluate shopEvaluate) {
         shopEvaluate.setEvaluateId(StringUtil.generateShortId());
         int result = shopEvaluateMapper.insert(shopEvaluate);
@@ -55,7 +54,6 @@ public class ShopEvaluateServiceImpl extends ServiceImpl<ShopEvaluateMapper, Sho
      * 删除实体店评价列表
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean deleteShopEvaluate(String evaluateId, String userId) {
         int result = shopEvaluateMapper.update(null, new UpdateWrapper<ShopEvaluate>()
                 .eq("evaluate_id", evaluateId)

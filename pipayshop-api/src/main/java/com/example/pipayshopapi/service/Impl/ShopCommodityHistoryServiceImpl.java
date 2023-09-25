@@ -40,7 +40,6 @@ public class ShopCommodityHistoryServiceImpl extends ServiceImpl<ShopCommodityHi
      * @return
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean deleteHistory(String userId, String commodityId) {
         if (commodityId != null) {
             return shopCommodityHistoryMapper.delete(new LambdaQueryWrapper<ShopCommodityHistory>()

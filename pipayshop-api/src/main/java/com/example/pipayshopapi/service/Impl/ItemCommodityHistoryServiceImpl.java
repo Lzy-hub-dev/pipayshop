@@ -35,7 +35,6 @@ public class ItemCommodityHistoryServiceImpl extends ServiceImpl<ItemCommodityHi
      * @return
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean deleteHistory(String userId, String commodityId) {
         if (commodityId != null) {
             return itemCommodityHistoryMapper.delete(new LambdaQueryWrapper<ItemCommodityHistory>()
@@ -55,7 +54,6 @@ public class ItemCommodityHistoryServiceImpl extends ServiceImpl<ItemCommodityHi
      * @return
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean addHistory(ItemCommodityHistory itemCommodityHistory) {
         if (itemCommodityHistory == null || itemCommodityHistory.getCommodityId() == null || itemCommodityHistory.getUserId() == null) {
             log.error("参数不能为空");

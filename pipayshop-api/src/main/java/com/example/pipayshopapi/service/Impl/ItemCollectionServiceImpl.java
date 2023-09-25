@@ -27,7 +27,6 @@ public class ItemCollectionServiceImpl extends ServiceImpl<ItemCollectionMapper,
     ItemCollectionMapper collectionMapper;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int AddItemCommodityToCollection(String userId, String commodityId) {
         // 先判断是否已经是关注过的，是就直接把状态改为0
         Long count = collectionMapper.selectCount(new QueryWrapper<ItemCollection>()
@@ -44,7 +43,6 @@ public class ItemCollectionServiceImpl extends ServiceImpl<ItemCollectionMapper,
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int closeItemCommodityToCollection(String userId, String commodityId) {
         return collectionMapper.update(null, new UpdateWrapper<ItemCollection>()
                 .eq("user_id", userId)

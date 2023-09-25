@@ -45,7 +45,6 @@ public class ShopHotelRecordServiceImpl extends ServiceImpl<ShopHotelRecordMappe
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public Boolean createShopHotelRecord(ShopHotelRecord shopHotelRecord) {
         String recordId = StringUtil.generateShortId();
         shopHotelRecord.setRecordId(recordId);

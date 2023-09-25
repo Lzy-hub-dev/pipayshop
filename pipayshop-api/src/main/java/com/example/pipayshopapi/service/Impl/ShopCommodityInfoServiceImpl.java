@@ -114,7 +114,6 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
      * 根据商品id，更改商品的上下架状态
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean updateCommodityStatus(String commodityId, Integer status) {
         try {
             if (!(status==0||status==1)){
@@ -245,13 +244,11 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public String shopCommodityTopImageUp(MultipartFile multipartFile) {
         return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.SHOP_COMMODITY_TOP_IMAGE_UP,null);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public List<String> shopCommodityImageUp(MultipartFile[] multipartFile) {
         List<String> imageSizeList_1 = new ArrayList<>();
         List<String> imageSizeList_2 = new ArrayList<>();

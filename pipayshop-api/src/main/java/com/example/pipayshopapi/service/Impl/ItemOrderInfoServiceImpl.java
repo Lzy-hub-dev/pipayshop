@@ -89,7 +89,6 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int completedOrder(String orderId) {
         return itemOrderMapper.update(null, new UpdateWrapper<ItemOrder>()
                 .eq("order_id", orderId)
@@ -127,7 +126,6 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void deleteFailOrders() {
         itemOrderMapper.update(null, new UpdateWrapper<ItemOrder>()
                 .eq("order_status", 3)
@@ -289,7 +287,6 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
      *
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int changePrice(String token) {
         Claims dataFromToken = TokenUtil.getDataFromToken(token);
         String orderId = dataFromToken.get("orderId", String.class);

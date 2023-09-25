@@ -195,7 +195,7 @@ public class RechargeOrderInfoServiceImpl extends ServiceImpl<RechargeOrderInfoM
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public ResponseVO complete(CompleteDTO completeDTO) throws InterruptedException {
 
         log.error("complete------------------------------------------------------------"+completeDTO);
@@ -298,7 +298,6 @@ public class RechargeOrderInfoServiceImpl extends ServiceImpl<RechargeOrderInfoM
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public Boolean cancelled(String rechargeOrderId) {
         int update = rechargeOrderInfoMapper.update(null, new UpdateWrapper<RechargeOrderInfo>()
                 .eq("order_id", rechargeOrderId)
@@ -307,7 +306,6 @@ public class RechargeOrderInfoServiceImpl extends ServiceImpl<RechargeOrderInfoM
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public String getNoPidOrder(String token) {
         // 解密JWT获取数据
         Claims claims = TokenUtil.getDataFromToken(token);

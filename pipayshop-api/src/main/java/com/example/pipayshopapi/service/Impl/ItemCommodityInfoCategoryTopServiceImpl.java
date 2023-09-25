@@ -32,9 +32,6 @@ public class ItemCommodityInfoCategoryTopServiceImpl extends ServiceImpl<ItemCom
     @Override
     public List<ItemCommodityInfoCategoryTop> cateTopList() {
 
-        List<ItemCommodityInfoCategoryTop> cateTopList = categoryTopMapper.selectList(new QueryWrapper<ItemCommodityInfoCategoryTop>()
-                                                                                            .eq("del_flag",0));
-
         return categoryTopMapper.selectCateTopList();
 
     }

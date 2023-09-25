@@ -233,9 +233,6 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
 
     /**
      * 根据商品id，上架变为下架
-     *
-     * @param commodity
-     * @return
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -253,9 +250,6 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
 
     /**
      * 根据商品id，下架变为审核中
-     *
-     * @param commodity
-     * @return
      */
     @Override
     public boolean changeCommodityCheck(String commodity) {
@@ -320,7 +314,6 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public String itemTopImagsUp(MultipartFile multipartFile) {
         List<String> imageSizeList = new ArrayList<>();
         imageSizeList.add(ImageConstants.ITEM_TOP_IMAGS_UP_SMALL);

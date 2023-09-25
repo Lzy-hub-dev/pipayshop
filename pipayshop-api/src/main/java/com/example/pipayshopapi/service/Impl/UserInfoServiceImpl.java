@@ -254,7 +254,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
      * 根据用户Id更改用户语言标识
      * */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean updateLanguageByUid(String uid, String language) {
         int result = userInfoMapper.update(null, new UpdateWrapper<UserInfo>()
                                                             .eq("uid", uid)
@@ -267,7 +266,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
      * 更改头像
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean uploadUserImage(String userId, MultipartFile file) {
         List<String> sizeList = new ArrayList<>();
         sizeList.add(ImageConstants.USER_IMAGE_SIZE_SMALL);
@@ -303,7 +301,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
      * 根据用户Id更改用户国家标识
      * */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean updateCountryByUid(String uid, String country) {
         int result = userInfoMapper.update(null, new UpdateWrapper<UserInfo>()
                                                             .eq("uid", uid)
@@ -408,7 +405,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean insertRegisterData(UserRegisterDTO userRegisterDTO) {
         // 将密码进行BCrypt加密再存到数据库中
         String passWord = userRegisterDTO.getPassword();

@@ -51,7 +51,6 @@ public class ShopTagsServiceImpl extends ServiceImpl<ShopTagsMapper, ShopTags> i
      * 根据标签id删除标签
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public Boolean deleteShopTagsById(String tagsId) {
         return shopTagsMapper.update(null, new LambdaUpdateWrapper<ShopTags>()
                 .eq(ShopTags::getTagId, tagsId)
@@ -63,7 +62,6 @@ public class ShopTagsServiceImpl extends ServiceImpl<ShopTagsMapper, ShopTags> i
      * 根据标签id修改标签
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public Boolean updateShopTagsById(ShopTags shopTags) {
         return shopTagsMapper.update(shopTags,new LambdaQueryWrapper<ShopTags>()
                 .eq(ShopTags::getDelFlag,0)
@@ -74,7 +72,6 @@ public class ShopTagsServiceImpl extends ServiceImpl<ShopTagsMapper, ShopTags> i
      * 新增标签
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public Boolean addShopTags(ShopTags shopTags) {
         return shopTagsMapper.insert(shopTags) > 0;
     }

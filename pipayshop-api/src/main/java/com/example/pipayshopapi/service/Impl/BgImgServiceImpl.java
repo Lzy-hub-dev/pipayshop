@@ -36,12 +36,8 @@ public class BgImgServiceImpl extends ServiceImpl<BgImgMapper, BgImg> implements
 
     /**
      * 新增首页背景轮播图
-     *
-     * @param file
-     * @return
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public Boolean addBgImg(MultipartFile file, BgImgDTO bgImgDTO) {
         if (file == null) {
             log.error("未选择图片");
@@ -67,7 +63,6 @@ public class BgImgServiceImpl extends ServiceImpl<BgImgMapper, BgImg> implements
      * 逻辑删除店的首页背景图片
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean logicDeleteBgImg(String bgId) {
         int result = bgImgMapper.update(null, new UpdateWrapper<BgImg>()
                 .eq("bg_id", bgId)

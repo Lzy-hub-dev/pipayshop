@@ -64,7 +64,6 @@ public class ShopCommodityLiveServiceImpl extends ServiceImpl<ShopCommodityLiveM
      * 发布实体店住的服务
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean insertShopLive(ShopCommodityLive shopCommodityLive) {
         shopCommodityLive.setCommodityId(StringUtil.generateShortId());
         int result = shopCommodityLiveMapper.insert(shopCommodityLive);
@@ -75,7 +74,6 @@ public class ShopCommodityLiveServiceImpl extends ServiceImpl<ShopCommodityLiveM
      * 根据房型id更改房型信息
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean updateShopLive(ShopCommodityLive shopCommodityLive) {
         int result = shopCommodityLiveMapper.update(null, new UpdateWrapper<ShopCommodityLive>()
                 .eq("commodity_id", shopCommodityLive.getCommodityId())

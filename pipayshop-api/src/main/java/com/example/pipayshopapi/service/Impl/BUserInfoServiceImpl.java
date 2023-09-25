@@ -66,7 +66,6 @@ public class BUserInfoServiceImpl extends ServiceImpl<BUserInfoMapper, BUserInfo
 
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean updatePassWord(BUserLoginVO bUserLoginVO) {
         int update = bUserInfoMapper.update(null, new UpdateWrapper<BUserInfo>()
                 .eq("pi_name", bUserLoginVO.getPiName())

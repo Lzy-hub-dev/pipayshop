@@ -223,7 +223,6 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
      * 根据实体店id删除实体店
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public Boolean deleteShopInfoById(String shopId) {
         return shopInfoMapper.update(null, new LambdaUpdateWrapper<ShopInfo>()
                 .eq(ShopInfo::getShopId, shopId)
@@ -235,7 +234,6 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
      * 根据实体店id修改实体店
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public Boolean updateShopInfoById(ShopInfo shopInfo) {
         return shopInfoMapper.update(shopInfo, new LambdaQueryWrapper<ShopInfo>()
                 .eq(ShopInfo::getStatus, 0)
@@ -364,7 +362,6 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     public Boolean upVipByShopIdList(String shopIds) {
         String[] shopIdArray = shopIds.split(",");
         long count = Arrays.stream(shopIdArray)
-                .parallel()
                 .peek(shopId -> {
                     shopInfoMapper.update(null, new UpdateWrapper<ShopInfo>()
                             .eq("shop_id", shopId)
@@ -393,7 +390,6 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     }
 
     @Override
-    @Transactional
     public Boolean setShopScore() {
         Integer update = shopInfoMapper.setItemScore();
         return update >0;
@@ -443,7 +439,6 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
 
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public String shopTopImageUp(MultipartFile multipartFile) {
         List<String> imageSizeList = new ArrayList<>();
         imageSizeList.add(ImageConstants.SHOP_TOP_IMAGE_UP_SMALL);
@@ -451,7 +446,6 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public String shopImageUp(MultipartFile multipartFile) {
         List<String> imageSizeList = new ArrayList<>();
         imageSizeList.add(ImageConstants.SHOP_IMAGE_UP_BIG);

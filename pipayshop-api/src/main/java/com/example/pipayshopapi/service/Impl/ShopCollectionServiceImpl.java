@@ -44,7 +44,6 @@ public class ShopCollectionServiceImpl extends ServiceImpl<ShopCollectionMapper,
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int removeShopCollection(String userId, String commodityId) {
         return shopCollectionMapper.update(null, new UpdateWrapper<ShopCollection>()
                 .eq("user_id", userId)

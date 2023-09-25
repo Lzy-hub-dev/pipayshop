@@ -41,7 +41,6 @@ public class BuyerDataServiceImpl extends ServiceImpl<BuyerDataMapper, BuyerData
      * 根据收货Id更改买家的收货地址
      * */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean updateBuyerDataById(BuyerData buyerData) {
         int result = buyerDataMapper.update(null, new UpdateWrapper<BuyerData>()
                                                                 .eq("buyer_data_id", buyerData.getBuyerDataId())
@@ -55,7 +54,6 @@ public class BuyerDataServiceImpl extends ServiceImpl<BuyerDataMapper, BuyerData
      * 插入买家的收货地址
      * */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean insectBuyerData(BuyerData buyerData) {
         buyerData.setBuyerDataId(StringUtil.generateShortId());
         int result = buyerDataMapper.insert(buyerData);
@@ -66,7 +64,6 @@ public class BuyerDataServiceImpl extends ServiceImpl<BuyerDataMapper, BuyerData
      * 根据id删除买家的收货地址
      * */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean deleteBuyerDataById(String buyerId) {
         int result = buyerDataMapper.update(null, new UpdateWrapper<BuyerData>()
                                                                 .eq("buyer_data_id", buyerId)

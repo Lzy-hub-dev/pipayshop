@@ -138,7 +138,6 @@ public class ShopCommodityLiveInfoServiceImpl extends ServiceImpl<ShopCommodityL
      * 根据房型id更改房型的详细信息
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean updateShopLiveInfo(ShopCommodityLiveInfo shopCommodityLiveInfo) {
         int result = shopCommodityLiveInfoMapper.update(shopCommodityLiveInfo, new QueryWrapper<ShopCommodityLiveInfo>()
                   .eq("room_id", shopCommodityLiveInfo.getRoomId()));
@@ -149,7 +148,6 @@ public class ShopCommodityLiveInfoServiceImpl extends ServiceImpl<ShopCommodityL
      * 根据房型id删除房型的详细信息
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean deleteShopLiveInfo(String roomId) {
         int result = shopCommodityLiveInfoMapper.update(null, new UpdateWrapper<ShopCommodityLiveInfo>()
                 .eq("room_id", roomId)
@@ -247,13 +245,11 @@ public class ShopCommodityLiveInfoServiceImpl extends ServiceImpl<ShopCommodityL
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public String roomTopImageUp(MultipartFile multipartFile) {
         return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.ROOM_TOP_IMG,null);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public String roomImageUp(MultipartFile multipartFile) {
         return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.ROOM_IMAGE_LIST,null);
     }

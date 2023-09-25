@@ -30,7 +30,6 @@ public class ChatRecordInfoServiceImpl extends ServiceImpl<ChatRecordInfoMapper,
     ChatRecordInfoMapper chatRecordInfoMapper;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void deleteChatRecord() {
         chatRecordInfoMapper.deleteOutTime();
     }
@@ -44,7 +43,6 @@ public class ChatRecordInfoServiceImpl extends ServiceImpl<ChatRecordInfoMapper,
         }
         // 插入
         long count = chatRecordInfoList.stream()
-                .parallel()
                 .filter(Objects::nonNull)
                 .peek(chatRecordInfo -> {
                     chatRecordInfoMapper.insert(chatRecordInfo);

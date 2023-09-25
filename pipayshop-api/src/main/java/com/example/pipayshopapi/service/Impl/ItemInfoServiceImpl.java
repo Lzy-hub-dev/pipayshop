@@ -145,7 +145,6 @@ public class ItemInfoServiceImpl extends ServiceImpl<ItemInfoMapper, ItemInfo> i
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public String itemTopCategoryImags(MultipartFile multipartFile) {
         return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.ITEM_TOP_CATEGORY_IMG,null);
     }
