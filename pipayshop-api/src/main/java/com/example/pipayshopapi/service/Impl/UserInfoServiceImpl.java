@@ -30,6 +30,7 @@ import org.lionsoul.ip2region.xdb.Searcher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -80,8 +81,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Resource
     private AuthenticationManager authenticationManager;
 
-    @Resource
-    private RedisUtil redisUtil;
 
     @Resource
     private RedisUtil<String> redisUtil;

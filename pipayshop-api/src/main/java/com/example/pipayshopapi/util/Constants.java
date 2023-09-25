@@ -70,18 +70,22 @@ public class Constants {
      * PAYPAL接口路径
      */
     public static final String PAYPAL_BASE_PATH = "https://api-m.paypal.com";
-
-
     /**
-     * 校验码的存储时间(三分钟)
+     * 交易所订单延时交换机
      */
-    public static final String CHECK_CODE_VALID_TIME  = "60 * 3";
-
-
+    public static final String DELAYED_EXCHANGE_NAME = "tradinOrderDelayed.exchange";
     /**
-     * 校验码的存储key前缀
+     * 交易所订单延时队列
      */
-    public static final String CHECK_CODE_PRE = "check_";
+    public static final String DELAYED_QUEUE_NAME = "tradinOrderDelayed.queue";
+    /**
+     * 交易所订单延时关键字
+     */
+    public static final String DELAYED_ROUTING_KEY = "tradinOrderDelayed.routingkey";
+
+
+
+
 
 
 }

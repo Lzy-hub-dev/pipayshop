@@ -28,5 +28,5 @@ public interface TradinPostMapper extends BaseMapper<TradinPost> {
 
     Integer selectTraditionListCount(Integer typeId);
 
-    DealDetailVO selectDealDetail(String tradinId);
+
 }

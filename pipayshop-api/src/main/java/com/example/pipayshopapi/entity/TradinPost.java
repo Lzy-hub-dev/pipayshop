@@ -41,10 +41,7 @@ public class TradinPost implements Serializable {
      */
     private String publisherUid;
 
-    /**
-     * 交易者uid
-     */
-    private String traderUid;
+
 
     /**
      * 0：换积分 1：换pi币
@@ -71,15 +68,12 @@ public class TradinPost implements Serializable {
      */
     private String piAddress;
 
-    /**
-     * 交易凭证
-     */
-    private String imageUrl;
+
 
     /**
-     * 日志id
+     * 订单id
      */
-    private String journalId;
+    private String orderId;
 
     /**
      * 0：发布 1：有人查看 2：交易进行中 3：交易完成 4:取消
@@ -96,17 +90,17 @@ public class TradinPost implements Serializable {
      */
     private LocalDateTime updateTime;
 
-    public TradinPost(String tradinId, String publisherUid, Integer typeId, String content, BigDecimal pointBalance, BigDecimal piBalance,String journalId) {
+    public TradinPost(String tradinId, String publisherUid, Integer typeId, String content, BigDecimal pointBalance, BigDecimal piBalance) {
         this.tradinId = tradinId;
         this.publisherUid = publisherUid;
         this.typeId = typeId;
         this.content = content;
         this.pointBalance = pointBalance;
         this.piBalance = piBalance;
-        this.journalId=journalId;
+
     }
 
-    public TradinPost(String tradinId, String publisherUid, Integer typeId, String content, BigDecimal pointBalance, BigDecimal piBalance, String piAddress,String journalId) {
+    public TradinPost(String tradinId, String publisherUid, Integer typeId, String content, BigDecimal pointBalance, BigDecimal piBalance, String piAddress) {
         this.tradinId = tradinId;
         this.publisherUid = publisherUid;
         this.typeId = typeId;
@@ -114,7 +108,7 @@ public class TradinPost implements Serializable {
         this.pointBalance = pointBalance;
         this.piBalance = piBalance;
         this.piAddress = piAddress;
-        this.journalId=journalId;
+
     }
 
 
