@@ -30,6 +30,7 @@ import org.lionsoul.ip2region.xdb.Searcher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -46,6 +47,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -79,8 +81,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Resource
     private AuthenticationManager authenticationManager;
 
-    @Resource
-    private RedisCache redisCache;
 
     @Resource
     private RedisUtil<String> redisUtil;
@@ -184,7 +184,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         // 根据pi_name查询数据库
         String userName = loginDTO.getUserName();
         // 将用户信息发给authentication
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDTO.getUserName(),loginDTO.getUserName());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userName,userName);
         // 调用mapper层的UserDetailService方法，校验信息
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
 
@@ -200,7 +200,12 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         // 生产jwt
         String jwt = JwtUtil.createJWT(userId);
         //authenticate存入redis
-        redisCache.setCacheObject("login:"+userId,loginUser);
+//        redisUtil.setCacheObject("login:"+userId,loginUser,1, TimeUnit.DAYS);
+
+        //存入SecurityContextHolder
+        UsernamePasswordAuthenticationToken authenticationToken1 =
+                new UsernamePasswordAuthenticationToken(loginUser,null,null);
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken1);
         //把token响应给前端
         HashMap<String,Object> map = new HashMap<>();
         map.put("token",jwt);
@@ -211,7 +216,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     public ResponseResultVO logout(String userId) {
 
-        redisCache.deleteObject("login:"+userId);
+        redisUtil.deleteObject("login:"+userId);
         return new ResponseResultVO(200,"退出成功",null);
     }
 

@@ -50,6 +50,7 @@ public class Constants {
      */
     public static final Integer REGION_VALID_TIME = 60 * 60 * 24;
 
+
     /**
      * 保存交易所图片凭证路径
      */
@@ -68,7 +69,23 @@ public class Constants {
     /**
      * PAYPAL接口路径
      */
-    public static final String PAYPAL_BASE_PATH = "https://api-m.sandbox.paypal.com";
+    public static final String PAYPAL_BASE_PATH = "https://api-m.paypal.com";
+    /**
+     * 交易所订单延时交换机
+     */
+    public static final String DELAYED_EXCHANGE_NAME = "tradinOrderDelayed.exchange";
+    /**
+     * 交易所订单延时队列
+     */
+    public static final String DELAYED_QUEUE_NAME = "tradinOrderDelayed.queue";
+    /**
+     * 交易所订单延时关键字
+     */
+    public static final String DELAYED_ROUTING_KEY = "tradinOrderDelayed.routingkey";
+
+
+
+
 
 
 }

@@ -1,28 +1,18 @@
 package com.example.pipayshopapi.controller;
 
 
-import com.example.pipayshopapi.entity.dto.TradinPostDTO;
-import com.example.pipayshopapi.entity.dto.TransactionDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.service.AccountInfoService;
+import com.example.pipayshopapi.service.TradinOrderService;
 import com.example.pipayshopapi.service.TradinPostService;
 import com.example.pipayshopapi.service.TradinRateService;
-import com.example.pipayshopapi.util.Constants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.json.JSONObject;
-import org.springframework.http.*;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.util.Base64;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * <p>
@@ -47,6 +37,9 @@ public class AccountInfoController {
     @Resource
     private TradinRateService tradinRateService;
 
+    @Resource
+    private TradinOrderService tradinOrderService;
+
     @PostMapping("selectAccountById/{uid}")
     @ApiOperation("根据用户Id查找用户账户表的积分余额和pi币余额")
     public ResponseVO selectAccountById(@PathVariable String uid){
@@ -63,8 +56,8 @@ public class AccountInfoController {
     @ApiOperation("发布交易")
     public ResponseVO publishTradition(String token){
         try {
-           int insert= tradinPostService.publishTradition(token);
-            if (insert < 1){
+           boolean insert= tradinPostService.publishTradition(token);
+            if ( ! insert ){
                 throw new RuntimeException();
             }
             return ResponseVO.getSuccessResponseVo("发布成功");
@@ -82,7 +75,7 @@ public class AccountInfoController {
             return ResponseVO.getSuccessResponseVo(traditionDTOList);
         }catch (Exception e){
             e.printStackTrace();
-            throw new RuntimeException("发布失败");
+            throw new RuntimeException("获取交易列表失败");
         }
     }
 
@@ -97,25 +90,25 @@ public class AccountInfoController {
             throw new RuntimeException("获取交易详情失败");
         }
     }
-    @PostMapping("upLoadImg")
-    @ApiOperation("提交pi币转账凭证")
-    public ResponseVO upLoadImg(MultipartFile file, TradinPostDTO tradinPostDTO){
+
+    @PostMapping("generateTradeOrder")
+    @ApiOperation("生成交易订单")
+    public ResponseVO generateTradeOrder(String tradinId,String buyerId){
         try {
-            boolean insert = tradinPostService.upLoadImg(file,tradinPostDTO);
-            if ( !insert ){
-                throw new RuntimeException();
-            }
-            return ResponseVO.getSuccessResponseVo("提交凭证成功");
+            String orderId=tradinOrderService.generateTradeOrder(tradinId,buyerId);
+            return ResponseVO.getSuccessResponseVo(orderId);
         }catch (Exception e){
             e.printStackTrace();
-            throw new RuntimeException("提交凭证失败");
+            throw new RuntimeException("生成交易订单失败");
         }
     }
+
+
     @PostMapping("upLoadPointBalance")
-    @ApiOperation("提交转积分")
-    public ResponseVO upLoadPointBalance( TradinPostDTO tradinPostDTO){
+    @ApiOperation("提交积分")
+    public ResponseVO upLoadPointBalance( String token){
         try {
-            boolean insert = tradinPostService.upLoadPointBalance(tradinPostDTO);
+            boolean insert = tradinOrderService.upLoadPointBalance(token);
             if ( !insert ){
                 throw new RuntimeException("提交转积分失败");
             }
@@ -126,24 +119,26 @@ public class AccountInfoController {
             throw new RuntimeException("提交转积分失败");
         }
     }
-    @GetMapping("selectTradinPostByUid/{userId}")
-    @ApiOperation("获取用户交易列表")
-    public ResponseVO selectTradinPostByUid(@PathVariable String userId){
+    @PostMapping("upLoadImg")
+    @ApiOperation("提交pi币转账凭证")
+    public ResponseVO upLoadImg(MultipartFile file, String token){
         try {
-            List<TraditionListVO> traditionDTOList= tradinPostService.selectTradinPostByUid(userId);
-            return ResponseVO.getSuccessResponseVo(traditionDTOList);
+            boolean insert = tradinOrderService.upLoadImg(file,token);
+            if ( !insert ){
+                throw new RuntimeException();
+            }
+            return ResponseVO.getSuccessResponseVo("提交凭证成功");
         }catch (Exception e){
             e.printStackTrace();
-            throw new RuntimeException("获取交易列表失败");
+            throw new RuntimeException("提交凭证失败");
         }
     }
 
-
     @PostMapping("confirmTransaction")
     @ApiOperation("确认交易")
-    public ResponseVO confirmTransaction( String userId,String tradinId){
+    public ResponseVO confirmTransaction(String token){
         try {
-            boolean update =tradinPostService.confirmTransaction(userId,tradinId);
+            boolean update =tradinOrderService.confirmTransaction(token);
             if (!update){
                 throw new RuntimeException("确认交易失败");
             }
@@ -154,6 +149,47 @@ public class AccountInfoController {
         }
     }
 
+
+    @GetMapping("selectTradinPostByUid")
+    @ApiOperation("获取用户交易列表")
+    public ResponseVO selectTradinPostByUid(String token){
+        try {
+            List<TraditionListVO> traditionDTOList= tradinPostService.selectTradinPostByUid(token);
+            return ResponseVO.getSuccessResponseVo(traditionDTOList);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("获取交易列表失败");
+        }
+    }
+
+
+
+    @GetMapping("selectTradinyOrderByUid")
+    @ApiOperation("获取用户交易订单列表")
+    public ResponseVO selectTradinyOrderByUid(String token){
+        try {
+            List<TradinOrderListVO> tradinyOrderListVOS= tradinOrderService.selectTradinyOrderByUid(token);
+            return ResponseVO.getSuccessResponseVo(tradinyOrderListVOS);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("获取用户交易订单列表失败");
+        }
+    }
+
+
+    @GetMapping("selectTradinOrderDetail/{orderId}")
+    @ApiOperation("交易双方获取交易订单详情接口")
+    public ResponseVO selectTradinyOrderDetail(@PathVariable String orderId){
+        try {
+            TradinOrderDetailVO tradinOrderDetailVO =tradinOrderService.selectTradinOrderDetail(orderId);
+            return ResponseVO.getSuccessResponseVo(tradinOrderDetailVO);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("交易双方获取交易详情失败");
+        }
+    }
+
+
     @GetMapping("selectAllTradinRate")
     @ApiOperation("获取汇率")
     public ResponseVO selectAllTradinRate(  ){
@@ -163,14 +199,9 @@ public class AccountInfoController {
             return ResponseVO.getSuccessResponseVo(tradinRateDTOList);
         }catch (Exception e){
             e.printStackTrace();
-            throw new RuntimeException("提交转积分失败");
+            throw new RuntimeException("获取汇率失败");
         }
     }
-
-
-
-
-
 
 
     @PostMapping("/api/orders/{orderId}/capture")

@@ -1,5 +1,6 @@
 package com.example.pipayshopapi.util;
 
+import com.sun.prism.null3d.NULL3DPipeline;
 import io.jsonwebtoken.*;
 
 import java.nio.charset.StandardCharsets;
@@ -23,6 +24,24 @@ public class TokenUtil {
                 .claim("pi_name", piName)
                 .setExpiration(new Date(System.currentTimeMillis() + Constants.USER_ACTIVE_TIME))
                 .signWith(SignatureAlgorithm.HS256, Constants.TOKEN_SECRET)
+                .compact();
+    }
+
+    /**
+     * 获取token，将传递的数据封装进JWT的荷载中
+     */
+    public static String getTradinOrderToken(String orderId, String userId) throws IllegalArgumentException {
+        if (orderId == null || userId == null) {
+            throw new IllegalArgumentException("订单号和用户ID不能为空");
+        }
+        JwtBuilder jwtBuilder = Jwts.builder();
+        return jwtBuilder
+                .setHeaderParam("typ", "JWT")
+                .setHeaderParam("alg", "HS256")
+                .claim("orderId", orderId)
+                .claim("userId", userId)
+                .setExpiration(new Date(System.currentTimeMillis() + Constants.USER_ACTIVE_TIME))
+                .signWith(SignatureAlgorithm.HS256, Constants.TOKEN_SECRET.getBytes(StandardCharsets.UTF_8))
                 .compact();
     }
 

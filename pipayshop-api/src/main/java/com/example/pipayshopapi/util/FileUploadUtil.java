@@ -157,7 +157,6 @@ public class FileUploadUtil {
                     }
                     String newFileName = file.getAbsolutePath()
                             .replaceFirst("\\.([a-z]+)", "_" + length +"_" + wide + "."+fileExtension);
-                    System.out.println(newFileName);
                     Thumbnails.of(file)
                             .size(length, wide)
                             .outputFormat(fileExtension)

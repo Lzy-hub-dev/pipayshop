@@ -19,6 +19,16 @@ public class AccountInfoVO {
     private BigDecimal pointBalance;
 
     /**
+     * 可用积分
+     */
+    private BigDecimal availableBalance;
+
+    /**
+     * 冻结积分
+     */
+    private BigDecimal frozenBalance;
+
+    /**
      * pi币余额
      */
     private BigDecimal piBalance;

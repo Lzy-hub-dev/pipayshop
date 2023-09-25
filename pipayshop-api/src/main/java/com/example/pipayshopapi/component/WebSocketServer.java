@@ -85,7 +85,7 @@ public class WebSocketServer {
         // 返送到消息队列去
         rabbitTemplate.convertAndSend("DailyActive","DailyActive",String.valueOf(dailyActiveCount.size()));
         // 自动退出登录
-        userInfoService.logout(userId);
+//        userInfoService.logout(userId);
     }
 
 

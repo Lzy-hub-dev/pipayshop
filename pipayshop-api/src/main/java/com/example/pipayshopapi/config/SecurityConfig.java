@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 放行图片
                 .antMatchers("/images/**").permitAll()
                 // 放行websocker
-                .antMatchers("/dailyActive/**").permitAll()
+                .antMatchers("/dailyActive/**","/TradinPostSocket/**").permitAll()
                 // 放行swagger
                 .antMatchers("/swagger-ui.html/**","/webjars/**","/swagger-resources/**","/v2/**").permitAll()
                 // 除上面外的所有请求全部需要鉴权认证

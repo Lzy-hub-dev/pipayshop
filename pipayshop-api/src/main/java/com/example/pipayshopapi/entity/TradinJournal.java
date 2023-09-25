@@ -106,22 +106,16 @@ public class TradinJournal implements Serializable {
      */
     private Date createTime;
 
-    public TradinJournal(String journalId, String publisherUid, Integer typeId, BigDecimal pointBalance, BigDecimal piBalance, BigDecimal publisherPointBalanceBefore, BigDecimal publisherPointBalanceAfter) {
+    public TradinJournal(String journalId, String publisherUid, String traderUid, Integer typeId, BigDecimal pointBalance, BigDecimal piBalance, BigDecimal publisherPointBalanceBefore, BigDecimal publisherPointBalanceAfter, BigDecimal traderPointBalanceBefore, BigDecimal traderPointBalanceAfter) {
         this.journalId = journalId;
         this.publisherUid = publisherUid;
+        this.traderUid = traderUid;
         this.typeId = typeId;
         this.pointBalance = pointBalance;
         this.piBalance = piBalance;
         this.publisherPointBalanceBefore = publisherPointBalanceBefore;
         this.publisherPointBalanceAfter = publisherPointBalanceAfter;
-
-    }
-
-    public TradinJournal(String journalId, String publisherUid, Integer typeId, BigDecimal pointBalance, BigDecimal piBalance) {
-        this.journalId = journalId;
-        this.publisherUid = publisherUid;
-        this.typeId = typeId;
-        this.pointBalance = pointBalance;
-        this.piBalance = piBalance;
+        this.traderPointBalanceBefore = traderPointBalanceBefore;
+        this.traderPointBalanceAfter = traderPointBalanceAfter;
     }
 }
