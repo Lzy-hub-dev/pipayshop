@@ -14,6 +14,8 @@ import com.example.pipayshopapi.util.CreateImageCode;
 import com.example.pipayshopapi.util.RedisUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,6 +40,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/pipayshopapi/user-info")
 public class UserInfoController {
+
+    private static final Logger log = LoggerFactory.getLogger(UserInfoController.class);
 
     @Resource
     private UserInfoService userInfoService;
@@ -254,11 +258,12 @@ public class UserInfoController {
     /**
      * 普通浏览器登录
      */
-    @GetMapping("userRegister")
+    @PostMapping("userRegister")
     @ApiOperation("普通浏览器登录")
     public ResponseVO<ResponseResultVO> userRegister(HttpServletRequest request, RegisterDTO registerDTO){
         try {
-            ResponseResultVO  responseResultVO  = userInfoService.userRegister(request.getSession().getId(),registerDTO);
+
+            ResponseResultVO  responseResultVO  = userInfoService.userRegister(request.getHeader("sessionID"),registerDTO);
             if (responseResultVO  == null) {
                 throw new BusinessException();
             }
@@ -284,6 +289,7 @@ public class UserInfoController {
             redisUtil.set(Constants.CHECK_CODE_PRE + sessionId, verifyCode);
             // 把验证码图片设置为响应正文并输出到客户端
             response.setContentType("image/jpeg");
+            response.setHeader("sessionID",sessionId);
             out = response.getOutputStream();
             ImageIO.write(code.getBufferedImage(), "jpeg", out);
         } catch (IOException e) {

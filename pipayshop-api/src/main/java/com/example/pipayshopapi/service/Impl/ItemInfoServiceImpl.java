@@ -144,8 +144,5 @@ public class ItemInfoServiceImpl extends ServiceImpl<ItemInfoMapper, ItemInfo> i
         return update >0;
     }
 
-    @Override
-    public String itemTopCategoryImags(MultipartFile multipartFile) {
-        return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.ITEM_TOP_CATEGORY_IMG,null);
-    }
+
 }

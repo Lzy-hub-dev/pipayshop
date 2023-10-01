@@ -11,10 +11,10 @@ import com.example.pipayshopapi.service.BgImgService;
 import com.example.pipayshopapi.util.FileUploadUtil;
 import com.example.pipayshopapi.util.StringUtil;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,17 +38,9 @@ public class BgImgServiceImpl extends ServiceImpl<BgImgMapper, BgImg> implements
      * 新增首页背景轮播图
      */
     @Override
-    public Boolean addBgImg(MultipartFile file, BgImgDTO bgImgDTO) {
-        if (file == null) {
-            log.error("未选择图片");
-            return false;
-        }
-        if (bgImgDTO == null) {
-            log.error("参数列表为空！");
-            return false;
-        }
-        String picPath = FileUploadUtil.allUploadImageData(file, imageMapper, FileUploadUtil.BG_IMG,null);
-        return bgImgMapper.insert(new BgImg(StringUtil.generateShortId(),picPath,bgImgDTO.getCategory(),bgImgDTO.getContentId())) > 0;
+    public Boolean addBgImg(BgImgDTO bgImgDTO) {
+
+        return bgImgMapper.insert(new BgImg(StringUtil.generateShortId(),bgImgDTO.getImgUrl(),bgImgDTO.getCategory(),bgImgDTO.getContentId())) > 0;
     }
 
     /**
@@ -57,6 +49,14 @@ public class BgImgServiceImpl extends ServiceImpl<BgImgMapper, BgImg> implements
     @Override
     public List<BgImgVO> selectBgImgList(int category) {
         return bgImgMapper.selectBgImgList(category);
+    }
+
+    @Override
+    public String bgCategoryImage(MultipartFile multipartFile) {
+        List<String> imageSize = new ArrayList<>();
+        imageSize.add("400,300");
+        return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.BG_IMG,imageSize);
+
     }
 
     /**

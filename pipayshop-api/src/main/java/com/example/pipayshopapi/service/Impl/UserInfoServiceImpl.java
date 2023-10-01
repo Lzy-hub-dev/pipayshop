@@ -27,6 +27,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.FileUpload;
 import org.lionsoul.ip2region.xdb.Searcher;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -92,12 +93,14 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     ImageMapper imageMapper;
 
 
+
     /**
      *  验证登录
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserInfoVO userInfoVO = new UserInfoVO();
         String userId = loginDTOTmp.getUserId();
         String userName=loginDTOTmp.getUserName();
         //根据用户名查询用户信息
@@ -150,7 +153,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                     throw new RuntimeException();
                 }
 
-                return new LoginUser(newUser);
+                BeanUtils.copyProperties(newUser,userInfoVO);
+                return new LoginUser(userInfoVO);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -169,8 +173,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         String region = getIp2Region(ip);
         LoginRecord loginRecord = new LoginRecord(user.getUid(), ip, region, new Date(),userName);
         loginRecordMapper.insert(loginRecord);
+        BeanUtils.copyProperties(user,userInfoVO);
         //封装成UserDetails对象返回
-        return new LoginUser(user);
+        return new LoginUser(userInfoVO);
     }
 
     /**
@@ -194,9 +199,16 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         }
         // 获取用户
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
-        UserInfo userInfo = loginUser.getUserInfo();
+        UserInfoVO userInfo = loginUser.getUserInfoVO();
         String userId=userInfo.getUid();
-
+        // 检查是否有外部登录密码
+        Long count = userRegisterMapper.selectCount(new QueryWrapper<UserRegister>()
+                .eq("pi_name", userInfo.getPiName()));
+        if (count == 0) {
+            userInfo.setFirstLogin(0);
+        } else {
+            userInfo.setFirstLogin(1);
+        }
         // 生产jwt
         String jwt = JwtUtil.createJWT(userId);
         //authenticate存入redis
@@ -425,6 +437,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         try {
             // 校验码匹配
             if (!registerDTO.getCheckCode().equalsIgnoreCase(redisUtil.get(Constants.CHECK_CODE_PRE + sessionId))){
+                log.error("sessionID:========================"+sessionId);
                 // 验证码不一致
                 throw new BusinessException("图片验证码不正确");
             }
@@ -447,12 +460,15 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             if (userInfo == null){
                 throw new BusinessException("用户数据不存在");
             }
+            UserInfoVO userInfoVO = new UserInfoVO();
+            BeanUtils.copyProperties(userInfo,userInfoVO);
+            userInfoVO.setFirstLogin(1);
             // 生成token
             String jwt = JwtUtil.createJWT(uid);
             //把token响应给前端
             HashMap<String,Object> map = new HashMap<>(1);
             map.put("token",jwt);
-            map.put("user",userInfo);
+            map.put("user",userInfoVO);
             return new ResponseResultVO(200,"登陆成功",map);
         } finally {
             // 无论是否成功，都要令上一次的验证码失效
