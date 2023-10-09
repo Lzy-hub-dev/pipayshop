@@ -56,10 +56,7 @@ public class UserInfoVO implements Serializable {
      */
     private String country;
 
-    /**
-     * 是否是首次注册 0:首次 1：非首次
-     */
-    private Integer firstLogin;
+
 
     /**
      * 登录令牌

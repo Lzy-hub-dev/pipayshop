@@ -32,4 +32,6 @@ public class ItemListVO {
      * 用户头像
      */
     private String userImage;
+
+    private Integer follows;
 }

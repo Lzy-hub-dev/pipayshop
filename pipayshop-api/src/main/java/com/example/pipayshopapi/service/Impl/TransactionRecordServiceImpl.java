@@ -42,7 +42,7 @@ public class TransactionRecordServiceImpl extends ServiceImpl<TransactionRecordM
         // 解密JWT获取数据，记录交易日志
         Claims claims = TokenUtil.getDataFromToken(token);
         String shopId = claims.get("shopId", String.class);
-        String userId = claims.get("user_id", String.class);
+        String userId = claims.get("userId", String.class);
         BigDecimal transactionAmount = BigDecimal.valueOf(Double.parseDouble(claims.get("transactionAmount", String.class)));
         int insert = transactionRecordMapper.insert(new TransactionRecord(null, StringUtil.generateShortId()
                 , shopId, userId, transactionAmount, null, null));

@@ -201,14 +201,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
         UserInfoVO userInfo = loginUser.getUserInfoVO();
         String userId=userInfo.getUid();
-        // 检查是否有外部登录密码
-        Long count = userRegisterMapper.selectCount(new QueryWrapper<UserRegister>()
-                .eq("pi_name", userInfo.getPiName()));
-        if (count == 0) {
-            userInfo.setFirstLogin(0);
-        } else {
-            userInfo.setFirstLogin(1);
-        }
         // 生产jwt
         String jwt = JwtUtil.createJWT(userId);
         //authenticate存入redis
@@ -427,9 +419,19 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         String passWord = userRegisterDTO.getPassword();
         String hashPassword = StringUtil.hashPassword(passWord);
         userRegisterDTO.setPassword(hashPassword);
-        // 插入数据
-        int insert = userRegisterMapper.insertRegisterData(userRegisterDTO);
-        return insert > 0;
+        Long count = userRegisterMapper.selectCount(new QueryWrapper<UserRegister>()
+                            .eq("uid", userRegisterDTO.getUid()));
+        if (null == count){
+            // 插入数据
+            int insert = userRegisterMapper.insertRegisterData(userRegisterDTO);
+            return insert > 0;
+        }
+        // 更新数据
+        int update = userRegisterMapper.update(null, new UpdateWrapper<UserRegister>()
+                                        .eq("uid", userRegisterDTO.getUid())
+                                        .set("password", userRegisterDTO.getPassword()));
+        return update > 0;
+
     }
 
     @Override
@@ -462,7 +464,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             }
             UserInfoVO userInfoVO = new UserInfoVO();
             BeanUtils.copyProperties(userInfo,userInfoVO);
-            userInfoVO.setFirstLogin(1);
             // 生成token
             String jwt = JwtUtil.createJWT(uid);
             //把token响应给前端
