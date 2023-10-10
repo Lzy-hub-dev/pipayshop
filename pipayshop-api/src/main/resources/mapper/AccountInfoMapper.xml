@@ -12,6 +12,7 @@
             shop_info s
         set
             a.point_balance = a.point_balance + #{transactionAmount},
+            a.available_balance = a.available_balance + #{transactionAmount},
             a.update_time = DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s')
         where
             s.uid = a.uid
