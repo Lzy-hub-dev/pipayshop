@@ -3,6 +3,7 @@ package com.example.pipayshopapi.service.Impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.config.CommonConfig;
 import com.example.pipayshopapi.entity.AccountInfo;
+import com.example.pipayshopapi.entity.dto.PayPalDTO;
 import com.example.pipayshopapi.entity.vo.AccountInfoVO;
 import com.example.pipayshopapi.mapper.AccountInfoMapper;
 import com.example.pipayshopapi.service.AccountInfoService;
@@ -114,7 +115,7 @@ public class AccountInfoServiceImpl extends ServiceImpl<AccountInfoMapper, Accou
     }
 
     @Override
-    public Object createOrder() {
+    public Object createOrder(PayPalDTO payPalDTO) {
         log.error("createOrder===========================================start");
         String accessToken = generateAccessToken();
         RestTemplate restTemplate = new RestTemplate();
@@ -127,6 +128,9 @@ public class AccountInfoServiceImpl extends ServiceImpl<AccountInfoMapper, Accou
 
         //JSON String
         String requestJson = "{\"intent\":\"CAPTURE\",\"purchase_units\":[{\"amount\":{\"currency_code\":\"USD\",\"value\":\"1.00\"}}]}";
+        log.error("requestJson==========================================="+requestJson);
+        String updatedValue = payPalDTO.getPayPalMoney().toString();
+        requestJson = requestJson.replace("1.00", updatedValue);
         log.error("requestJson===========================================start"+requestJson);
         HttpEntity<String> entity = new HttpEntity<String>(requestJson, headers);
         log.error("entity===========================================start"+entity);
@@ -141,6 +145,7 @@ public class AccountInfoServiceImpl extends ServiceImpl<AccountInfoMapper, Accou
         log.error("response==============================================="+response.getBody());
         if (response.getStatusCode() == HttpStatus.CREATED) {
             LOGGER.log(Level.INFO, "ORDER CAPTURE");
+
             return response.getBody();
         } else {
             LOGGER.log(Level.INFO, "FAILED CAPTURING ORDER");

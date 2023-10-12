@@ -27,14 +27,16 @@ public interface BgImgService extends IService<BgImg> {
 
     /**
      * 新增首页背景轮播图
-     * @param file
+     *
      * @return
      */
-    Boolean addBgImg(MultipartFile file, BgImgDTO bgImgDTO);
+    Boolean addBgImg( BgImgDTO bgImgDTO);
 
     /**
      * 查询首页轮播背景图列表
      * @return
      */
     List<BgImgVO> selectBgImgList(int category);
+
+    String bgCategoryImage(MultipartFile multipartFile);
 }

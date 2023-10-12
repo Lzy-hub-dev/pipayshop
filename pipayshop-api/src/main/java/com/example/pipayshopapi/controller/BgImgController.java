@@ -61,9 +61,11 @@ public class BgImgController {
     }
     @PostMapping("addBgImg")
     @ApiOperation("新增首页背景轮播图")
-    public ResponseVO addBgImg(MultipartFile file, BgImgDTO bgImgDTO){
+    //Todo 后面要补全只对哪个服务器开放
+    @CrossOrigin
+    public ResponseVO addBgImg(BgImgDTO bgImgDTO){
         try{
-            Boolean result= bgImgService.addBgImg(file,bgImgDTO);
+            Boolean result= bgImgService.addBgImg(bgImgDTO);
             if (!result) {
                 throw new Exception();
             }
@@ -71,6 +73,23 @@ public class BgImgController {
         }catch (Exception e){
             log.error(e.getMessage());
             throw new BusinessException("新增首页背景轮播图片失败，请联系后台人员");
+        }
+    }
+
+    /**
+     * 网店首页的分类栏上传图片
+     */
+    @PostMapping("bgCategoryImage")
+    @ApiOperation("网店、实体店首页的轮播图上传图片")
+    //Todo 后面要补全只对哪个服务器开放
+    @CrossOrigin
+    public ResponseVO<String> bgCategoryImage(@RequestParam("file") MultipartFile multipartFile){
+        try {
+            String imageId = bgImgService.bgCategoryImage(multipartFile);
+            return ResponseVO.getSuccessResponseVo(imageId);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("网店、实体店首页的轮播图上传图片失败，请联系后台人员");
         }
     }
 }

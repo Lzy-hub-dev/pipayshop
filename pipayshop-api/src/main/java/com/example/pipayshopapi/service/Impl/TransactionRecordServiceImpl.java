@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.AccountInfo;
 import com.example.pipayshopapi.entity.TransactionRecord;
+import com.example.pipayshopapi.entity.vo.AccountInfoVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.RecordTransactionVO;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -42,18 +43,16 @@ public class TransactionRecordServiceImpl extends ServiceImpl<TransactionRecordM
         // 解密JWT获取数据，记录交易日志
         Claims claims = TokenUtil.getDataFromToken(token);
         String shopId = claims.get("shopId", String.class);
-        String userId = claims.get("user_id", String.class);
+        String userId = claims.get("userId", String.class);
         BigDecimal transactionAmount = BigDecimal.valueOf(Double.parseDouble(claims.get("transactionAmount", String.class)));
-        int insert = transactionRecordMapper.insert(new TransactionRecord(null, StringUtil.generateShortId()
-                , shopId, userId, transactionAmount, null, null));
-        if (insert < 1) {
-            throw new BusinessException("记录交易日志失败");
+        // 获取用户账户
+        AccountInfoVO userAccountInfo = accountInfoMapper.selectAccountInfo(userId);
+        // 判断可用积分是否足够支付积分
+        if (userAccountInfo.getAvailableBalance().compareTo(transactionAmount) < 0) {
+            throw new BusinessException("积分不足");
         }
         // 扣减自身的积分余额
-        int update = accountInfoMapper.update(null, new UpdateWrapper<AccountInfo>()
-                .eq("uid", userId)
-                .setSql("point_balance = point_balance -" + transactionAmount)
-                .set("update_time", new Date()));
+        int update =accountInfoMapper.updatePointBalanceByUid(transactionAmount,userId);
         if (update < 1) {
             throw new BusinessException("扣减自身的积分余额失败");
         }
@@ -61,6 +60,11 @@ public class TransactionRecordServiceImpl extends ServiceImpl<TransactionRecordM
         int update1 = accountInfoMapper.updatePointBalanceByShopId(shopId, transactionAmount);
         if (update1 < 1) {
             throw new BusinessException("增加店铺对应的店主的账户数据失败");
+        }
+        int insert = transactionRecordMapper.insert(new TransactionRecord(null, StringUtil.generateShortId()
+                , shopId, userId, transactionAmount, null, null));
+        if (insert < 1) {
+            throw new BusinessException("记录交易日志失败");
         }
         return true;
     }

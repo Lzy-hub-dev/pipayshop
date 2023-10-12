@@ -2,6 +2,7 @@ package com.example.pipayshopapi.service;
 
 import com.example.pipayshopapi.entity.ItemCommodityInfoCategoryTop;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 
@@ -24,6 +25,5 @@ public interface ItemCommodityInfoCategoryTopService extends IService<ItemCommod
     List<ItemCommodityInfoCategoryTop> cateTopList();
 
 
-
-
+    String itemTopCategoryImags(MultipartFile multipartFile);
 }

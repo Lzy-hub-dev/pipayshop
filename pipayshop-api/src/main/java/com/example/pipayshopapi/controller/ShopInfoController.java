@@ -44,7 +44,7 @@ public class ShopInfoController {
             return ResponseVO.getSuccessResponseVo(pageDataVO);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new BusinessException("评论评分设置失败，请联系后台人员");
+            throw new BusinessException("根据条件筛选酒店信息失败，请联系后台人员");
         }
     }
 

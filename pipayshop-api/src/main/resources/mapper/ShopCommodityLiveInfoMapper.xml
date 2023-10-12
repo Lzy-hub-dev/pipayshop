@@ -11,7 +11,7 @@
     </insert>
 
     <select id="selectShopCommodityLiveInfoList" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoListVO">
-        select s.room_id,s.room_type_name,s.tag_list,s.land,s.price,i.avatar_imag,s.bed_type
+        select s.room_id,s.room_type_name,s.tag_list,s.land,s.price,i.origin_path as avatarImag,s.bed_type
         from shop_commodity_live_info s
         join image i
         on i.image_id = s.avatar_imag

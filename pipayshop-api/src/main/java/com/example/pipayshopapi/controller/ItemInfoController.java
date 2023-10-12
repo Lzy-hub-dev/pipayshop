@@ -183,20 +183,5 @@ public class ItemInfoController {
         }
     }
 
-    /**
-     * 网店首页的分类栏上传图片
-     */
-    @PostMapping("itemTopCategoryImags")
-    @ApiOperation("网店首页的分类栏上传图片")
-    @CrossOrigin
-    public ResponseVO<String> itemTopCategoryImags(@RequestParam("file")MultipartFile multipartFile){
-        try {
-            log.error("file-----------------------------------"+multipartFile);
-            String imageId = itemInfoService.itemTopCategoryImags(multipartFile);
-            return ResponseVO.getSuccessResponseVo(imageId);
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new BusinessException("网店首页的分类栏上传图片失败，请联系后台人员");
-        }
-    }
+
 }

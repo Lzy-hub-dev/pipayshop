@@ -2,6 +2,7 @@ package com.example.pipayshopapi.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.AccountInfo;
+import com.example.pipayshopapi.entity.dto.PayPalDTO;
 import com.example.pipayshopapi.entity.vo.AccountInfoVO;
 
 /**
@@ -24,6 +25,6 @@ public interface AccountInfoService extends IService<AccountInfo> {
 
     Object capturePayment(String orderId);
 
-    Object createOrder();
+    Object createOrder(PayPalDTO payPalDTO);
 
 }

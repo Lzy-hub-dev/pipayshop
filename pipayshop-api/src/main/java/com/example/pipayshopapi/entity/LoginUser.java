@@ -1,5 +1,6 @@
 package com.example.pipayshopapi.entity;
 
+import com.example.pipayshopapi.entity.vo.UserInfoVO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,8 +14,9 @@ import java.util.Collection;
 @AllArgsConstructor
 public class LoginUser implements UserDetails {
  
-    private UserInfo userInfo;
- 
+//    private UserInfo userInfo;
+
+    private UserInfoVO userInfoVO;
  
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -23,12 +25,12 @@ public class LoginUser implements UserDetails {
  
     @Override
     public String getPassword() {
-        return userInfo.getUserName();
+        return userInfoVO.getUserName();
     }
  
     @Override
     public String getUsername() {
-        return userInfo.getUserName();
+        return userInfoVO.getUserName();
     }
  
     @Override

@@ -52,7 +52,7 @@
     </select>
 
     <select id="selectFollowItemByUserId" resultType="com.example.pipayshopapi.entity.vo.ItemListVO">
-        SELECT i.item_id, i.item_name, i.membership, i.score, g.origin_path as user_image
+        SELECT i.item_id, i.item_name, i.membership, i.score, g.origin_path as user_image, (select count(*) from item_follow_focus f1 where f1.item_id=i.item_id   ) as follows
         FROM item_follow_focus f
                  INNER JOIN
              item_info i
@@ -65,9 +65,18 @@
           order by f.update_time desc
         limit #{page},#{limit}
     </select>
+    <select id="selectAllFollowItemByUserId" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM item_follow_focus f
+                 INNER JOIN item_info i
+                            ON f.item_id = i.item_id
+        WHERE f.follow_id = #{userId}
+          and f.`status` = 0
+          and i.`status` = 0
+    </select>
 
     <select id="getItemInfoByUid" resultType="com.example.pipayshopapi.entity.vo.ItemMinInfoVo">
-    SELECT COUNT(*) as num,item_id
+    SELECT COUNT(*) as num, ( SELECT item_id FROM item_info WHERE uid = #{uid}) AS item_id
     FROM item_commodity_info
     WHERE item_id =
     (
@@ -86,16 +95,7 @@
         where
             item_id = #{itemId} and status = 0
     </select>
-    <select id="selectAllFollowItemByUserId" resultType="java.lang.Integer">
-        SELECT count(*)
-        FROM item_follow_focus f
-                 INNER JOIN
-             item_info i
-             ON f.item_id = i.item_id
-        WHERE f.follow_id = #{userId}
-          and f.`status` = 0
-          and i.`status` = 0
-    </select>
+
 
 
 </mapper>

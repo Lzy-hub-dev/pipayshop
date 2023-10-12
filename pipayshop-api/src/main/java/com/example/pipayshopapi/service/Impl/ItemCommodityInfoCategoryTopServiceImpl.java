@@ -2,12 +2,16 @@ package com.example.pipayshopapi.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.pipayshopapi.entity.ItemCommodityInfoCategoryTop;
+import com.example.pipayshopapi.mapper.ImageMapper;
 import com.example.pipayshopapi.mapper.ItemCommodityInfoCategoryTopMapper;
 import com.example.pipayshopapi.service.ItemCommodityInfoCategoryTopService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.pipayshopapi.util.FileUploadUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +29,8 @@ public class ItemCommodityInfoCategoryTopServiceImpl extends ServiceImpl<ItemCom
     private ItemCommodityInfoCategoryTopMapper categoryTopMapper;
 
 
+    @Resource
+    private ImageMapper imageMapper;
 
     /**
      * 展示一级分类列表
@@ -34,5 +40,14 @@ public class ItemCommodityInfoCategoryTopServiceImpl extends ServiceImpl<ItemCom
 
         return categoryTopMapper.selectCateTopList();
 
+    }
+    /**
+     * 网店分类图片上传
+     */
+    @Override
+    public String itemTopCategoryImags(MultipartFile multipartFile) {
+        List<String> imageSize = new ArrayList<>();
+        imageSize.add("45,45");
+        return FileUploadUtil.allUploadImageData(multipartFile, imageMapper, FileUploadUtil.ITEM_TOP_CATEGORY_IMG,imageSize);
     }
 }

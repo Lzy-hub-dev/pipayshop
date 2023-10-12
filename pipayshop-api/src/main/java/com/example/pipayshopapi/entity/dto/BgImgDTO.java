@@ -35,4 +35,11 @@ public class BgImgDTO {
      */
     @ApiModelProperty(value = "网店商品id/实体店铺id",required = true)
     private String contentId;
+
+
+    /**
+     * 网店/实体店的首页背景图片的路径
+     */
+    @ApiModelProperty(value = "网店/实体店的首页背景图片的路径",required = true)
+    private String imgUrl;
 }

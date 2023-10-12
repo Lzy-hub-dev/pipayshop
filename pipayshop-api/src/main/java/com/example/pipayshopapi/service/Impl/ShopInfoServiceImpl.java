@@ -410,7 +410,8 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
                 livePageVO.getCheckInTime(),
                 livePageVO.getDepartureTime(),
                 livePageVO.getAdult(),
-                livePageVO.getChildren(),livePageVO.getRegionId());
+                livePageVO.getChildren(),
+                livePageVO.getRegionId());
         for (IndexShopInfoVO indexShopInfoVO : indexShopInfoVOS) {
             indexShopInfoVO.setUserImage(imageMapper.selectPath(indexShopInfoVO.getUserImage()));
         }

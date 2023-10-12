@@ -67,5 +67,5 @@ public interface ItemInfoService extends IService<ItemInfo> {
 
     Boolean setItemScore();
 
-    String itemTopCategoryImags(MultipartFile multipartFile);
+
 }

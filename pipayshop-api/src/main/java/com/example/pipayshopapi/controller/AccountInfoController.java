@@ -1,6 +1,7 @@
 package com.example.pipayshopapi.controller;
 
 
+import com.example.pipayshopapi.entity.dto.PayPalDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.service.AccountInfoService;
 import com.example.pipayshopapi.service.TradinOrderService;
@@ -213,9 +214,7 @@ public class AccountInfoController {
 
     @PostMapping("/api/orders")
     @ApiOperation("生成订单")
-    public Object createOrder() {
-        return accountInfoService.createOrder();
-
-
+    public Object createOrder(@RequestBody PayPalDTO payPalDTO) {
+        return accountInfoService.createOrder(payPalDTO);
     }
 }
