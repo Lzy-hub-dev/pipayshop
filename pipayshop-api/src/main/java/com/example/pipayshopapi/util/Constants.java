@@ -16,9 +16,9 @@ public class Constants {
     public static final String TOKEN_SECRET = "pairuan";
 
     /**
-     * 用户和网店的默认头像
+     * 用户和网店的默认头像id
      */
-    public static final String AVATAR_IMAG = "/images/avatar/avatar.jpg";
+    public static final String AVATAR_IMAG = "defaultAvatar";
 
     /**
      * 全局统一的图片格式
