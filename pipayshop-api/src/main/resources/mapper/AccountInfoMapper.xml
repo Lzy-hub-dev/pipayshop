@@ -10,12 +10,20 @@
             account_info a
             join
             shop_info s
+            on s.uid = a.uid
         set
             a.point_balance = a.point_balance + #{transactionAmount},
-            a.available_balance = a.available_balance + #{transactionAmount},
-            a.update_time = DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s')
+            a.available_balance = a.available_balance + #{transactionAmount}
         where
-            s.uid = a.uid
+            s.shop_id=#{shopId}
+    </update>
+    <update id="updatePointBalanceByUid">
+        update
+            account_info
+        set
+            point_balance = point_balance - #{transactionAmount},
+            available_balance = available_balance - #{transactionAmount}
+        where uid=#{userId}
     </update>
 
     <select id="selectAccountInfo" resultType="com.example.pipayshopapi.entity.vo.AccountInfoVO">

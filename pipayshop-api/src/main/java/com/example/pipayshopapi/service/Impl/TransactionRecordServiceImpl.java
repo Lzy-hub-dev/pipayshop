@@ -52,10 +52,7 @@ public class TransactionRecordServiceImpl extends ServiceImpl<TransactionRecordM
             throw new BusinessException("积分不足");
         }
         // 扣减自身的积分余额
-        int update = accountInfoMapper.update(null, new UpdateWrapper<AccountInfo>()
-                .eq("uid", userId)
-                .setSql("point_balance = point_balance - " + transactionAmount + ", available_balance = available_balance - " + transactionAmount)
-                .set("update_time", new Date()));
+        int update =accountInfoMapper.updatePointBalanceByUid(transactionAmount,userId);
         if (update < 1) {
             throw new BusinessException("扣减自身的积分余额失败");
         }
