@@ -5,6 +5,7 @@ import com.example.pipayshopapi.entity.ItemOrderInfo;
 import com.example.pipayshopapi.entity.vo.ItemOrderDetailVO;
 import com.example.pipayshopapi.entity.vo.MyItemOrderInfoVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -43,4 +44,8 @@ public interface ItemOrderInfoService extends IService<ItemOrderInfo> {
      * 未支付订单改价接口
      */
     int changePrice(String token);
+
+    String generateUnpaidOrderByPi(String token);
+
+    boolean payOrderCertificate(MultipartFile file, String token);
 }

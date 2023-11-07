@@ -223,10 +223,7 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
                 .eq("order_status", 1));
         if (count != 0){throw new BusinessException("该订单已经支付，请勿重复下单！");}
         // 用户余额更新
-        int uid = accountInfoMapper.update(null, new UpdateWrapper<AccountInfo>()
-                .eq("uid", uid1)
-                .setSql("point_balance = point_balance - " + transactionAmount)
-                .set("update_time", new Date()));
+        int uid = accountInfoMapper.updatePointBalanceByUid(transactionAmount,uid1);
         if (uid < 1){throw new RuntimeException();}
         // 商品库存 、 月售量更新
         int update = shopCommodityInfoMapper.update(null, new UpdateWrapper<ShopCommodityInfo>()
@@ -260,10 +257,7 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
                 .eq("order_status", 1));
         if (count != 0){throw new BusinessException("该订单已经支付，请勿重复下单！");}
         // 用户余额更新
-        int uid = accountInfoMapper.update(null, new UpdateWrapper<AccountInfo>()
-                .eq("uid", uid1)
-                .setSql("point_balance = point_balance - " + transactionAmount)
-                .set("update_time", new Date()));
+        int uid = accountInfoMapper.updatePointBalanceByUid(transactionAmount,uid1);
         if (uid < 1){throw new RuntimeException();}
         // 商品库存 、 月售量更新
         int update = shopCommodityLiveInfoMapper.update(null, new UpdateWrapper<ShopCommodityLiveInfo>()

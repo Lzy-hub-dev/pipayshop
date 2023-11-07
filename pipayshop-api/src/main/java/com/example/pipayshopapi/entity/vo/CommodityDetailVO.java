@@ -51,7 +51,18 @@ public class CommodityDetailVO {
     private Integer degreeLoss;
 
     private List<String> detailImagList;
-
+    /**
+     * 0:不是pi商 1：是pi商
+     */
+    private Integer piShoper;
+    /**
+     * pi币
+     */
+    private BigDecimal piBalance;
+    /**
+     *  pi钱包地址
+     */
+    private String piAddress;
     /**
      * 评论总数
      */

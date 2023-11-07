@@ -1,23 +1,28 @@
 package com.example.pipayshopapi;
 
+import com.baomidou.mybatisplus.core.assist.ISqlRunner;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.pipayshopapi.config.CommonConfig;
 import com.example.pipayshopapi.entity.ItemOrder;
 import com.example.pipayshopapi.entity.TradinPost;
+import com.example.pipayshopapi.entity.UserInfo;
 import com.example.pipayshopapi.entity.dto.ItemOrderDetailDTO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.TradinPostMapper;
 import com.example.pipayshopapi.util.*;
 import io.jsonwebtoken.*;
 import net.coobird.thumbnailator.Thumbnails;
+import org.apache.ibatis.session.RowBounds;
 import org.junit.After;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.ResourceUtils;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.*;
 import java.math.BigDecimal;
@@ -30,14 +35,24 @@ public class ShopTest {
 
 
 
+    private RabbitTemplate rabbitTemplate;
+
+    @Resource
+    public void setRabbitTemplate(RabbitTemplate rabbitTemplate) {
+        this.rabbitTemplate = rabbitTemplate;
+    }
+
+    @PostConstruct
+    public void init() {
+        // 在初始化方法中使用 rabbitTemplate
+        // ...
+        System.out.println("rabbitTemplate = " + rabbitTemplate);
+    }
 
     @Test
     public void imageTest(){
-        String s = StringUtil.hashPassword("1234567");
-        System.out.println(s);
-
-        boolean FLAG = StringUtil.checkPassword("1234567", "$2a$10$dc3klPXnOZ9spNus8TXPGeUcCXI9CqPs4acjSyobJJCIFNBDQsqGG");
-        System.out.println(FLAG);
+        System.out.println("rabbitTemplate = " + rabbitTemplate);
+        rabbitTemplate.convertAndSend("","userInfo"," message");
     }
 
 
@@ -127,12 +142,13 @@ public class ShopTest {
     public void test3(){
         JwtBuilder jwtBuilder = Jwts.builder();
         List<ItemOrderDetailDTO> itemOrderDetailDTOS = new ArrayList<>();
-        ItemOrderDetailDTO itemOrderDetailDTO = new ItemOrderDetailDTO("CADKMnRHaE","Vvfmf3xGhw", new BigDecimal(11.2), new BigDecimal(11.2), 2, "蓝色xl", "/images/avatar/174abc6ebd0.png");
-        ItemOrderDetailDTO itemOrderDetailDTO2 = new ItemOrderDetailDTO("biaMlrE5xh","Vvfmf3xGhw", new BigDecimal(11.2), new BigDecimal(11.2), 2, "蓝色xl", "/images/avatar/174abc6ebd0.png");
-        ItemOrderDetailDTO itemOrderDetailDTO3 = new ItemOrderDetailDTO("CADKMnRHaE","Vvfmf3xGhw", new BigDecimal(11.2), new BigDecimal(11.2), 2, "蓝色xl", "/images/avatar/174abc6ebd0.png");
-        itemOrderDetailDTOS.add(itemOrderDetailDTO2);
-        itemOrderDetailDTOS.add(itemOrderDetailDTO);
-        itemOrderDetailDTOS.add(itemOrderDetailDTO3);
+////        ItemOrderDetailDTO itemOrderDetailDTO = new ItemOrderDetailDTO("CADKMnRHaE","Vvfmf3xGhw", new BigDecimal(11.2), new BigDecimal(11.2), 2, "蓝色xl", "/images/avatar/174abc6ebd0.png");
+////        ItemOrderDetailDTO itemOrderDetailDTO2 = new ItemOrderDetailDTO("biaMlrE5xh","Vvfmf3xGhw", new BigDecimal(11.2), new BigDecimal(11.2), 2, "蓝色xl", "/images/avatar/174abc6ebd0.png");
+////        ItemOrderDetailDTO itemOrderDetailDTO3 = new ItemOrderDetailDTO("CADKMnRHaE","Vvfmf3xGhw", new BigDecimal(11.2), new BigDecimal(11.2), 2, "蓝色xl", "/images/avatar/174abc6ebd0.png");
+//        itemOrderDetailDTOS.add(itemOrderDetailDTO2);
+//        itemOrderDetailDTOS.add(itemOrderDetailDTO);
+//        itemOrderDetailDTOS.add(itemOrderDetailDTO3);
+
 
         String compact = jwtBuilder
                 .setHeaderParam("typ", "JWT")

@@ -2,7 +2,8 @@ package com.example.pipayshopapi.service;
 
 import com.example.pipayshopapi.entity.TradinRate;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.pipayshopapi.entity.vo.TradinRateDTO;
+
+import com.example.pipayshopapi.entity.vo.TradinRateVO;
 
 import java.util.List;
 
@@ -16,5 +17,5 @@ import java.util.List;
  */
 public interface TradinRateService extends IService<TradinRate> {
 
-    List<TradinRateDTO> selectAllTradinRate();
+    List<TradinRateVO> selectAllTradinRate();
 }

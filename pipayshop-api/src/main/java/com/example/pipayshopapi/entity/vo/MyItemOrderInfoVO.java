@@ -45,6 +45,12 @@ public class MyItemOrderInfoVO {
     private BigDecimal transactionAmount;
 
     /**
+     * 交易pi总金额
+     */
+    private BigDecimal piAmount;
+
+
+    /**
      * 优惠后的总价
      */
      private BigDecimal discount;

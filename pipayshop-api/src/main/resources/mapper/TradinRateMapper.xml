@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.pipayshopapi.mapper.TradinRateMapper">
 
-    <select id="selectAllTradinRate" resultType="com.example.pipayshopapi.entity.vo.TradinRateDTO">
+    <select id="selectAllTradinRate" resultType="com.example.pipayshopapi.entity.vo.TradinRateVO">
         select title,format,conversion_rate from tradin_rate
         where status = 0
     </select>

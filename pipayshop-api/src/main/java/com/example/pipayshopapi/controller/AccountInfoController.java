@@ -196,7 +196,7 @@ public class AccountInfoController {
     public ResponseVO selectAllTradinRate(  ){
         try {
 
-            List<TradinRateDTO> tradinRateDTOList=tradinRateService.selectAllTradinRate();
+            List<TradinRateVO> tradinRateDTOList=tradinRateService.selectAllTradinRate();
             return ResponseVO.getSuccessResponseVo(tradinRateDTOList);
         }catch (Exception e){
             e.printStackTrace();

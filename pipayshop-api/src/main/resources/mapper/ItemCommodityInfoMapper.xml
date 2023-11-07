@@ -16,7 +16,7 @@
             inventory = inventory-#{num}
         WHERE
             commodity_id=#{commodityId}
-          AND
+        AND
             inventory>=#{num}
     </update>
 
@@ -250,7 +250,7 @@
 <!--    首页商品的多条件过滤查询-->
     <select id="itemSearchCommodity" resultType="com.example.pipayshopapi.entity.vo.ItemCommoditiesVO">
         SELECT
-            ici.price, ici.origin_price, ici.item_commodity_name,g.origin_path as avatarImag, ici.commodity_id, ici.details ,ii.membership
+          u.pi_shoper,ici.pi_balance, ici.price, ici.origin_price, ici.item_commodity_name,g.origin_path as avatarImag, ici.commodity_id, ici.details ,ii.membership
 
         <include refid="itemSearchCommoditySql"/>
             <choose>
@@ -271,6 +271,13 @@
         SELECT COUNT(*)
         <include refid="itemSearchCommoditySql"/>
     </select>
+    <select id="selectPiShoper" resultType="java.lang.Integer">
+        select u.pi_shoper from item_info i
+        join user_info u
+        on i.uid=u.uid
+        where i.item_id=#{itemId}
+    </select>
+
 
     <sql id="itemSearchCommoditySql">
         FROM
@@ -287,6 +294,10 @@
             image g
         on
             g.image_id=ici.avatar_imag
+        join
+            user_info u
+        on
+            ii.uid=u.uid
         WHERE
             ici.status = 0 AND cc.country_code = #{dto.countryCode} AND ii.status = 0
         <if test="dto.brandId != null">

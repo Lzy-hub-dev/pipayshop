@@ -27,6 +27,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.FileUpload;
 import org.lionsoul.ip2region.xdb.Searcher;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -93,6 +94,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     ImageMapper imageMapper;
 
 
+    @Resource
+    RabbitTemplate rabbitTemplate;
 
     /**
      *  验证登录
@@ -154,6 +157,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                 }
 
                 BeanUtils.copyProperties(newUser,userInfoVO);
+                //把新用户数据广播出去
+                rabbitTemplate.convertAndSend("userExchanges","",userId+"_"+userName);
                 return new LoginUser(userInfoVO);
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -201,6 +206,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
         UserInfoVO userInfo = loginUser.getUserInfoVO();
         String userId=userInfo.getUid();
+        userInfo.setUserImage(imageMapper.selectPath(userInfo.getUserImage()));
         // 生产jwt
         String jwt = JwtUtil.createJWT(userId);
         //authenticate存入redis

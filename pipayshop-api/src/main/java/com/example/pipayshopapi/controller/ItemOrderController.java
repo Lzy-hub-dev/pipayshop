@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -158,6 +159,38 @@ public class ItemOrderController {
         }
     }
 
+    /**
+     * 生成未支付订单（pi支付）
+     */
+    @PostMapping("generateUnpaidOrderByPi")
+    @ApiOperation("生成未支付订单（pi支付）")
+    public ResponseVO<String> generateUnpaidOrderByPi(String token) {
+        try {
+            String orderId = itemOrderInfoService.generateUnpaidOrderByPi(token);
+            return ResponseVO.getSuccessResponseVo(orderId);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new BusinessException("生成未支付订单（pi支付）失败，请联系后台人员");
+        }
+    }
+
+    /**
+     pi支付上传凭证
+     */
+    @PostMapping("payOrderCertificate")
+    @ApiOperation("pi支付上传凭证")
+    public ResponseVO<String> payOrderCertificate(MultipartFile file, String token) {
+        try {
+            boolean flag = itemOrderInfoService.payOrderCertificate(file,token);
+            if (!flag) {
+                throw new Exception();
+            }
+            return ResponseVO.getSuccessResponseVo("pi支付上传凭证成功!");
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new BusinessException("pi支付上传凭证失败，请联系后台人员");
+        }
+    }
 
     /**
     支付下单接口

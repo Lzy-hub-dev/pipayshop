@@ -142,13 +142,14 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         // 获取网店的数据
         ItemCommodityInfo itemCommodityInfo = commodityInfoMapper.selectOne(new QueryWrapper<ItemCommodityInfo>()
                 .eq("commodity_id", commodityId));
-//        log.error(String.valueOf(itemCommodityInfo)+"==========================");
         String itemId = itemCommodityInfo.getItemId();
         Map<String, List<String>> typeMap = new HashMap<>();
         // 转移部分非json型的数据
         CommodityDetailVO commodityDetailVO = new CommodityDetailVO();
         // 属性转移
         BeanUtils.copyProperties(itemCommodityInfo, commodityDetailVO);
+        Integer piShoper =commodityInfoMapper.selectPiShoper(commodityDetailVO.getItemId());
+        commodityDetailVO.setPiShoper(piShoper);
         String acceptAddressListString = itemCommodityInfo.getAcceptAddressList();
         if (acceptAddressListString != null) {
             commodityDetailVO.setAcceptAddressList(JSON.parseArray(acceptAddressListString, String.class));

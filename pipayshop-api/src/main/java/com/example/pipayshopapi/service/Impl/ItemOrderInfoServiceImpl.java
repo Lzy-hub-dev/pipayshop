@@ -15,15 +15,20 @@ import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.*;
 import com.example.pipayshopapi.service.ItemOrderInfoService;
+import com.example.pipayshopapi.util.Constants;
 import com.example.pipayshopapi.util.StringUtil;
 import com.example.pipayshopapi.util.TokenUtil;
 import io.jsonwebtoken.Claims;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -192,7 +197,6 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
                         // 修改商品展示图数据指向image表的id
                         String imageId = imageMapper.selectImageIdByPath(itemOrderDetailDTO.getAvatarImag());
                         itemOrderDetail.setAvatarImag(imageId);
-                        log.error("detail======================="+itemOrderDetail);
                         // 插入数据库
                         int insertItemOrderDetail = itemOrderDetailMapper.insert(itemOrderDetail);
                         if (insertItemOrderDetail < 1) {
@@ -211,6 +215,129 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
             });
         });
         return orderIdList;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String generateUnpaidOrderByPi(String token) {
+        log.error(token);
+        // 解析token
+        Claims dataFromToken = TokenUtil.getDataFromToken(token);
+        String uid = dataFromToken.get("uid", String.class);
+        Integer paymentId = Integer.valueOf(dataFromToken.get("paymentId", String.class));
+        String buyerDataId = dataFromToken.get("buyerDataId", String.class);
+        // 订单中的商品
+        String itemOrderDetailDTOByString = dataFromToken.get("itemOrderDetailDTO", String.class);
+        // 将json转成需要的对象
+        ItemOrderDetailDTO itemOrderDetailDTO = JSONObject.parseObject(itemOrderDetailDTOByString, ItemOrderDetailDTO.class);
+
+        // 获取一个订单的商品数据列表
+        // 计算原总价
+        BigDecimal piPrice = itemOrderDetailDTO.getPiPrice();
+        // 生成订单id
+        String orderId = StringUtil.generateShortId();
+        // 网店id
+        String itemId = itemOrderDetailDTO.getItemId();
+        // 插入订单主题表数据
+        ItemOrder itemOrder = new ItemOrder(null, orderId, null, null, itemId, uid, buyerDataId
+                , 0, null, null, null, null,paymentId,null,piPrice);
+        int insert = itemOrderMapper.insert(itemOrder);
+        if (insert < 1) {
+            throw new BusinessException(ERROR_MAG);
+        }
+
+        ItemOrderDetail itemOrderDetail = new ItemOrderDetail();
+        // 属性转移
+        BeanUtils.copyProperties(itemOrderDetailDTO, itemOrderDetail);
+        // 补全属性
+        itemOrderDetail.setOrderId(orderId);
+        // 修改商品展示图数据指向image表的id
+        String imageId = imageMapper.selectImageIdByPath(itemOrderDetailDTO.getAvatarImag());
+        itemOrderDetail.setAvatarImag(imageId);
+        // 插入数据库
+        int insertItemOrderDetail = itemOrderDetailMapper.insert(itemOrderDetail);
+        if (insertItemOrderDetail < 1) {
+            throw new BusinessException(ERROR_MAG);
+        }
+        // 扣减商品的剩余库存余额
+        int update = itemCommodityInfoMapper.reduceStock(itemOrderDetailDTO.getNumber(), itemOrderDetailDTO.getCommodityId());
+        if (update < 1) {
+            throw new BusinessException(ERROR_MAG);
+        }
+
+        // 订单十分钟未支付的失效处理
+        rabbitTemplate.convertAndSend(QueueConfig.QUEUE_MESSAGE_DELAY, "item_" + orderId, message1 -> {
+            message1.getMessageProperties().setExpiration("1000 * 60 * 10");
+            return message1;
+        });
+        return orderId;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean payOrderCertificate(MultipartFile file, String token) {
+        if (file.isEmpty()) {
+            throw new BusinessException("文件不能为空");
+        }
+        String fileName = file.getOriginalFilename();
+        if ("".equals(fileName)) {
+            throw new BusinessException("文件名不能为空");
+        }
+        String separator = File.separator;
+        String postStr = fileName.substring(fileName.lastIndexOf(".")+1);
+        String preStr = StringUtil.generateShortId();
+        fileName = "temp-"+preStr + "."+ postStr;
+        String ThumbnailPath=preStr + "."+ postStr;
+        File readPath = new File(Constants.PAYMENT_IMAG_PATH + separator );
+        if (!readPath.isDirectory()) {
+            readPath.mkdirs();
+        }
+        // 将文件复制到指定路径
+        File destFile = new File(readPath.getAbsolutePath()+ separator + fileName);
+        // 解析token
+        Claims dataFromToken = TokenUtil.getDataFromToken(token);
+        String orderId = dataFromToken.get("orderId", String.class);
+        String userId = dataFromToken.get("userId", String.class);
+
+
+        // 获取订单详情
+        ItemOrder itemOrder = itemOrderMapper.selectOne(new QueryWrapper<ItemOrder>()
+                                                    .eq("order_id", orderId));
+
+
+        // 上传图片和改订单状态为2:提交凭证图片
+        itemOrder.setCertificateImag("/images/tradin_post_certificate/"+ThumbnailPath);
+        itemOrder.setOrderStatus(1);
+        // 更改订单状态和提交图片
+        int update = itemOrderMapper.updateById(itemOrder);
+
+        if (update < 1){
+            throw new BusinessException("提交失败") ;
+        }
+
+
+        try {
+            // 移动temp图片到目标文件夹
+            FileCopyUtils.copy(file.getBytes(), destFile);
+            String absolutePath = new File(Constants.CERTIFICATE_IMAG_PATH+separator + ThumbnailPath).getAbsolutePath();
+            // 压缩图片
+            Thumbnails.of(Constants.CERTIFICATE_IMAG_PATH+separator+fileName)
+                    .size(300, 300)
+                    .outputFormat(postStr)
+                    .toFile(absolutePath);
+            // 删除temp图片
+            if (destFile.exists()){
+                destFile.delete();
+            }
+
+        } catch (Exception e) {
+            if (destFile.exists()){
+                destFile.delete();
+                throw new BusinessException("提交失败") ;
+            }
+            e.printStackTrace();
+        }
+        return true;
     }
 
     @Override
@@ -241,10 +368,7 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
             if (update1 < 1){throw new BusinessException(PAY_ERROR);}
         });
         // 用户余额更新
-        int uid = accountInfoMapper.update(null, new UpdateWrapper<AccountInfo>()
-                .eq("uid", uid1)
-                .setSql("point_balance = point_balance - " + payPointSum)
-                .set("update_time", date));
+        int uid = accountInfoMapper.updatePointBalanceByUid(payPointSum,uid1);
         if (uid < 1){throw new BusinessException(PAY_ERROR);}
         return true;
     }
@@ -300,4 +424,6 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
                 .eq(ItemOrder::getDelFlag, 0)
                 .set(ItemOrder::getDiscount, discount));
     }
+
+
 }

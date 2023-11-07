@@ -64,4 +64,6 @@ public interface ItemCommodityInfoMapper extends BaseMapper<ItemCommodityInfo> {
 
     int itemSearchCommodityCount(@Param("dto") ItemSearchConditionDTO dto);
 
+
+    Integer selectPiShoper(String itemId);
 }

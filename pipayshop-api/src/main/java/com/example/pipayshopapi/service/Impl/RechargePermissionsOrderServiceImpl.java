@@ -105,10 +105,7 @@ public class RechargePermissionsOrderServiceImpl extends ServiceImpl<RechargePer
                 .eq("order_id", orderId));
         if (data == null || data.getStatus() == 1){throw new BusinessException(MESSAGE);}
         // 扣减余额积分
-        int update = accountInfoMapper.update(null, new UpdateWrapper<AccountInfo>()
-                .eq("uid", data.getUid())
-                .eq("del_flag", 0)
-                .setSql("point_balance = point_balance -" + data.getTransactionAmount()));
+        int update = accountInfoMapper.updatePointBalanceByUid(data.getTransactionAmount(),data.getUid());
         if (update < 1){throw new RuntimeException();}
         // 修改未支付订单的状态
         int update2 = rechargePermissionsOrderMapper.update(null, new UpdateWrapper<RechargePermissionsOrder>()

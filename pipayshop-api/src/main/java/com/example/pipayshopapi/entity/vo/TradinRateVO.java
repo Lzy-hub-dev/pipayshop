@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TradinRateDTO {
+public class TradinRateVO {
     /**
      * 转化货币
      */

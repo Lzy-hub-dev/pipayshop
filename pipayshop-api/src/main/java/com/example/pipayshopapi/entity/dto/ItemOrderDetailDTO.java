@@ -27,6 +27,10 @@ public class ItemOrderDetailDTO {
      */
     private BigDecimal price;
     /**
+     * pi的单价
+     */
+    private BigDecimal piPrice;
+    /**
      * 优惠后的单价
      */
     private BigDecimal discount;

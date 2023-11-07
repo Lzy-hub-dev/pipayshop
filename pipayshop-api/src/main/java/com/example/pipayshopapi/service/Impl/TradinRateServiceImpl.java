@@ -1,7 +1,8 @@
 package com.example.pipayshopapi.service.Impl;
 
 import com.example.pipayshopapi.entity.TradinRate;
-import com.example.pipayshopapi.entity.vo.TradinRateDTO;
+
+import com.example.pipayshopapi.entity.vo.TradinRateVO;
 import com.example.pipayshopapi.mapper.TradinRateMapper;
 import com.example.pipayshopapi.service.TradinRateService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -25,7 +26,7 @@ public class TradinRateServiceImpl extends ServiceImpl<TradinRateMapper, TradinR
     private TradinRateMapper tradinRateMapper;
 
     @Override
-    public List<TradinRateDTO> selectAllTradinRate() {
+    public List<TradinRateVO> selectAllTradinRate() {
         return tradinRateMapper.selectAllTradinRate();
     }
 }

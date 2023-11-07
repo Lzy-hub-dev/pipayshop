@@ -95,4 +95,9 @@ public class UserInfoVO implements Serializable {
      * 可绑定的实体店数量
      */
     private Integer shopBalance;
+
+    /**
+     * 0:不是pi商 1：是pi商
+     */
+    private Integer piShoper;
 }

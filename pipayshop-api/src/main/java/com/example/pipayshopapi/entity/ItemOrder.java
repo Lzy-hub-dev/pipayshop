@@ -63,6 +63,8 @@ public class ItemOrder implements Serializable {
      */
     private String buyerDataId;
 
+
+
     /**
      * 0:待支付1:已支付2：已完成3：无效订单4:已评价
      */
@@ -94,5 +96,32 @@ public class ItemOrder implements Serializable {
      */
     private Integer delFlag;
 
+    /**
+     * 支付id
+     */
+    private Integer paymentId;
+    /**
+     * pi支付凭证
+     */
+    private String certificateImag;
 
+    /**
+     * pi总金额
+     */
+    private BigDecimal piAmount;
+
+    public ItemOrder(Long id, String orderId, BigDecimal transactionAmount, BigDecimal discount, String itemId, String uid, String buyerDataId, Integer orderStatus, Date createTime, Date updateTime, Date orderTime, Integer delFlag) {
+        this.id = id;
+        this.orderId = orderId;
+        this.transactionAmount = transactionAmount;
+        this.discount = discount;
+        this.itemId = itemId;
+        this.uid = uid;
+        this.buyerDataId = buyerDataId;
+        this.orderStatus = orderStatus;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+        this.orderTime = orderTime;
+        this.delFlag = delFlag;
+    }
 }

@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ApplyItemCommodityDTO {
+
     /**
      * 品牌id
      */
@@ -24,6 +25,14 @@ public class ApplyItemCommodityDTO {
      */
     private BigDecimal price;
 
+    /**
+     * pi币
+     */
+    private BigDecimal piBalance;
+    /**
+     *  pi钱包地址
+     */
+    private String piAddress;
     /**
      *  商品名字
      */

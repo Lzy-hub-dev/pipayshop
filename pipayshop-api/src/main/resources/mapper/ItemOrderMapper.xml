@@ -4,7 +4,7 @@
 
     <select id="getMyOrderByUid" resultType="com.example.pipayshopapi.entity.vo.MyItemOrderInfoVO">
         SELECT
-            o.order_id, o.item_id, o.transaction_amount, o.discount, o.order_status, i.item_name, ig.origin_path as userImage
+            o.order_id, o.item_id,o.pi_amount ,o.transaction_amount, o.discount, o.order_status, i.item_name, ig.origin_path as userImage
         FROM
             item_order o
         JOIN
@@ -65,7 +65,7 @@
 
     <select id="getOrderDetail" resultType="com.example.pipayshopapi.entity.vo.ItemOrderDetailVO">
         SELECT
-            o.create_time,o.order_time as payTime, u.address, u.phone, u.user_name as buyerName
+            o.create_time,o.pi_amount,o.certificate_imag,o.order_time as payTime, u.address, u.phone, u.user_name as buyerName
         FROM
             item_order o
                 JOIN
@@ -108,7 +108,7 @@
 
     <select id="getBuyerOrderList" resultType="com.example.pipayshopapi.entity.vo.MyItemOrderInfoVO">
         SELECT
-            o.order_id, o.item_id, o.transaction_amount, o.discount, o.order_status, i.item_name, ig.origin_path as userImage
+            o.order_id, o.item_id, o.pi_amount,o.transaction_amount, o.discount, o.order_status, i.item_name, ig.origin_path as userImage
         FROM
             item_order o
         JOIN

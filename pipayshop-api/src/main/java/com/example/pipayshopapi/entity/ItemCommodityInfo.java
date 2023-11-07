@@ -35,6 +35,14 @@ public class ItemCommodityInfo implements Serializable {
     private Long id;
 
     /**
+     * pi币
+     */
+    private BigDecimal piBalance;
+    /**
+     *  pi钱包地址
+     */
+    private String piAddress;
+    /**
      * 商品id
      */
     private String commodityId;

@@ -55,7 +55,10 @@ public class Constants {
      * 保存交易所图片凭证路径
      */
     public static final String CERTIFICATE_IMAG_PATH = "pipayshop-api/src/main/resources/static/images/tradin_post_certificate";
-
+    /**
+     * 保存pi交易图片凭证路径
+     */
+    public static final String PAYMENT_IMAG_PATH = "pipayshop-api/src/main/resources/static/images/payment_certificate";
     /**
      * 校验码的存储key前缀
      */

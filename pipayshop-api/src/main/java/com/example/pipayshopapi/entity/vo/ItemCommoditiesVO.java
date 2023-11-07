@@ -18,6 +18,16 @@ public class ItemCommoditiesVO{
      * 商品现价
      */
     private BigDecimal price;
+
+    /**
+     * 商品现价
+     */
+    private BigDecimal piBalance;
+
+    /**
+     * 商品现价
+     */
+    private Integer piShoper;
     /**
      * 商品原价
      */
@@ -26,6 +36,10 @@ public class ItemCommoditiesVO{
      * 商品名字
      */
     private String itemCommodityName;
+    /**
+     * 店铺id
+     */
+    private String shopId;
 
     /**
      * 商品的展示图路径
