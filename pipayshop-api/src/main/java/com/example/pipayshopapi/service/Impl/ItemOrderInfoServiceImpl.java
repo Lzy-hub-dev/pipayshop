@@ -224,10 +224,11 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
         // 解析token
         Claims dataFromToken = TokenUtil.getDataFromToken(token);
         String uid = dataFromToken.get("uid", String.class);
-        Integer paymentId = Integer.valueOf(dataFromToken.get("paymentId", String.class));
+        Integer paymentId = dataFromToken.get("paymentId", Integer.class);
         String buyerDataId = dataFromToken.get("buyerDataId", String.class);
         // 订单中的商品
-        String itemOrderDetailDTOByString = dataFromToken.get("itemOrderDetailDTO", String.class);
+        Object object = dataFromToken.get("itemOrderDetailDTO", Object.class);
+        String itemOrderDetailDTOByString=JSON.toJSONString(object);
         // 将json转成需要的对象
         ItemOrderDetailDTO itemOrderDetailDTO = JSONObject.parseObject(itemOrderDetailDTOByString, ItemOrderDetailDTO.class);
 
