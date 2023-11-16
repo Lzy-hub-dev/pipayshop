@@ -30,7 +30,15 @@ public class ItemOrderDetailVO {
      * pi的单价
      */
     private BigDecimal piPrice;
+    /**
+     * 订单状态
+     */
+    private Integer orderStatus;
 
+    /**
+     * pi钱包地址
+     */
+    private Integer piAddress;
     private String phone;
 
     private String buyerName;

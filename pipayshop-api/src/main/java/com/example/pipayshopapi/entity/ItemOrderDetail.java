@@ -42,7 +42,10 @@ public class ItemOrderDetail implements Serializable {
      * 商品id
      */
     private String commodityId;
-
+    /**
+     * 下单时的单价
+     */
+    private BigDecimal piPrice;
     /**
      * 下单时的单价
      */

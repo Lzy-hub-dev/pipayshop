@@ -110,6 +110,11 @@ public class ItemOrder implements Serializable {
      */
     private BigDecimal piAmount;
 
+    /**
+     * pi钱包地址
+     */
+    private String piAddress;
+
     public ItemOrder(Long id, String orderId, BigDecimal transactionAmount, BigDecimal discount, String itemId, String uid, String buyerDataId, Integer orderStatus, Date createTime, Date updateTime, Date orderTime, Integer delFlag) {
         this.id = id;
         this.orderId = orderId;
