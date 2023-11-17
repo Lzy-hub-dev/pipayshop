@@ -183,17 +183,17 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         if (typeMap.size() != 0) {
             commodityDetailVO.setTypeMap(typeMap);
         }
-        String brandId = itemCommodityInfo.getBrandId();
-        // 解析品牌字段
-        if (brandId != null) {
-            BrandInfo brandInfo = brandInfoMapper.selectOne(new QueryWrapper<BrandInfo>()
-                    .eq("b_id", brandId)
-                    .eq("del_flag", 0)
-                    .select("title"));
-            if (brandInfo != null) {
-                commodityDetailVO.setTitle(brandInfo.getTitle());
-            }
-        }
+//        String brandId = itemCommodityInfo.getBrandId();
+//        // 解析品牌字段
+//        if (brandId != null) {
+//            BrandInfo brandInfo = brandInfoMapper.selectOne(new QueryWrapper<BrandInfo>()
+//                    .eq("b_id", brandId)
+//                    .eq("del_flag", 0)
+//                    .select("title"));
+//            if (brandInfo != null) {
+//                commodityDetailVO.setTitle(brandInfo.getTitle());
+//            }
+//        }
         // 封装该商品的评论总数
         int evaluateCount = itemCommodityEvaluateMapper.selectCount(new QueryWrapper<ItemCommodityEvaluate>()
                 .eq("commodity_id", commodityId)

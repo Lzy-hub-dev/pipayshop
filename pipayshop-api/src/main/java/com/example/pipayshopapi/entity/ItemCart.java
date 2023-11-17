@@ -62,7 +62,7 @@ public class ItemCart implements Serializable {
      */
     private Integer sumCount;
     /**
-     * 商品规格
+     * 商品规格详情（多个规格以逗号隔开）
      */
     private String commoditySpec;
 }

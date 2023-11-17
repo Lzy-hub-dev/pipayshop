@@ -90,7 +90,7 @@
             i.item_name, i.score,g.origin_path as userImage
         from
             item_info i
-        join image g
+        left join image g
         on g.image_id=i.user_image
         where
             item_id = #{itemId} and status = 0

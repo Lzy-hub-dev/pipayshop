@@ -47,10 +47,10 @@ public class ItemCommodityInfo implements Serializable {
      */
     private String commodityId;
 
-    /**
-     * 品牌id 可有可无
-     */
-    private String brandId;
+//    /**
+//     * 品牌id 可有可无
+//     */
+//    private String brandId;
 
     /**
      * 商品原价
@@ -98,7 +98,7 @@ public class ItemCommodityInfo implements Serializable {
     private String itemId;
 
     /**
-     * 商品介绍
+     * 商品详情介绍
      */
     private String details;
 
@@ -140,10 +140,10 @@ public class ItemCommodityInfo implements Serializable {
     private Integer status;
 
 
-    /**
-     * 商品的折损（枚举）
-     */
-    private  Integer degreeLoss;
+//    /**
+//     * 商品的折损（枚举）
+//     */
+//    private  Integer degreeLoss;
 
     /**
      * 商品的展示图路径

@@ -16,7 +16,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author wzx
@@ -59,7 +59,7 @@ public class ItemOrder implements Serializable {
     private String uid;
 
     /**
-     * 买家的收货数据
+     * 买家的收货地址数据id
      */
     private String buyerDataId;
 

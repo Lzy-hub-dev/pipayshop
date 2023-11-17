@@ -15,10 +15,10 @@ import java.util.List;
 @NoArgsConstructor
 public class ApplyItemCommodityDTO {
 
-    /**
-     * 品牌id
-     */
-    private String brandId;
+//    /**
+//     * 品牌id
+//     */
+//    private String brandId;
 
     /**
      * 商品现价
@@ -51,7 +51,7 @@ public class ApplyItemCommodityDTO {
      */
     private String itemId;
     /**
-     *  商品介绍
+     *  商品详情介绍
      */
     private String details;
     /**
@@ -66,10 +66,10 @@ public class ApplyItemCommodityDTO {
      *  商品类别(外键关联)
      */
     private Integer categoryId;
-    /**
-     *  商品的折损（枚举）
-     */
-    private Integer degreeLoss;
+//    /**
+//     *  商品的折损（枚举）-1
+//     */
+//    private Integer degreeLoss;
     /**
      *  发货人的电话
      */
