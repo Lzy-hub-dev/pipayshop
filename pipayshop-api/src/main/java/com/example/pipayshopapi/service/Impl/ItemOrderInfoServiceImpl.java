@@ -239,9 +239,11 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
         String orderId = StringUtil.generateShortId();
         // 网店id
         String itemId = itemOrderDetailDTO.getItemId();
+        // pi钱包地址
+        String piAddress = itemOrderDetailDTO.getPiAddress();
         // 插入订单主题表数据
         ItemOrder itemOrder = new ItemOrder(null, orderId, null, null, itemId, uid, buyerDataId
-                , 0, null, null, null, null,paymentId,null,piPrice);
+                , 0, null, null, null, null,paymentId,null,piPrice,piAddress);
         int insert = itemOrderMapper.insert(itemOrder);
         if (insert < 1) {
             throw new BusinessException(ERROR_MAG);
@@ -307,7 +309,7 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
 
 
         // 上传图片和改订单状态为2:提交凭证图片
-        itemOrder.setCertificateImag("/images/tradin_post_certificate/"+ThumbnailPath);
+        itemOrder.setCertificateImag("/images/payment_certificate/"+ThumbnailPath);
         itemOrder.setOrderStatus(1);
         // 更改订单状态和提交图片
         int update = itemOrderMapper.updateById(itemOrder);
@@ -320,9 +322,9 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
         try {
             // 移动temp图片到目标文件夹
             FileCopyUtils.copy(file.getBytes(), destFile);
-            String absolutePath = new File(Constants.CERTIFICATE_IMAG_PATH+separator + ThumbnailPath).getAbsolutePath();
+            String absolutePath = new File(Constants.PAYMENT_IMAG_PATH+separator + ThumbnailPath).getAbsolutePath();
             // 压缩图片
-            Thumbnails.of(Constants.CERTIFICATE_IMAG_PATH+separator+fileName)
+            Thumbnails.of(Constants.PAYMENT_IMAG_PATH+separator+fileName)
                     .size(300, 300)
                     .outputFormat(postStr)
                     .toFile(absolutePath);

@@ -65,7 +65,7 @@
 
     <select id="getOrderDetail" resultType="com.example.pipayshopapi.entity.vo.ItemOrderDetailVO">
         SELECT
-            o.create_time,o.pi_amount,o.certificate_imag,o.order_time as payTime, u.address, u.phone, u.user_name as buyerName
+          o.order_status , o.pi_address , o.create_time,o.pi_amount as piPrice,o.certificate_imag,o.order_time as payTime, u.address, u.phone, u.user_name as buyerName
         FROM
             item_order o
                 JOIN

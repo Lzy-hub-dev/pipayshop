@@ -48,4 +48,9 @@ public class ItemOrderDetailDTO {
      * 商品的展示图
      */
     private String avatarImag;
+
+    /**
+     * pi钱包地址
+     */
+    private String piAddress;
 }

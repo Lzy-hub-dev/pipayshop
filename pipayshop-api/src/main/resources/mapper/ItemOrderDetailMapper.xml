@@ -4,12 +4,13 @@
 
     <select id="selectCommodityList" resultType="com.example.pipayshopapi.entity.dto.ItemOrderDetailDTO">
         SELECT
-            o.commodity_id, o.price, o.discount, o.number, o.commodity_specification, i.origin_path as avatarImag
+            o.commodity_id, o.price, o.pi_price,o.discount, o.number, o.commodity_specification, i.origin_path as avatarImag
         FROM
             item_order_detail o
         join
             image i
         ON
             i.image_id = o.avatar_imag
+        where o.order_id=#{orderId}
     </select>
 </mapper>
