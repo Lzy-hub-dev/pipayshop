@@ -107,8 +107,6 @@ public class ItemCommodityInfo implements Serializable {
      */
     private String imagsList;
 
-
-
     /**
      * 库存
      */
@@ -139,7 +137,6 @@ public class ItemCommodityInfo implements Serializable {
      */
     private Integer status;
 
-
 //    /**
 //     * 商品的折损（枚举）
 //     */
@@ -159,10 +156,12 @@ public class ItemCommodityInfo implements Serializable {
      * 发货人电话
      */
     private String originName;
+
     /**
      * 商品详情信息图集合
      */
     private String detailImagList;
+
     /**
      * 是否属于会员商品 false:否;true:是
      */
