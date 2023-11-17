@@ -309,7 +309,7 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
 
 
         // 上传图片和改订单状态为2:提交凭证图片
-        itemOrder.setCertificateImag("/images/tradin_post_certificate/"+ThumbnailPath);
+        itemOrder.setCertificateImag("/images/payment_certificate/"+ThumbnailPath);
         itemOrder.setOrderStatus(1);
         // 更改订单状态和提交图片
         int update = itemOrderMapper.updateById(itemOrder);
