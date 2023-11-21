@@ -114,10 +114,8 @@ public class FileUploadUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return SEPARATOR + PRE + path + SEPARATOR  + fileName;
     }
-
 
     /**
      *删除文件
@@ -216,8 +214,6 @@ public class FileUploadUtil {
                 FileUploadUtil.deleteFile(path);
             }
             throw new RuntimeException(e);
-
         }
     }
-
 }

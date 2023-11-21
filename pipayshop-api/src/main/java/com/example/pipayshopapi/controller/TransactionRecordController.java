@@ -32,7 +32,7 @@ public class TransactionRecordController {
      */
     @PostMapping("recordTransaction")
     @ApiOperation("数据交换并记录交易，数据采用JWT 加密传输")
-    public ResponseVO<Boolean> recordTransaction( String token){
+    public ResponseVO<Boolean> recordTransaction(String token){
         try {
             boolean flag = transactionRecordService.recordTransaction(token);
             return new ResponseVO<>(200,"交易成功",flag);
