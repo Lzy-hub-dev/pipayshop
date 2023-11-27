@@ -9,7 +9,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -21,13 +20,13 @@ public class LogMemberConsumption implements Serializable {
     //表id
     Integer id;
     //用户ID
-    String user_id;
+    String userId;
     //所属团ID
-    BigInteger zone_id;
+    Long zoneId;
     //消费金额
-    BigDecimal consumption_sum;
+    BigDecimal consumptionSum;
     //消费时间
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    Date consumption_time;
+    Date consumptionTime;
 }

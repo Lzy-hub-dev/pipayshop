@@ -4,12 +4,19 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.pipayshopapi.entity.UserByZone;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
+import com.example.pipayshopapi.mapper.ZoneLeaderConfigurationMapper;
+import com.example.pipayshopapi.service.FirstZoneUserService;
 import com.example.pipayshopapi.service.UserByZoneService;
-import com.example.pipayshopapi.util.InviteCodeGenerator;
+import com.example.pipayshopapi.service.ZoneLeaderConfigurationService;
+import com.example.pipayshopapi.service.ZoneService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
+import java.util.Map;
+
 
 /**
  * <p>
@@ -19,73 +26,66 @@ import org.springframework.web.bind.annotation.*;
  * @author c_shunyi
  * @since 2023-11-21
  */
-@Api(value = "用户专区信息",tags = "用户专区信息")
+@Api(tags = "用户专区信息")
 @RestController
-@RequestMapping("/pipayshopapi/userByZone")
+@RequestMapping("/pipayshopapi/UserByZone")
 public class UserByZoneController {
 
     @Autowired
     UserByZoneService userByZoneService;
+    @Autowired
+    ZoneService ZoneService;
+    @Autowired
+    ZoneLeaderConfigurationService zoneLeaderConfigurationService;
+    @Autowired
+    ZoneLeaderConfigurationMapper zoneLeaderConfigurationMapper;
+    @Autowired
+    FirstZoneUserService firstZoneUserService;
 
     @ApiOperation("添加用户专区信息")
     @PostMapping("addUserByZone")
-    public ResponseVO<String> addUserByZone(@RequestBody UserByZone userByZone){
+    public ResponseVO<String> addUserByZone(@RequestBody Map<String, Object> requestBody){
+        String userId = requestBody.get("userId").toString();
+        if(userId.isEmpty())
+            return ResponseVO.getFalseResponseMsg("请求失败，用户未登录，创建用户专区信息失败");
         if (userByZoneService.getOne(new QueryWrapper<UserByZone>()
-                        .eq("user_id", userByZone.getUserId())) != null){
-            return ResponseVO.getSuccessResponseVo("用户已存在");
+                        .eq("user_id", userId)) != null){
+            return ResponseVO.getFalseResponseMsg("请求失败，用户专区信息已存在，创建用户专区信息失败");
         }else {
+            UserByZone userByZone = new UserByZone();
+            userByZone.setUserId(userId);
+            userByZone.setUserThreshold(zoneLeaderConfigurationService.getById(1).getThresholdSum());
             userByZoneService.save(userByZone);
-            return ResponseVO.getSuccessResponseVo("用户添加成功");
+            return ResponseVO.getSuccessResponseMsg(null, "用户专区信息添加成功");
         }
     }
 
     @ApiOperation("根据用户ID查询用户专区信息")
-    @GetMapping("selectUserZoneByUid/{uid}")
-    public ResponseVO<UserByZone> SelectUserByZone(@PathVariable String uid){
+    @GetMapping("selectUserZoneByUid/{userId}")
+    public ResponseVO<UserByZone> SelectUserByZone(@PathVariable String userId){
         return ResponseVO.getSuccessResponseVo(userByZoneService.getOne(new QueryWrapper<UserByZone>()
-                        .eq("user_id", uid)));
+                        .eq("user_id", userId)));
     }
 
     @ApiOperation("升级为团长")
-    @PutMapping("zoneLeader")
-    public ResponseVO<String> zoneLeader(@RequestBody UserByZone userByZone){
+    @PostMapping("zoneLeader")
+    public ResponseVO<String> zoneLeader(@RequestBody Map<String, Object> requestBody){
+        String userId = requestBody.get("userId").toString();
+        BigDecimal thresholdSum = zoneLeaderConfigurationService.getById(1).getThresholdSum();
         if(userByZoneService.getOne(new QueryWrapper<UserByZone>()
-                .eq("user_id", userByZone.getUserId())
-                .eq("opening_group_qualification", 0)) != null){
-            return ResponseVO.getSuccessResponseVo("升级为团长失败,不具备升级资格");
+                .eq("user_id", userId)).getZoneConsumptionSum().compareTo(thresholdSum) < 0){
+            return ResponseVO.getFalseResponseMsg("升级为团长失败,消费金额未达到门槛，不具备升级资格");
         }
         if(userByZoneService.getOne(new QueryWrapper<UserByZone>()
-                .eq("user_id", userByZone.getUserId())
+                .eq("user_id", userId)
                 .eq("is_group_leader", 1)) != null){
-            return ResponseVO.getSuccessResponseVo("升级为团长失败,已经是团长身份");
+            return ResponseVO.getFalseResponseMsg("升级为团长失败,已经是团长身份");
         }
-        userByZone.setIsGroupLeader(1);
-        userByZone.setInvitationCode(InviteCodeGenerator.generateInviteCode());
-        userByZoneService.update(userByZone, new UpdateWrapper<UserByZone>()
-                .eq("user_id", userByZone.getUserId()));
-        return ResponseVO.getSuccessResponseVo("升级为团长成功，邀请码为："+userByZone.getInvitationCode());
+        userByZoneService.update(null, new UpdateWrapper<UserByZone>()
+                .eq("user_id", userId)
+                .set("is_group_leader", 1)
+                .set("opening_group_qualification", 1));
+        return ResponseVO.getSuccessResponseMsg(null, "升级为团长成功");
     }
 
-    @ApiOperation("用户输入邀请码进行关系绑定")
-    @PutMapping("invitationCode")
-    public ResponseVO<String> invitationCode(@RequestBody UserByZone userByZone) {
-        if (userByZoneService.getOne(new QueryWrapper<UserByZone>()
-                .eq("user_id", userByZone.getUserId())).getSuperiorUserId() != null) {
-            return ResponseVO.getSuccessResponseVo("关系绑定失败，已被其他用户邀请过");
-        } else {
-            UserByZone superiorUser = userByZoneService.getOne(new QueryWrapper<UserByZone>()
-                    .eq("invitation_code", userByZone.getInvitationCode()));
-            if (superiorUser != null) {
-                if (superiorUser.getUserId().equals(userByZone.getUserId())) {
-                    return ResponseVO.getSuccessResponseVo("关系绑定失败，无法绑定自己");
-                }
-                userByZoneService.update(null, new UpdateWrapper<UserByZone>()
-                        .eq("user_id", userByZone.getUserId())
-                        .set("superior_user_id", superiorUser.getUserId()));
-                return ResponseVO.getSuccessResponseVo("关系绑定成功");
-            } else {
-                return ResponseVO.getSuccessResponseVo("关系绑定失败，该邀请码用户不存在或已注销");
-            }
-        }
-    }
 }

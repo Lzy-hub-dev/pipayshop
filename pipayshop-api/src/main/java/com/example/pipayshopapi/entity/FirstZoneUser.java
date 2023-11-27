@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,7 +20,11 @@ public class FirstZoneUser implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     Integer id;
     //团ID
-    BigInteger zone_id;
+    Long zoneId;
     //用户ID
-    String user_id;
+    String userId;
+    public FirstZoneUser(Long zoneId, String userId){
+        this.zoneId = zoneId;
+        this.userId = userId;
+    }
 }

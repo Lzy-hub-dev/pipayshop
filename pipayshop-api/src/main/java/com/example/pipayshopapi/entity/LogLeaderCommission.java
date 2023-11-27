@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 
@@ -24,14 +25,14 @@ public class LogLeaderCommission implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     Integer id;
     //团长用户ID
-    BigInteger zone_leader_id;
+    String zoneLeaderId;
     //所属团ID
-    BigInteger zone_id;
+    Long zoneId;
     //返佣金额
-    BigInteger commission_amount;
+    BigDecimal commissionAmount;
     //返佣发放时间
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    Date commission_time;
+    Date commissionTime;
 
 }

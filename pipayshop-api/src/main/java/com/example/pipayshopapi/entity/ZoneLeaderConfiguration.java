@@ -18,15 +18,21 @@ public class ZoneLeaderConfiguration implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     Integer id;
     //团长门槛金额
-    BigDecimal ThresholdSum;
+    BigDecimal thresholdSum;
     //任务完成时间
-    Integer TaskTime;
+    Integer taskTime;
     //下级最大人数
-    Integer SubordinateMaxNum;
+    Integer subordinateMaxNum;
     //一级利率
-    BigDecimal FirstInterestRate;
+    Long firstInterestRate;
     //二级利率
-    BigDecimal TwoInterestRate;
+    Long twoInterestRate;
+    // 二级利率二级时间利率
+    Long twoInterestRateTwo;
     //是否开启二级返佣时间（0：不开启 1：开启）
     Integer twoRebateTime;
+    //二级返佣二级时间的一级天数
+    Integer twoRebateTimeOne;
+    //二级返佣二级时间的二级天数
+    Integer twoRebateTimeTwo;
 }

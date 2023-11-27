@@ -11,6 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -22,6 +23,7 @@ import java.util.Arrays;
 @SpringBootApplication
 @EnableRabbit
 @MapperScan("com.example.pipayshopapi.mapper")
+@EnableScheduling
 public class PipayshopApiApplication {
 
     public static void main(String[] args) {

@@ -21,6 +21,12 @@ public class ResponseVO<T> {
     public static <T> ResponseVO<T> getSuccessResponseVo(T data){
         return new ResponseVO<>( 200, "请求成功", data);
     }
+    /**
+     请求成功的信息响应
+     */
+    public static <T> ResponseVO<T> getSuccessResponseMsg(T data,String msg){
+        return new ResponseVO<>( 200, msg,data);
+    }
 
     /**
      失败的响应

@@ -1,7 +1,5 @@
 package com.example.pipayshopapi.controller;
 
-import com.example.pipayshopapi.entity.Country;
-import com.example.pipayshopapi.entity.UserInfo;
 import com.example.pipayshopapi.entity.dto.LoginDTO;
 import com.example.pipayshopapi.entity.dto.RegisterDTO;
 import com.example.pipayshopapi.entity.dto.UserRegisterDTO;
@@ -23,7 +21,6 @@ import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;

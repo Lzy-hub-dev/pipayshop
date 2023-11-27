@@ -21,7 +21,7 @@ public class TwoZoneUser implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     Integer id;
     //团ID
-    BigInteger zoneId;
+    Long zoneId;
     //用户ID
     String userId;
 }
