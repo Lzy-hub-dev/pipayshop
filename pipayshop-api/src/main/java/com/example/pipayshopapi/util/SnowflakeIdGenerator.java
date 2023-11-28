@@ -63,10 +63,15 @@ public class SnowflakeIdGenerator {
         lastTimestamp = timestamp;
 
         // 移位并通过或运算拼到一起组成64位的ID
-        return ((timestamp - START_TIMESTAMP) << TIMESTAMP_LEFT) |
+        long num = ((timestamp - START_TIMESTAMP) << TIMESTAMP_LEFT) |
                 (datacenterId << DATACENTER_LEFT) |
                 (machineId << MACHINE_LEFT) |
                 sequence;
+        String numStr = Long.toString(num);  // 将长整型转换为字符串
+        String resultStr = numStr.substring(0, 14);  // 截取前5位
+        long result = Long.parseLong(resultStr);  // 将结果转换为长整型
+
+        return result;
     }
 
     private long tilNextMillis(long lastTimestamp) {

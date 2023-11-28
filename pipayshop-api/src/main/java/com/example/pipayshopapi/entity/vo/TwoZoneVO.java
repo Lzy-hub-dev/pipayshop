@@ -4,17 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
+import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ZoneUserInfoVO {
-
+public class TwoZoneVO {
     String userId;
-    String userName;
-    private String userImage;
-    Long zoneId;
-    //消费金额
-    BigDecimal zoneConsumptionSum;
+    //人员信息
+    List<ZoneUserInfoVO> zoneUserInfoVOList;
 }

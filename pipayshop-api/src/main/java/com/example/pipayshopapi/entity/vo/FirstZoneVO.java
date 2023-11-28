@@ -15,14 +15,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FirstZoneVO {
-    //所属用户ID
-    String userId;
-    //团ID
-    Long zoneId;
     //团内人数
     Integer zoneUserNum;
     //邀请码
     String invitationCode;
+    //返利资格
+    Integer rebateQualification;
+    //是否失效
+    Integer invalid;
     //人员信息
     List<ZoneUserInfoVO> zoneUserInfoVOList;
 }

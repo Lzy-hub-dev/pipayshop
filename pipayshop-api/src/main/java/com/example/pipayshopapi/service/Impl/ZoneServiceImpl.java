@@ -5,10 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.*;
 import com.example.pipayshopapi.entity.dto.UserByZoneInvitationCodeDTO;
-import com.example.pipayshopapi.entity.vo.FirstZoneVO;
-import com.example.pipayshopapi.entity.vo.ResponseVO;
-import com.example.pipayshopapi.entity.vo.UserInfoVO;
-import com.example.pipayshopapi.entity.vo.ZoneUserInfoVO;
+import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.mapper.*;
 import com.example.pipayshopapi.service.UserInfoService;
 import com.example.pipayshopapi.service.ZoneService;
@@ -57,6 +54,9 @@ public class ZoneServiceImpl  extends ServiceImpl<FirstZoneMapper, FirstZone> im
         UserByZone userByZone = userByZoneMapper.selectOne(new QueryWrapper<UserByZone>()
                 .eq("user_id", userId));
         //检验是否具有开团资格
+        if (userByZone == null) {
+            return ResponseVO.getFalseResponseMsg("团创建失败，无该用户的专区信息");
+        }
         if(userByZone.getOpeningGroupQualification() == 1) {
             //添加一级团
             FirstZone firstZone = new FirstZone();
@@ -75,10 +75,9 @@ public class ZoneServiceImpl  extends ServiceImpl<FirstZoneMapper, FirstZone> im
             //判断该一级团是否要被纳入上级总级团
             //判断是否有邀请人
             String superiorUserId = userByZone.getSuperiorUserId();
-            if (superiorUserId != null){
-                if (!superiorUserId.isEmpty()) {
+                    if (superiorUserId != null && !superiorUserId.isEmpty()) {
                 //判断是否为第一次开团
-                if (userByZone.getZoneNum() == 1) {
+                if (userByZone.getZoneNum() == 0) {
                     //判断二级团是否失效
                     FirstZone firstZone1 = firstZoneMapper.selectOne(new QueryWrapper<FirstZone>()
                             .eq("user_id", superiorUserId)
@@ -91,7 +90,7 @@ public class ZoneServiceImpl  extends ServiceImpl<FirstZoneMapper, FirstZone> im
                         //纳入上级的二级团
                         if (invalid == 0) {
                             TwoZone twoZone = new TwoZone(twoZoneSuperior.getZoneId(), firstZone.getZoneId());
-                            twoZoneMapper.insert(twoZone);}}}}}
+                            twoZoneMapper.insert(twoZone);}}}}
             //添加二级总团
             TwoZoneSuperior twoZoneSuperior2 = new TwoZoneSuperior();
             twoZoneSuperior2.setUserId(userId);
@@ -163,7 +162,7 @@ public class ZoneServiceImpl  extends ServiceImpl<FirstZoneMapper, FirstZone> im
             }
             //判断团是否满员
             Integer maxNum = zoneLeaderConfigurationMapper.selectById(1).getSubordinateMaxNum();
-            if (firstZone.getZoneUserNum() < maxNum) {
+            if (firstZone.getZoneUserNum() > maxNum) {
                 return ResponseVO.getFalseResponseMsg("请求失败，该团已经满人，无法加入");
             }
             //通过邀请码获取到对应的团
@@ -171,34 +170,64 @@ public class ZoneServiceImpl  extends ServiceImpl<FirstZoneMapper, FirstZone> im
             //将用户绑定到当前团下
             firstZoneUserMapper.insert(new FirstZoneUser(zoneId, userId));
             //查询是否关联了二级团
-            TwoZoneUser twoZoneUser = new TwoZoneUser();
-            twoZoneUser.setZoneId(zoneId);
-            twoZoneUser.setUserId(userId);
-            twoZoneUserMapper.insert(twoZoneUser);
-            //修改用户状态为入团状态
+            //判断邀请码的所属用户
+            TwoZoneSuperior twoZoneSuperior = twoZoneSuperiorMapper.selectOne(new QueryWrapper<TwoZoneSuperior>()
+                    .eq("first_zone_id", firstZone.getZoneId()));
+            TwoZone twoZone = twoZoneMapper.selectOne(new QueryWrapper<TwoZone>()
+                    .eq("superior_zone_id", twoZoneSuperior.getZoneId()));
+            if (twoZone != null){
+                //存在
+                TwoZoneUser twoZoneUser = new TwoZoneUser();
+                twoZoneUser.setZoneId(twoZone.getZoneId());
+                twoZoneUser.setUserId(userId);
+                twoZoneUserMapper.insert(twoZoneUser);
+            }
+            //修改用户信息
             userByZoneMapper.update(null, new UpdateWrapper<UserByZone>()
                     .eq("user_id", userId)
-                    .set("join_zone", 1));
+                    .set("join_zone", 1)
+                    .set("superior_user_id", firstZone.getUserId()));
             return ResponseVO.getSuccessResponseMsg(null,"入团成功");
         }
         return ResponseVO.getFalseResponseMsg("请求失败，无该用户专区信息");
     }
 
     @Override
-    public List<TwoZone> selectTwoZones(String userId, Long firstZoneId) {
-        TwoZoneSuperior twoZoneSuperior = twoZoneSuperiorMapper.selectOne(new UpdateWrapper<TwoZoneSuperior>()
+    public List<TwoZoneVO> selectTwoZones(String userId, Long firstZoneId) {
+        List<TwoZoneVO> twoZoneVOS = new ArrayList<>();
+        TwoZoneVO twoZoneVO = new TwoZoneVO();
+        List<ZoneUserInfoVO> zoneUserInfoVOList = new ArrayList<>();
+        ZoneUserInfoVO zoneUserInfoVO = new ZoneUserInfoVO();
+        TwoZoneSuperior twoZoneSuperior = twoZoneSuperiorMapper.selectOne(new QueryWrapper<TwoZoneSuperior>()
                 .eq("user_id", userId)
                 .eq("first_zone_id", firstZoneId));
-        List<TwoZone> TwoZones = twoZoneMapper.selectList(new QueryWrapper<TwoZone>()
+        List<TwoZone> twoZones = twoZoneMapper.selectList(new QueryWrapper<TwoZone>()
                 .eq("superior_zone_id", twoZoneSuperior.getZoneId()));
-        return TwoZones;
+        for (TwoZone twoZone : twoZones) {
+            FirstZone firstZone = firstZoneMapper.selectOne(new QueryWrapper<FirstZone>()
+                    .eq("zone_id", twoZone.getZoneId()));
+
+            twoZoneVO.setUserId(firstZone.getUserId());
+            List<FirstZoneUser> users = firstZoneUserMapper.selectList(new QueryWrapper<FirstZoneUser>()
+                    .eq("zone_id", firstZone.getZoneId()));
+            for (FirstZoneUser user : users) {
+                UserInfoVO userInfoVO = userInfoService.selectUserInfoByUid(user.getUserId());
+                zoneUserInfoVO.setUserId(userInfoVO.getUid());
+                zoneUserInfoVO.setUserImage(userInfoVO.getUserImage());
+                zoneUserInfoVO.setUserName(userInfoVO.getUserName());
+                zoneUserInfoVOList.add(zoneUserInfoVO);
+            }
+            twoZoneVO.setZoneUserInfoVOList(zoneUserInfoVOList);
+            twoZoneVOS.add(twoZoneVO);
+        }
+        return twoZoneVOS;
     }
 
     @Override
     public FirstZoneVO selectZone(String userId, Long firstZoneId) {
         List<ZoneUserInfoVO> ZoneUserInfoVOList = new ArrayList<>();
         FirstZoneVO firstZoneVO = new FirstZoneVO();
-        ZoneUserInfoVO zoneUserInfoVO = new ZoneUserInfoVO();
+
         FirstZone firstZone = firstZoneMapper.selectOne(new QueryWrapper<FirstZone>()
                 .eq("user_id", userId)
                 .eq("zone_id", firstZoneId));
@@ -206,6 +235,7 @@ public class ZoneServiceImpl  extends ServiceImpl<FirstZoneMapper, FirstZone> im
             List<FirstZoneUser> firstZoneUsers = firstZoneUserMapper.selectList(new QueryWrapper<FirstZoneUser>()
                     .eq("zone_id", firstZoneId));
             for (FirstZoneUser firstZoneUser : firstZoneUsers) {
+                ZoneUserInfoVO zoneUserInfoVO = new ZoneUserInfoVO();
                 UserInfoVO userInfo = userInfoService.selectUserInfoByUid(firstZoneUser.getUserId());
                 zoneUserInfoVO.setUserId(userInfo.getUid());
                 zoneUserInfoVO.setUserImage(userInfo.getUserImage());
@@ -216,11 +246,20 @@ public class ZoneServiceImpl  extends ServiceImpl<FirstZoneMapper, FirstZone> im
                 zoneUserInfoVO.setZoneId(userByZone.getNewZoneId());
                 ZoneUserInfoVOList.add(zoneUserInfoVO);
             }
-            firstZoneVO.setZoneId(firstZoneId);
             firstZoneVO.setZoneUserNum(firstZone.getZoneUserNum());
             firstZoneVO.setInvitationCode(firstZone.getInvitationCode());
+            firstZoneVO.setRebateQualification(firstZone.getRebateQualification());
+            firstZoneVO.setInvalid(firstZone.getInvalid());
             firstZoneVO.setZoneUserInfoVOList(ZoneUserInfoVOList);
         }
         return firstZoneVO;
+    }
+
+    @Override
+    public ZoneStatusVO selectTwoZone(String userId, Long firstZoneId) {
+        TwoZoneSuperior twoZoneSuperior = twoZoneSuperiorMapper.selectOne(new QueryWrapper<TwoZoneSuperior>()
+                .eq("user_id", userId)
+                .eq("first_zone_id", firstZoneId));
+        return new ZoneStatusVO(twoZoneSuperior.getRebateQualification(), twoZoneSuperior.getInvalid());
     }
 }

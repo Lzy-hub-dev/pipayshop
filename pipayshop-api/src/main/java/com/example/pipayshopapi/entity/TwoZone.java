@@ -23,18 +23,18 @@ public class TwoZone implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     Integer id;
     //所属用户ID
-    Long superior_zone_id ;
+    Long superiorZoneId ;
     //团ID
     Long zoneId;
+    //团内人数
+    Integer zoneUserNum;
     //开团时间
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     Date opening_zone_time;
-    //是否返利
-    Integer levelRebate;
 
-    public TwoZone(Long superior_zone_id, Long zoneId) {
-        this.superior_zone_id = superior_zone_id;
+    public TwoZone(Long superiorZoneId, Long zoneId) {
+        this.superiorZoneId = superiorZoneId;
         this.zoneId = zoneId;
     }
 

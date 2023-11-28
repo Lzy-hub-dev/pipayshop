@@ -3,7 +3,9 @@ package com.example.pipayshopapi.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.pipayshopapi.entity.UserByZone;
+import com.example.pipayshopapi.entity.UserInfo;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
+import com.example.pipayshopapi.mapper.UserInfoMapper;
 import com.example.pipayshopapi.mapper.ZoneLeaderConfigurationMapper;
 import com.example.pipayshopapi.service.FirstZoneUserService;
 import com.example.pipayshopapi.service.UserByZoneService;
@@ -36,6 +38,8 @@ public class UserByZoneController {
     @Autowired
     ZoneService ZoneService;
     @Autowired
+    UserInfoMapper userInfoMapper;
+    @Autowired
     ZoneLeaderConfigurationService zoneLeaderConfigurationService;
     @Autowired
     ZoneLeaderConfigurationMapper zoneLeaderConfigurationMapper;
@@ -48,10 +52,13 @@ public class UserByZoneController {
         String userId = requestBody.get("userId").toString();
         if(userId.isEmpty())
             return ResponseVO.getFalseResponseMsg("请求失败，用户未登录，创建用户专区信息失败");
+        if (userInfoMapper.selectOne(new QueryWrapper<UserInfo>()
+                .eq("uid", userId)) == null)
+            return ResponseVO.getFalseResponseMsg("请求失败，无该用户信息");
         if (userByZoneService.getOne(new QueryWrapper<UserByZone>()
                         .eq("user_id", userId)) != null){
             return ResponseVO.getFalseResponseMsg("请求失败，用户专区信息已存在，创建用户专区信息失败");
-        }else {
+        } else {
             UserByZone userByZone = new UserByZone();
             userByZone.setUserId(userId);
             userByZone.setUserThreshold(zoneLeaderConfigurationService.getById(1).getThresholdSum());

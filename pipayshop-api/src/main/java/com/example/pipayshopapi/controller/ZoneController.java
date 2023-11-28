@@ -5,6 +5,8 @@ import com.example.pipayshopapi.entity.TwoZone;
 import com.example.pipayshopapi.entity.dto.UserByZoneInvitationCodeDTO;
 import com.example.pipayshopapi.entity.vo.FirstZoneVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
+import com.example.pipayshopapi.entity.vo.TwoZoneVO;
+import com.example.pipayshopapi.entity.vo.ZoneStatusVO;
 import com.example.pipayshopapi.service.ZoneService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -40,7 +42,7 @@ public class ZoneController {
     @ApiOperation("查询用户名和一级团id查询当前一级团信息")
     @GetMapping("selectZone/{userId}/{firstZoneId}")
     public ResponseVO<FirstZoneVO> selectZone(@PathVariable String userId, @PathVariable Long firstZoneId){
-        if(zoneService.selectZone(userId, firstZoneId) == null)
+        if(zoneService.selectZone(userId, firstZoneId).getZoneUserNum() == null)
             return ResponseVO.getSuccessResponseMsg(null, "无该团信息");
         return ResponseVO.getSuccessResponseVo(zoneService.selectZone(userId, firstZoneId));
     }
@@ -51,11 +53,18 @@ public class ZoneController {
         return ResponseVO.getSuccessResponseVo(zoneService.selectZones(userId));
     }
 
-    @ApiOperation("查询用户名和一级团id查询二级团信息")
+    @ApiOperation("查询用户名和一级团id查询所有二级团信息")
     @GetMapping("selectTwoZones/{userId}/{firstZoneId}")
-    public ResponseVO<List<TwoZone>> selectTwoZones(@PathVariable String userId, @PathVariable Long firstZoneId){
+    public ResponseVO<List<TwoZoneVO>> selectTwoZones(@PathVariable String userId, @PathVariable Long firstZoneId){
         return ResponseVO.getSuccessResponseVo(zoneService.selectTwoZones(userId, firstZoneId));
     }
+
+    @ApiOperation("二级团是否可返利及是否失效")
+    @GetMapping("selectTwoZone/{userId}/{firstZoneId}")
+    public ResponseVO<ZoneStatusVO> selectTwoZone(@PathVariable String userId, @PathVariable Long firstZoneId){
+        return ResponseVO.getSuccessResponseVo(zoneService.selectTwoZone(userId, firstZoneId));
+    }
+
     @ApiOperation("通过邀请码入团")
     @PostMapping("invitationCode")
     public ResponseVO<String> invitationCode(@RequestBody UserByZoneInvitationCodeDTO userByZoneInvitationCodeDTO) {
