@@ -5,13 +5,13 @@ import com.example.pipayshopapi.entity.vo.ResponseVO;
 
 public interface RebateService {
     /**
-     * 一级返佣
+     * 一级团返佣
      * @return
      */
     ResponseVO<String> firstRebate(RebateDTO rebateDTO);
 
     /**
-     * 二级返佣
+     * 二级团返佣
      * @return
      */
     ResponseVO<String> twoRebate(RebateDTO rebateDTO);

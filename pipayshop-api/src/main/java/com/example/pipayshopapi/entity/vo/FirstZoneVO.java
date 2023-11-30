@@ -23,6 +23,8 @@ public class FirstZoneVO {
     Integer rebateQualification;
     //是否失效
     Integer invalid;
+    //是否返佣
+    Integer levelRebate;
     //人员信息
     List<ZoneUserInfoVO> zoneUserInfoVOList;
 }

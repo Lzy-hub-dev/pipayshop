@@ -100,4 +100,9 @@ public class UserInfoVO implements Serializable {
      * 0:不是pi商 1：是pi商
      */
     private Integer piShoper;
+
+    /**
+     * 0:不是供应商 1：是供应商商
+     */
+    private Integer supplier;
 }

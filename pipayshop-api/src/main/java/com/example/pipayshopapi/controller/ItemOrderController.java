@@ -90,7 +90,8 @@ public class ItemOrderController {
     public ResponseVO<String> completedOrder(@PathVariable String orderId) {
         try {
             int update = itemOrderInfoService.completedOrder(orderId);
-            if (update < 1){
+
+            if (update < 2){
                 throw new Exception();
             }
             return ResponseVO.getSuccessResponseVo("收货成功");

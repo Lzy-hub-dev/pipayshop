@@ -48,7 +48,7 @@ public class RebateServiceImpl implements RebateService {
         if(firstZone.getLevelRebate() == 1){
             return ResponseVO.getFalseResponseMsg("该团已经返利，无法再次获取返利");
         }
-        if (firstZone.getRebateQualification() == 1){
+        if (firstZone.getRebateQualification() == 0){
             return ResponseVO.getFalseResponseMsg("当前不具有返利资格，请稍后重试");
         }
         if(firstZone.getOpeningZoneTime().compareTo(firstZone.getEndTime()) > 0 || firstZone.getOpeningZoneTime().compareTo(firstZone.getEndTime()) == 0){
@@ -57,24 +57,25 @@ public class RebateServiceImpl implements RebateService {
                     .set("invalid", 1));
             return ResponseVO.getFalseResponseMsg("该团超过任务时长已失效，无法获取返佣");
         }
-        //修改一级团状态为成功返利
+        //修改一级团状态为成功返利且团失效
         firstZoneMapper.update(null, new UpdateWrapper<FirstZone>()
                 .eq("zone_id", zoneId)
-                .set("level_rebate", 1));
+                .set("level_rebate", 1)
+                .set("invalid", 1));
         //为用户账户添加金额
-        BigDecimal interestRate = zoneLeaderConfiguration.getThresholdSum()
+        UserByZone userByZone = userByZoneMapper.selectOne(new QueryWrapper<UserByZone>()
+                .eq("user_id", userId));
+        BigDecimal interestRate = userByZone.getUserThreshold()
                 .multiply(BigDecimal.valueOf(zoneLeaderConfiguration.getFirstInterestRate()));
         AccountInfo accountInfo = accountInfoMapper.selectOne(new QueryWrapper<AccountInfo>()
                 .eq("uid", userId)
                 .eq("del_flag", 0));
         if (accountInfo == null) {
-            throw new BusinessException("无该用户或者该用户已注销");
+            throw new BusinessException("用户信息表无该用户或者该用户已注销");
         }
         accountInfoMapper.update(null, new UpdateWrapper<AccountInfo>()
                 .eq("uid", userId)
-                .set("pi_balance", accountInfo.getPiBalance()
-                        .add(zoneLeaderConfiguration.getThresholdSum()
-                                .multiply(BigDecimal.valueOf(zoneLeaderConfiguration.getFirstInterestRate())))));
+                .setSql("pi_balance=pi_balance+" + interestRate));
         //修改用户专区信息表
         Integer firstRebateNum = userByZoneMapper.selectOne(new QueryWrapper<UserByZone>()
                 .eq("user_id", userId)).getFirstRebateNum();
@@ -125,7 +126,8 @@ public class RebateServiceImpl implements RebateService {
             //修改二级团状态为成功返利
             twoZoneSuperiorMapper.update(null, new UpdateWrapper<TwoZoneSuperior>()
                     .eq("zone_id", zoneId)
-                    .set("level_rebate", 1));
+                    .set("level_rebate", 1)
+                    .set("invalid", 1));
             //开团时间
             Date openingZoneTime = twoZoneSuperior.getOpeningZoneTime();
             //一阶段结束时间
@@ -146,13 +148,11 @@ public class RebateServiceImpl implements RebateService {
                         .eq("uid", userId)
                         .eq("del_flag", 0));
                 if (accountInfo == null) {
-                    throw new BusinessException("无该用户或者该用户已注销");
+                    throw new BusinessException("用户信息表无该用户或者该用户已注销");
                 }
                 accountInfoMapper.update(null, new UpdateWrapper<AccountInfo>()
                         .eq("uid", userId)
-                        .set("pi_balance", accountInfo.getPiBalance()
-                                .add(zoneLeaderConfiguration.getThresholdSum()
-                                        .multiply(BigDecimal.valueOf(zoneLeaderConfiguration.getFirstInterestRate())))));
+                        .setSql("pi_balance=pi_balance+"+interestRate));
                 //修改用户专区信息表
                 Integer twoRebateNum = userByZoneMapper.selectOne(new QueryWrapper<UserByZone>()
                         .eq("user_id", userId)).getTwoRebateNum();
@@ -179,13 +179,11 @@ public class RebateServiceImpl implements RebateService {
                         .eq("uid", userId)
                         .eq("del_flag", 0));
                 if (accountInfo == null) {
-                    throw new BusinessException("无该用户或者该用户已注销");
+                    throw new BusinessException("用户信息表无该用户或者该用户已注销");
                 }
                 accountInfoMapper.update(null, new UpdateWrapper<AccountInfo>()
                         .eq("uid", userId)
-                        .set("pi_balance", accountInfo.getPiBalance()
-                                .add(zoneLeaderConfiguration.getThresholdSum()
-                                        .multiply(BigDecimal.valueOf(zoneLeaderConfiguration.getFirstInterestRate())))));
+                        .setSql("pi_balance=pi_balance+"+interestRate));
                 //修改用户专区信息表
                 Integer twoRebateNum = userByZoneMapper.selectOne(new QueryWrapper<UserByZone>()
                         .eq("user_id", userId)).getTwoRebateNum();

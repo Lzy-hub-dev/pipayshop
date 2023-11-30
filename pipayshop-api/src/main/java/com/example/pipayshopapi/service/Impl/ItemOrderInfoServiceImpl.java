@@ -22,6 +22,7 @@ import io.jsonwebtoken.Claims;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
@@ -63,6 +64,12 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
     @Resource
     private ItemOrderDetailMapper itemOrderDetailMapper;
 
+    @Autowired
+    UserByZoneMapper userByZoneMapper;
+
+    @Autowired
+    CountryCommodityMapper countryCommodityMapper;
+
     private static final String PAY_ERROR = "该订单已经支付，请勿重复下单！";
 
     private static final String ERROR_MAG = "生成未支付订单失败";
@@ -95,10 +102,21 @@ public class ItemOrderInfoServiceImpl extends ServiceImpl<ItemOrderInfoMapper, I
 
     @Override
     public int completedOrder(String orderId) {
+        int i = 0;
+        //添加专区消费金额
+        if (countryCommodityMapper.selectOne(new QueryWrapper<CountryCommodity>()
+                .eq("commodity_id", itemOrderDetailMapper.selectOne(
+                        new QueryWrapper<ItemOrderDetail>().eq("order_id", orderId)).getCommodityId())).getCountryCode().equals("PIFTWARE")){
+            ItemOrder order = itemOrderMapper.selectOne(new QueryWrapper<ItemOrder>()
+                    .eq("order_id", orderId));
+            i = userByZoneMapper.update(null, new UpdateWrapper<UserByZone>()
+                    .eq("user_id", order.getUid())
+                    .setSql("zone_consumption_sum = zone_consumption_sum +" + order.getTransactionAmount()));
+        }
         return itemOrderMapper.update(null, new UpdateWrapper<ItemOrder>()
                 .eq("order_id", orderId)
                 .set("order_status", 2)
-                .set("update_time", new Date()));
+                .set("update_time", new Date())) + i;
     }
 
     @Override

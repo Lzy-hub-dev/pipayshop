@@ -60,9 +60,9 @@ public class ZoneController {
     }
 
     @ApiOperation("二级团是否可返利及是否失效")
-    @GetMapping("selectTwoZone/{userId}/{firstZoneId}")
-    public ResponseVO<ZoneStatusVO> selectTwoZone(@PathVariable String userId, @PathVariable Long firstZoneId){
-        return ResponseVO.getSuccessResponseVo(zoneService.selectTwoZone(userId, firstZoneId));
+    @GetMapping("selectTwoZone/{zoneId}")
+    public ResponseVO<ZoneStatusVO> selectTwoZone( @PathVariable Long zoneId){
+        return ResponseVO.getSuccessResponseVo(zoneService.selectTwoZone(zoneId));
     }
 
     @ApiOperation("通过邀请码入团")

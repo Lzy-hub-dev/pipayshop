@@ -4,7 +4,7 @@
 
     <select id="selectUserInfoByUid" resultType="com.example.pipayshopapi.entity.vo.UserInfoVO">
         SELECT
-            u.id, u.uid,pi_shoper,user_name,pi_name,access_token,last_login,gender,shop_balance,level,u.personal_profile,img.origin_path as userImage, u.language,u.email,u.age, u.country
+            u.id, u.uid,pi_shoper,supplier,user_name,pi_name,access_token,last_login,gender,shop_balance,level,u.personal_profile,img.origin_path as userImage, u.language,u.email,u.age, u.country
         FROM
             user_info u
         JOIN

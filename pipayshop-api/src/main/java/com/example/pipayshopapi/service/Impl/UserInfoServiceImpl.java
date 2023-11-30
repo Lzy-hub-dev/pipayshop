@@ -427,7 +427,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         userRegisterDTO.setPassword(hashPassword);
         Long count = userRegisterMapper.selectCount(new QueryWrapper<UserRegister>()
                             .eq("uid", userRegisterDTO.getUid()));
-        if (null == count){
+        if (0 == count){
             // 插入数据
             int insert = userRegisterMapper.insertRegisterData(userRegisterDTO);
             return insert > 0;

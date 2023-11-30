@@ -38,6 +38,8 @@ public class UserByZone implements Serializable {
     Integer zoneNum;
     //当前拥有的最新的团id
     Long newZoneId;
+    //当前拥有的最新的二级团id
+    Long newTwoZoneId;
     //获取一级佣金次数
     Integer firstRebateNum;
     //获取二级佣金次数

@@ -26,20 +26,31 @@ public interface ZoneService extends IService<FirstZone> {
     List<FirstZone> selectZones(String userId);
 
     /**
-     * 入团
+     * 通过邀请码入团
      * @param userByZoneInvitationCodeDTO
      * @return
      */
     ResponseVO<String> joinZone(UserByZoneInvitationCodeDTO userByZoneInvitationCodeDTO);
 
     /**
-     * 查询用户二级团信息
+     * 查询用户名和一级团id查询所有二级团信息
      * @param userId
      * @param zoneId
      */
     List<TwoZoneVO> selectTwoZones(String userId, Long zoneId);
 
+    /**
+     * 查询用户名和一级团id查询当前一级团信息
+     * @param userId
+     * @param firstZoneId
+     * @return
+     */
     FirstZoneVO selectZone(String userId, Long firstZoneId);
 
-    ZoneStatusVO selectTwoZone(String userId, Long firstZoneId);
+    /**
+     * 二级团是否可返利及是否失效
+     * @param ZoneId
+     * @return
+     */
+    ZoneStatusVO selectTwoZone(Long ZoneId);
 }

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ZoneStatusVO {
     //返利资格
-    Integer rebate_qualification;
+    Integer rebateQualification;
     //是否失效
     Integer invalid;
 }
