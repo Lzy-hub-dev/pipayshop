@@ -29,7 +29,7 @@ public class ZoneLeaderTask {
     @Autowired
     TwoZoneSuperiorMapper twoZoneSuperiorMapper;
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     @Scheduled(cron = "0 0/1 * * * ?")
     public void inspectZoneLeader(){
         System.out.println("开始检查开团资格");
@@ -62,7 +62,7 @@ public class ZoneLeaderTask {
         }
     }
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     //@Scheduled(cron = "* * * * * ?")
     @Scheduled(cron = "0 0/5 * * * ?")
     public void inspectRebate() {
@@ -82,7 +82,7 @@ public class ZoneLeaderTask {
         }
     }
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     //@Scheduled(cron = "* * * * * ?")
     @Scheduled(cron = "0 0/1 * * * ?")
     public void inspectZoneInvalidity(){
