@@ -19,9 +19,9 @@
                    WHEN order_status = 3 THEN '无效订单'
                    END                                                        AS order_status
         from shop_order_info o
-                 inner join shop_commodity_info c
+                  left join shop_commodity_info c
                             on o.commodity_id = c.commodity_id
-                 inner join shop_info i
+                  left join shop_info i
                             on i.shop_id = o.shop_id
         where o.uid = #{userId}
           and o.del_flag = 0
@@ -31,9 +31,9 @@
     <select id="selectOrderByUidAndStatus" resultType="com.example.pipayshopapi.entity.vo.ShopOrderInfoVO">
         SELECT ui.uid,ui.user_name,ui.user_image,  sci.commodity_id,sci.commodity_name,sci.commodity_img_list,  soi.order_id,soi.transaction_amount
         FROM user_info as ui
-                 INNER JOIN shop_info as si on ui.uid=si.uid
-                 INNER JOIN shop_commodity_info as sci on si.shop_id=sci.shop_id
-                 INNER JOIN shop_order_info as soi on sci.shop_id=soi.shop_id
+                  left join shop_info as si on ui.uid=si.uid
+                  left join shop_commodity_info as sci on si.shop_id=sci.shop_id
+                  left join shop_order_info as soi on sci.shop_id=soi.shop_id
         WHERE sci.`status`=1 and soi.del_flag=0
           and si.uid=#{uid}
           and order_status=#{status}
@@ -42,9 +42,9 @@
     <select id="selectAllOrderByUidAndStatus" resultType="java.lang.Integer">
         SELECT COUNT(*)
         FROM user_info as ui
-                 INNER JOIN shop_info as si on ui.uid=si.uid
-                 INNER JOIN shop_commodity_info as sci on si.shop_id=sci.shop_id
-                 INNER JOIN shop_order_info as soi on sci.shop_id=soi.shop_id
+                  left join shop_info as si on ui.uid=si.uid
+                  left join shop_commodity_info as sci on si.shop_id=sci.shop_id
+                  left join shop_order_info as soi on sci.shop_id=soi.shop_id
         WHERE sci.`status`=1 and soi.del_flag=0
           and si.uid=#{uid}
           and order_status=#{status}
@@ -67,12 +67,12 @@
         e.origin_path as user_image, u.shop_name,g.origin_path as avatar_imag, i.commodity_detail
         from
         shop_order_info o
-        JOIN
+        left join
         shop_info u
-        JOIN
+        left join
         shop_commodity_info i
-        join image g on g.image_id=i.avatar_imag
-        join image e on e.image_id=u.user_image
+        left join image g on g.image_id=i.avatar_imag
+        left join image e on e.image_id=u.user_image
         where
         o.uid = #{userId}
                 and o.order_status != 3
@@ -88,12 +88,12 @@
         g.origin_path as user_image, u.shop_name,e.origin_path as avatar_imag, i.commodity_detail
         from
         shop_order_info o
-        JOIN
+        left join
         shop_info u
-        JOIN
+        left join
         shop_commodity_info i
-        join image g on g.image_id=u.user_image
-        join image e on e.image_id=i.avatar_imag
+        left join image g on g.image_id=u.user_image
+        left join image e on e.image_id=i.avatar_imag
         where
         o.shop_id = #{getOrderDataVO.shopId}
         <choose>
@@ -119,9 +119,9 @@
         COUNT(1)
         from
         shop_order_info o
-        JOIN
+        left join
         shop_info u
-        JOIN
+        left join
         shop_commodity_info i
         where
         o.shop_id = #{getOrderDataVO.shopId}
@@ -150,7 +150,7 @@
             o.create_time, o.update_time,o.number, c.validity_time, c.reservation_information
         from
             shop_order_info o
-        join
+        left join
             shop_commodity_info c
         on
             o.commodity_id = c.commodity_id
@@ -162,9 +162,9 @@
         count(1)
         from
         shop_order_info o
-        JOIN
+        left join
         shop_info u
-        JOIN
+        left join
         shop_commodity_info i
         where
         o.uid = #{getOrderDataVO.userId}
@@ -188,14 +188,14 @@
                e.origin_path as avatar_imag,l.room_type_name,  s.address,g.origin_path as user_image,s.shop_name,s.shop_introduce
                 ,r.start_time,r.end_time
         FROM shop_order_info as o
-                 join shop_commodity_live_info as l
+                 left join shop_commodity_live_info as l
                       ON o.commodity_id=l.room_id
-                 join shop_info as s
+                 left join shop_info as s
                       ON s.shop_id = o.shop_id
-        JOIN shop_hotel_record as r
+        left join shop_hotel_record as r
         on o.order_id=r.order_id
-        join image g on g.image_id=s.user_image
-        join image e on e.image_id=l.avatar_imag
+        left join image g on g.image_id=s.user_image
+        left join image e on e.image_id=l.avatar_imag
         WHERE
             o.uid=#{getOrderDataVO.userId}
         <if test="getOrderDataVO.orderStatus != -1">
@@ -208,11 +208,11 @@
     <select id="getAllOrderLiveList" resultType="java.lang.Integer">
         select count(*)
         FROM shop_order_info as o
-        join shop_commodity_live_info as l
+        left join shop_commodity_live_info as l
         ON o.commodity_id=l.room_id
-        join shop_info as s
+        left join shop_info as s
         ON s.shop_id = o.shop_id
-        JOIN shop_hotel_record as r
+        left join shop_hotel_record as r
         on o.order_id=r.order_id
         WHERE
         o.uid=#{getOrderDataVO.userId}
@@ -228,14 +228,14 @@
               g.origin_path as avatar_imag,l.room_type_name,  s.address,e.origin_path as user_image,s.shop_name,s.shop_introduce
                 ,r.start_time,r.end_time
         FROM shop_order_info as o
-        join shop_commodity_live_info as l
+        left join shop_commodity_live_info as l
         ON o.commodity_id=l.room_id
-        join shop_info as s
+        left join shop_info as s
         ON s.shop_id = o.shop_id
-        JOIN shop_hotel_record as r
+        left join shop_hotel_record as r
         on o.order_id=r.order_id
-        join image g on g.image_id=l.avatar_imag
-        join image e on e.image_id=s.user_image
+        left join image g on g.image_id=l.avatar_imag
+        left join image e on e.image_id=s.user_image
         WHERE
         s.uid=#{getOrderDataVO.userId}
         <if test="getOrderDataVO.orderStatus != -1">
@@ -248,11 +248,11 @@
     <select id="getAllOrderLiveListByShopId" resultType="java.lang.Integer">
         select count(*)
         FROM shop_order_info as o
-        join shop_commodity_live_info as l
+        left join shop_commodity_live_info as l
         ON o.commodity_id=l.room_id
-        join shop_info as s
+        left join shop_info as s
         ON s.shop_id = o.shop_id
-        JOIN shop_hotel_record as r
+        left join shop_hotel_record as r
         on o.order_id=r.order_id
         WHERE
         s.uid=#{getOrderDataVO.userId}
@@ -268,11 +268,11 @@
                l.detail,l.restricted,l.land,l.room,l.rest_room,l.bed ,
                s.phone
         FROM shop_order_info as o
-                 join shop_commodity_live_info as l
+                 left join shop_commodity_live_info as l
                       ON o.commodity_id=l.room_id
-                 join shop_info as s
+                 left join shop_info as s
                       ON s.shop_id = o.shop_id
-                 JOIN shop_hotel_record as r
+                 left join shop_hotel_record as r
                       ON r.order_id=o.order_id
         WHERE o.order_id=#{orderId}
     </select>

@@ -29,4 +29,6 @@ public class ShopInfoVO1 {
      * 粉丝总数
      */
     private Integer follows;
+
+    private Integer status;
 }

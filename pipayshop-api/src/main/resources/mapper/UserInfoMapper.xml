@@ -5,12 +5,8 @@
     <select id="selectUserInfoByUid" resultType="com.example.pipayshopapi.entity.vo.UserInfoVO">
         SELECT
             u.id, u.uid,pi_shoper,supplier,user_name,pi_name,access_token,last_login,gender,shop_balance,level,u.personal_profile,img.origin_path as userImage, u.language,u.email,u.age, u.country
-        FROM
-            user_info u
-        JOIN
-            image img
-        ON
-            u.user_image = img.image_id
+        FROM user_info u
+        left join image img ON u.user_image = img.image_id
         where
             uid=#{uid};
     </select>
@@ -28,11 +24,9 @@
             i.item_id
         from
             item_info i
-        join
-            user_info u
+        left join user_info u on u.uid = i.uid
         where
-            u.uid = i.uid and u.uid = #{userId}
+        u.uid = #{userId}
     </select>
-
 
 </mapper>

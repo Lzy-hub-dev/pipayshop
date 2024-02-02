@@ -10,9 +10,9 @@
         i.user_name,
         g.origin_path as user_image
         FROM item_follow_focus f
-        left JOIN
+        left join
         user_info i
-        join image g
+        left join image g
         on g.image_id=i.user_image
         ON
         f.follow_id=i.uid

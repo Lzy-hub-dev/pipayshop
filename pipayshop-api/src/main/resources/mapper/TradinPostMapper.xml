@@ -5,7 +5,7 @@
     <select id="selectTraditionList" resultType="com.example.pipayshopapi.entity.vo.TraditionListVO">
         select t.tradin_id,t.publisher_uid,t.type_id,t.content,t.point_balance,t.pi_balance,u.user_name,u.user_image
         from tradin_post t
-        join user_info u
+                 left join user_info u
         on u.uid=t.publisher_uid
         where t.status = 0 and t.type_id = #{typeId}
         order by t.create_time desc
@@ -14,14 +14,14 @@
     <select id="selectTraditionDetail" resultType="com.example.pipayshopapi.entity.vo.TraditionDetailVO">
         select t.tradin_id,t.publisher_uid as sellerId,t.type_id,t.content,t.point_balance,t.pi_balance,t.pi_address,u.user_name,u.user_image
         from tradin_post t
-        join user_info u
+        left join user_info u
         on u.uid=t.publisher_uid
         where t.tradin_id=#{tradinId}
     </select>
     <select id="selectTradinPostByUid" resultType="com.example.pipayshopapi.entity.vo.TraditionListVO">
         select t.tradin_id,t.publisher_uid,t.type_id,t.content,t.point_balance,t.pi_balance,t.pi_address,u.user_name,u.user_image,t.status
         from tradin_post t
-        join user_info u
+        left join user_info u
         on u.uid=t.publisher_uid
         where t.publisher_uid=#{userId}
         order by t.update_time desc
@@ -30,6 +30,29 @@
         select count(*)
         from tradin_post t
         where t.status = 0 and t.type_id = #{typeId}
+    </select>
+
+    <select id="selectTraditionListByPiName" resultType="com.example.pipayshopapi.entity.vo.TraditionListVO">
+        select t.tradin_id,t.publisher_uid,t.type_id,t.content,t.point_balance,t.pi_balance,u.user_name,u.user_image
+        from tradin_post t
+        left join user_info u on u.uid=t.publisher_uid
+        where (t.status = 0 OR t.status = 1) and t.type_id = #{typeId}
+        <if test="piName != null and piName != ''">
+            and u.pi_name = #{piName}
+        </if>
+        order by t.create_time desc
+        limit #{page},#{limit}
+    </select>
+
+    <select id="selectCountTraditionList" resultType="java.lang.Integer">
+        select count(*)
+            from tradin_post t
+        left join user_info u on u.uid=t.publisher_uid
+        where (t.status = 0 OR t.status = 1) and t.type_id = #{typeId}
+        <if test="piName != null and piName != ''">
+            and u.pi_name = #{piName}
+        </if>
+        order by t.create_time desc
     </select>
 
 </mapper>

@@ -3,6 +3,7 @@ package com.example.pipayshopapi.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopDetailInfoVO;
+import com.example.pipayshopapi.entity.dto.ShopCommodityInfoDTO;
 import com.example.pipayshopapi.entity.vo.ApplicationRecordVO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityInfo1VO;
 import com.example.pipayshopapi.entity.vo.ShopCommodityInfoVO;
@@ -95,4 +96,7 @@ public interface ShopCommodityInfoMapper extends BaseMapper<ShopCommodityInfo> {
      * @return
      */
     int addStock(@Param("num")Integer num,@Param("commodityId")String commodityId);
+
+    int updateCommodity(ShopCommodityInfoDTO shopCommodityInfoDTO);
+
 }

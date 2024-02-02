@@ -7,7 +7,7 @@
             u.user_name, u.user_image, c.transaction_amount, c.create_time
         from
             user_info u
-        join
+        left join
             transaction_record c
         on
             c.user_id = u.uid
@@ -20,10 +20,9 @@
             count(*)
         from
             user_info u
-                join
-            transaction_record c
-            on
-                c.user_id = u.uid
+        left join
+        transaction_record c
+        on c.user_id = u.uid
         where c.shop_id = #{shopId} and del_flag = 0
     </select>
 </mapper>

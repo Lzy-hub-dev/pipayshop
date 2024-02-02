@@ -1,8 +1,11 @@
 package com.example.pipayshopapi.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.example.pipayshopapi.entity.TradinPost;
 import com.example.pipayshopapi.entity.dto.PayPalDTO;
 import com.example.pipayshopapi.entity.vo.*;
+import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.AccountInfoService;
 import com.example.pipayshopapi.service.TradinOrderService;
 import com.example.pipayshopapi.service.TradinPostService;
@@ -14,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * <p>
@@ -67,17 +71,25 @@ public class AccountInfoController {
             throw new RuntimeException("发布失败");
         }
     }
-    @GetMapping("selectTraditionList/{typeId}/{page}/{limit}")
-    @ApiOperation("获取交易列表")
-    public ResponseVO selectTraditionList(@PathVariable Integer typeId,@PathVariable Integer page,@PathVariable Integer limit ){
-        try {
 
-            PageDataVO traditionDTOList= tradinPostService.selectTraditionList(typeId,page,limit);
+
+    @GetMapping("selectTraditionList/{typeId}/{page}/{limit}")
+    @ApiOperation("根据piName获取交易列表")
+    public ResponseVO selectTraditionList(@PathVariable Integer typeId,
+                                          @PathVariable Integer page,
+                                          @PathVariable Integer limit,
+                                          @RequestParam(required = false, defaultValue = "") String piName){
+
+            PageDataVO traditionDTOList= tradinPostService.selectTraditionListByPiName(typeId,page,limit, piName);
             return ResponseVO.getSuccessResponseVo(traditionDTOList);
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new RuntimeException("获取交易列表失败");
-        }
+    }
+
+    @PutMapping("cancelTradition/{piName}/{tradinId}")
+    @ApiOperation("取消交易")
+    public ResponseVO<String> cancelTradition(@PathVariable String tradinId, @PathVariable String piName ){
+
+        tradinPostService.cancelTradition(tradinId, piName);
+        return ResponseVO.getSuccessResponseVo("取消交易成功");
     }
 
     @GetMapping("selectTraditionDetail/{tradinId}")
@@ -94,13 +106,15 @@ public class AccountInfoController {
 
     @PostMapping("generateTradeOrder")
     @ApiOperation("生成交易订单")
-    public ResponseVO generateTradeOrder(String tradinId,String buyerId){
+    public ResponseVO<String> generateTradeOrder(String tradinId,String buyerId){
         try {
             String orderId=tradinOrderService.generateTradeOrder(tradinId,buyerId);
             return ResponseVO.getSuccessResponseVo(orderId);
+        }catch (BusinessException e){
+            return ResponseVO.getSuccessResponseVo(e.getMessage());
         }catch (Exception e){
             e.printStackTrace();
-            throw new RuntimeException("生成交易订单失败");
+            return ResponseVO.getSuccessResponseVo("生成交易订单失败");
         }
     }
 

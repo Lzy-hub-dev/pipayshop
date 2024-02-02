@@ -69,8 +69,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         Integer limit = commodityPageVO.getLimit();
         int startIndex = (commodityPageVO.getPage() - 1) * limit;
         List<CommodityVO> commodityList = commodityInfoMapper.commodityOfCateList(commodityPageVO.getSecondCategoryId(),commodityPageVO.getCountryCode(), startIndex, limit);
-        Integer count = commodityInfoMapper.listCount(commodityPageVO.getSecondCategoryId());
-        return new PageDataVO(count, commodityList);
+        return new PageDataVO(commodityList.size(), commodityList);
 
     }
 
@@ -111,7 +110,7 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
             throw new RuntimeException();
         }
 
-        // 将商品数据记录到发布表上
+        // 4.商品数据添加到国家商品关联表-countryCommodity表
         CountryCommodity countryCommodity = new CountryCommodity(null, applyItemCommodityDTO.getCountryCode(), commodityId, null, null);
         int insert = countryCommodityMapper.insert(countryCommodity);
         return insert > 0;
@@ -295,10 +294,13 @@ public class ItemCommodityInfoServiceImpl extends ServiceImpl<ItemCommodityInfoM
         if (itemInfoVO != null) {
             ItemInfoVO vo = itemInfoVO.get(0);
             List<String> imageIds = JSON.parseArray(vo.getItemImagList(), String.class);
-            List<String> imageList = imageIds.stream()
-                                            .parallel()
-                                            .map(imageId -> imageMapper.selectPath(imageId))
-                                            .collect(Collectors.toList());
+            List<String> imageList = new ArrayList<>();
+            if (imageIds!= null){
+                imageList = imageIds.stream()
+                        .parallel()
+                        .map(imageId -> imageMapper.selectPath(imageId))
+                        .collect(Collectors.toList());
+            }
             vo.setItemImagList(imageList.toString());
             vo.setCommodityInfoList(voList);
             return vo;

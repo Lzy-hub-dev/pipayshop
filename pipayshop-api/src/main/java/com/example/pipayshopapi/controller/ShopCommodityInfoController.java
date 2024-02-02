@@ -1,8 +1,12 @@
 package com.example.pipayshopapi.controller;
 
 
+import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopDetailInfoVO;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
+import com.example.pipayshopapi.entity.dto.ShopCommodityInfoDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopCommodityInfoService;
@@ -76,7 +80,7 @@ public class ShopCommodityInfoController {
     }
 
     @GetMapping("selectShopInfoByCommodityId/{commodityId}")
-    @ApiOperation("根据商品的id查找实体店商品的  详情信息")
+    @ApiOperation("根据商品的id查找实体店商品的详情信息")
     public ResponseVO<ShopDetailInfoVO> selectShopInfoByCommodityId(@PathVariable String commodityId) {
         try {
             ShopDetailInfoVO shopDetailInfoVO = shopCommodityService.selectShopInfoByCommodityId(commodityId);
@@ -140,7 +144,7 @@ public class ShopCommodityInfoController {
     }
 
     @PostMapping("updateCommodityCheck/{commodityId}")
-    @ApiOperation("根据商品id，下架变为审核中")
+    @ApiOperation("根据商品id，下架")
     public ResponseVO<String> updateCommodityCheck(@PathVariable String commodityId) {
             boolean result = shopCommodityService.updateCommodityCheck(commodityId);
             if (!result) {
@@ -174,11 +178,15 @@ public class ShopCommodityInfoController {
         }
     }
 
-
-
-
-
-
+    @PostMapping("updateCommodityStatus")
+    @ApiOperation("根据商品id更改商品的信息")
+    public ResponseVO<String> updateCommodityStatus(@RequestBody ShopCommodityInfoDTO shopCommodityInfoDTO) {
+        if (shopCommodityService.updateCommodity(shopCommodityInfoDTO)) {
+            return ResponseVO.getSuccessResponseVo("根据商品id，更改商品的信息成功");
+        } else {
+            return ResponseVO.getFalseResponseMsg("根据商品id，更改商品的信息失败");
+        }
+    }
 
 }
 

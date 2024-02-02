@@ -21,7 +21,6 @@ public interface TradinPostService extends IService<TradinPost> {
 
     boolean publishTradition(String token);
 
-    PageDataVO selectTraditionList(Integer typeId, Integer page, Integer limit);
 
     TraditionDetailVO selectTraditionDetail(String tradinId) throws InterruptedException;
 
@@ -31,9 +30,8 @@ public interface TradinPostService extends IService<TradinPost> {
     List<TraditionListVO> selectTradinPostByUid(String token);
 
 
+    PageDataVO selectTraditionListByPiName(Integer typeId, Integer page, Integer limit, String piName);
 
-
-
-
+    void cancelTradition(String tradinId, String piName);
 
 }

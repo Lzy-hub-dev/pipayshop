@@ -103,7 +103,8 @@ public class ShopTest {
     @Test
     public void test01(){
 
-
+        String hashPassword = StringUtil.hashPassword("123456789");
+        System.out.println(hashPassword);
 
     }
 

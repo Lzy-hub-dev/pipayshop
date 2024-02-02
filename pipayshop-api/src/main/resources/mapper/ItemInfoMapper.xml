@@ -3,14 +3,14 @@
 <mapper namespace="com.example.pipayshopapi.mapper.ItemInfoMapper">
     <insert id="addUploadBalanceByCommodityId">
         UPDATE item_info i
-            INNER JOIN item_commodity_info c
+            left join item_commodity_info c
         ON i.item_id = c.item_id
             SET i.upload_balance = i.upload_balance + 1
         WHERE c.commodity_id = #{commodityId}
     </insert>
     <update id="reduceUploadBalanceByCommodityId">
         UPDATE item_info i
-            INNER JOIN item_commodity_info c
+            left join item_commodity_info c
         ON i.item_id = c.item_id
             SET i.upload_balance = i.upload_balance - 1
         WHERE c.commodity_id = #{commodityId}
@@ -31,7 +31,7 @@
             s.upload_balance
         FROM
             item_info s
-                INNER JOIN
+                left join
             item_commodity_info sc
             ON
                 s.item_id=sc.item_id
@@ -44,7 +44,7 @@
                (select count(*) from item_commodity_info c2 where i.item_id=c2.item_id  ) as itemSum,
                (select count(*) from item_follow_focus f where i.item_id=f.item_id) as fanSum
         from item_info i
-        join image g on g.image_id=i.user_image
+        left join image g on g.image_id=i.user_image
         <where>
             <if test="itemId!=null and itemId!=''">and i.item_id=#{itemId}</if>
             <if test="userId!=null and userId!=''">and i.uid=#{userId}</if>
@@ -54,10 +54,8 @@
     <select id="selectFollowItemByUserId" resultType="com.example.pipayshopapi.entity.vo.ItemListVO">
         SELECT i.item_id, i.item_name, i.membership, i.score, g.origin_path as user_image, (select count(*) from item_follow_focus f1 where f1.item_id=i.item_id   ) as follows
         FROM item_follow_focus f
-                 INNER JOIN
-             item_info i
-             ON f.item_id = i.item_id
-        join image g
+        left join item_info i ON f.item_id = i.item_id
+        left join image g
         on g.image_id=i.user_image
         WHERE f.follow_id = #{userId}
           and f.`status` = 0
@@ -68,8 +66,7 @@
     <select id="selectAllFollowItemByUserId" resultType="java.lang.Integer">
         SELECT count(*)
         FROM item_follow_focus f
-                 INNER JOIN item_info i
-                            ON f.item_id = i.item_id
+        left join item_info i ON f.item_id = i.item_id
         WHERE f.follow_id = #{userId}
           and f.`status` = 0
           and i.`status` = 0

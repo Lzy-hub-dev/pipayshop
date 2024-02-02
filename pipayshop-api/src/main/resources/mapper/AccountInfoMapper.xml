@@ -8,9 +8,7 @@
     <update id="updatePointBalanceByShopId">
         update
             account_info a
-            join
-            shop_info s
-            on s.uid = a.uid
+        left join shop_info s on s.uid = a.uid
         set
             a.point_balance = a.point_balance + #{transactionAmount},
             a.available_balance = a.available_balance + #{transactionAmount}

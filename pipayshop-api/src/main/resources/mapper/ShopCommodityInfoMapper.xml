@@ -9,6 +9,39 @@
         WHERE
             commodity_id=#{commodityId}
     </insert>
+
+    <insert id="updateCommodity">
+        UPDATE
+            shop_commodity_info
+        <set>
+            <if test="commodityName != null and commodityName != ''">
+                commodity_name = #{commodityName},
+            </if>
+            <if test="avatarImag != null and avatarImag != ''">
+                avatar_imag = #{avatarImag},
+            </if>
+            <if test="commodityImgList != null and commodityImgList != ''">
+                commodity_img_list = #{commodityImgList},
+            </if>
+            <if test="commodityDetail != null and commodityDetail != ''">
+                commodity_detail = #{commodityDetail},
+            </if>
+            <if test="price != null and price != ''">
+                price = #{price},
+            </if>
+            <if test="validityTime != null and validityTime != ''">
+                validity_time = #{validityTime},
+            </if>
+            <if test="residue != null and residue != ''">
+                residue = #{residue},
+            </if>
+            <if test="reservationInformation != null and reservationInformation != ''">
+                reservation_information = #{reservationInformation},
+            </if>
+        </set>
+        WHERE
+            commodity_id=#{commodityId}
+    </insert>
     <update id="reduceStock">
         UPDATE
             shop_commodity_info
@@ -23,9 +56,9 @@
     <select id="selectAllTopContentList" resultType="com.example.pipayshopapi.entity.ShopCommodityInfo">
         SELECT *
         FROM shop_commodity_info c
-                 INNER JOIN shop_info i
+                  left join shop_info i
                             ON c.shop_id = i.shop_id
-                 INNER JOIN
+                  left join
              shop_collection sc
              ON sc.commodity_id = c.commodity_id
         WHERE i.uid = 'user1'
@@ -42,14 +75,14 @@
                info.shop_name,
                e.origin_path as user_image
         FROM shop_collection sc
-                 INNER JOIN
+                  left join
              shop_commodity_info i
              ON
                  sc.commodity_id = i.commodity_id
-                 inner join shop_info info
+                  left join shop_info info
                             on info.shop_id = i.shop_id
-        join image g on g.image_id=i.avatar_imag
-        join image e on e.image_id=info.user_image
+        left join image g on g.image_id=i.avatar_imag
+        left join image e on e.image_id=info.user_image
         WHERE sc.user_id = #{userId}
           AND i.`status` = 0
           AND sc.`status` = 0
@@ -65,14 +98,14 @@
                s.shop_name,
                e.origin_path as user_image
         FROM shop_commodity_history h
-                 INNER JOIN
+                  left join
              shop_commodity_info i
              ON
                  h.commodity_id = i.commodity_id
-        inner join shop_info s
+         left join shop_info s
         on  s.shop_id=i.shop_id
-        join image g on g.image_id=i.avatar_imag
-        join image e on e.image_id=s.user_image
+        left join image g on g.image_id=i.avatar_imag
+        left join image e on e.image_id=s.user_image
         WHERE h.user_id = #{userId}
           AND i.`status` = 0
             LIMIT #{page},#{limit}
@@ -88,8 +121,8 @@
                sci.price,
                sci.status
         FROM user_info as ui
-                 INNER JOIN shop_info as si on ui.uid = si.uid
-                 INNER JOIN shop_commodity_info as sci on si.shop_id = sci.shop_id
+                  left join shop_info as si on ui.uid = si.uid
+                  left join shop_commodity_info as sci on si.shop_id = sci.shop_id
         WHERE si.uid = #{uid}
           and sci.status = #{status} LIMIT #{page}
             , #{limit}
@@ -97,16 +130,16 @@
     <select id="selectAllCommodity" resultType="java.lang.Integer">
         SELECT COUNT(*)
         FROM user_info as ui
-                 INNER JOIN shop_info as si on ui.uid = si.uid
-                 INNER JOIN shop_commodity_info as sci on si.shop_id = sci.shop_id
+                  left join shop_info as si on ui.uid = si.uid
+                  left join shop_commodity_info as sci on si.shop_id = sci.shop_id
         WHERE si.uid = #{uid}
           and sci.status = #{status}
     </select>
     <select id="selectCommodityByShopId" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityInfo1VO">
         SELECT s.commodity_id, s.commodity_name,i.origin_path as avatar_imag, s.price, s.monthly_sales, s.tag_list
         from shop_commodity_info s
-        join image i on i.image_id=s.avatar_imag
-        WHERE s.shop_id = #{shopId}
+        left join image i on i.image_id=s.avatar_imag
+        WHERE s.shop_id = #{shopId} and s.status = 0
     </select>
     <select id="selectAllCommodityByShopId" resultType="java.lang.Integer">
         SELECT COUNT(*)
@@ -122,11 +155,11 @@
     <select id="selectAllCollectProductByUserId" resultType="java.lang.Integer">
         select count(*)
         FROM shop_collection sc
-                 INNER JOIN
+                  left join
              shop_commodity_info i
              ON
                  sc.commodity_id = i.commodity_id
-                 inner join shop_info info
+                  left join shop_info info
                             on info.shop_id = i.shop_id
         WHERE sc.user_id = #{userId}
           AND i.`status` = 0
@@ -135,11 +168,11 @@
     <select id="selectAllHistoryProductByUserId" resultType="java.lang.Integer">
         SELECT count(*)
         FROM shop_commodity_history h
-                 INNER JOIN
+                  left join
              shop_commodity_info i
              ON
                  h.commodity_id = i.commodity_id
-                 inner join shop_info s
+                  left join shop_info s
                             on  s.shop_id=i.shop_id
         WHERE h.user_id = #{userId}
           AND i.`status` = 0
@@ -160,7 +193,7 @@
                i.price
         FROM
             shop_commodity_info i
-        join image g on g.image_id=i.avatar_imag
+        left join image g on g.image_id=i.avatar_imag
         WHERE
             i.shop_id=#{shopId}
             and

@@ -13,7 +13,7 @@
     <select id="selectShopCommodityLiveInfoList" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoListVO">
         select s.room_id,s.room_type_name,s.tag_list,s.land,s.price,i.origin_path as avatarImag,s.bed_type
         from shop_commodity_live_info s
-        join image i
+        left join image i
         on i.image_id = s.avatar_imag
         where
         shop_id=#{shopId}
@@ -29,9 +29,9 @@
     <select id="selectShopCommodityLiveVO" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityLiveVO">
         SELECT l.room_id,l.shop_id,l.detail,l.tag_list,g.origin_path as avatar_imag,l.price,e.evaluate, i.localhost_latitude,i.localhost_longitude,i.address,i.score
         from shop_commodity_live_info as l
-                 LEFT JOIN shop_evaluate as e ON l.room_id=e.commodity_id
-                 LEFT JOIN shop_info as i ON l.shop_id=i.shop_id
-                 join image as g on g.image_id=l.avatar_imag
+                 left join shop_evaluate as e ON l.room_id=e.commodity_id
+                 left join shop_info as i ON l.shop_id=i.shop_id
+                 left join image as g on g.image_id=l.avatar_imag
         GROUP BY e.commodity_id
         ORDER BY e.create_time DESC
             LIMIT #{pages},#{limit}
@@ -39,8 +39,8 @@
     <select id="selectAllShopCommodityLiveVO" resultType="java.lang.Integer">
         select count(*) from (SELECT l.room_id,l.shop_id,l.detail,l.tag_list,l.avatar_imag,l.price,e.evaluate, i.localhost_latitude,i.localhost_longitude,i.address,i.score
                               from shop_commodity_live_info as l
-                                       LEFT JOIN shop_evaluate as e ON l.room_id=e.commodity_id
-                                       LEFT JOIN shop_info as i ON l.shop_id=i.shop_id
+                                       left join shop_evaluate as e ON l.room_id=e.commodity_id
+                                       left join shop_info as i ON l.shop_id=i.shop_id
                               GROUP BY e.commodity_id
                               ORDER BY e.create_time DESC) p
     </select>

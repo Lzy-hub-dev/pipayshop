@@ -4,20 +4,21 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.pipayshopapi.entity.AccountInfo;
 import com.example.pipayshopapi.entity.TradinPost;
+import com.example.pipayshopapi.entity.UserInfo;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.AccountInfoMapper;
 import com.example.pipayshopapi.mapper.ImageMapper;
-import com.example.pipayshopapi.mapper.TradinJournalMapper;
 import com.example.pipayshopapi.mapper.TradinPostMapper;
 import com.example.pipayshopapi.service.TradinPostService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.pipayshopapi.service.UserInfoService;
 import com.example.pipayshopapi.util.StringUtil;
 import com.example.pipayshopapi.util.TokenUtil;
 import io.jsonwebtoken.Claims;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.List;
@@ -40,7 +41,8 @@ public class TradinPostServiceImpl extends ServiceImpl<TradinPostMapper, TradinP
     @Resource
     private AccountInfoMapper accountInfoMapper;
     @Resource
-    private TradinJournalMapper tradinJournalMapper;
+    @Autowired
+    private UserInfoService userInfoService;
 
 
 
@@ -58,8 +60,6 @@ public class TradinPostServiceImpl extends ServiceImpl<TradinPostMapper, TradinP
         int insert = 0;
         // 发布者换积分
         if (typeId == 0){
-
-
         insert += tradinPostMapper.insert(new TradinPost(tradinId, publisherId, typeId, content, pointBalance, piBalance,null));
         if (insert < 1){
            throw new BusinessException("插入失败失败");
@@ -78,7 +78,10 @@ public class TradinPostServiceImpl extends ServiceImpl<TradinPostMapper, TradinP
 
           String piAddress = dataFromToken.get("piAddress", String.class);
           // 更新账户
-          insert += accountInfoMapper.update(null, new UpdateWrapper<AccountInfo>().eq("uid", publisherId).set("available_balance", subtractPointBalance).set("frozen_balance",addFrozenBalance));
+          insert += accountInfoMapper.update(null, new UpdateWrapper<AccountInfo>()
+                  .eq("uid", publisherId)
+                  .set("available_balance", subtractPointBalance)
+                  .set("frozen_balance",addFrozenBalance));
           insert += tradinPostMapper.insert(new TradinPost(tradinId,publisherId,typeId,content,pointBalance,piBalance,piAddress));
           if (insert < 2){
               throw new BusinessException("插入失败");
@@ -87,16 +90,6 @@ public class TradinPostServiceImpl extends ServiceImpl<TradinPostMapper, TradinP
         return true;
     }
 
-    @Override
-    public PageDataVO selectTraditionList(Integer typeId, Integer page, Integer limit) {
-        Integer count=tradinPostMapper.selectTraditionListCount(typeId);
-        List<TraditionListVO> traditionVOS = tradinPostMapper.selectTraditionList(typeId,(page-1)*limit,limit);
-        for (TraditionListVO traditionVO : traditionVOS) {
-            traditionVO.setUserImage(imageMapper.selectPath(traditionVO.getUserImage()));
-        }
-        PageDataVO pageDataVO = new PageDataVO(count,traditionVOS);
-        return pageDataVO;
-    }
 
     @Override
     public TraditionDetailVO selectTraditionDetail(String tradinId) throws InterruptedException {
@@ -152,7 +145,44 @@ public class TradinPostServiceImpl extends ServiceImpl<TradinPostMapper, TradinP
         return traditionListVOS;
     }
 
+    @Override
+    public PageDataVO selectTraditionListByPiName(Integer typeId, Integer page, Integer limit, String piName) {
 
+        Integer count = tradinPostMapper.selectCountTraditionList(typeId, piName);
+        List<TraditionListVO> traditionVOS = tradinPostMapper.selectTraditionListByPiName(typeId,(page-1)*limit,limit, piName);
+        for (TraditionListVO traditionVO : traditionVOS) {
+            traditionVO.setUserImage(imageMapper.selectPath(traditionVO.getUserImage()));
+        }
+        return new PageDataVO(count,traditionVOS);
+    }
 
+    @Override
+    @Transactional
+    public void cancelTradition(String tradinId, String piName) {
+        // 查看交易状态
+        TradinPost tradition = getOne(new QueryWrapper<TradinPost>()
+                .eq("tradin_id", tradinId));
+        if (tradition.getStatus() == 4) {
+            throw new BusinessException("交易已取消");
+        }
+        if (tradition.getStatus() == 3) {
+            throw new BusinessException("交易已完成");
+        }
+        if (tradition.getStatus() == 2) {
+            throw new BusinessException("交易进行中");
+        }
+        // 修改交易状态
+        update(null, new UpdateWrapper<TradinPost>()
+                .eq("tradin_id",tradinId)
+                .set("status",4));
 
+        if (tradition.getTypeId() == 1) {
+            // 积分换pi币返还积分
+            accountInfoMapper.update(null, new UpdateWrapper<AccountInfo>()
+                    .eq("uid", userInfoService.getOne(new QueryWrapper<UserInfo>()
+                            .eq("pi_name", piName)).getUid())
+                    .setSql("available_balance = available_balance + "+ tradition.getPointBalance())
+                    .setSql("frozen_balance = frozen_balance - "+tradition.getPointBalance()));
+        }
+    }
 }

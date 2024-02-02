@@ -29,4 +29,6 @@ public class IndexShopInfoVO {
      * 是否会员(0映射为false，1映射为true)
      */
     private Boolean membership;
+    // 使用pi比例
+    private String piratio;
 }

@@ -17,7 +17,6 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-
 public class ZoneLeaderTask {
 
     @Autowired
@@ -29,8 +28,12 @@ public class ZoneLeaderTask {
     @Autowired
     TwoZoneSuperiorMapper twoZoneSuperiorMapper;
 
+    /**
+     * 检查开团资格
+     */
     @Transactional
-    @Scheduled(cron = "0 0/1 * * * ?")
+    //@Scheduled(cron = "* * * * * ?") //测试
+    //@Scheduled(cron = "0 0/1 * * * ?") //每隔一分钟执行一次任务
     public void inspectZoneLeader(){
         System.out.println("开始检查开团资格");
         int sum = 0;
@@ -62,9 +65,12 @@ public class ZoneLeaderTask {
         }
     }
 
+    /**
+     * 检查返佣资格
+     */
     @Transactional
-    //@Scheduled(cron = "* * * * * ?")
-    @Scheduled(cron = "0 0/5 * * * ?")
+    //@Scheduled(cron = "* * * * * ?") //测试
+    //@Scheduled(cron = "0 0/5 * * * ?") //每隔五分钟执行一次任务
     public void inspectRebate() {
         System.out.println("开始检查返佣资格");
         List<UserByZone> userByZones = userByZoneMapper.selectList(null);
@@ -82,9 +88,12 @@ public class ZoneLeaderTask {
         }
     }
 
+    /**
+     * 检查团是否失效
+     */
     @Transactional
-    //@Scheduled(cron = "* * * * * ?")
-    @Scheduled(cron = "0 0/1 * * * ?")
+    //@Scheduled(cron = "* * * * * ?") //测试
+    //@Scheduled(cron = "0 0/1 * * * ?") //每隔一分钟执行一次任务
     public void inspectZoneInvalidity(){
         System.out.println("开始检查团是否失效");
         Date date = new Date();

@@ -20,9 +20,9 @@
              , e.score
         from
             shop_evaluate e
-        join user_info u
+        left join user_info u
         on u.uid = e.user_id
-        join image i
+        left join image i
         on i.image_id = u.user_image
         where
             shop_id = #{shopId}

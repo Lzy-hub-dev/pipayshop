@@ -15,7 +15,7 @@
         from shop_commodity_evaluate e
             left join user_info u
         on u.uid = e.user_id
-        join image i on i.image_id=u.user_image
+        left join image i on i.image_id=u.user_image
         where e.commodity_id = #{commodityId}
         and e.status = 0
         and u.status = 0
@@ -24,7 +24,7 @@
 
     <select id="getEvaluateList" resultType="com.example.pipayshopapi.entity.vo.EvaluateVO">
         SELECT e.evaluate,e.evaluate_id,e.create_time,u.`uid`,u.`user_image`,u.`user_name`
-        FROM shop_commodity_evaluate e LEFT JOIN user_info u ON e.`user_id` = u.`uid`
+        FROM shop_commodity_evaluate e left join user_info u ON e.`user_id` = u.`uid`
         WHERE commodity_id = #{commodityId}
         LIMIT 0,10
     </select>

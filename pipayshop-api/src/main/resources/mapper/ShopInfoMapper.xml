@@ -3,14 +3,14 @@
 <mapper namespace="com.example.pipayshopapi.mapper.ShopInfoMapper">
     <insert id="addUploadBalanceByCommodityId">
         UPDATE shop_info i
-            INNER JOIN shop_commodity_info c
+             left join shop_commodity_info c
         ON i.shop_id = c.shop_id
             SET i.upload_commodity_balance = i.upload_commodity_balance + 1
         WHERE c.commodity_id = #{commodityId}
     </insert>
     <update id="reduceUploadBalanceByCommodityId">
         UPDATE shop_info i
-            INNER JOIN shop_commodity_info c
+             left join shop_commodity_info c
         ON i.shop_id = c.shop_id
             SET i.upload_commodity_balance = i.upload_commodity_balance - 1
         WHERE c.commodity_id = #{commodityId}
@@ -25,13 +25,32 @@
             WHERE c.item_id = i.shop_id
             )
     </update>
+    <update id="updateShopInfoById" parameterType="com.example.pipayshopapi.entity.dto.ShopDTO">
+            UPDATE shop_info
+            <set>
+                <if test="shopName != null and shopName != ''">shop_name = #{shopName},</if>
+                <if test="localhostLatitude != null">localhost_latitude = #{localhostLatitude},</if>
+                <if test="localhostLongitude != null">localhost_longitude = #{localhostLongitude},</if>
+                <if test="tagList != null and tagList != ''">tag_list = #{tagList},</if>
+                <if test="phone != null and phone != ''">phone = #{phone},</if>
+                <if test="address != null and address != ''">address = #{address},</if>
+                <if test="shopIntroduce != null and shopIntroduce != ''">shop_introduce = #{shopIntroduce},</if>
+                <if test="shopImagList != null and shopImagList != ''">shop_imag_list = #{shopImagList},</if>
+                <if test="userImage != null and userImage != ''">user_image = #{userImage},</if>
+                <if test="categoryId != null">category_id = #{categoryId},</if>
+                <if test="piratio != null">piratio = #{piratio},</if>
+                <if test="startTime != null">start_time = #{startTime},</if>
+                <if test="endTime != null">end_time = #{endTime},</if>
+            </set>
+            WHERE shop_id = #{shopId}
+    </update>
 
     <select id="selectShopInfoByTopCate" resultType="com.example.pipayshopapi.entity.ShopInfo">
         select *
         FROM shop_info i
         where i.category_id = (select ct.category_id
                                from shop_category c
-                                        INNER JOIN
+                                         left join
                                     shop_category_top ct
                                     ON
                                         c.category_pid = ct.category_id
@@ -43,22 +62,22 @@
             where `status`=0 and shop_id=#{shopId}
         ) as follows
         from shop_info s
-        JOIN
+        left join
              image i
         on
             i.image_id = s.user_image
         WHERE shop_id=#{shopId}
     </select>
     <select id="getShopList" resultType="com.example.pipayshopapi.entity.vo.ShopInfoVO1">
-        SELECT s.shop_id,s.shop_name,s.score,i.origin_path as userImage, (
+        SELECT s.shop_id,s.status,s.shop_name,s.score,i.origin_path as userImage, (
             SELECT COUNT(*) FROM shop_follow_focus
             where `status`=0 and shop_id= s.shop_id
         ) as follows
         from shop_info s
-        join image i on i.image_id = s.user_image
+        left join image i on i.image_id = s.user_image
         WHERE uid=#{uid}
-        and status = 0
-            LIMIT #{page},#{limit}
+        and status = 0 or status = 1
+        LIMIT #{page},#{limit}
     </select>
     <select id="getShopNumber" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM shop_info where uid=#{uid} and status = 0
@@ -67,45 +86,41 @@
 
     <select id="getIndexShopInfoVOCount" resultType="java.lang.Integer">
         select count(*)
-        from shop_info si
-        join
-            shop_region sr
+        from shop_info s
+        left join
+        image i
+        ON
+        i.image_id = s.user_image
+        left join
+        shop_region sr
         on
-            sr.shop_id = si.shop_id
-        WHERE si.status = 0 and sr.region_id = #{regionId} and sr.del_flag = 0
-
-
-        <if test="categoryId != null and categoryId != '-1'">
-        and si.category_id = #{categoryId}
-        </if>
-        <if test="shopName != null ">
-            and si.shop_name like CONCAT('%', #{shopName}, '%')
-        </if>
+        sr.shop_id = s.shop_id
+        <where>
+            sr.region_id = #{regionId} and sr.del_flag = 0 and s.status = 0
+            <if test="categoryId != null and categoryId != '-1' ">
+                and s.category_id  = #{categoryId}
+            </if>
+            <if test="shopName != null ">
+                and s.shop_name  like CONCAT('%', #{shopName}, '%')
+            </if>
+        </where>
     </select>
-
-
 
     <select id="getIndexShopInfoVO" resultType="com.example.pipayshopapi.entity.vo.IndexShopInfoVO">
         select
-            s.shop_id, s.shop_name, s.score, s.localhost_latitude, s.localhost_longitude, i.origin_path as userImage, s.shop_introduce, s.tag_list, s.address, s.membership
+            s.shop_id, s.shop_name, s.score, s.localhost_latitude, s.localhost_longitude, i.origin_path as userImage, s.shop_introduce, s.tag_list, s.address, s.membership, s.piratio
         from shop_info s
-        JOIN
-            image i
-        ON
-            i.image_id = s.user_image
-        join
-            shop_region sr
-        on
-             sr.shop_id = s.shop_id
-            <where>
-                sr.region_id = #{regionId} and sr.del_flag = 0
-                <if test="categoryId != null and categoryId != '-1' ">
-                    and s.category_id  = #{categoryId}
-                 </if>
-                <if test="shopName != null ">
-                    and s.shop_name  like CONCAT('%', #{shopName}, '%')
-                </if>
-            </where>
+        left join image i ON i.image_id = s.user_image
+        left join shop_region sr on sr.shop_id = s.shop_id
+        <where>
+            sr.region_id = #{regionId} and sr.del_flag = 0 and s.status = 0
+            <if test="categoryId != null and categoryId != '-1' ">
+                and s.category_id  = #{categoryId}
+             </if>
+            <if test="shopName != null ">
+                and s.shop_name  like CONCAT('%', #{shopName}, '%')
+            </if>
+        </where>
         <choose>
             <when test="score">
                 order By score
@@ -120,10 +135,7 @@
     <select id="getAllIndexShopInfoVO" resultType="java.lang.Integer">
         select COUNT(*)
         from shop_info s
-                 join
-             shop_region sr
-             on
-                 sr.shop_id = s.shop_id
+        left join shop_region sr on sr.shop_id = s.shop_id
         WHERE
        s.category_id in
             (select category_id from shop_category where category_pid = #{categoryId}) AND s.status=0
@@ -151,17 +163,19 @@ and sr.region_id = #{regionId} and sr.del_flag = 0
         select s.shop_id,s.shop_name,s.score,s.localhost_latitude,s.localhost_longitude,i.origin_path as userImage,
                s.shop_introduce, s.tag_list,s.address,s.membership
         from shop_info s
-        JOIN
+        left join
              image i
         ON
             i.image_id = s.user_image
-        join
+        left join
              shop_region sr
              on
                  sr.shop_id = s.shop_id
         WHERE category_id in
-              (select category_id from shop_category where category_pid = #{categoryId}) AND status=0
-              and sr.del_flag = 0 and sr.region_id = #{regionId}
+              (select category_id
+               from shop_category
+               where category_pid = #{categoryId})
+        and status=0 and sr.del_flag = 0 and sr.region_id = #{regionId}
         <if test="shopName != null">
             and s.shop_name like concat('%',#{shopName},'%')
         </if>
@@ -176,7 +190,7 @@ and sr.region_id = #{regionId} and sr.del_flag = 0
             s.upload_commodity_balance
         FROM
             shop_info s
-                INNER JOIN
+                 left join
             shop_commodity_info sc
             ON
                 s.shop_id=sc.shop_id
@@ -188,7 +202,7 @@ and sr.region_id = #{regionId} and sr.del_flag = 0
     <select id="getHotelInfoByCondition" resultType="com.example.pipayshopapi.entity.vo.IndexShopInfoVO">
         select si.shop_id,si.shop_name,si.tag_list,si.address,si.score,si.shop_introduce,si.user_image,si.localhost_latitude,si.localhost_longitude,si.membership
         from shop_info si
-        join
+        left join
             shop_region sr
         on
             sr.shop_id = si.shop_id
@@ -211,7 +225,7 @@ and sr.region_id = #{regionId} and sr.del_flag = 0
     <select id="getHotelInfoNum" resultType="java.lang.Integer">
         select count(*)
         from shop_info si
-        join
+        left join
         shop_region sr
         on
         sr.shop_id = si.shop_id
@@ -244,11 +258,11 @@ and sr.region_id = #{regionId} and sr.del_flag = 0
         select
         s.shop_id, s.shop_name, s.score, s.localhost_latitude, s.localhost_longitude, i.origin_path as userImage, s.shop_introduce, s.tag_list, s.address, s.membership
         from shop_info s
-        JOIN
+        left join
         image i
         ON
         i.image_id = s.user_image
-        join
+        left join
              shop_region sr
              on
                  sr.shop_id = s.shop_id

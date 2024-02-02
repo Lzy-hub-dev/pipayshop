@@ -6,7 +6,7 @@
     <select id="selectCateTopList" resultType="com.example.pipayshopapi.entity.ItemCommodityInfoCategoryTop">
         select t.category_id,t.content,i.origin_path as imgUrl,t.create_time,t.del_flag
         from item_commodity_info_category_top t
-        join image i on i.image_id=t.img_url
+        left join image i on i.image_id=t.img_url
         where t.del_flag=0
     </select>
 </mapper>

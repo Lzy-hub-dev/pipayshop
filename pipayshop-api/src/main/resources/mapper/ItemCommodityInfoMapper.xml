@@ -25,19 +25,19 @@
             i.commodity_id, i.item_commodity_name, i.origin_price, i.price, i.details,g.origin_path as avatarImag, it.membership
         FROM
             item_commodity_info i
-        JOIN
+        left join
             item_info it
         ON
             it.item_id = i.item_id
-        JOIN
+        left join
             item_commodity_category c
         ON
             i.category_id = c.category_id
-        JOIN
+        left join
             country_commodity cc
         ON
             cc.commodity_id = I.commodity_id
-        join
+        left join
             image g
         on
             g.image_id=i.avatar_imag
@@ -52,16 +52,16 @@
     <select id="listCount" resultType="java.lang.Integer">
         SELECT COUNT(*)
         FROM item_commodity_info as i
-                 JOIN item_commodity_category as c on i.category_id = c.category_id
+                 left join item_commodity_category as c on i.category_id = c.category_id
         where c.category_id = #{secondCategoryId}
           and i.status = 0
     </select>
     <select id="itemCommodityChoose" resultType="com.example.pipayshopapi.entity.vo.CommodityVO">
         select i.commodity_id,i.item_commodity_name,i.origin_price,i.price,i.details,g.origin_path as avatar_imag,it.membership
         FROM item_commodity_info i
-        join item_info it
+        left join item_info it
         on it.item_id=i.item_id
-        join image g
+        left join image g
         on g.image_id=i.avatar_imag
         where i.item_id=#{itemId}
         <if test="brandId">
@@ -71,7 +71,7 @@
     <select id="selectProductByItemId">
         select *
         FROM item_commodity_info c
-                 INNER JOIN
+                  left join
              item_info i
              ON
                  c.item_id = i.item_id
@@ -86,15 +86,15 @@
                g.origin_path as sellerPic,
                info.membership
         FROM item_collection ic
-                 INNER JOIN
+                  left join
              item_commodity_info i
              ON
                  ic.commodity_id = i.commodity_id
-                 inner join item_info info
+                  left join item_info info
                             on info.item_id = i.item_id
-        join image g
+        left join image g
         on g.image_id=info.user_image
-        join image e
+        left join image e
         on e.image_id=i.avatar_imag
         WHERE ic.user_id = #{userId}
           AND i.`status` = 0
@@ -113,15 +113,15 @@
                g.origin_path as sellerPic,
                info.membership
         FROM item_commodity_history h
-                 INNER JOIN
+                  left join
              item_commodity_info i
              ON
                  h.commodity_id = i.commodity_id
-                 inner join item_info info
+                  left join item_info info
                             on info.item_id = i.item_id
-         join image g
+         left join image g
               on g.image_id=info.user_image
-         join image e
+         left join image e
               on e.image_id=i.avatar_imag
         WHERE h.user_id = #{userId}
         order by h.create_time DESC
@@ -136,7 +136,7 @@
         i.item_commodity_name,
         i.price
         FROM item_commodity_info i
-        join image g
+        left join image g
         on g.image_id=i.avatar_imag
         WHERE i.commodity_id = #{itemId}
         and
@@ -148,25 +148,25 @@
         SELECT c.commodity_id,
                i.item_name,
                g.origin_path  AS seller_pic,
-               c.`status`,
+               c.status,
                e.origin_path AS commodity_pic,
                c.item_commodity_name,
                c.price,
                iu.membership
         FROM item_info i
-                 INNER JOIN user_info u ON i.uid = u.uid
-                 INNER JOIN item_info iu on i.uid = iu.uid
-                 INNER JOIN item_commodity_info c ON i.item_id = c.item_id
-                 join image g on g.image_id=i.user_image
-                 join image e on e.image_id=c.avatar_imag
-        WHERE i.item_id = #{itemId}
-          AND c.`status` != 2
+        left join user_info u ON i.uid = u.uid
+        left join item_info iu on i.uid = iu.uid
+        left join item_commodity_info c ON i.item_id = c.item_id
+        left join image g on g.image_id=i.user_image
+        left join image e on e.image_id=c.avatar_imag
+        WHERE
+        i.item_id = #{itemId} AND c.status != 2
     </select>
 
     <select id="getInfoByItemId" resultType="com.example.pipayshopapi.entity.vo.ItemCommodityMinVO">
         select i.commodity_id,i.price,i.item_commodity_name,g.origin_path as avatar_imag,i.create_time,i.details
         from item_commodity_info i
-        join image g
+        left join image g
         on g.image_id=i.avatar_imag
         where i.item_id = #{itemId} and i.status = 0
         <choose>
@@ -194,7 +194,7 @@
         c.details
         FROM
         item_info info
-        INNER JOIN
+         left join
         item_commodity_info c
         ON
         info.item_id=c.item_id
@@ -208,11 +208,11 @@
     <select id="selectAllCollectProductByUserId" resultType="java.lang.Integer">
         select count(*)
         FROM item_collection ic
-                 INNER JOIN
+                  left join
              item_commodity_info i
              ON
                  ic.commodity_id = i.commodity_id
-                 inner join item_info info
+                  left join item_info info
                             on info.item_id = i.item_id
 
         WHERE ic.user_id = #{userId}
@@ -224,11 +224,11 @@
     <select id="selectAllHistoryProductByUserId" resultType="java.lang.Integer">
         SELECT count(*)
         FROM item_commodity_history h
-                 INNER JOIN
+                  left join
              item_commodity_info i
              ON
                  h.commodity_id = i.commodity_id
-                 inner join item_info info
+                  left join item_info info
                             on info.item_id = i.item_id
         WHERE h.user_id = #{userId}
     </select>
@@ -273,7 +273,7 @@
     </select>
     <select id="selectPiShoper" resultType="java.lang.Integer">
         select u.pi_shoper from item_info i
-        join user_info u
+        left join user_info u
         on i.uid=u.uid
         where i.item_id=#{itemId}
     </select>
@@ -282,22 +282,10 @@
     <sql id="itemSearchCommoditySql">
         FROM
             item_commodity_info ici
-        JOIN
-            item_info ii
-        ON
-            ici.item_id = ii.item_id
-        JOIN
-            country_commodity cc
-        ON
-            cc.commodity_id = ici.commodity_id
-        join
-            image g
-        on
-            g.image_id=ici.avatar_imag
-        join
-            user_info u
-        on
-            ii.uid=u.uid
+        left join item_info ii ON ici.item_id = ii.item_id
+        left join country_commodity cc ON cc.commodity_id = ici.commodity_id
+        left join image g on g.image_id=ici.avatar_imag
+        left join user_info u on ii.uid=u.uid
         WHERE
             ici.status = 0 AND cc.country_code = #{dto.countryCode} AND ii.status = 0
         <if test="dto.brandId != null">

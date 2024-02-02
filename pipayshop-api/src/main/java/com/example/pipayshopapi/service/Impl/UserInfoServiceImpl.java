@@ -104,11 +104,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Transactional(rollbackFor = Exception.class)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserInfoVO userInfoVO = new UserInfoVO();
-        String userId = loginDTOTmp.getUserId();
         String userName=loginDTOTmp.getUserName();
         //根据用户名查询用户信息
         LambdaQueryWrapper<UserInfo> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(UserInfo::getPiName,username);
+        wrapper.eq(UserInfo::getUid,username);
         UserInfo user = userInfoMapper.selectOne(wrapper);
         //如果查询不到数据就通过抛出异常来给出提示
         if(Objects.isNull(user)){
@@ -134,22 +133,22 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                 newUser.setPiName(userName);
                 newUser.setUserName(userName);
                 newUser.setAccessToken(loginDTOTmp.getAccessToken());
-                newUser.setUid(userId);
+                newUser.setUid(userName);
                 newUser.setUserImage(Constants.AVATAR_IMAG);
                 // 插入数据
                 int insert = userInfoMapper.insert(newUser);
                 // 创建用户账号
-                insert += accountInfoMapper.createAccount(userId);
+                insert += accountInfoMapper.createAccount(userName);
                 // 记录登录
                 String ip = getIp();
                 String region = getIp2Region(ip);
-                LoginRecord loginRecord = new LoginRecord(userId, ip, region, new Date(),userName);
+                LoginRecord loginRecord = new LoginRecord(userName, ip, region, new Date(),userName);
                 loginRecordMapper.insert(loginRecord);
 
                 if (insert < 2){throw new BusinessException(REGISTER_FALSE);}
                 // 给新用户开一家网店
                 ItemInfo itemInfo = new ItemInfo(null, StringUtil.generateShortId(), userName, false, null, 0.0, null, null,
-                        null, userId, 0, Constants.AVATAR_IMAG, 1);
+                        null, userName, 0, Constants.AVATAR_IMAG, 1);
                 int insert1 = itemInfoMapper.insert(itemInfo);
                 if (insert1 < 1) {
                     log.error("给新用户开一家网店失败");
@@ -158,7 +157,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
                 BeanUtils.copyProperties(newUser,userInfoVO);
                 //把新用户数据广播出去
-                rabbitTemplate.convertAndSend("userExchanges","",userId+"_"+userName);
+                rabbitTemplate.convertAndSend("userExchanges","",userName+"_"+userName);
                 return new LoginUser(userInfoVO);
             } catch (IOException e) {
                 throw new RuntimeException(e);

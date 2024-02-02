@@ -7,11 +7,11 @@
             o.order_id, o.item_id,o.pi_amount ,o.transaction_amount, o.discount, o.order_status, i.item_name, ig.origin_path as userImage
         FROM
             item_order o
-        JOIN
+        left join
             item_info i
         ON
             o.item_id = i.item_id
-        JOIN
+        left join
             image ig
         ON
             ig.image_id = i.user_image
@@ -41,7 +41,7 @@
             COUNT(*)
         FROM
             item_order o
-        JOIN
+        left join
             item_info i
         ON
             o.item_id = i.item_id
@@ -68,7 +68,7 @@
           o.order_status , o.pi_address , o.create_time,o.pi_amount as piPrice,o.certificate_imag,o.order_time as payTime, u.address, u.phone, u.user_name as buyerName
         FROM
             item_order o
-                JOIN
+                left join
             buyer_data u
             ON
                 o.buyer_data_id = u.buyer_data_id AND o.order_id = #{orderId}
@@ -90,11 +90,11 @@
             g.origin_path as user_image, u.item_name, i.avatar_imag, i.details
         from
             item_order_info o
-                JOIN
+                left join
             item_info u
-                JOIN
+                left join
             item_commodity_info i
-                join image g
+                left join image g
                      on g.image_id=u.user_image
         where
             o.uid = #{userId}
@@ -111,11 +111,11 @@
             o.order_id, o.item_id, o.pi_amount,o.transaction_amount, o.discount, o.order_status, i.item_name, ig.origin_path as userImage
         FROM
             item_order o
-        JOIN
+        left join
             item_info i
         ON
             o.item_id = i.item_id
-        JOIN
+        left join
             image ig
         ON
             ig.image_id = i.user_image

@@ -52,7 +52,7 @@
             g.origin_path as userImage, c.newMessage, c.newMessageTime
         FROM
             item_info i
-        JOIN
+        left join
         (
             SELECT
                 CASE
@@ -79,7 +79,7 @@
         ) AS c
         ON
             c.partner_id = i.item_id
-        JOIN image g
+        left join image g
         on g.image_id=i.user_image
         ORDER BY
             c.newMessageTime DESC
@@ -91,7 +91,7 @@
             g.origin_path as userImage, c.newMessage, c.newMessageTime
         FROM
         user_info u
-        JOIN
+        left join
         (
         SELECT
         CASE
@@ -118,7 +118,7 @@
         ) AS c
         ON
         c.partner_id = u.uid
-        JOIN image g
+        left join image g
         on g.image_id=u.user_image
         ORDER BY
         c.newMessageTime DESC

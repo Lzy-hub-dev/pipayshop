@@ -43,7 +43,7 @@ public interface UserInfoService extends IService<UserInfo> {
     boolean updateCountryByUid(String uid,String country);
 
     /**
-     *根据用户Id更改用户国家标识
+     * 根据用户Id更改用户国家标识
      */
     boolean uploadUserImage(String userId, MultipartFile file);
 

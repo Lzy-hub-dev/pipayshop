@@ -124,4 +124,13 @@ public class ShopInfo implements Serializable {
      * 商家的付款ID
      */
     private String qrcode;
+
+    // 使用pi比例
+    private String piratio;
+
+
+    private String startTime;
+
+
+    private String endTime;
 }

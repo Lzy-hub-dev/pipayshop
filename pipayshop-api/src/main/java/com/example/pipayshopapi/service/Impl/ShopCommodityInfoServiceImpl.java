@@ -10,6 +10,7 @@ import com.example.pipayshopapi.entity.ShopDetailInfoVO;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.ShopTags;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
+import com.example.pipayshopapi.entity.dto.ShopCommodityInfoDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.ImageMapper;
@@ -163,7 +164,7 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
         }
         int result = shopCommodityInfoMapper.update(null, new UpdateWrapper<ShopCommodityInfo>()
                 .eq("commodity_id", commodityId)
-                .set("status", 2));
+                .set("status", 1));
         return result > 0;
     }
 
@@ -211,7 +212,9 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
                     public void accept(QueryWrapper<ShopCommodityInfo> wrapper) {
                         wrapper.eq("status",0)
                                 .or()
-                                .eq("status",1);
+                                .eq("status",1)
+                                .or()
+                                .eq("status",2);
                     }
                 }));
         List<ShopCommodityInfo> shopCommodityInfos = page.getRecords();
@@ -267,5 +270,11 @@ public class ShopCommodityInfoServiceImpl extends ServiceImpl<ShopCommodityInfoM
             }
         }
         return imageIdList;
+    }
+
+    @Override
+    public boolean updateCommodity(ShopCommodityInfoDTO shopCommodityInfoDTO) {
+        int i = shopCommodityInfoMapper.updateCommodity(shopCommodityInfoDTO);
+        return i == 1;
     }
 }

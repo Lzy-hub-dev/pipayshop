@@ -1,6 +1,5 @@
 package com.example.pipayshopapi.component;
 
-
 import cn.hutool.core.collection.ConcurrentHashSet;
 import com.example.pipayshopapi.service.UserInfoService;
 import org.slf4j.Logger;
@@ -9,7 +8,6 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
-
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
@@ -57,6 +55,7 @@ public class WebSocketServer {
     public void setRabbitService(RabbitTemplate rabbitTemplate) {
         WebSocketServer.rabbitTemplate = rabbitTemplate;
     }
+
     /**
      * 连接建立成功调用的方法
      */

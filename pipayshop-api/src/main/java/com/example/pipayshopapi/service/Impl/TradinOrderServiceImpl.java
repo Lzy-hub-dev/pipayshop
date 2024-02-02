@@ -18,10 +18,7 @@ import com.example.pipayshopapi.util.Constants;
 import com.example.pipayshopapi.util.StringUtil;
 import com.example.pipayshopapi.util.TokenUtil;
 import io.jsonwebtoken.Claims;
-import io.swagger.models.auth.In;
 import net.coobird.thumbnailator.Thumbnails;
-import org.redisson.api.RLock;
-import org.redisson.api.RedissonClient;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,15 +64,14 @@ public class TradinOrderServiceImpl extends ServiceImpl<TradinOrderMapper, Tradi
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public String generateTradeOrder(String tradinId, String buyerId) throws InterruptedException {
+    public String generateTradeOrder(String tradinId, String buyerId) {
 
         // 获取发布详情
         TradinPost tradinPost = tradinPostMapper.selectOne(new QueryWrapper<TradinPost>()
                                                             .eq("tradin_id", tradinId));
         // 判断是否有人已经下单了
         if (tradinPost.getStatus() != 0){
-            // 有人下单了
-            return null;
+            throw new BusinessException("已经下单了");
         }
 
         // 乐观锁基于版本号更新
@@ -86,7 +82,7 @@ public class TradinOrderServiceImpl extends ServiceImpl<TradinOrderMapper, Tradi
                 .eq("status", tradinPost.getStatus()));
         if (update < 1){
             // 更新版本号失败,已经给人抢先下单了，慢了一步返回null
-            return null;
+            throw new BusinessException("已经下单了");
         }
         // 生成订单
         String orderId= StringUtil.generateShortId();
@@ -112,7 +108,7 @@ public class TradinOrderServiceImpl extends ServiceImpl<TradinOrderMapper, Tradi
         }
         int insert =tradinOrderMapper.insert(tradinOrder);
         // 改变交易状态为交易中，
-        tradinPost.setStatus(1);
+        tradinPost.setStatus(2);
         tradinPost.setOrderId(orderId);
         insert += tradinPostMapper.updateById(tradinPost);
         if (insert < 2){

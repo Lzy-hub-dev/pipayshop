@@ -72,8 +72,9 @@ public class ShopCategoryServiceImpl extends ServiceImpl<ShopCategoryMapper, Sho
      */
     @Override
     public List<ShopCategory> getShopCategorySecList(String categoryPid) {
-        List<ShopCategory> shopCategories = shopCategoryMapper.selectList(new QueryWrapper<ShopCategory>().
-                eq("del_flag", 0).eq("category_pid", categoryPid));
+        List<ShopCategory> shopCategories = shopCategoryMapper.selectList(new QueryWrapper<ShopCategory>()
+                .eq("del_flag", 0)
+                .eq("category_pid", categoryPid));
         for (ShopCategory shopCategory : shopCategories) {
             shopCategory.setCategoryImg(imageMapper.selectPath(shopCategory.getCategoryImg()));
         }

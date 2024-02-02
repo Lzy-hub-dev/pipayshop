@@ -5,9 +5,9 @@
     <select id="selectShopCommodityLiveVO" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityLiveVO">
         SELECT l.commodity_id,l.shop_id,l.detail,l.tag_list,g.origin_path as avatar_imag,l.price,e.evaluate, i.localhost_latitude,i.localhost_longitude,i.address,i.score
         from shop_commodity_live as l
-                 LEFT JOIN shop_evaluate as e ON l.commodity_id=e.commodity_id
-                 LEFT JOIN shop_info as i ON l.shop_id=i.shop_id
-                 join image g on g.image_id=l.avatar_imag
+                 left join shop_evaluate as e ON l.commodity_id=e.commodity_id
+                 left join shop_info as i ON l.shop_id=i.shop_id
+                 left join image g on g.image_id=l.avatar_imag
         GROUP BY e.commodity_id
         ORDER BY e.create_time DESC
             LIMIT #{pages},#{limit}
@@ -15,8 +15,8 @@
     <select id="selectAllShopCommodityLiveVO" resultType="java.lang.Integer">
         select count(*) from (SELECT l.commodity_id,l.shop_id,l.detail,l.tag_list,l.avatar_imag,l.price,e.evaluate, i.localhost_latitude,i.localhost_longitude,i.address,i.score
                               from shop_commodity_live as l
-                                       LEFT JOIN shop_evaluate as e ON l.commodity_id=e.commodity_id
-                                       LEFT JOIN shop_info as i ON l.shop_id=i.shop_id
+                                       left join shop_evaluate as e ON l.commodity_id=e.commodity_id
+                                       left join shop_info as i ON l.shop_id=i.shop_id
                               GROUP BY e.commodity_id
                               ORDER BY e.create_time DESC) p
     </select>
@@ -25,7 +25,7 @@
         SELECT l.commodity_id,l.shop_id,l.detail,l.tag_list,l.avatar_imag,l.price, i.localhost_latitude,i.localhost_longitude,i.address,i.score,
             (SELECT evaluate FROM shop_evaluate ORDER BY create_time DESC  LIMIT 0,1) as evaluate
         from shop_commodity_live as l
-        LEFT JOIN shop_info as i ON l.shop_id=i.shop_id
+        left join shop_info as i ON l.shop_id=i.shop_id
         where #{checkInTime}>=l.check_in_time
         and l.departure_time>=#{departureTime}
         and l.adult>=#{adult} and l.children>=#{children}
@@ -35,7 +35,7 @@
     <select id="selectAllShopLiveVOByCondition" resultType="java.lang.Integer">
         SELECT COUNT(*)
         from shop_commodity_live as l
-        LEFT JOIN shop_info as i ON l.shop_id=i.shop_id
+        left join shop_info as i ON l.shop_id=i.shop_id
         where #{checkInTime}>=l.check_in_time
           and l.departure_time>=#{departureTime}
           and l.adult>=#{adult} and l.children>=#{children}

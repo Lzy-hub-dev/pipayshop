@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
 import com.example.pipayshopapi.entity.dto.SecShopInfoListByConditionDTO;
+import com.example.pipayshopapi.entity.dto.ShopInfoDTO;
 import com.example.pipayshopapi.entity.dto.ShopInfoListByConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,21 +54,22 @@ public interface ShopInfoService extends IService<ShopInfo> {
      * @param shopId
      * @return
      */
-    Boolean deleteShopInfoById(String shopId);
+    void deleteShopInfoById(String shopId, Integer status);
+
 
     /**
      * 根据实体店id修改实体店
      * @param shopInfo
      * @return
      */
-    Boolean updateShopInfoById(ShopInfo shopInfo);
+    void updateShopInfoById(ShopInfoDTO shopInfoDTO);
 
 
 
     /**
      * 申请实体店
      */
-    boolean applyShop(ApplyShopDTO applyShopDTO );
+    void applyShop(ApplyShopDTO applyShopDTO );
 
     /**
      * 根据一级分类-获取所有实体店列表

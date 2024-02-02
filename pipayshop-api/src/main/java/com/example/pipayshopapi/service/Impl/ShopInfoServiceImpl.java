@@ -7,10 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.*;
-import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
-import com.example.pipayshopapi.entity.dto.SecShopInfoListByConditionDTO;
-import com.example.pipayshopapi.entity.dto.ShopDTO;
-import com.example.pipayshopapi.entity.dto.ShopInfoListByConditionDTO;
+import com.example.pipayshopapi.entity.dto.*;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.*;
@@ -24,6 +21,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Resource;
 import java.text.DecimalFormat;
@@ -81,6 +79,9 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     @Override
     public PageDataVO getShopInfoListByCondition(ShopInfoListByConditionDTO shopInfoListByConditionDTO) {
 
+        if (StringUtils.isBlank(shopInfoListByConditionDTO.getRegionId())) {
+            throw new BusinessException("数据异常，regionId不能为空");}
+
         // 获取总条数
         Integer count = shopInfoMapper.getIndexShopInfoVOCount(shopInfoListByConditionDTO.getCategoryId(), shopInfoListByConditionDTO.getRegionId(),shopInfoListByConditionDTO.getShopName());
         List<IndexShopInfoVO> indexShopInfoVO = shopInfoMapper.getIndexShopInfoVO(shopInfoListByConditionDTO.getCategoryId(),
@@ -89,7 +90,9 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
                                                                 shopInfoListByConditionDTO.getScore(),
                                                                 shopInfoListByConditionDTO.getRegionId(),
                                                                 shopInfoListByConditionDTO.getShopName());
-        indexShopInfoVO.stream().parallel()
+        indexShopInfoVO
+                .stream()
+                .parallel()
                 .forEach(shopInfoVO -> {
                     List<String> list1 = new ArrayList<>();
                     List<String> list = JSON.parseArray(shopInfoVO.getTagList(), String.class);
@@ -220,24 +223,38 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     }
 
     /**
-     * 根据实体店id删除实体店
+     * 根据实体店id上下架实体店
      */
     @Override
-    public Boolean deleteShopInfoById(String shopId) {
-        return shopInfoMapper.update(null, new LambdaUpdateWrapper<ShopInfo>()
-                .eq(ShopInfo::getShopId, shopId)
-                .eq(ShopInfo::getStatus, 0)
-                .set(ShopInfo::getStatus, 1)) > 0;
+    public void deleteShopInfoById(String shopId, Integer status) {
+        if (status == null) {throw new BusinessException("状态不能为空");}
+        if (status == 0) {
+            // 上架
+            int update = shopInfoMapper.update(null, new UpdateWrapper<ShopInfo>()
+                    .eq("shop_id", shopId)
+                    .eq("status", 1)
+                    .set("status", status));
+            if (update == 0) {throw new BusinessException("未查找到店铺，或该店铺已上架");}
+            return;
+        }else if (status == 1) {
+            // 下架
+            int update = shopInfoMapper.update(null, new UpdateWrapper<ShopInfo>()
+                    .eq("shop_id", shopId)
+                    .eq("status", 0)
+                    .set("status", status));
+            if (update == 0) {throw new BusinessException("未查找到店铺，或该店铺已下架");}
+            return;
+        }
+        throw new BusinessException("状态不正确");
     }
 
     /**
      * 根据实体店id修改实体店
      */
     @Override
-    public Boolean updateShopInfoById(ShopInfo shopInfo) {
-        return shopInfoMapper.update(shopInfo, new LambdaQueryWrapper<ShopInfo>()
-                .eq(ShopInfo::getStatus, 0)
-                .eq(ShopInfo::getShopId, shopInfo.getShopId())) > 0;
+    public void updateShopInfoById(ShopInfoDTO shopInfoDTO) {
+        int i = shopInfoMapper.updateShopInfoById(shopInfoDTO);
+        if (i == 0) {throw new BusinessException("修改失败");}
     }
 
 
@@ -247,7 +264,11 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean applyShop(ApplyShopDTO applyShopDTO) {
+    public void applyShop(ApplyShopDTO applyShopDTO) {
+        if (applyShopDTO.getShopImagList() == null || applyShopDTO.getShopImagList().size() == 0) {
+            throw new BusinessException("实体店图片不能为空");
+        }
+
         if (!USER_ID_LIST.add(applyShopDTO.getUid())) {
             throw new BusinessException("请勿重复提交!");
         }
@@ -271,6 +292,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
             shopInfo.setUserImage(shopImagList.get(0));
             shopInfo.setUid(uid);
             shopInfo.setMembership(membership);
+            shopInfo.setPiratio(applyShopDTO.getPiratio());
             log.error("shopinfo======================================"+shopInfo);
             // 新增实体店
             int insert = shopInfoMapper.insert(shopInfo);
@@ -307,7 +329,6 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
                     throw new BusinessException("申请实体店失败");
                 }
             }
-            return true;
         } catch (Exception e) {
             throw new BusinessException("申请实体店失败");
         } finally {
@@ -461,7 +482,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         if (dataListFromRedisList == null || dataListFromRedisList.size() == 0) {
             // 刷新缓存
             dataListFromRedisList = countrySecondMapper.getSecondDistrictList(countryCode);
-            if (dataListFromRedisList == null){return null;}
+            if (dataListFromRedisList == null || dataListFromRedisList.size() == 0){return null;}
             redisUtil.savaDataListToRedisList(Constants.COUNTRY_SECOND_REGION + "_" + countryCode, dataListFromRedisList);
         }
         return dataListFromRedisList;
@@ -475,7 +496,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
         if (dataListFromRedisList == null || dataListFromRedisList.size() == 0) {
             // 刷新缓存
             dataListFromRedisList = countryThirdMapper.getThirdDistrictList(countrySecondId);
-            if (dataListFromRedisList == null){return null;}
+            if (dataListFromRedisList == null || dataListFromRedisList.size() == 0){return null;}
             redisUtil.savaDataListToRedisList(Constants.COUNTRY_THIRD_REGION + "_" + countrySecondId, dataListFromRedisList);
         }
         return dataListFromRedisList;

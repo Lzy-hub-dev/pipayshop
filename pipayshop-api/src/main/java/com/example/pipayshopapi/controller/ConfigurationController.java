@@ -1,6 +1,7 @@
 package com.example.pipayshopapi.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.pipayshopapi.entity.Configuration;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.ResponseVO;
@@ -31,11 +32,41 @@ public class ConfigurationController {
     @Autowired
     private ConfigurationService configurationService;
 
-    @GetMapping("getAll")
-    @ApiOperation("查询相关配置信息")
-    public ResponseVO<List<Configuration>> getAll() {
-        List<Configuration> all = configurationService.getAll();
-        return ResponseVO.getSuccessResponseVo(all);
+    @GetMapping("getEnabledPi")
+    @ApiOperation("是否开启PI汇率自动转换")
+    public boolean getEnabledPi() {
+        Configuration configuration = configurationService
+                .getBaseMapper()
+                .selectOne(new QueryWrapper<Configuration>()
+                .eq("del_flag", 0)
+                .eq("content", "pi")
+        );
+        return configuration != null;
+    }
+
+    @GetMapping("getEshopLimitPrice")
+    @ApiOperation("获取提升网店商品额度价格")
+    public ResponseVO<String> getEshopLimitPrice() {
+        Configuration configuration = configurationService
+                .getBaseMapper()
+                .selectOne(new QueryWrapper<Configuration>()
+                        .eq("del_flag", 0)
+                        .eq("content", "eshop_limit_price")
+                );
+        return ResponseVO.getSuccessResponseVo(configuration.getConfigValue());
+
+    }
+
+    @GetMapping("getshopLimitPrice")
+    @ApiOperation("获取提升实体店额度价格")
+    public ResponseVO<String> getShopLimitPrice() {
+        Configuration configuration = configurationService
+                .getBaseMapper()
+                .selectOne(new QueryWrapper<Configuration>()
+                        .eq("del_flag", 0)
+                        .eq("content", "shop_limit_price")
+                );
+        return ResponseVO.getSuccessResponseVo(configuration.getConfigValue());
 
     }
     @PostMapping("setValueByKey")

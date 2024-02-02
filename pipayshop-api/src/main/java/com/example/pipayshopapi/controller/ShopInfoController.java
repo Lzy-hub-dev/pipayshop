@@ -3,6 +3,7 @@ package com.example.pipayshopapi.controller;
 
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
+import com.example.pipayshopapi.entity.dto.ShopInfoDTO;
 import com.example.pipayshopapi.entity.dto.ShopInfoListByConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -78,16 +79,8 @@ public class ShopInfoController {
     @GetMapping("getShopInfoListByCondition")
     @ApiOperation("首页根据条件获取所有实体店列表")
     public ResponseVO<PageDataVO> getShopInfoListByCondition(ShopInfoListByConditionDTO shopInfoListByConditionDTO){
-        try {
             PageDataVO shopInfoListByCondition = infoService.getShopInfoListByCondition(shopInfoListByConditionDTO);
-            if (shopInfoListByCondition==null){
-                throw new Exception();
-            }
             return ResponseVO.getSuccessResponseVo(shopInfoListByCondition);
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new BusinessException("根据二级分类-获取所有实体店列表失败，请联系后台人员");
-        }
     }
 
     @GetMapping("getShopInfoVO/{shopId}")
@@ -115,14 +108,14 @@ public class ShopInfoController {
     }
 
     @GetMapping("getShopNumber/{uid}")
-    @ApiOperation("根据用户id查询用户名下多少间实体店")
+    @ApiOperation("根据用户id查询用户名下实体店数量")
     public ResponseVO getShopNumber(@PathVariable String uid){
         try {
             Integer shopNumber = infoService.getShopNumber(uid);
             return ResponseVO.getSuccessResponseVo(shopNumber);
         }catch (Exception e){
             e.printStackTrace();
-            throw new BusinessException("根据用户id查询用户名下多少间实体店失败，请联系后台人员");
+            throw new BusinessException("查询失败，请联系后台人员");
         }
     }
 
@@ -137,41 +130,47 @@ public class ShopInfoController {
             return ResponseVO.getFalseResponseVo(null);
         }
     }
-    @PostMapping("deleteShopInfoById/{shopId}")
-    @ApiOperation("根据id删除实体店")
-    public ResponseVO deleteShopInfoById(@PathVariable String shopId) {
+@PostMapping("undercarriageShopInfoById/{shopId}/{status}")
+    @ApiOperation("根据实体id下上架实体店")
+    public ResponseVO undercarriageShopInfoById(@PathVariable String shopId,@PathVariable Integer status) {
         try {
-            boolean aBoolean = infoService.deleteShopInfoById(shopId);
-            return aBoolean ? ResponseVO.getSuccessResponseVo(null) : ResponseVO.getFalseResponseVo(null);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseVO.getFalseResponseVo(null);
+            infoService.deleteShopInfoById(shopId, status);
+            return ResponseVO.getSuccessResponseVo("根据id下上架实体店成功");
+        }catch (BusinessException e) {
+            return ResponseVO.getFalseResponseVo(e.getMessage());
+        }catch (Exception e) {
+            return ResponseVO.getFalseResponseVo("失败，请联系后台人员");
         }
+
     }
+
     @PostMapping("updateShopInfoById")
-    @ApiOperation("根据id修改实体店")
-    public ResponseVO updateShopInfoById(@RequestBody ShopInfo shopInfo) {
+    @ApiOperation("根据实体id修改实体店")
+    public ResponseVO<String> updateShopInfoById(@RequestBody ShopInfoDTO shopInfoDTO) {
         try {
-            boolean aBoolean = infoService.updateShopInfoById(shopInfo);
-            return aBoolean ? ResponseVO.getSuccessResponseVo(null) : ResponseVO.getFalseResponseVo(null);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseVO.getFalseResponseVo(null);
+            infoService.updateShopInfoById(shopInfoDTO);
+            return ResponseVO.getSuccessResponseVo("根据id修改实体店成功");
+        }catch (BusinessException e) {
+            return ResponseVO.getFalseResponseVo(e.getMessage());
+        }catch (Exception e) {
+            return ResponseVO.getFalseResponseVo("失败，请联系后台人员");
         }
+
     }
+
     @PostMapping("applyShop")
     @ApiOperation("申请实体店")
     public ResponseVO<String> applyShop(ApplyShopDTO applyShopDTO) {
         try {
-            boolean insert = infoService.applyShop(applyShopDTO);
-            if (!insert){
-                throw new Exception();
-            }
-            return ResponseVO.getSuccessResponseVo("提交申请成功");
-         } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseVO.getFalseResponseVo("提交申请失败，请联系后台管理员");
-        }
+            infoService.applyShop(applyShopDTO);
+            return ResponseVO.getSuccessResponseVo("申请实体店成功");
+        }catch (BusinessException e) {
+            return ResponseVO.getFalseResponseVo(e.getMessage());
+        }catch (Exception e) {
+            return ResponseVO.getFalseResponseVo("失败，请联系后台人员");
+    }
+
+
     }
 
 
@@ -180,10 +179,12 @@ public class ShopInfoController {
      */
     @GetMapping("isVipShop/{shopId}")
     @ApiOperation("根据店铺id查询该店铺是否为vip店铺")
-    public ResponseVO<Boolean> isVipShop(@PathVariable("shopId") String shopId) {
+    public ResponseVO isVipShop(@PathVariable("shopId") String shopId) {
         try {
             boolean flag = infoService.isVipShop(shopId);
             return ResponseVO.getSuccessResponseVo(flag);
+        } catch (BusinessException e) {
+            return ResponseVO.getFalseResponseVo(e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
             throw new BusinessException("根据店铺id查询该店铺是否为vip店铺失败，请联系后台人员");
@@ -195,10 +196,12 @@ public class ShopInfoController {
      */
     @GetMapping("getShopIdListByUid/{uid}")
     @ApiOperation("根据用户id查找名下的所有实体店铺的shopId列表")
-    public ResponseVO<List<String>> getShopIdListByUid(@PathVariable("uid") String uid) {
+    public ResponseVO getShopIdListByUid(@PathVariable("uid") String uid) {
         try {
             List<String> list = infoService.getShopIdListByUid(uid);
             return ResponseVO.getSuccessResponseVo(list);
+        } catch (BusinessException e) {
+            return ResponseVO.getFalseResponseVo(e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
             throw new BusinessException("根据用户id查找名下的所有实体店铺的shopId列表失败，请联系后台人员");
@@ -217,6 +220,8 @@ public class ShopInfoController {
                 throw new Exception();
             }
             return ResponseVO.getSuccessResponseVo("将多家实体店一起升级为vip店铺");
+        } catch (BusinessException e) {
+            return ResponseVO.getFalseResponseVo(e.getMessage());
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseVO.getFalseResponseVo("将多家实体店一起升级为vip店铺失败，请联系后台管理员");
@@ -225,11 +230,13 @@ public class ShopInfoController {
 
     @GetMapping("updateShopCommodity/{shopId}")
     @ApiOperation("查询指定实体店还可以上传的商品数量")
-    public ResponseVO<Integer> updateShopCommodity(@PathVariable String shopId){
+    public ResponseVO updateShopCommodity(@PathVariable String shopId){
         try {
             Integer integer = infoService.updateShopCommodity(shopId);
             return ResponseVO.getSuccessResponseVo(integer);
-        }catch (Exception e){
+        } catch (BusinessException e) {
+            return ResponseVO.getFalseResponseVo(e.getMessage());
+        } catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("失败");
         }
@@ -241,7 +248,9 @@ public class ShopInfoController {
         try {
             String imageId = infoService.shopTopImageUp(multipartFile);
             return ResponseVO.getSuccessResponseVo(imageId);
-        }catch (Exception e){
+        } catch (BusinessException e) {
+            return ResponseVO.getFalseResponseVo(e.getMessage());
+        } catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("实体店展示图上传失败，请联系后台人员");
         }
@@ -253,7 +262,9 @@ public class ShopInfoController {
         try {
             String imageId = infoService.shopImageUp(multipartFile);
             return ResponseVO.getSuccessResponseVo(imageId);
-        }catch (Exception e){
+        } catch (BusinessException e) {
+            return ResponseVO.getFalseResponseVo(e.getMessage());
+        } catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("实体店轮播图上传失败，请联系后台人员");
         }
@@ -282,6 +293,9 @@ public class ShopInfoController {
     public ResponseVO<List<CountryMinVO>> getSecondDistrictList(@PathVariable String countryCode){
         try {
             List<CountryMinVO> list = infoService.getSecondDistrictList(countryCode);
+            if (list == null){
+                throw new Exception();
+            }
             return ResponseVO.getSuccessResponseVo(list);
         }catch (Exception e){
             e.printStackTrace();

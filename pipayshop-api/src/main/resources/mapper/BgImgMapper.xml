@@ -7,7 +7,7 @@
                b.category,
                img.origin_path as imgUrl
         FROM bg_img b
-        JOIN
+        left join
         image img
         ON
         b.img_url = img.image_id

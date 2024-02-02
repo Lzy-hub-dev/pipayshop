@@ -12,6 +12,7 @@ import com.example.pipayshopapi.util.CreateImageCode;
 import com.example.pipayshopapi.util.RedisUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -49,12 +50,6 @@ public class UserInfoController {
     @Resource
     private RedisUtil<String> redisUtil;
 
-    @GetMapping("test")
-    @ApiOperation("test")
-    public String test(){
-
-        return "ok";
-    }
 
     @PostMapping("login")
     @ApiOperation("登录")
@@ -73,19 +68,19 @@ public class UserInfoController {
     }
 
     @GetMapping("selectUserInfoByUid/{uid}")
-    @ApiOperation("根据用户Id查找用户数据表的基本信息")
+    @ApiOperation("根据用户ID获取用户基本信息")
     public ResponseVO selectUserInfoByUid(@PathVariable String uid){
         try {
             UserInfoVO userInfoVO = userInfoService.selectUserInfoByUid(uid);
             return ResponseVO.getSuccessResponseVo(userInfoVO);
         }catch (Exception e){
             e.printStackTrace();
-            throw new RuntimeException("根据用户Id查找用户数据表的基本信息失败，请联系后台人员");
+            throw new RuntimeException("获取失败，请联系后台人员");
         }
     }
 
     @PostMapping("updateUserInfoByUid")
-    @ApiOperation("根据用户Id更改用户数据表的基本信息")
+    @ApiOperation("根据用户ID更改用户数据表的基本信息")
     public ResponseVO updateUserInfoByUid(@RequestBody UserInfoVO userInfoVO){
         try {
             boolean result = userInfoService.updateUserInfoByUid(userInfoVO);
@@ -100,7 +95,7 @@ public class UserInfoController {
     }
 
     @PostMapping("updateLanguageByUid/{uid}/{language}")
-    @ApiOperation("根据用户Id更改用户语言标识")
+    @ApiOperation("根据用户ID更改用户语言标识")
     public ResponseVO updateLanguageByUid(@PathVariable String uid,@PathVariable String language){
         try {
             boolean result = userInfoService.updateLanguageByUid(uid, language);
@@ -115,7 +110,7 @@ public class UserInfoController {
     }
 
     @PostMapping("updateCountryByUid/{uid}/{country}")
-    @ApiOperation("根据用户Id更改用户国家标识")
+    @ApiOperation("根据用户ID更改用户国家标识")
     public ResponseVO updateCountryByUid(@PathVariable String uid,@PathVariable String country){
         try {
             boolean result = userInfoService.updateCountryByUid(uid, country);
@@ -129,7 +124,7 @@ public class UserInfoController {
         }
     }
     @PostMapping("uploadUserImage")
-    @ApiOperation("根据用户Id上传头像")
+    @ApiOperation("根据用户ID上传头像")
     public ResponseVO<String> uploadUserImage(String userId, MultipartFile file){
         try {
             boolean result = userInfoService.uploadUserImage(userId, file);
@@ -159,7 +154,7 @@ public class UserInfoController {
      * 根据用户id查询它的网店id
      */
     @GetMapping("getItemIdByUserId/{userId}")
-    @ApiOperation("根据用户id查询它的网店id")
+    @ApiOperation("根据用户id查询网店id")
     public ResponseVO<String> getItemIdByUserId(@PathVariable  String userId){
         try {
             String itemId = userInfoService.getItemIdByUserId(userId);
@@ -289,20 +284,9 @@ public class UserInfoController {
             response.setHeader("sessionID",sessionId);
             out = response.getOutputStream();
             ImageIO.write(code.getBufferedImage(), "jpeg", out);
+            out.close();
         } catch (IOException e) {
             throw new BusinessException("生成验证码失败");
-        }finally {
-            try {
-                assert out != null;
-                out.close();
-            } catch (IOException e) {
-                throw new BusinessException("生成验证码失败");
-            }
-            try {
-                out.close();
-            } catch (IOException e) {
-                throw new BusinessException("生成验证码失败");
-            }
         }
     }
 

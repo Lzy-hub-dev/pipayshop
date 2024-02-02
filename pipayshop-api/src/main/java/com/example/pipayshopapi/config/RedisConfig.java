@@ -26,7 +26,7 @@ public class RedisConfig {
 
         // 添加redis地址，这里添加了单点的地址，也可以使用config.useClusterServers()添加集群地址
 
-        config.useSingleServer().setAddress("redis://111.230.16.231:6379").setPassword("123");
+        config.useSingleServer().setAddress("redis://205.209.115.162:6379").setPassword("123");
 
         // 创建客户端
         return Redisson.create(config);

@@ -29,4 +29,7 @@ public interface TradinPostMapper extends BaseMapper<TradinPost> {
     Integer selectTraditionListCount(Integer typeId);
 
 
+    List<TraditionListVO> selectTraditionListByPiName(Integer typeId, Integer page, Integer limit, String piName);
+
+    Integer selectCountTraditionList(Integer typeId, String piName);
 }

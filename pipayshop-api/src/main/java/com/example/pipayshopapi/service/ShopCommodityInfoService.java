@@ -1,9 +1,11 @@
 package com.example.pipayshopapi.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ShopCommodityInfo;
 import com.example.pipayshopapi.entity.ShopDetailInfoVO;
 import com.example.pipayshopapi.entity.dto.ApplyShopCommodityDTO;
+import com.example.pipayshopapi.entity.dto.ShopCommodityInfoDTO;
 import com.example.pipayshopapi.entity.vo.ApplicationRecordVO;
 import com.example.pipayshopapi.entity.vo.CommodityStatusPageVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
@@ -100,4 +102,6 @@ public interface ShopCommodityInfoService extends IService<ShopCommodityInfo> {
     String shopCommodityTopImageUp(MultipartFile multipartFile);
 
     List<String> shopCommodityImageUp(MultipartFile[] multipartFile);
+
+    boolean updateCommodity(ShopCommodityInfoDTO shopCommodityInfoDTO);
 }

@@ -68,4 +68,6 @@ public class ShopInfoVO {
      * 是否是vip店铺
      */
     private Integer membership;
+
+    private String piratio;
 }

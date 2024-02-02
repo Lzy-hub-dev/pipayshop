@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author wzx
@@ -43,6 +43,12 @@ public class TradinRate implements Serializable {
      * 汇率
      */
     private BigDecimal conversionRate;
+
+    // 数据更新时间
+    private String updateTime;
+
+    // 汇率更新时间
+    private String RateUpdateTime;
 
     /**
      * 0：启用 1：禁用

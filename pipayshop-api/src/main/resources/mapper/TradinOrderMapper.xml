@@ -5,7 +5,7 @@
     <select id="selectTradinyOrderByUid" resultType="com.example.pipayshopapi.entity.vo.TradinOrderListVO">
         select t.order_id,t.seller_id,t.type_id,t.point_balance,t.pi_balance,u.user_name,u.user_image,t.status
         from tradin_order t
-        join user_info u
+        left join user_info u
         on u.uid=t.seller_id
         where t.seller_id=#{userId} or t.buyer_id=#{userId}
         order by t.update_time desc
@@ -13,9 +13,9 @@
     <select id="selectTradinOrderDetail" resultType="com.example.pipayshopapi.entity.vo.TradinOrderDetailVO">
         select t.order_id,t.seller_id,t.buyer_id,t.type_id,t.point_balance,t.pi_balance,t.pi_address,t.status,t.image_url,u1.user_name as sellerName,u1.user_image as sellerImageUrl,u2.user_name as buyerName,u2.user_image as buyerImageUrl
         from tradin_order t
-        join user_info u1
+        left join user_info u1
         on u1.uid=t.seller_id
-        join user_info u2
+        left join user_info u2
         on u2.uid=t.buyer_id
         where t.order_id=#{orderId}
     </select>
