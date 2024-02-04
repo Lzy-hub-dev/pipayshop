@@ -67,4 +67,6 @@ public class ShopInfoDTO {
     private String startTime;
     // 打烊时间
     private String endTime;
+   //二维码
+    private String qrcode;
 }

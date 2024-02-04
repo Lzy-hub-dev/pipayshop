@@ -152,8 +152,6 @@ public class ShopInfoController {
             return ResponseVO.getSuccessResponseVo("根据id修改实体店成功");
         }catch (BusinessException e) {
             return ResponseVO.getFalseResponseVo(e.getMessage());
-        }catch (Exception e) {
-            return ResponseVO.getFalseResponseVo("失败，请联系后台人员");
         }
 
     }
