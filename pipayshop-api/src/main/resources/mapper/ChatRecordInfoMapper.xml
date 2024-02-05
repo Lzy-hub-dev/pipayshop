@@ -45,14 +45,14 @@
         ) AS chat
     </select>
 
-
+    <!--前端卖家模块,我作为顾客找商家聊天，聊天表插入的是我的用户id和商家的网店id-->
     <select id="getChatRecordAsUser" resultType="com.example.pipayshopapi.entity.vo.ChatListVO">
         SELECT
             i.item_id AS chatObjectId, i.item_name AS chatObjectName,
             g.origin_path as userImage, c.newMessage, c.newMessageTime
         FROM
             item_info i
-        left join
+         join
         (
             SELECT
                 CASE
@@ -84,14 +84,14 @@
         ORDER BY
             c.newMessageTime DESC
     </select>
-
+    <!--前端买家模块,用网店item_id查询，意思时我作为商家和顾客聊天，但是聊天表插入的是我的网店item_id-->
     <select id="getChatRecordAsItem" resultType="com.example.pipayshopapi.entity.vo.ChatListVO">
         SELECT
             u.uid AS chatObjectId, u.pi_name AS chatObjectName,
             g.origin_path as userImage, c.newMessage, c.newMessageTime
         FROM
         user_info u
-        left join
+         join
         (
         SELECT
         CASE
