@@ -50,7 +50,7 @@ public interface ShopInfoService extends IService<ShopInfo> {
     ShopInfoVO1 getShopInfoVO(String shopId);
 
     /**
-     * 根据实体店id删除实体店
+     * 根据实体店id删除实体店  ???其实是上下架吧，好像只能把状态改为1或2
      * @param shopId
      * @return
      */
@@ -113,4 +113,6 @@ public interface ShopInfoService extends IService<ShopInfo> {
     List<CountryMinVO> getThirdDistrictList(String countrySecondId);
 
     List<CountryMinVO> getFourthDistrictList(String countryThirdId);
+
+    public int deleteShopById(String shopId);
 }

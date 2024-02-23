@@ -66,6 +66,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
 
     @Resource
     private CountryFourthMapper countryFourthMapper;
+
     private final RedisUtil<CountryMinVO> redisUtil = new RedisUtil<>();
 
     @Override
@@ -514,4 +515,12 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
             redisUtil.savaDataListToRedisList(Constants.COUNTRY_THIRD_REGION + "_" + countryThirdId, dataListFromRedisList);
         }
         return dataListFromRedisList;    }
+
+    @Override
+    public int deleteShopById(String shopId) {
+        UpdateWrapper<ShopRegion> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("shop_id",shopId).set("del_flag",1);
+        shopRegionMapper.update(null,updateWrapper);
+        return shopInfoMapper.deleteShopById(shopId);
+    }
 }

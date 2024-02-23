@@ -350,4 +350,14 @@ public class ShopInfoController {
             throw new BusinessException("pi_Id_Image上传失败，请联系后台人员");
         }
     }*/
+
+    @PostMapping("/deleteShopInfoById/{shopId}")
+    @ApiOperation("删除实体店")
+    public ResponseVO deleteShopInfoById(@PathVariable String shopId){
+        int i = infoService.deleteShopById(shopId);
+        if(i==1){
+            return ResponseVO.getSuccessResponseVo("删除成功");
+        }
+        return ResponseVO.getFalseResponseMsg("删除失败");
+    }
 }

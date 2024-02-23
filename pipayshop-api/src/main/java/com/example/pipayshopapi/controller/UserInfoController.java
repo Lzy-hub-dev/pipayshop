@@ -59,7 +59,6 @@ public class UserInfoController {
             if (responseResultVO  == null) {
                 throw new Exception();
             }
-
             return ResponseVO.getSuccessResponseVo(responseResultVO );
         } catch (Exception e) {
 
@@ -224,7 +223,6 @@ public class UserInfoController {
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException("获取国家列表数据失败");
-
         }
     }
 

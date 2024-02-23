@@ -82,18 +82,12 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Resource
     private AuthenticationManager authenticationManager;
-
-
     @Resource
     private RedisUtil<String> redisUtil;
-
     @Resource
     private UserRegisterMapper userRegisterMapper;
-
     @Resource
     ImageMapper imageMapper;
-
-
     @Resource
     RabbitTemplate rabbitTemplate;
 
@@ -126,7 +120,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                 if (!jsonObject1.getString("username").equals(userName)) {
                     return null;
                 }
-
                 //新用户
                 UserInfo newUser = new UserInfo();
                 // 属性转移
@@ -436,7 +429,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                                         .eq("uid", userRegisterDTO.getUid())
                                         .set("password", userRegisterDTO.getPassword()));
         return update > 0;
-
     }
 
     @Override

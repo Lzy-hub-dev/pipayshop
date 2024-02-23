@@ -50,7 +50,8 @@ public interface ShopInfoMapper extends BaseMapper<ShopInfo> {
     /**
      * 首页获取商家信息列表
      */
-    List<IndexShopInfoVO> getIndexShopInfoVO(@Param("categoryId") String categoryId
+    List<IndexShopInfoVO> getIndexShopInfoVO(
+            @Param("categoryId") String categoryId
             ,@Param("page") Integer page
             ,@Param("limit") Integer limit
             ,@Param("score") Boolean score
@@ -110,5 +111,12 @@ public interface ShopInfoMapper extends BaseMapper<ShopInfo> {
     List<IndexShopInfoVO> getShopInfoMinListByCondition(@Param("categoryId") String categoryId, @Param("page") int page, @Param("limit") Integer limit, @Param("regionId") String regionId,@Param("shopName") String shopName);
 
     int updateShopInfoById(ShopInfoDTO shopInfoDTO);
+
+    /**
+     * 删除实体店，把实体店状态设为3
+     * @param shopId
+     * @return
+     */
+    int deleteShopById(String shopId);
 
 }
