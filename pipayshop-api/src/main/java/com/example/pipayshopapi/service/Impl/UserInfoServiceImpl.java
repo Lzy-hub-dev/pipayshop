@@ -184,30 +184,67 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     public ResponseResultVO login(LoginDTO loginDTO) {
         loginDTOTmp=loginDTO;
         // 根据pi_name查询数据库
-        String userName = loginDTO.getUserName();
-        // 将用户信息发给authentication
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userName,userName);
-        // 调用mapper层的UserDetailService方法，校验信息
-        Authentication authenticate = authenticationManager.authenticate(authenticationToken);
+        UserInfoVO userInfo = userInfoMapper.selectUserInfoByUid(loginDTO.getUserName());
+        if(userInfo==null){
+            //新用户
+            UserInfo newUser = new UserInfo();
+            // 属性转移
+            String username = loginDTO.getUserName();
+            newUser.setPiName(username);
+            newUser.setUserName(username);
+            newUser.setAccessToken("123456789");
+            newUser.setUid(username);
+            newUser.setUserImage(null);
+            // 插入数据
+            int insert = userInfoMapper.insert(newUser);
+            // 创建用户账号
+            insert += accountInfoMapper.createAccount(username);
+            // 记录登录
+            String ip = getIp();
+            String region = getIp2Region(ip);
+            LoginRecord loginRecord = new LoginRecord(username, ip, region, new Date(),username);
+            loginRecordMapper.insert(loginRecord);
+
+            if (insert < 2){throw new BusinessException(REGISTER_FALSE);}
+            // 给新用户开一家网店
+            ItemInfo itemInfo = new ItemInfo(null, StringUtil.generateShortId(), username, false, null, 0.0, null, null,
+                    null, username, 0, Constants.AVATAR_IMAG, 1);
+            int insert1 = itemInfoMapper.insert(itemInfo);
+            if (insert1 < 1) {
+                log.error("给新用户开一家网店失败");
+                throw new RuntimeException();
+            }
+            String jwt = JwtUtil.createJWT(username);
+            //把token响应给前端
+            HashMap<String,Object> map = new HashMap<>();
+            map.put("token",jwt);
+            map.put("user",newUser);
+            return new ResponseResultVO(200,"登陆成功",map);
+        }
+
+//        // 将用户信息发给authentication
+//        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,username);
+//        // 调用mapper层的UserDetailService方法，校验信息
+//        Authentication authenticate = authenticationManager.authenticate(authenticationToken);
 
         // 验证不通过
-        if (Objects.isNull(authenticate)) {
-            throw new RuntimeException("发生异常");
-        }
+//        if (Objects.isNull(authenticate)) {
+//            throw new RuntimeException("发生异常");
+//        }
         // 获取用户
-        LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
-        UserInfoVO userInfo = loginUser.getUserInfoVO();
-        String userId=userInfo.getUid();
-        userInfo.setUserImage(imageMapper.selectPath(userInfo.getUserImage()));
+//        LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
+//        UserInfoVO userInfo = loginUser.getUserInfoVO();
+//        String userId=userInfo.getUid();
+//        userInfo.setUserImage(imageMapper.selectPath(userInfo.getUserImage()));
         // 生产jwt
-        String jwt = JwtUtil.createJWT(userId);
+        String jwt = JwtUtil.createJWT(userInfo.getUserName());
         //authenticate存入redis
 //        redisUtil.setCacheObject("login:"+userId,loginUser,1, TimeUnit.DAYS);
 
         //存入SecurityContextHolder
-        UsernamePasswordAuthenticationToken authenticationToken1 =
-                new UsernamePasswordAuthenticationToken(loginUser,null,null);
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken1);
+//        UsernamePasswordAuthenticationToken authenticationToken1 =
+//                new UsernamePasswordAuthenticationToken(loginUser,null,null);
+//        SecurityContextHolder.getContext().setAuthentication(authenticationToken1);
         //把token响应给前端
         HashMap<String,Object> map = new HashMap<>();
         map.put("token",jwt);

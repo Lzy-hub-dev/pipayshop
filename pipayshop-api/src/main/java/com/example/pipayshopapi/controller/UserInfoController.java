@@ -54,16 +54,8 @@ public class UserInfoController {
     @PostMapping("login")
     @ApiOperation("登录")
     public ResponseVO<ResponseResultVO> login(@RequestBody LoginDTO loginDTO) {
-        try {
             ResponseResultVO  responseResultVO  = userInfoService.login(loginDTO);
-            if (responseResultVO  == null) {
-                throw new Exception();
-            }
             return ResponseVO.getSuccessResponseVo(responseResultVO );
-        } catch (Exception e) {
-
-            throw new BusinessException("登录注册失败，请联系后台人员 + "+e.getLocalizedMessage()+e+e.getCause().toString());
-        }
     }
 
     @GetMapping("selectUserInfoByUid/{uid}")
