@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.pipayshopapi.entity.ExchangeRate;
 import com.example.pipayshopapi.entity.TradinRate;
+import com.example.pipayshopapi.mapper.ItemOrderMapper;
+import com.example.pipayshopapi.mapper.ShopOrderInfoMapper;
 import com.example.pipayshopapi.service.TradinRateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -24,6 +26,12 @@ public class ExchangeRateTask {
 
     @Autowired
     TradinRateService tradinRateService;
+
+    @Autowired
+    ItemOrderMapper itemOrderMapper;
+
+    @Autowired
+    ShopOrderInfoMapper shopOrderInfoMapper;
 
     @Scheduled(cron = "0 0 */6 * * ?") // 每6个小时执行一次
     public void start() {
@@ -82,7 +90,7 @@ public class ExchangeRateTask {
                 tradinRate.setRateUpdateTime(exchangeRate.getUpdatetime());
                 tradinRateService.saveOrUpdate(tradinRate, new QueryWrapper<TradinRate>()
                         .eq("format", exchangeRate.getTo()));
-                System.out.println("更新"+ exchangeRate.getTo_name() +"汇率成功， 更新时间：" + exchangeRate.getUpdatetime());
+                System.out.println("更新" + exchangeRate.getTo_name() + "汇率成功， 更新时间：" + exchangeRate.getUpdatetime());
 
             } else {
                 System.out.println("获取汇率接口出错，code:" + responseCode);
@@ -94,4 +102,16 @@ public class ExchangeRateTask {
             e.printStackTrace();
         }
     }
+
+    //    定时把实体店超时未支付订单改状态为3
+   /*  @Scheduled(fixedRate = 60000)
+    public void updateStatus() {
+        itemOrderMapper.updateStatus();
+    }
+ */
+//    定时把网店
+   /*  @Scheduled(fixedRate = 60000)
+    public void shopUpdateStatus(){
+        shopOrderInfoMapper.updateStatus();
+    } */
 }

@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="pipayshop-backend" />
+        <module name="pipay.shop-new-backend" />
         <module name="pipayshop-api (1) (com.example.pipayshop-api)" />
         <module name="pipayshop-api" />
         <module name="pi-pay-shop-api" />

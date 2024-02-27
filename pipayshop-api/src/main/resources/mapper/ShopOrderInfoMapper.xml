@@ -277,5 +277,10 @@
         WHERE o.order_id=#{orderId}
     </select>
 
-
+<!--把订单改为失效-->
+    <update id="updateStatus">
+        UPDATE SET shop_order_info
+        <set>order_status = 3</set>
+        WHERE order_status = 0 AND TIMESTAMPDIFF(MINUTE, create_time,NOW()) > 10
+    </update>
 </mapper>

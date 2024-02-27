@@ -56,5 +56,7 @@ public interface ShopOrderInfoMapper extends BaseMapper<ShopOrderInfo> {
 
     //getLiveOrderDetail
 
+    //把未支付的超时订单改为失效订单
+    public void updateStatus();
 
 }

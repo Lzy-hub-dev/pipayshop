@@ -4,17 +4,18 @@
 
     <select id="getMyOrderByUid" resultType="com.example.pipayshopapi.entity.vo.MyItemOrderInfoVO">
         SELECT
-            o.order_id, o.item_id,o.pi_amount ,o.transaction_amount, o.discount, o.order_status, i.item_name, ig.origin_path as userImage
+        o.order_id, o.item_id,o.pi_amount ,o.transaction_amount, o.discount, o.order_status, i.item_name, ig.origin_path
+        as userImage
         FROM
-            item_order o
+        item_order o
         left join
-            item_info i
+        item_info i
         ON
-            o.item_id = i.item_id
+        o.item_id = i.item_id
         left join
-            image ig
+        image ig
         ON
-            ig.image_id = i.user_image
+        ig.image_id = i.user_image
         WHERE i.uid= #{uid}
         <choose>
             <when test="status == -1">
@@ -28,23 +29,22 @@
             </otherwise>
         </choose>
         AND
-            o.del_flag=0
+        o.del_flag=0
         ORDER BY
-            o.update_time DESC
-            LIMIT #{page}, #{limit}
+        o.update_time DESC
+        LIMIT #{page}, #{limit}
     </select>
-
 
 
     <select id="getAllMyOrderByUid" resultType="java.lang.Integer">
         SELECT
-            COUNT(*)
+        COUNT(*)
         FROM
-            item_order o
+        item_order o
         left join
-            item_info i
+        item_info i
         ON
-            o.item_id = i.item_id
+        o.item_id = i.item_id
         WHERE i.uid= #{uid}
         <choose>
             <when test="status == -1">
@@ -58,46 +58,56 @@
             </otherwise>
         </choose>
         AND
-            o.del_flag=0
+        o.del_flag=0
     </select>
-
 
 
     <select id="getOrderDetail" resultType="com.example.pipayshopapi.entity.vo.ItemOrderDetailVO">
-        SELECT
-          o.order_status , o.pi_address , o.create_time,o.pi_amount as piPrice,o.certificate_imag,o.order_time as payTime, u.address, u.phone, u.user_name as buyerName
-        FROM
-            item_order o
-                left join
-            buyer_data u
-            ON
-                o.buyer_data_id = u.buyer_data_id AND o.order_id = #{orderId}
+        SELECT o.order_status,
+               o.pi_address,
+               o.create_time,
+               o.pi_amount  as piPrice,
+               o.certificate_imag,
+               o.order_time as payTime,
+               u.address,
+               u.phone,
+               u.user_name  as buyerName
+        FROM item_order o
+                 left join
+             buyer_data u
+             ON
+                 o.buyer_data_id = u.buyer_data_id AND o.order_id = #{orderId}
     </select>
     <resultMap id="orderListResultMap" type="com.example.pipayshopapi.entity.vo.OrderListVO">
-        <result property="orderId" column="order_id" />
-        <result property="orderStatus" column="order_status" />
-        <result property="commodityId" column="commodity_id" />
-        <result property="transactionAmount" column="transaction_amount" />
-        <result property="sellerImg" column="user_image" />
-        <result property="sellerName" column="item_name" />
-        <result property="commodityImg" column="avatar_imag" />
+        <result property="orderId" column="order_id"/>
+        <result property="orderStatus" column="order_status"/>
+        <result property="commodityId" column="commodity_id"/>
+        <result property="transactionAmount" column="transaction_amount"/>
+        <result property="sellerImg" column="user_image"/>
+        <result property="sellerName" column="item_name"/>
+        <result property="commodityImg" column="avatar_imag"/>
         <result property="details" column="details"/>
     </resultMap>
 
     <select id="getOrderList" resultMap="orderListResultMap">
-        select
-            o.order_id, o.order_status, o.commodity_id, o.transaction_amount,o.number,o.commodity_specification,
-            g.origin_path as user_image, u.item_name, i.avatar_imag, i.details
-        from
-            item_order_info o
-                left join
-            item_info u
-                left join
-            item_commodity_info i
-                left join image g
-                     on g.image_id=u.user_image
-        where
-            o.uid = #{userId}
+        select o.order_id,
+               o.order_status,
+               o.commodity_id,
+               o.transaction_amount,
+               o.number,
+               o.commodity_specification,
+               g.origin_path as user_image,
+               u.item_name,
+               i.avatar_imag,
+               i.details
+        from item_order_info o
+                 left join
+             item_info u
+                 left join
+             item_commodity_info i
+                 left join image g
+                           on g.image_id = u.user_image
+        where o.uid = #{userId}
           and o.order_status != 3
             AND o.commodity_id = i.commodity_id
             AND o.item_id = u.item_id
@@ -107,23 +117,31 @@
 
 
     <select id="getBuyerOrderList" resultType="com.example.pipayshopapi.entity.vo.MyItemOrderInfoVO">
-        SELECT
-            o.order_id, o.item_id, o.pi_amount,o.transaction_amount, o.discount, o.order_status, i.item_name, ig.origin_path as userImage
-        FROM
-            item_order o
-        left join
-            item_info i
-        ON
-            o.item_id = i.item_id
-        left join
-            image ig
-        ON
-            ig.image_id = i.user_image
-        WHERE
-            o.uid= #{userId}
-        AND
-            o.del_flag=0
-        ORDER BY
-            o.update_time DESC
+        SELECT o.order_id,
+               o.item_id,
+               o.pi_amount,
+               o.transaction_amount,
+               o.discount,
+               o.order_status,
+               i.item_name,
+               ig.origin_path as userImage
+        FROM item_order o
+                 left join
+             item_info i
+             ON
+                 o.item_id = i.item_id
+                 left join
+             image ig
+             ON
+                 ig.image_id = i.user_image
+        WHERE o.uid = #{userId}
+          AND o.del_flag = 0
+        ORDER BY o.update_time DESC
     </select>
+    <!--当前系统时间减去创建时间大于10分钟的就把订单状态改为3-->
+    <update id="updateStatus">
+        UPDATE item_order
+        <set>status = 3</set>
+        WHERE status = 0 AND TIMESTAMPDIFF(MINUTE, create_time,NOW()) > 10
+    </update>
 </mapper>

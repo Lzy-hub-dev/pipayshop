@@ -35,4 +35,7 @@ public interface ItemOrderMapper extends BaseMapper<ItemOrder> {
     List<OrderListVO> getOrderList(@Param("userId") String userId);
 
     List<MyItemOrderInfoVO> getBuyerOrderList(@Param("userId") String userId);
+
+//    当前系统时间减去创建时间大于10分钟的就把订单状态改为3
+    public void updateStatus();
 }

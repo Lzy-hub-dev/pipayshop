@@ -242,7 +242,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 //        redisUtil.setCacheObject("login:"+userId,loginUser,1, TimeUnit.DAYS);
 
         //存入SecurityContextHolder
-//        UsernamePasswordAuthenticationToken authenticationToken1 =
+       // UsernamePasswordAuthenticationToken authenticationToken1 =
 //                new UsernamePasswordAuthenticationToken(loginUser,null,null);
 //        SecurityContextHolder.getContext().setAuthentication(authenticationToken1);
         //把token响应给前端

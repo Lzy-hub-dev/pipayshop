@@ -8,13 +8,13 @@ import org.springframework.context.annotation.Configuration;
 public class QueueConfig {
 
     /** 短信发送队列 */
-    public static final String QUEUE_MESSAGE = "queue.message";
+   public static final String QUEUE_MESSAGE = "queue.message";
 
     /** 交换机 */
     public static final String DLX_EXCHANGE = "dlx.exchange";
 
     /** 短信发送队列 延迟缓冲（按消息） */
-    public static final String QUEUE_MESSAGE_DELAY = "queue.message.delay";
+   public static final String QUEUE_MESSAGE_DELAY = "queue.message.delay";
 
     /**
      * 短信发送队列
@@ -39,8 +39,8 @@ public class QueueConfig {
     /***
      * 创建交换机
      */
-    @Bean
-    public DirectExchange directExchange(){
+     @Bean
+   public DirectExchange directExchange(){
         return new DirectExchange(DLX_EXCHANGE);
     }
 

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+// import com.example.pipayshopapi.config.QueueConfig;
 import com.example.pipayshopapi.config.QueueConfig;
 import com.example.pipayshopapi.entity.*;
 import com.example.pipayshopapi.entity.dto.ItemOrderDetailDTO;
