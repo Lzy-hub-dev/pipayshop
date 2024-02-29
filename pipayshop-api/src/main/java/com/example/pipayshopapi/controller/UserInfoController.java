@@ -55,6 +55,7 @@ public class UserInfoController {
     @ApiOperation("登录")
     public ResponseVO<ResponseResultVO> login(@RequestBody LoginDTO loginDTO) {
             ResponseResultVO  responseResultVO  = userInfoService.login(loginDTO);
+        System.out.println("pi登录方法触发了");
             return ResponseVO.getSuccessResponseVo(responseResultVO );
     }
 

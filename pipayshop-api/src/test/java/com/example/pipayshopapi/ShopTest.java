@@ -5,11 +5,15 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.pipayshopapi.config.CommonConfig;
 import com.example.pipayshopapi.entity.ItemOrder;
+import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.TradinPost;
 import com.example.pipayshopapi.entity.UserInfo;
 import com.example.pipayshopapi.entity.dto.ItemOrderDetailDTO;
+import com.example.pipayshopapi.entity.vo.CheckVO;
 import com.example.pipayshopapi.exception.BusinessException;
+import com.example.pipayshopapi.mapper.ShopInfoMapper;
 import com.example.pipayshopapi.mapper.TradinPostMapper;
+import com.example.pipayshopapi.service.ShopInfoService;
 import com.example.pipayshopapi.util.*;
 import io.jsonwebtoken.*;
 import net.coobird.thumbnailator.Thumbnails;
@@ -33,8 +37,6 @@ public class ShopTest {
 
     CommonConfig commonConfig = new CommonConfig();
 
-
-
     private RabbitTemplate rabbitTemplate;
 
     @Resource
@@ -50,11 +52,10 @@ public class ShopTest {
     }
 
     @Test
-    public void imageTest(){
+    public void imageTest() {
         System.out.println("rabbitTemplate = " + rabbitTemplate);
-        rabbitTemplate.convertAndSend("","userInfo"," message");
+        rabbitTemplate.convertAndSend("", "userInfo", " message");
     }
-
 
 
     private static TradinPostMapper tradinPostMapper;
@@ -66,24 +67,24 @@ public class ShopTest {
 
 
 
-//    @AfterEach
-//    void tearDown() throws IOException {
-//        this.client.close();
-//    }
+    //    @AfterEach
+    //    void tearDown() throws IOException {
+    //        this.client.close();
+    //    }
 
     // .selectOne(new QueryWrapper<TradinPost>().eq("tradin_id", "test").select("status"))
     @Test
-    public void test02(){
+    public void test02() {
         System.out.println(tradinPostMapper);
     }
 
     @Test
-    public void Test01(){
+    public void Test01() {
         Claims dataFromToken = TokenUtil.getDataFromToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ3engiLCJvcmRlcklkQXJyYXkiOlsiYTg5OTdiMjM4MWEiXSwicGF5UG9pbnRTdW0iOjIwOX0.IJRTL1-uqlyk4DkbP5aeesNZj_RdOgUBTNBmDDFnyRo");
         String uid = dataFromToken.get("uid", String.class);
         List<String> list = dataFromToken.get("orderIdArray", ArrayList.class);
         System.out.println(list);
-//        BigDecimal payPointSum = BigDecimal.valueOf(Double.parseDouble(dataFromToken.get("payPointSum", String.class)));
+        //        BigDecimal payPointSum = BigDecimal.valueOf(Double.parseDouble(dataFromToken.get("payPointSum", String.class)));
         BigDecimal payPointSum = BigDecimal.valueOf(dataFromToken.get("payPointSum", Integer.class));
         System.out.println(payPointSum);
         list.stream().forEach(orderId -> {
@@ -95,13 +96,8 @@ public class ShopTest {
     }
 
 
-
-
-
-
-
     @Test
-    public void test01(){
+    public void test01() {
 
         String hashPassword = StringUtil.hashPassword("123456789");
         System.out.println(hashPassword);
@@ -109,7 +105,7 @@ public class ShopTest {
     }
 
     @Test
-    public void testss(){
+    public void testss() {
         try {
             // 原始图片路径
             File originalImage = new File("C:\\Users\\Hellow\\Desktop\\pi-pay-shop-api\\pipayshop-api\\src\\main\\resources\\static\\images\\avatar\\avatar.jpg");
@@ -134,21 +130,21 @@ public class ShopTest {
 
     @Test
     public void testss2() {
-            File readPath = new File("pipayshop-api/src/main/resources/static/images/avatar");
-            System.out.println(readPath.getAbsolutePath());
+        File readPath = new File("pipayshop-api/src/main/resources/static/images/avatar");
+        System.out.println(readPath.getAbsolutePath());
 
     }
 
     @Test
-    public void test3(){
+    public void test3() {
         JwtBuilder jwtBuilder = Jwts.builder();
         List<ItemOrderDetailDTO> itemOrderDetailDTOS = new ArrayList<>();
-////        ItemOrderDetailDTO itemOrderDetailDTO = new ItemOrderDetailDTO("CADKMnRHaE","Vvfmf3xGhw", new BigDecimal(11.2), new BigDecimal(11.2), 2, "蓝色xl", "/images/avatar/174abc6ebd0.png");
-////        ItemOrderDetailDTO itemOrderDetailDTO2 = new ItemOrderDetailDTO("biaMlrE5xh","Vvfmf3xGhw", new BigDecimal(11.2), new BigDecimal(11.2), 2, "蓝色xl", "/images/avatar/174abc6ebd0.png");
-////        ItemOrderDetailDTO itemOrderDetailDTO3 = new ItemOrderDetailDTO("CADKMnRHaE","Vvfmf3xGhw", new BigDecimal(11.2), new BigDecimal(11.2), 2, "蓝色xl", "/images/avatar/174abc6ebd0.png");
-//        itemOrderDetailDTOS.add(itemOrderDetailDTO2);
-//        itemOrderDetailDTOS.add(itemOrderDetailDTO);
-//        itemOrderDetailDTOS.add(itemOrderDetailDTO3);
+        ////        ItemOrderDetailDTO itemOrderDetailDTO = new ItemOrderDetailDTO("CADKMnRHaE","Vvfmf3xGhw", new BigDecimal(11.2), new BigDecimal(11.2), 2, "蓝色xl", "/images/avatar/174abc6ebd0.png");
+        ////        ItemOrderDetailDTO itemOrderDetailDTO2 = new ItemOrderDetailDTO("biaMlrE5xh","Vvfmf3xGhw", new BigDecimal(11.2), new BigDecimal(11.2), 2, "蓝色xl", "/images/avatar/174abc6ebd0.png");
+        ////        ItemOrderDetailDTO itemOrderDetailDTO3 = new ItemOrderDetailDTO("CADKMnRHaE","Vvfmf3xGhw", new BigDecimal(11.2), new BigDecimal(11.2), 2, "蓝色xl", "/images/avatar/174abc6ebd0.png");
+        //        itemOrderDetailDTOS.add(itemOrderDetailDTO2);
+        //        itemOrderDetailDTOS.add(itemOrderDetailDTO);
+        //        itemOrderDetailDTOS.add(itemOrderDetailDTO3);
 
 
         String compact = jwtBuilder
@@ -167,4 +163,5 @@ public class ShopTest {
         System.out.println(claimsJws.getBody());*/
 
     }
+
 }

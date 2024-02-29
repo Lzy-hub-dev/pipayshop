@@ -403,8 +403,12 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
 
     @Override
     public CheckVO checkId(String qrcode) {
-        ShopInfo shopInfo = shopInfoMapper.selectOne(new QueryWrapper<ShopInfo>().eq("qrcode", qrcode)
-                .eq("status", 0));
+        // ShopInfo shopInfo = shopInfoMapper.selectOne(new QueryWrapper<ShopInfo>().eq("qrcode", qrcode)
+        //         .eq("status", 0));
+        if(qrcode.startsWith("payapp.weixin.qq.com")){
+            qrcode = qrcode+"#wechat_pay";
+        }
+        ShopInfo shopInfo = shopInfoMapper.selectShopInfoByQrcode(qrcode);
         if (shopInfo == null) {
             return null;
         }

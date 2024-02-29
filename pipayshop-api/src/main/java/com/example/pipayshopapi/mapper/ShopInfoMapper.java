@@ -119,4 +119,11 @@ public interface ShopInfoMapper extends BaseMapper<ShopInfo> {
      */
     int deleteShopById(String shopId);
 
+    /**
+     * 根据实体店的qrcode查询实体店信息
+     * @param qrcode
+     * @return
+     */
+     ShopInfo selectShopInfoByQrcode(String qrcode);
+
 }
