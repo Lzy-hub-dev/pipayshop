@@ -3,6 +3,7 @@ package com.example.pipayshopapi.controller;
 
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.dto.ApplyShopDTO;
+import com.example.pipayshopapi.entity.dto.QrcodeDto;
 import com.example.pipayshopapi.entity.dto.ShopInfoDTO;
 import com.example.pipayshopapi.entity.dto.ShopInfoListByConditionDTO;
 import com.example.pipayshopapi.entity.vo.*;
@@ -271,11 +272,11 @@ public class ShopInfoController {
     /**
      * 校验商家的付款ID
      */
-    @GetMapping("checkId")
+    @PostMapping("checkId")
     @ApiOperation("校验商家的付款ID")
-    public ResponseVO<CheckVO> checkId(String qrcode){
+    public ResponseVO<CheckVO> checkId(@RequestBody QrcodeDto qrcode){
         try {
-            CheckVO checkId = infoService.checkId(qrcode);
+            CheckVO checkId = infoService.checkId(qrcode.getQrcode());
             return ResponseVO.getSuccessResponseVo(checkId);
         }catch (Exception e){
             e.printStackTrace();

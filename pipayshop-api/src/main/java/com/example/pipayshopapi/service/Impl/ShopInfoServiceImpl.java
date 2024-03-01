@@ -405,9 +405,9 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoMapper, ShopInfo> i
     public CheckVO checkId(String qrcode) {
         // ShopInfo shopInfo = shopInfoMapper.selectOne(new QueryWrapper<ShopInfo>().eq("qrcode", qrcode)
         //         .eq("status", 0));
-        if(qrcode.startsWith("payapp.weixin.qq.com")||qrcode.startsWith("payapp.wechatpay.cn")){
-            qrcode = qrcode+"#wechat_pay";
-        }
+        // if(qrcode.startsWith("payapp.weixin.qq.com")||qrcode.startsWith("payapp.wechatpay.cn")){
+        //     qrcode = qrcode+"#wechat_pay";
+        // }
         ShopInfo shopInfo = shopInfoMapper.selectShopInfoByQrcode(qrcode);
         if (shopInfo == null) {
             return null;
