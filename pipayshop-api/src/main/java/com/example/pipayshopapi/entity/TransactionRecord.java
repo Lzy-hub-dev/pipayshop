@@ -55,6 +55,9 @@ public class TransactionRecord implements Serializable {
      */
     private LocalDateTime createTime;
 
+    /* 结算状态 */
+    private Integer status;
+
     /**
      * 0:正常1：逻辑删除
      */
