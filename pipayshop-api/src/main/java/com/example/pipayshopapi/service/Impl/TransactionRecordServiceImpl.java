@@ -61,8 +61,11 @@ public class TransactionRecordServiceImpl extends ServiceImpl<TransactionRecordM
         if (update1 < 1) {
             throw new BusinessException("增加店铺对应的店主的账户数据失败");
         }
+       /*  int insert = transactionRecordMapper.insert(new TransactionRecord(null, StringUtil.generateShortId()
+                , shopId, userId, transactionAmount, null, null)); */
         int insert = transactionRecordMapper.insert(new TransactionRecord(null, StringUtil.generateShortId()
-                , shopId, userId, transactionAmount, null, null));
+                , shopId, userId, transactionAmount, null, null,null));
+
         if (insert < 1) {
             throw new BusinessException("记录交易日志失败");
         }
