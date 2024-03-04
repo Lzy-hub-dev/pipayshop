@@ -31,4 +31,6 @@ public class IndexShopInfoVO {
     private Boolean membership;
     // 使用pi比例
     private String piratio;
+   //    实体店的类型
+    private String categoryId;
 }

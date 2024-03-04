@@ -111,7 +111,7 @@
 
     <select id="getIndexShopInfoVO" resultType="com.example.pipayshopapi.entity.vo.IndexShopInfoVO">
         select
-            s.shop_id, s.shop_name, s.score, s.localhost_latitude, s.localhost_longitude, i.origin_path as userImage, s.shop_introduce, s.tag_list, s.address, s.membership, s.piratio
+            s.shop_id, s.shop_name, s.score, s.localhost_latitude, s.localhost_longitude, i.origin_path as userImage, s.shop_introduce, s.tag_list, s.address, s.membership, s.piratio,s.category_id
         from shop_info s
         left join image i ON i.image_id = s.user_image
         left join shop_region sr on sr.shop_id = s.shop_id
