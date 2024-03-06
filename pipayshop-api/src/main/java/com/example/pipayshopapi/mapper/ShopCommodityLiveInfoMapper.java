@@ -2,9 +2,8 @@ package com.example.pipayshopapi.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.pipayshopapi.entity.ShopCommodityLiveInfo;
-import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoListVO;
-import com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoVO;
-import com.example.pipayshopapi.entity.vo.ShopCommodityLiveVO;
+import com.example.pipayshopapi.entity.dto.ShopCommodityLiveInfoListDTO1;
+import com.example.pipayshopapi.entity.vo.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -47,4 +46,11 @@ public interface ShopCommodityLiveInfoMapper extends BaseMapper<ShopCommodityLiv
      * @return
      */
     int addLiveStock(@Param("num")Integer num,@Param("commodityId")String commodityId);
+
+    /**
+     * 查出酒店下面所有的房间，条件：价格（非必要）
+     * @param hotelInfo
+     * @return
+     */
+    List<ShopCommodityLiveInfoVO3> selectALlByPrice(ShopCommodityLiveInfoListDTO1 hotelInfo);
 }

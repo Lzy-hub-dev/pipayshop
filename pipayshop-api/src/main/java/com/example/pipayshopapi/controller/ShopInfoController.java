@@ -169,7 +169,6 @@ public class ShopInfoController {
             return ResponseVO.getFalseResponseVo("失败，请联系后台人员");
     }
 
-
     }
 
 

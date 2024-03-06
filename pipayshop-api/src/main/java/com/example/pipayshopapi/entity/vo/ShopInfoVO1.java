@@ -25,6 +25,8 @@ public class ShopInfoVO1 {
      * 实体店的头像
      */
     private String userImage;
+    //实体店所属分类
+    private String categoryId;
     /**
      * 粉丝总数
      */

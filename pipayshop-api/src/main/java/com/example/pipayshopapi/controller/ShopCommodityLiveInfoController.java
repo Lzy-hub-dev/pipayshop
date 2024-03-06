@@ -3,11 +3,13 @@ package com.example.pipayshopapi.controller;
 
 import com.example.pipayshopapi.entity.ShopCommodityLiveInfo;
 import com.example.pipayshopapi.entity.dto.ShopCommodityLiveInfoListDTO;
+import com.example.pipayshopapi.entity.dto.ShopCommodityLiveInfoListDTO1;
 import com.example.pipayshopapi.entity.dto.ShopHotelRecordDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopCommodityLiveInfoService;
 import com.example.pipayshopapi.util.FileUploadUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -59,9 +61,9 @@ public class ShopCommodityLiveInfoController {
 
     @PostMapping("roomImageUp")
     @ApiOperation("酒店轮播图上传")
-    public ResponseVO<String> roomImageUp(MultipartFile multipartFile){
+    public ResponseVO<String> roomImageUp(MultipartFile file){
         try {
-            String imageId = shopCommodityLiveInfoService.roomImageUp(multipartFile);
+            String imageId = shopCommodityLiveInfoService.roomImageUp(file);
             return ResponseVO.getSuccessResponseVo(imageId);
         }catch (Exception e){
             e.printStackTrace();
@@ -196,6 +198,13 @@ public class ShopCommodityLiveInfoController {
             e.printStackTrace();
             throw new BusinessException("根据房型id更改房型信息失败，请联系后台人员");
         }
+
+    }
+
+    @PostMapping("/selectAllByPrice")
+    @ApiOperation("价格升降序查房")
+    public ResponseVO selectAllByPrice(@RequestBody ShopCommodityLiveInfoListDTO1 shopInfo) throws JsonProcessingException {
+        return new ResponseVO<>(200,"查询成功",shopCommodityLiveInfoService.selectAllByPrice(shopInfo));
     }
 
 }

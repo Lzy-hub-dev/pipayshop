@@ -72,7 +72,7 @@
         WHERE shop_id=#{shopId}
     </select>
     <select id="getShopList" resultType="com.example.pipayshopapi.entity.vo.ShopInfoVO1">
-        SELECT s.shop_id,s.status,s.shop_name,s.score,i.origin_path as userImage, (
+        SELECT s.shop_id,s.status,s.shop_name,s.score,s.category_id,i.origin_path as userImage, (
             SELECT COUNT(*) FROM shop_follow_focus
             where `status`=0 and shop_id= s.shop_id
         ) as follows

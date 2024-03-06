@@ -9,10 +9,14 @@ import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.TradinPost;
 import com.example.pipayshopapi.entity.UserInfo;
 import com.example.pipayshopapi.entity.dto.ItemOrderDetailDTO;
+import com.example.pipayshopapi.entity.dto.ShopCommodityLiveInfoListDTO1;
 import com.example.pipayshopapi.entity.vo.CheckVO;
 import com.example.pipayshopapi.exception.BusinessException;
+import com.example.pipayshopapi.mapper.ShopCommodityLiveInfoMapper;
+import com.example.pipayshopapi.mapper.ShopCommodityLiveMapper;
 import com.example.pipayshopapi.mapper.ShopInfoMapper;
 import com.example.pipayshopapi.mapper.TradinPostMapper;
+import com.example.pipayshopapi.service.Impl.ShopCommodityLiveInfoServiceImpl;
 import com.example.pipayshopapi.service.ShopInfoService;
 import com.example.pipayshopapi.util.*;
 import io.jsonwebtoken.*;
@@ -32,7 +36,7 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-
+@SpringBootTest
 public class ShopTest {
 
     CommonConfig commonConfig = new CommonConfig();
@@ -164,4 +168,14 @@ public class ShopTest {
 
     }
 
+    // Failed to load ApplicationContext
+   /*  @Autowired
+    private ShopCommodityLiveInfoMapper mapper;
+
+    @Test
+    public void testSearch(){
+        ShopCommodityLiveInfoListDTO1 shop = new ShopCommodityLiveInfoListDTO1("12ace87a757",false,false,false);
+        System.out.println(mapper.selectALlByPrice(shop));
+    }
+ */
 }

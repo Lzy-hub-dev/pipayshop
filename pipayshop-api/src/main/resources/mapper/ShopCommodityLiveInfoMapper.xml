@@ -1,58 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.pipayshopapi.mapper.ShopCommodityLiveInfoMapper">
+ <!--   <resultMap id="diyResult" type="com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoVO2">
+        <result column="l.image_list" jdbcType="OTHER" property="tagList" javaType="cn.hutool.json.JSONObject"
+                typeHandler="com.example.pipayshopapi.util.JSONObjectTypeHandler"></result>
+        <result column="l.tag_list" jdbcType="OTHER" property="tagList" javaType="cn.hutool.json.JSONObject"
+                typeHandler="com.example.pipayshopapi.util.JSONObjectTypeHandler"></result>
+        <result column="l.basics" jdbcType="OTHER" property="basics" javaType="cn.hutool.json.JSONObject"
+                typeHandler="com.example.pipayshopapi.util.JSONObjectTypeHandler"></result>
+        <result column="l.bath" jdbcType="OTHER" property="bath" javaType="cn.hutool.json.JSONObject"
+                typeHandler="com.example.pipayshopapi.util.JSONObjectTypeHandler"></result>
+        <result column="l.appliance" jdbcType="OTHER" property="appliance" javaType="cn.hutool.json.JSONObject"
+                typeHandler="com.example.pipayshopapi.util.JSONObjectTypeHandler"></result>
+    </resultMap>-->
+
     <insert id="addLiveStock">
         UPDATE
             shop_commodity_live_info
-        SET
-            inventory = inventory+#{num}
-        WHERE
-            room_id=#{commodityId}
+        SET inventory = inventory + #{num}
+        WHERE room_id = #{commodityId}
     </insert>
 
-    <select id="selectShopCommodityLiveInfoList" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoListVO">
-        select s.room_id,s.room_type_name,s.tag_list,s.land,s.price,i.origin_path as avatarImag,s.bed_type
+    <select id="selectShopCommodityLiveInfoList"
+            resultType="com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoListVO">
+        select s.room_id, s.room_type_name, s.tag_list, s.land, s.price, i.origin_path as avatarImag, s.bed_type
         from shop_commodity_live_info s
-        left join image i
-        on i.image_id = s.avatar_imag
-        where
-        shop_id=#{shopId}
+                 left join image i
+                           on i.image_id = s.avatar_imag
+        where shop_id = #{shopId}
     </select>
 
     <select id="selectByRoomId" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoVO">
-        select room_id,room_type_name,land,restricted,price,rest_room,bed,adult,children,room,bed_type,floor,is_add
+        select room_id,
+               room_type_name,
+               land,
+               restricted,
+               price,
+               rest_room,
+               bed,
+               adult,
+               children,
+               room,
+               bed_type,
+               floor,
+               is_add
         from shop_commodity_live_info
         where room_id = #{roomId}
     </select>
 
 
     <select id="selectShopCommodityLiveVO" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityLiveVO">
-        SELECT l.room_id,l.shop_id,l.detail,l.tag_list,g.origin_path as avatar_imag,l.price,e.evaluate, i.localhost_latitude,i.localhost_longitude,i.address,i.score
+        SELECT l.room_id,
+               l.shop_id,
+               l.detail,
+               l.tag_list,
+               g.origin_path as avatar_imag,
+               l.price,
+               e.evaluate,
+               i.localhost_latitude,
+               i.localhost_longitude,
+               i.address,
+               i.score
         from shop_commodity_live_info as l
-                 left join shop_evaluate as e ON l.room_id=e.commodity_id
-                 left join shop_info as i ON l.shop_id=i.shop_id
-                 left join image as g on g.image_id=l.avatar_imag
+                 left join shop_evaluate as e ON l.room_id = e.commodity_id
+                 left join shop_info as i ON l.shop_id = i.shop_id
+                 left join image as g on g.image_id = l.avatar_imag
         GROUP BY e.commodity_id
         ORDER BY e.create_time DESC
-            LIMIT #{pages},#{limit}
+            LIMIT #{pages}, #{limit}
     </select>
     <select id="selectAllShopCommodityLiveVO" resultType="java.lang.Integer">
-        select count(*) from (SELECT l.room_id,l.shop_id,l.detail,l.tag_list,l.avatar_imag,l.price,e.evaluate, i.localhost_latitude,i.localhost_longitude,i.address,i.score
-                              from shop_commodity_live_info as l
-                                       left join shop_evaluate as e ON l.room_id=e.commodity_id
-                                       left join shop_info as i ON l.shop_id=i.shop_id
-                              GROUP BY e.commodity_id
-                              ORDER BY e.create_time DESC) p
+        select count(*)
+        from (SELECT l.room_id,
+                     l.shop_id,
+                     l.detail,
+                     l.tag_list,
+                     l.avatar_imag,
+                     l.price,
+                     e.evaluate,
+                     i.localhost_latitude,
+                     i.localhost_longitude,
+                     i.address,
+                     i.score
+              from shop_commodity_live_info as l
+                       left join shop_evaluate as e ON l.room_id = e.commodity_id
+                       left join shop_info as i ON l.shop_id = i.shop_id
+              GROUP BY e.commodity_id
+              ORDER BY e.create_time DESC) p
     </select>
 
     <update id="reduceLiveStock">
         UPDATE
             shop_commodity_live_info
-        SET
-            inventory = inventory-#{num}
-        WHERE
-            room_id=#{commodityId}
-          AND
-            inventory>=#{num}
+        SET inventory = inventory - #{num}
+        WHERE room_id = #{commodityId}
+          AND inventory >= #{num}
     </update>
+
+    <!--<select id="selectALlByPrice" resultMap="diyResult">-->
+    <select id="selectALlByPrice" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoVO3">
+        SELECT s.localhost_latitude,s.localhost_longitude,s.phone,s.address,
+        l.room_id,l.room_type_name,l.tag_list, l.inventory,l.detail,l.image_list,l.land,
+        l.restricted, l.basics,l.bath,l.appliance,l.price,l.rest_room,l.bed,l.adult,l.children,l.bed_type,
+        l.floor,l.room,l.is_add,l.monthly_sales
+        FROM shop_info s
+        LEFT JOIN shop_commodity_live_info l ON s.shop_id = l.shop_id
+        WHERE s.shop_id = #{shopId} AND l.status = 0
+        <if test="priceSearch">
+            ORDER BY l.price
+            <if test="ascending">ASC</if>
+            <if test="descending">DESC</if>
+        </if>
+    </select>
 </mapper>

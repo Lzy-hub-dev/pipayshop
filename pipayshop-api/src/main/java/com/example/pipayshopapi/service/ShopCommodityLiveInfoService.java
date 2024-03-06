@@ -2,8 +2,10 @@ package com.example.pipayshopapi.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ShopCommodityLiveInfo;
+import com.example.pipayshopapi.entity.dto.ShopCommodityLiveInfoListDTO1;
 import com.example.pipayshopapi.entity.dto.ShopHotelRecordDTO;
 import com.example.pipayshopapi.entity.vo.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
@@ -63,4 +65,6 @@ public interface ShopCommodityLiveInfoService extends IService<ShopCommodityLive
     String roomTopImageUp(MultipartFile multipartFile);
 
     String roomImageUp(MultipartFile multipartFile);
+
+    List<ShopCommodityLiveInfoVO2> selectAllByPrice(ShopCommodityLiveInfoListDTO1 ahopInfo) throws JsonProcessingException;
 }
