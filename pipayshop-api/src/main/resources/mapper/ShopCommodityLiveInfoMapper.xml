@@ -97,7 +97,6 @@
           AND inventory >= #{num}
     </update>
 
-    <!--<select id="selectALlByPrice" resultMap="diyResult">-->
     <select id="selectALlByPrice" resultType="com.example.pipayshopapi.entity.vo.ShopCommodityLiveInfoVO3">
         SELECT s.localhost_latitude,s.localhost_longitude,s.phone,s.address,
         l.room_id,l.room_type_name,l.tag_list, l.inventory,l.detail,l.image_list,l.land,

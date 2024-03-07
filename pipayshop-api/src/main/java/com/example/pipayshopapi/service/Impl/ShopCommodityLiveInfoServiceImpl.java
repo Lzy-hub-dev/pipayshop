@@ -272,61 +272,61 @@ public class ShopCommodityLiveInfoServiceImpl extends ServiceImpl<ShopCommodityL
         //得到数据
         List<ShopCommodityLiveInfoVO3> shopInfoLists = shopCommodityLiveInfoMapper.selectALlByPrice(shopInfo);
         List<ShopCommodityLiveInfoVO2> shopInfoLists2 = new ArrayList<>();
-        //接收转换后的值
-        ShopCommodityLiveInfoVO2 shopCommodityLiveInfoVO2 = new ShopCommodityLiveInfoVO2();
         for (ShopCommodityLiveInfoVO3 shopInfoVO : shopInfoLists) {
             if (shopInfoVO != null) {
+                // System.out.println(shopInfoVO);
                 ModelMapper modelMapper = new ModelMapper();
-                shopCommodityLiveInfoVO2  = modelMapper.map(shopInfoVO, ShopCommodityLiveInfoVO2.class);
-
+                //接收转换后的值
+                ShopCommodityLiveInfoVO2 s2 = new ShopCommodityLiveInfoVO2();
+                s2  = modelMapper.map(shopInfoVO, ShopCommodityLiveInfoVO2.class);
+              /*   s2.setAddress(shopInfoVO.getAddress());
+                s2.setAdult(shopInfoVO.getAdult());
+                s2.setBed(shopInfoVO.getBed());
+                s2.setBedType(shopInfoVO.getBedType());
+                s2.setChildren(shopInfoVO.getChildren());
+                s2.setDetail(shopInfoVO.getDetail());
+                s2.setFloor(shopInfoVO.getFloor());
+                s2.setInventory(shopInfoVO.getInventory());
+                s2.setIsAdd(shopInfoVO.getIsAdd());
+                s2.setLand(shopInfoVO.getLand());
+                s2.setLatitude(shopInfoVO.getLatitude());
+                s2.setLongitude(shopInfoVO.getLongitude());
+                s2.setMonthlySales(shopInfoVO.getMonthlySales());
+                s2.setPhone(shopInfoVO.getPhone());
+                s2.setPrice(shopInfoVO.getPrice());
+                s2.setRestricted(shopInfoVO.getRestricted());
+                s2.setRestRoom(shopInfoVO.getRestRoom());
+                s2.setRoom(shopInfoVO.getRoom());
+                s2.setRoomId(shopInfoVO.getRoomId());
+                s2.setRoomTypeName(shopInfoVO.getRoomTypeName());
+ */
                 //tagList
-                JSONArray TagArray = JSON.parseArray(shopInfoVO.getTagList().toString());
+                JSONArray TagArray = JSON.parseArray(shopInfoVO.getTagList());
                 List<String> tagList = JSON.parseArray(TagArray.toJSONString(), String.class);
-                shopCommodityLiveInfoVO2.setTagList(tagList);
+                s2.setTagList(tagList);
                 //imageList
-                JSONArray imageArray = JSON.parseArray(shopInfoVO.getImageList().toString());
+                JSONArray imageArray = JSON.parseArray(shopInfoVO.getImageList());
                 List<String> imageList = JSON.parseArray(imageArray.toJSONString(), String.class);
-                shopCommodityLiveInfoVO2.setTagList(imageList);
+                s2.setImageList(imageList);
               //  解析基础设施
-                JSONArray basicArray = JSON.parseArray(shopInfoVO.getBasics().toString());
+                JSONArray basicArray = JSON.parseArray(shopInfoVO.getBasics());
                 List<HotelFacilityVO>  basicList = JSON.parseArray(basicArray.toJSONString(),HotelFacilityVO.class);
-                shopCommodityLiveInfoVO2.setBasics(basicList);
+                s2.setBasics(basicList);
               //  解析淋浴
-                JSONArray bathArray = JSON.parseArray(shopInfoVO.getBath().toString());
+                JSONArray bathArray = JSON.parseArray(shopInfoVO.getBath());
                 List<HotelFacilityVO>  bathList = JSON.parseArray(bathArray.toJSONString(),HotelFacilityVO.class);
-                shopCommodityLiveInfoVO2.setBasics(bathList);
+                s2.setBath(bathList);
 
                 // 解析电器设施
-                JSONArray applianceArray = JSON.parseArray(shopInfoVO.getAppliance().toString());
+                JSONArray applianceArray = JSON.parseArray(shopInfoVO.getAppliance());
                 List<HotelFacilityVO>  applianceList = JSON.parseArray(applianceArray.toJSONString(),HotelFacilityVO.class);
-                shopCommodityLiveInfoVO2.setBasics(applianceList);
-                shopInfoLists2.add(shopCommodityLiveInfoVO2);
-              /*   // 解析图片img_list
-                String imageListJson = shopInfoVO.getImageList().toString();
-                List<String> imageList = new ObjectMapper().readValue(imageListJson, new TypeReference<List<String>>() {});
-                shopInfoVO.setImageList(imageList);
-                // 解析标签tagList
-                String tagListJson = shopInfoVO.getTagList().toString();
-                List<String> tagList = new ObjectMapper().readValue(tagListJson, new TypeReference<List<String>>() {});
-                shopInfoVO.setTagList(tagList);
-                // 解析基础设施
-                List<HotelFacilityVO> basics = shopInfoVO.getBasics();
-                // 更新基础设施字段
-                shopInfoVO.setBasics(parseHotelFacilityVOList(basics.toString()));
-                // 解析沐浴设施
-                List<HotelFacilityVO> bath = shopInfoVO.getBath();
-                // 更新沐浴设施字段
-                shopInfoVO.setBath(parseHotelFacilityVOList(bath.toString()));
-                // 解析电器设施
-                List<HotelFacilityVO> appliance = shopInfoVO.getAppliance();
-                // 更新电器设施字段
-                shopInfoVO.setAppliance(parseHotelFacilityVOList(appliance.toString())); */
+                s2.setAppliance(applianceList);
+
+                shopInfoLists2.add(s2);
+                // System.out.println(s2);
+                // System.out.println("----------------");
             }
         }
         return shopInfoLists2;
     }
-    /* private List<HotelFacilityVO> parseHotelFacilityVOList(String facilityListJson) throws JsonProcessingException {
-        List<HotelFacilityVO> facilityList = new ObjectMapper().readValue(facilityListJson, new TypeReference<List<HotelFacilityVO>>() {});
-        return facilityList;
-    } */
 }

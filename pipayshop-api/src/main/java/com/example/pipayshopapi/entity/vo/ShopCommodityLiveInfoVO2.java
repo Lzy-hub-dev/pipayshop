@@ -1,10 +1,6 @@
 package com.example.pipayshopapi.entity.vo;
 
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.example.pipayshopapi.util.JSONObjectTypeHandler;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -61,8 +57,6 @@ public class ShopCommodityLiveInfoVO2 {
      */
     private List<String> imageList;
 
-
-
     /**
      * 出租土地平方米
      */
@@ -81,14 +75,10 @@ public class ShopCommodityLiveInfoVO2 {
 
     private List<HotelFacilityVO> bath;
 
-
-
   /*   *
      * 电器设施
      */
     private List<HotelFacilityVO> appliance;
-
-
 
     /**
      * 价格

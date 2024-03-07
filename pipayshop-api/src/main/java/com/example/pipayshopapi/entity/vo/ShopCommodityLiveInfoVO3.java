@@ -71,7 +71,6 @@ public class ShopCommodityLiveInfoVO3 {
     /* *
      * 基础设施 */
     private String basics;
-    // private List<HotelFacilityVO> basics;
 
    /*  *
      * 洗沐设施 */
