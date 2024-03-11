@@ -3,12 +3,14 @@ package com.example.pipayshopapi.service.Impl;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.pipayshopapi.entity.AccountInfo;
+import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.TransactionRecord;
 import com.example.pipayshopapi.entity.vo.AccountInfoVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.RecordTransactionVO;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.mapper.AccountInfoMapper;
+import com.example.pipayshopapi.mapper.ShopInfoMapper;
 import com.example.pipayshopapi.mapper.TransactionRecordMapper;
 import com.example.pipayshopapi.service.TransactionRecordService;
 import com.example.pipayshopapi.util.StringUtil;
@@ -35,6 +37,8 @@ public class TransactionRecordServiceImpl extends ServiceImpl<TransactionRecordM
     @Resource
     AccountInfoMapper accountInfoMapper;
 
+    @Resource
+    ShopInfoMapper shopInfoMapper;
 
 
     @Override
@@ -79,5 +83,24 @@ public class TransactionRecordServiceImpl extends ServiceImpl<TransactionRecordM
                 .getRecordTransaction(shopId,(page - 1) * limit,limit);
         int count = transactionRecordMapper.getRecordTransactionCount(shopId);
         return new PageDataVO(count, list);
+    }
+
+    @Override
+    public int hotelTransaction(String token) {
+        // 解密JWT获取数据，记录交易日志
+        Claims claims = TokenUtil.getDataFromToken(token);
+        String shopId = claims.get("shopId", String.class);
+        String userId = claims.get("userId", String.class);
+        BigDecimal transactionAmount = BigDecimal.valueOf(Double.parseDouble(claims.get("transactionAmount", String.class)));
+        //查询是否是会员店
+        ShopInfo shopInfo = shopInfoMapper.selectShopAllInfo(shopId);
+        int insert = 0;
+        //if(shopInfo.getMembership()==1){
+        //    插入交易记录表
+        //目前就算不是会员店都插入记录
+             insert = transactionRecordMapper.insert(new TransactionRecord(null, StringUtil.generateShortId()
+                    , shopId, userId, transactionAmount, null, null,null));
+       // }
+        return insert;
     }
 }

@@ -5,6 +5,7 @@ import com.example.pipayshopapi.entity.ShopOrderInfo;
 import com.example.pipayshopapi.entity.vo.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -48,5 +49,10 @@ public interface ShopOrderInfoService extends IService<ShopOrderInfo> {
 
     String generateUnpaidLiveOrder(String token);
 
-    boolean payLiveOrder(String token);
+    /**
+     * 返回订单order_id
+     * @param token
+     * @return
+     */
+    Map<String,String> payLiveOrder(String token);
 }

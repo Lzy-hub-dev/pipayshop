@@ -41,6 +41,11 @@ public class ShopHotelRecord implements Serializable {
     private String roomId;
 
     /**
+     * 入住人账号
+     */
+    private String uid;
+
+    /**
      * 入住人姓名
      */
     private String name;

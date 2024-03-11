@@ -126,4 +126,6 @@ public interface ShopInfoMapper extends BaseMapper<ShopInfo> {
      */
      ShopInfo selectShopInfoByQrcode(String qrcode);
 
+     ShopInfo selectShopAllInfo(String shopId);
+
 }

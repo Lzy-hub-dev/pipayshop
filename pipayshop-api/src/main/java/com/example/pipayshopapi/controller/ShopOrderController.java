@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -227,11 +228,11 @@ public class ShopOrderController {
     @ApiOperation("支付酒店下单接口")
     public ResponseVO<String> payLiveOrder(String token) {
         try {
-            boolean flag = shopOrderInfoService.payLiveOrder(token);
-            if (!flag) {
+            Map<String, String> map = shopOrderInfoService.payLiveOrder(token);
+            if (!map.get("flag").equals("true")) {
                 throw new Exception();
             }
-            return ResponseVO.getSuccessResponseVo("支付酒店下单成功!");
+            return new ResponseVO(200,map.get("order_id"),"支付酒店下单成功!");
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new BusinessException("支付酒店下单失败，请联系后台人员");

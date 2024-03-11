@@ -27,7 +27,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -243,7 +245,7 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean payLiveOrder(String token) {
+    public Map<String,String> payLiveOrder(String token) {
         Claims dataFromToken = TokenUtil.getDataFromToken(token);
         String orderId = dataFromToken.get("orderId", String.class);
         String uid1 = dataFromToken.get("uid", String.class);
@@ -271,7 +273,11 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
                 .set("order_status", 1)
                 .set("update_time", new Date()));
         if (update1 < 1){throw new RuntimeException();}
-        return true;
+        //添加交易记录
+        Map<String,String> map = new HashMap<>();
+        map.put("flag","true");
+        map.put("order_id",orderId);
+        return map;
     }
 
     @Override

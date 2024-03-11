@@ -23,7 +23,6 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/pipayshopapi/transaction-record")
 public class TransactionRecordController {
-
     @Resource
     TransactionRecordService transactionRecordService;
 
@@ -57,5 +56,18 @@ public class TransactionRecordController {
             e.printStackTrace();
             throw new BusinessException("获取记账流水数据失败，请联系后台人员");
         }
+    }
+
+    /**
+     * 用户订酒店的时候创建交易订单
+     */
+    @PostMapping("/hotelTransaction")
+    public ResponseVO hotelTransaction(@RequestParam String token){
+        //这里酒店用的，不涉及任何积分转移，因为在下单酒店的时候，支付酒店订单已经做了积分转移了
+        int i = transactionRecordService.hotelTransaction(token);
+        if (i==1){
+            return  new ResponseVO<>(200,null,"此店铺是会员店，插入交易记录记录成功");
+        }
+        return  new ResponseVO<>(200,null,"此店铺不是会员店，没有插入交易记录");
     }
 }
