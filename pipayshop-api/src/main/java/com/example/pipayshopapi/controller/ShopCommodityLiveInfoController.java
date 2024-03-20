@@ -2,13 +2,13 @@ package com.example.pipayshopapi.controller;
 
 
 import com.example.pipayshopapi.entity.ShopCommodityLiveInfo;
+import com.example.pipayshopapi.entity.dto.RoomDto;
 import com.example.pipayshopapi.entity.dto.ShopCommodityLiveInfoListDTO;
 import com.example.pipayshopapi.entity.dto.ShopCommodityLiveInfoListDTO1;
 import com.example.pipayshopapi.entity.dto.ShopHotelRecordDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
 import com.example.pipayshopapi.service.ShopCommodityLiveInfoService;
-import com.example.pipayshopapi.util.FileUploadUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -207,4 +207,14 @@ public class ShopCommodityLiveInfoController {
         return new ResponseVO<>(200,"查询成功",shopCommodityLiveInfoService.selectAllByPrice(shopInfo));
     }
 
+    @PostMapping("/takeOffRoom")
+    @ApiOperation("上（0）下（1）架/删除（3）/酒店房间")
+    public  ResponseVO takeOffRoom(@RequestBody RoomDto room){
+        int i = shopCommodityLiveInfoService.updateRoomStatus(room);
+        if(i==1){
+            return ResponseVO.getSuccessResponseMsg(null,"修改成功");
+        }else {
+            return ResponseVO.getFalseResponseMsg("修改失败");
+        }
+    }
 }

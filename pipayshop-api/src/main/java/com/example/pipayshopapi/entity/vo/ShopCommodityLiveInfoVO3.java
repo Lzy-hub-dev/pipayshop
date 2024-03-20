@@ -131,5 +131,8 @@ public class ShopCommodityLiveInfoVO3 {
      * 此房型月销量
      */
     private Integer monthlySales;
-
+    /**
+     * 房间状态
+     */
+    private Integer status;
 }

@@ -7,11 +7,12 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderLiveListVO {
+public class OrderLiveListVO2 {
     /**
      * 订单id
      */
@@ -58,12 +59,8 @@ public class OrderLiveListVO {
      */
     private String address;
 
-    /**
-     * 商品图片
-     */
-    private String imageList;
-
-
+    //房间图片
+    private List<String> imageList;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

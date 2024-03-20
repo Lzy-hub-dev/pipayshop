@@ -101,10 +101,10 @@
         SELECT s.localhost_latitude,s.localhost_longitude,s.phone,s.address,
         l.room_id,l.room_type_name,l.tag_list, l.inventory,l.detail,l.image_list,l.land,
         l.restricted, l.basics,l.bath,l.appliance,l.price,l.rest_room,l.bed,l.adult,l.children,l.bed_type,
-        l.floor,l.room,l.is_add,l.monthly_sales
+        l.floor,l.room,l.is_add,l.monthly_sales,l.status
         FROM shop_info s
         LEFT JOIN shop_commodity_live_info l ON s.shop_id = l.shop_id
-        WHERE s.shop_id = #{shopId} AND l.status = 0
+        WHERE s.shop_id = #{shopId} AND ((l.status = 0) OR (l.status = 1 AND -1 = #{status}))
         <if test="priceSearch">
             ORDER BY l.price
             <if test="ascending">ASC</if>

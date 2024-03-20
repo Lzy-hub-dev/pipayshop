@@ -185,7 +185,7 @@
     </select>
     <select id="getOrderLiveList" resultType="com.example.pipayshopapi.entity.vo.OrderLiveListVO">
         select o.order_id,o.order_status,o.commodity_id,o.transaction_amount,
-               e.origin_path as avatar_imag,l.room_type_name,  s.address,g.origin_path as user_image,s.shop_name,s.shop_introduce
+               e.origin_path as avatar_imag,l.room_type_name,l.image_list, s.address,g.origin_path as user_image,s.shop_name,s.shop_introduce
                 ,r.start_time,r.end_time
         FROM shop_order_info as o
                  left join shop_commodity_live_info as l

@@ -48,6 +48,7 @@ public class ShopHotelRecordServiceImpl extends ServiceImpl<ShopHotelRecordMappe
     public Boolean createShopHotelRecord(ShopHotelRecord shopHotelRecord) {
         String recordId = StringUtil.generateShortId();
         shopHotelRecord.setRecordId(recordId);
+
         return shopHotelRecordMapper.insert(shopHotelRecord) > 0;
     }
 

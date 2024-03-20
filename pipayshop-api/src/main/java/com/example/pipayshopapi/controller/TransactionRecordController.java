@@ -62,6 +62,7 @@ public class TransactionRecordController {
      * 用户订酒店的时候创建交易订单
      */
     @PostMapping("/hotelTransaction")
+    @ApiOperation("酒店支付时创建交易")
     public ResponseVO hotelTransaction(@RequestParam String token){
         //这里酒店用的，不涉及任何积分转移，因为在下单酒店的时候，支付酒店订单已经做了积分转移了
         int i = transactionRecordService.hotelTransaction(token);

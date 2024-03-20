@@ -2,6 +2,7 @@ package com.example.pipayshopapi.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pipayshopapi.entity.ShopCommodityLiveInfo;
+import com.example.pipayshopapi.entity.dto.RoomDto;
 import com.example.pipayshopapi.entity.dto.ShopCommodityLiveInfoListDTO1;
 import com.example.pipayshopapi.entity.dto.ShopHotelRecordDTO;
 import com.example.pipayshopapi.entity.vo.*;
@@ -67,4 +68,6 @@ public interface ShopCommodityLiveInfoService extends IService<ShopCommodityLive
     String roomImageUp(MultipartFile multipartFile);
 
     List<ShopCommodityLiveInfoVO2> selectAllByPrice(ShopCommodityLiveInfoListDTO1 ahopInfo) throws JsonProcessingException;
+
+    int updateRoomStatus(RoomDto room);
 }

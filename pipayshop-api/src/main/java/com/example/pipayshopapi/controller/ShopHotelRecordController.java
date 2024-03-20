@@ -29,8 +29,9 @@ public class ShopHotelRecordController {
 
     @PostMapping("createShopHotelRecord")
     @ApiOperation("记录酒店入住信息接口")
-    private ResponseVO createShopHotelRecord(ShopHotelRecord shopHotelRecord){
+    private ResponseVO createShopHotelRecord(@RequestBody ShopHotelRecord shopHotelRecord){
         try {
+            System.out.println(shopHotelRecord);
             Boolean result = shopHotelRecordService.createShopHotelRecord(shopHotelRecord);
             if (!result){
                 throw new Exception();
@@ -41,5 +42,4 @@ public class ShopHotelRecordController {
             throw new BusinessException("记录酒店入住信息接口失败，请联系后台人员");
         }
     }
-
 }

@@ -1,5 +1,7 @@
 package com.example.pipayshopapi.service.Impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -20,16 +22,14 @@ import com.example.pipayshopapi.service.ShopOrderInfoService;
 import com.example.pipayshopapi.util.StringUtil;
 import com.example.pipayshopapi.util.TokenUtil;
 import io.jsonwebtoken.Claims;
+import org.modelmapper.ModelMapper;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -63,10 +63,20 @@ public class ShopOrderInfoServiceImpl extends ServiceImpl<ShopOrderInfoMapper, S
         getOrderDataVO.setCurrentPage((getOrderDataVO.getCurrentPage()-1)*getOrderDataVO.getPageSize());
         Integer allOrderLiveList = shopOrderInfoMapper.getAllOrderLiveList(getOrderDataVO);
         List<OrderLiveListVO> orderLiveList = shopOrderInfoMapper.getOrderLiveList(getOrderDataVO);
-        return new PageDataVO(allOrderLiveList,orderLiveList);
+        List<OrderLiveListVO2> orderLiveList2 = new ArrayList<>();
+
+        for(OrderLiveListVO o1: orderLiveList){
+            ModelMapper modelMapper = new ModelMapper();
+            OrderLiveListVO2 o2 = modelMapper.map(o1,OrderLiveListVO2.class);
+            if(o1.getImageList()!=null){
+                JSONArray imageArray = JSON.parseArray(o1.getImageList());
+                List<String> imageList = JSON.parseArray(imageArray.toJSONString(),String.class);
+                o2.setImageList(imageList);
+            }
+            orderLiveList2.add(o2);
+        }
+        return new PageDataVO(allOrderLiveList,orderLiveList2);
     }
-
-
 
     @Override
     public int delOrderByOrderId(String orderId) {

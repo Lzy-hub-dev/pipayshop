@@ -20,9 +20,12 @@ public class ShopCommodityLiveInfoListDTO1 {
      * 是否升序
      */
     private boolean ascending;
-
     /**
      * 降序
      */
     private boolean descending;
+    /**
+     * 0上架  1下架
+     */
+    private String status;
 }

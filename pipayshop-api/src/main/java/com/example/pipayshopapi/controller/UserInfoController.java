@@ -53,9 +53,10 @@ public class UserInfoController {
 
     @PostMapping("login")
     @ApiOperation("登录")
-    public ResponseVO<ResponseResultVO> login(@RequestBody LoginDTO loginDTO) {
+    public ResponseVO<ResponseResultVO> login(@RequestBody LoginDTO loginDTO,@RequestParam String name) {
             ResponseResultVO  responseResultVO  = userInfoService.login(loginDTO);
         System.out.println("pi登录方法触发了");
+        System.out.println(name+"浏览器名称");
             return ResponseVO.getSuccessResponseVo(responseResultVO );
     }
 

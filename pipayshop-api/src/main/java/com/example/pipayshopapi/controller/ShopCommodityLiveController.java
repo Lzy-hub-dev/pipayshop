@@ -21,6 +21,7 @@ import javax.annotation.Resource;
  * @author zxb
  * @since 2023-07-29
  */
+//这个好像是不要了，因为之前建错了表好像，但是最好不要乱删除
 @Api(value = "实体店住的服务接口",tags = "实体店住的服务接口")
 @RestController
 @RequestMapping("/pipayshopapi/shop-commodity-live")

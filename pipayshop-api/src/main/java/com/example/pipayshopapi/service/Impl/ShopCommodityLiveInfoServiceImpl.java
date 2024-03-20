@@ -9,6 +9,7 @@ import com.example.pipayshopapi.entity.ShopCommodityLiveInfo;
 import com.example.pipayshopapi.entity.ShopHotelRecord;
 import com.example.pipayshopapi.entity.ShopInfo;
 import com.example.pipayshopapi.entity.ShopOrderInfo;
+import com.example.pipayshopapi.entity.dto.RoomDto;
 import com.example.pipayshopapi.entity.dto.ShopCommodityLiveInfoListDTO1;
 import com.example.pipayshopapi.entity.dto.ShopHotelRecordDTO;
 import com.example.pipayshopapi.entity.vo.*;
@@ -277,29 +278,7 @@ public class ShopCommodityLiveInfoServiceImpl extends ServiceImpl<ShopCommodityL
                 // System.out.println(shopInfoVO);
                 ModelMapper modelMapper = new ModelMapper();
                 //接收转换后的值
-                ShopCommodityLiveInfoVO2 s2 = new ShopCommodityLiveInfoVO2();
-                s2  = modelMapper.map(shopInfoVO, ShopCommodityLiveInfoVO2.class);
-              /*   s2.setAddress(shopInfoVO.getAddress());
-                s2.setAdult(shopInfoVO.getAdult());
-                s2.setBed(shopInfoVO.getBed());
-                s2.setBedType(shopInfoVO.getBedType());
-                s2.setChildren(shopInfoVO.getChildren());
-                s2.setDetail(shopInfoVO.getDetail());
-                s2.setFloor(shopInfoVO.getFloor());
-                s2.setInventory(shopInfoVO.getInventory());
-                s2.setIsAdd(shopInfoVO.getIsAdd());
-                s2.setLand(shopInfoVO.getLand());
-                s2.setLatitude(shopInfoVO.getLatitude());
-                s2.setLongitude(shopInfoVO.getLongitude());
-                s2.setMonthlySales(shopInfoVO.getMonthlySales());
-                s2.setPhone(shopInfoVO.getPhone());
-                s2.setPrice(shopInfoVO.getPrice());
-                s2.setRestricted(shopInfoVO.getRestricted());
-                s2.setRestRoom(shopInfoVO.getRestRoom());
-                s2.setRoom(shopInfoVO.getRoom());
-                s2.setRoomId(shopInfoVO.getRoomId());
-                s2.setRoomTypeName(shopInfoVO.getRoomTypeName());
- */
+                ShopCommodityLiveInfoVO2 s2 = modelMapper.map(shopInfoVO, ShopCommodityLiveInfoVO2.class);
                 //tagList
                 JSONArray TagArray = JSON.parseArray(shopInfoVO.getTagList());
                 List<String> tagList = JSON.parseArray(TagArray.toJSONString(), String.class);
@@ -312,15 +291,16 @@ public class ShopCommodityLiveInfoServiceImpl extends ServiceImpl<ShopCommodityL
                 JSONArray basicArray = JSON.parseArray(shopInfoVO.getBasics());
                 List<HotelFacilityVO>  basicList = JSON.parseArray(basicArray.toJSONString(),HotelFacilityVO.class);
                 s2.setBasics(basicList);
+
               //  解析淋浴
-                JSONArray bathArray = JSON.parseArray(shopInfoVO.getBath());
+                /* JSONArray bathArray = JSON.parseArray(shopInfoVO.getBath());
                 List<HotelFacilityVO>  bathList = JSON.parseArray(bathArray.toJSONString(),HotelFacilityVO.class);
-                s2.setBath(bathList);
+                s2.setBath(bathList); */
 
                 // 解析电器设施
-                JSONArray applianceArray = JSON.parseArray(shopInfoVO.getAppliance());
+               /*  JSONArray applianceArray = JSON.parseArray(shopInfoVO.getAppliance());
                 List<HotelFacilityVO>  applianceList = JSON.parseArray(applianceArray.toJSONString(),HotelFacilityVO.class);
-                s2.setAppliance(applianceList);
+                s2.setAppliance(applianceList); */
 
                 shopInfoLists2.add(s2);
                 // System.out.println(s2);
@@ -328,5 +308,19 @@ public class ShopCommodityLiveInfoServiceImpl extends ServiceImpl<ShopCommodityL
             }
         }
         return shopInfoLists2;
+    }
+
+    /**
+     * 修改房间状态
+     * @param room
+     * @return
+     */
+    @Override
+    public int updateRoomStatus(RoomDto room) {
+       UpdateWrapper<ShopCommodityLiveInfo> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("room_id", room.getRoomId())
+                .set("status", room.getStatus());
+        int update = shopCommodityLiveInfoMapper.update(null, updateWrapper);
+        return update;
     }
 }
