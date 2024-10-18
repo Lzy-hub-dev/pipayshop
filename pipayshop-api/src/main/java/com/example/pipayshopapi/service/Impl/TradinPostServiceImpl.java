@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -91,6 +92,58 @@ public class TradinPostServiceImpl extends ServiceImpl<TradinPostMapper, TradinP
     }
 
 
+    //批量发布
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean batchPublishTradition(String token, int total) {
+        // 解析token
+        Claims dataFromToken = TokenUtil.getDataFromToken(token);
+        String publisherId = dataFromToken.get("publisherId", String.class);
+        Integer typeId = dataFromToken.get("typeId", Integer.class);
+        String content = dataFromToken.get("content", String.class);
+        BigDecimal pointBalance = BigDecimal.valueOf(Double.parseDouble(dataFromToken.get("pointBalance", String.class)));
+        BigDecimal piBalance = BigDecimal.valueOf(Double.parseDouble(dataFromToken.get("piBalance", String.class)));
+        String tradinId = StringUtil.generateShortId();
+        int insert = 0;
+        // 发布者换积分
+        if (typeId == 0){
+            insert += tradinPostMapper.insert(new TradinPost(tradinId, publisherId, typeId, content, pointBalance, piBalance,null));
+            if (insert < 1){
+                throw new BusinessException("插入失败失败");
+            }
+            // 发布者换pi币
+        } else if (typeId == 1) {
+            // 获取发布者账户
+            AccountInfoVO accountInfoVO = accountInfoMapper.selectAccountInfo(publisherId);
+            if (accountInfoVO.getAvailableBalance().compareTo(pointBalance) < 0) {
+                throw new BusinessException("账户可用余额不足");
+            }
+
+            // 计算积分、冻结积分
+            BigDecimal subtractPointBalance = accountInfoVO.getAvailableBalance().subtract(pointBalance);
+            BigDecimal addFrozenBalance = accountInfoVO.getFrozenBalance().add(pointBalance);
+
+            String piAddress = dataFromToken.get("piAddress", String.class);
+            // 更新账户
+            insert += accountInfoMapper.update(null, new UpdateWrapper<AccountInfo>()
+                    .eq("uid", publisherId)
+                    .set("available_balance", subtractPointBalance)
+                    .set("frozen_balance",addFrozenBalance));
+            List<TradinPost> list = new ArrayList<>();
+            for (int i=0;i<total;i++){
+                list.add(new TradinPost(tradinId,publisherId,typeId,content,pointBalance,piBalance,piAddress));
+            }
+            boolean b = this.saveBatch(list);
+//            insert += tradinPostMapper.insert(new TradinPost(tradinId,publisherId,typeId,content,pointBalance,piBalance,piAddress));
+            if (insert < 1|| b==false){
+                throw new BusinessException("插入失败");
+            }
+        }
+        return true;
+    }
+
+
+
     @Override
     public TraditionDetailVO selectTraditionDetail(String tradinId) throws InterruptedException {
         // 获取锁（可重入），指定锁的名称
@@ -130,9 +183,6 @@ public class TradinPostServiceImpl extends ServiceImpl<TradinPostMapper, TradinP
 
 
 
-
-
-
     @Override
     public List<TraditionListVO> selectTradinPostByUid(String token) {
         // 解析token
@@ -150,6 +200,20 @@ public class TradinPostServiceImpl extends ServiceImpl<TradinPostMapper, TradinP
 
         Integer count = tradinPostMapper.selectCountTraditionList(typeId, piName);
         List<TraditionListVO> traditionVOS = tradinPostMapper.selectTraditionListByPiName(typeId,(page-1)*limit,limit, piName);
+        for (TraditionListVO traditionVO : traditionVOS) {
+            traditionVO.setUserImage(imageMapper.selectPath(traditionVO.getUserImage()));
+        }
+        return new PageDataVO(count,traditionVOS);
+    }
+
+    //范围选择
+    @Override
+    public PageDataVO selectTraditionScopeListByPiName(Integer typeId, Integer page, Integer limit,
+                                                       String piName,String start,String end) {
+
+        Integer count = tradinPostMapper.selectCountTraditionScopeList(typeId, piName,start,end);
+        List<TraditionListVO> traditionVOS = tradinPostMapper.selectTraditionScopeListByPiName(typeId,
+                (page-1)*limit,limit, piName,start,end);
         for (TraditionListVO traditionVO : traditionVOS) {
             traditionVO.setUserImage(imageMapper.selectPath(traditionVO.getUserImage()));
         }

@@ -6,6 +6,7 @@ import com.example.pipayshopapi.entity.vo.DealDetailVO;
 import com.example.pipayshopapi.entity.vo.PageDataVO;
 import com.example.pipayshopapi.entity.vo.TraditionDetailVO;
 import com.example.pipayshopapi.entity.vo.TraditionListVO;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,8 +20,12 @@ import java.util.List;
  */
 public interface TradinPostService extends IService<TradinPost> {
 
+    //业务员的批量发布
     boolean publishTradition(String token);
 
+
+    @Transactional(rollbackFor = Exception.class)
+    boolean batchPublishTradition(String token, int total);
 
     TraditionDetailVO selectTraditionDetail(String tradinId) throws InterruptedException;
 
@@ -31,6 +36,10 @@ public interface TradinPostService extends IService<TradinPost> {
 
 
     PageDataVO selectTraditionListByPiName(Integer typeId, Integer page, Integer limit, String piName);
+
+    //范围查询
+    PageDataVO selectTraditionScopeListByPiName(Integer typeId, Integer page, Integer limit,
+                                                String piName,String start,String end);
 
     void cancelTradition(String tradinId, String piName);
 

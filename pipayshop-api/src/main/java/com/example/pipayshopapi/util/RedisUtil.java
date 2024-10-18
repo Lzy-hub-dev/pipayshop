@@ -21,14 +21,13 @@ public class RedisUtil<T> {
     @Resource
     private RedisTemplate redisTemplate;
 
-    public static RedisTemplate redis;
 
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 
     @PostConstruct
     public void getRedisTemplate() {
-        redis = this.redisTemplate;
+        redisTemplate = this.redisTemplate;
     }
 
     /**
@@ -36,9 +35,9 @@ public class RedisUtil<T> {
      */
     public void savaDataListToRedisList(String key, List<T> list) {
         // 设置Key的String序列化
-        redis.setKeySerializer(RedisSerializer.string());
-        redis.opsForList().leftPushAll(key, list);
-        redis.expire(key, Constants.REGION_VALID_TIME, TimeUnit.SECONDS);
+        redisTemplate.setKeySerializer(RedisSerializer.string());
+        redisTemplate.opsForList().leftPushAll(key, list);
+        redisTemplate.expire(key, Constants.REGION_VALID_TIME, TimeUnit.SECONDS);
     }
 
     /**
@@ -46,8 +45,8 @@ public class RedisUtil<T> {
      */
     public List<T> getDataListFromRedisList(String key) {
         // 设置Key的String序列化
-        redis.setKeySerializer(RedisSerializer.string());
-        return redis.opsForList().range(key, 0, -1);
+        redisTemplate.setKeySerializer(RedisSerializer.string());
+        return redisTemplate.opsForList().range(key, 0, -1);
     }
 
 

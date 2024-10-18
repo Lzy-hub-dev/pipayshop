@@ -15,8 +15,7 @@
     <groupId>com.example.pipayshop-api</groupId>
     <artifactId>pipayshop-api</artifactId>
     <version>1.0</version>
-    <packaging>jar</packaging>
-    <name>pipayshop-api</name>
+    <packaging>jar</packaging>    <name>pipayshop-api</name>
     <description>pipayshop-api</description>
 
     <properties>
@@ -77,12 +76,6 @@
             <artifactId>spatial4j</artifactId>
             <version>0.7</version>
         </dependency>
-        <dependency>
-            <groupId>org.lionsoul</groupId>
-            <artifactId>ip2region</artifactId>
-            <version>2.7.0</version>
-        </dependency>
-
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -294,6 +287,17 @@
             <artifactId>modelmapper</artifactId>
             <version>2.4.4</version>
         </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+            <version>2.0.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lionsoul</groupId>
+            <artifactId>ip2region</artifactId>
+            <version>2.7.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -304,10 +308,9 @@
                 <version>2.2.6.RELEASE</version>
                 <executions>
                     <execution>
+                        <id>repackage</id>
                         <goals>
-                            <goal>
-                                repackage
-                            </goal>
+                            <goal>repackage</goal>
                         </goals>
                     </execution>
                 </executions>

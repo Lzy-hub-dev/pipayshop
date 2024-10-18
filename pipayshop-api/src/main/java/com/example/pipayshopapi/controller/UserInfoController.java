@@ -246,7 +246,6 @@ public class UserInfoController {
     @ApiOperation("普通浏览器登录")
     public ResponseVO<ResponseResultVO> userRegister(HttpServletRequest request, RegisterDTO registerDTO){
         try {
-
             ResponseResultVO  responseResultVO  = userInfoService.userRegister(request.getHeader("sessionID"),registerDTO);
             if (responseResultVO  == null) {
                 throw new BusinessException();

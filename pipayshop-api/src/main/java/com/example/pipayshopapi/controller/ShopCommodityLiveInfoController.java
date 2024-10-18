@@ -158,6 +158,7 @@ public class ShopCommodityLiveInfoController {
         }
     }
 
+
     @GetMapping("selectShopCommodityLiveVO/{pages}/{limit}")
     @ApiOperation("查找实体店酒店的服务列表")
     public ResponseVO selectShopCommodityLiveInfoVO(@PathVariable Integer pages, @PathVariable Integer limit){

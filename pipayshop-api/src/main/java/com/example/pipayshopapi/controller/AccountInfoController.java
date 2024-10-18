@@ -1,8 +1,6 @@
 package com.example.pipayshopapi.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.example.pipayshopapi.entity.TradinPost;
 import com.example.pipayshopapi.entity.dto.PayPalDTO;
 import com.example.pipayshopapi.entity.vo.*;
 import com.example.pipayshopapi.exception.BusinessException;
@@ -17,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * <p>
@@ -72,6 +69,42 @@ public class AccountInfoController {
         }
     }
 
+    @GetMapping("selectAllTradinRate")
+    @ApiOperation("获取汇率")
+    public ResponseVO selectAllTradinRate(  ){
+        try {
+
+            List<TradinRateVO> tradinRateDTOList=tradinRateService.selectAllTradinRate();
+            return ResponseVO.getSuccessResponseVo(tradinRateDTOList);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("获取汇率失败");
+        }
+    }
+
+    //批量发布交易
+    @PostMapping("batchPublishTradition")
+    @ApiOperation("批量发布交易")
+    public ResponseVO batchPublishTradition(String token,int total){
+        try {
+            boolean insert=false;
+            for (int i = 0; i < total; i++) {
+                insert= tradinPostService.publishTradition(token);
+                if (insert==false){
+                    break;
+                }
+            }
+
+            if ( ! insert ){
+                throw new RuntimeException();
+            }
+            return ResponseVO.getSuccessResponseVo("发布成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("发布失败");
+        }
+    }
+
 
     @GetMapping("selectTraditionList/{typeId}/{page}/{limit}")
     @ApiOperation("根据piName获取交易列表")
@@ -82,6 +115,21 @@ public class AccountInfoController {
 
             PageDataVO traditionDTOList= tradinPostService.selectTraditionListByPiName(typeId,page,limit, piName);
             return ResponseVO.getSuccessResponseVo(traditionDTOList);
+    }
+
+
+    //范围选择
+    @GetMapping("selectTraditionScopeList/{typeId}/{page}/{limit}")
+    @ApiOperation("根据piName获取交易列表范围选择")
+    public ResponseVO selectTraditionScopeList(@PathVariable Integer typeId,
+                                          @PathVariable Integer page,
+                                          @PathVariable Integer limit,
+                                          @RequestParam(required = false, defaultValue = "") String piName,
+                                               @RequestParam(required = false, defaultValue = "") String start,
+                                               @RequestParam(required = false, defaultValue = "") String end){
+
+        PageDataVO traditionDTOList= tradinPostService.selectTraditionScopeListByPiName(typeId,page,limit, piName,start,end);
+        return ResponseVO.getSuccessResponseVo(traditionDTOList);
     }
 
     @PutMapping("cancelTradition/{piName}/{tradinId}")
@@ -134,6 +182,7 @@ public class AccountInfoController {
             throw new RuntimeException("提交转积分失败");
         }
     }
+
     @PostMapping("upLoadImg")
     @ApiOperation("提交pi币转账凭证")
     public ResponseVO upLoadImg(MultipartFile file, String token){
@@ -148,7 +197,6 @@ public class AccountInfoController {
             throw new RuntimeException("提交凭证失败");
         }
     }
-
     @PostMapping("confirmTransaction")
     @ApiOperation("确认交易")
     public ResponseVO confirmTransaction(String token){
@@ -205,18 +253,7 @@ public class AccountInfoController {
     }
 
 
-    @GetMapping("selectAllTradinRate")
-    @ApiOperation("获取汇率")
-    public ResponseVO selectAllTradinRate(  ){
-        try {
 
-            List<TradinRateVO> tradinRateDTOList=tradinRateService.selectAllTradinRate();
-            return ResponseVO.getSuccessResponseVo(tradinRateDTOList);
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new RuntimeException("获取汇率失败");
-        }
-    }
 
 
     @PostMapping("/api/orders/{orderId}/capture")
@@ -231,4 +268,7 @@ public class AccountInfoController {
     public Object createOrder(@RequestBody PayPalDTO payPalDTO) {
         return accountInfoService.createOrder(payPalDTO);
     }
+
+
+
 }

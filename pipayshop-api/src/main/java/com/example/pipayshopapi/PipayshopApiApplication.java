@@ -1,7 +1,6 @@
 package com.example.pipayshopapi;
 
 import org.mybatis.spring.annotation.MapperScan;
-// import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,7 +14,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableRabbit
 @MapperScan("com.example.pipayshopapi.mapper")
 @EnableScheduling
-
 public class PipayshopApiApplication {
 
     public static void main(String[] args) {

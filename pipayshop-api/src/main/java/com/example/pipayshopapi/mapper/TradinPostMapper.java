@@ -30,6 +30,14 @@ public interface TradinPostMapper extends BaseMapper<TradinPost> {
 
 
     List<TraditionListVO> selectTraditionListByPiName(Integer typeId, Integer page, Integer limit, String piName);
+    //范围分页
+    List<TraditionListVO> selectTraditionScopeListByPiName(Integer typeId, Integer page,
+                                                           Integer limit, String piName,
+                                                           String start,String end);
 
     Integer selectCountTraditionList(Integer typeId, String piName);
+
+    //范围选择统计
+    Integer selectCountTraditionScopeList(Integer typeId, String piName,String start,String end);
+
 }

@@ -55,4 +55,36 @@
         order by t.create_time desc
     </select>
 
+<!--    范围选择-->
+    <select id="selectCountTraditionScopeList" resultType="java.lang.Integer">
+        select count(*)
+        from tradin_post t
+        left join user_info u on u.uid=t.publisher_uid
+        where (t.status = 0 OR t.status = 1) and t.type_id = #{typeId}
+        <if test="piName != null and piName != ''">
+            and u.pi_name = #{piName}
+        </if>
+        <if test="start!=null and end !=null and start!='' and end!='' ">
+            AND n.point_balance &gt;= #{vo.start}
+            AND n.point_balance &lt;= #{vo.end}
+        </if>
+        order by t.create_time desc
+    </select>
+
+<!--    范围选择分页-->
+    <select id="selectTraditionScopeListByPiName" resultType="com.example.pipayshopapi.entity.vo.TraditionListVO">
+        select t.tradin_id,t.publisher_uid,t.type_id,t.content,t.point_balance,t.pi_balance,u.user_name,u.user_image
+        from tradin_post t
+        left join user_info u on u.uid=t.publisher_uid
+        where (t.status = 0 OR t.status = 1) and t.type_id = #{typeId}
+        <if test="piName != null and piName != ''">
+            and u.pi_name = #{piName}
+        </if>
+        <if test="start!=null and end !=null and start!='' and end!='' ">
+            AND n.point_balance &gt;= #{vo.start}
+            AND n.point_balance &lt;= #{vo.end}
+        </if>
+        order by t.create_time desc
+        limit #{page},#{limit}
+    </select>
 </mapper>

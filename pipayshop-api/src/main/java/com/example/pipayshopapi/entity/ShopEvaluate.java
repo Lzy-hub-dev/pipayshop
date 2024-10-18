@@ -26,12 +26,9 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ShopEvaluate implements Serializable {
-
     private static final long serialVersionUID = 1L;
-
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
-
     /**
      * 实体店id
      */

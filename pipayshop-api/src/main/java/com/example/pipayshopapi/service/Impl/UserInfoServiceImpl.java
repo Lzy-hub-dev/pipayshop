@@ -37,6 +37,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -488,6 +489,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             // 校验密码
             boolean flag = StringUtil.checkPassword(registerDTO.getPassword(), userRegister.getPassword());
             if (!flag){
+                String salt = BCrypt.gensalt();
+                // 生成哈希密码
+                System.out.println(BCrypt.hashpw("", salt));
                 throw new BusinessException("密码不正确");
             }
             // 获取用户数据

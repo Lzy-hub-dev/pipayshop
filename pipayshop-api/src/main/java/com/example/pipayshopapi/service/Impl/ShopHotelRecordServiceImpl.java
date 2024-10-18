@@ -52,4 +52,5 @@ public class ShopHotelRecordServiceImpl extends ServiceImpl<ShopHotelRecordMappe
         return shopHotelRecordMapper.insert(shopHotelRecord) > 0;
     }
 
+
 }
